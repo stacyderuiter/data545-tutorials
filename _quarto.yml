@@ -33,16 +33,15 @@ book:
     - text: License
       href: cclicense.md
   page-navigation: true
+  search: true
+  repo-url: https://github.com/stacyderuiter/data545-tutorials/
+  repo-actions: [issue, edit]
+  sidebar: 
+    collapse-level: 1
 number-depth: 2
 bibliography: references.bib
 format:
   live-html:
-    theme: flatly
-    css: _include/webex.css
-    include-after-body: _include/webex.js
-  pdf:
-    documentclass: scrreprt
-  html:
     theme: flatly
     css: _include/webex.css
     include-after-body: _include/webex.js

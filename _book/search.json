@@ -10,78 +10,22 @@
     ]
   },
   {
-    "objectID": "intro.html",
-    "href": "intro.html",
-    "title": "1  Introduction",
-    "section": "",
-    "text": "1.1 There will be some content.\nEventually.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
-    ]
-  },
-  {
-    "objectID": "summary.html",
-    "href": "summary.html",
-    "title": "16  Summary",
-    "section": "",
-    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Summary</span>"
-    ]
-  },
-  {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "References",
-    "section": "",
-    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
-    "crumbs": [
-      "References"
-    ]
-  },
-  {
-    "objectID": "cclicense.html",
-    "href": "cclicense.html",
-    "title": "DATA 545 Tutorial",
-    "section": "",
-    "text": "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.\n\n\n\nCC BY-SA 4.0"
-  },
-  {
-    "objectID": "index.html#will-this-be-a-page",
-    "href": "index.html#will-this-be-a-page",
-    "title": "DATA 545 Tutorial",
-    "section": "Will this be a page?",
-    "text": "Will this be a page?\nThis book contains notes and materials for the Calvin University course DATA 545 (Applied Regression Modeling).",
-    "crumbs": [
-      "Preface"
-    ]
-  },
-  {
-    "objectID": "index.html#and-will-this",
-    "href": "index.html#and-will-this",
-    "title": "DATA 545 Tutorial",
-    "section": "And will this?",
-    "text": "And will this?",
-    "crumbs": [
-      "Preface"
-    ]
-  },
-  {
-    "objectID": "intro.html#and-will-this",
-    "href": "intro.html#and-will-this",
-    "title": "1  Introduction",
-    "section": "1.2 And will this?",
-    "text": "1.2 And will this?",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
-    ]
-  },
-  {
     "objectID": "install-r.html",
     "href": "install-r.html",
     "title": "1  Installation",
     "section": "",
     "text": "1.1 Motivation\nOne way to access R and RStudio is via an account at https://r.stem.calvin.edu/ (or if not a Calvin student, at posit.cloud). To use RStudio on one of these servers, all you need to do is log in, with nothing to install or maintain.\nFor many, this cloud approach is a great way to use RStudio, and they have no reason to install a standalone copy of the software on a personal computer. If you are happy using the server, exit this tutorial now and continue happily using the server!\nIf you have concerns about your internet bandwidth, speed, usage limits, or firewalls, or if you want to be able to work on assignments for this class somewhere without internet access, or if you need to analyze really large datasets or fit complex models, you may want to install R and RStudio and work locally instead of on the server.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
+    ]
+  },
+  {
+    "objectID": "install-r.html#motivation",
+    "href": "install-r.html#motivation",
+    "title": "1  Installation",
+    "section": "",
+    "text": "Pros and Cons\nThe benefits of downloading your own copy are that you can work offline and should not be subject to any (hopefully rare) server-related errors, freezing, etc.\nThe negatives of downloading your own copy are that you have to maintain it yourself, installing and updating packages and software.",
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
@@ -143,17 +87,6 @@
     ]
   },
   {
-    "objectID": "install-r.html#motivation",
-    "href": "install-r.html#motivation",
-    "title": "1  Installation",
-    "section": "",
-    "text": "Pros and Cons\nThe benefits of downloading your own copy are that you can work offline and should not be subject to any (hopefully rare) server-related errors, freezing, etc.\nThe negatives of downloading your own copy are that you have to maintain it yourself, installing and updating packages and software.",
-    "crumbs": [
-      "Getting Started",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
-    ]
-  },
-  {
     "objectID": "r-basics.html",
     "href": "r-basics.html",
     "title": "2  R Basics",
@@ -169,7 +102,7 @@
     "href": "r-basics.html#communicating-with-r",
     "title": "2  R Basics",
     "section": "2.2 Communicating with R",
-    "text": "2.2 Communicating with R\nYou will do most of your work in R with code or commands. Instead of pointing and clicking, you will type one or more lines of code, which R will execute (doing the work you have asked it to do).\nThen, R will return the results of whatever operation you asked it to do - sometimes producing a plot, other times creating a plot.\nSometimes executing code has almost no visible effect (no plot or text output is produced), but instead some object is created and stored in R’s environment for later use.\n\nTwo Key Questions\nTo get R (or any software) to do something for you, there are two important questions you must be able to answer. Before continuing, think about what those questions might be.\n\n\nThe Questions\nTo get R (or any software) to do a job for you, there are two important questions you must be able to answer:\n\n1. What do you want the computer to do?\n\n\n2. What must the computer know in order to do that?\n\n\n\nProviding R with the information it needs\nR functions provide R with the answer to the first question: what do you want the computer to do?\nMost functions in R have short, but descriptive names that describe what they do. For example, R has some functions to do basic mathematical operations: the function sqrt() computes the square root of a number, and the function round() rounds a number (by default, it rounds to the nearest integer).\nBut just giving R a function is not enough: you also need to answer the second question (what information does R need to do the job?). For example, if you want to use the function round(), you also need to provide R with the number you want to round!\nWe will provide answers to our two questions by filling in the boxes of a basic template:\n\n\nfunction (  information1  ,  information2  , …)\n\n\n \n(The ... indicates that there may be some additional input arguments (input information we could provide to R) we could add eventually. Some functions need only one input, but if a function takes more than one argument, they are separated by commas. They have names, and if named (like: function(input_name = value, input2_name = 'value')) they can be in any order.\n\n\nUsing simple functions\nLet’s practice what you just learned, trying out the mathematical sqrt() and round() functions.\nEdit the code below to compute the square root of 64:\n\n#| exercise: find-sqrt\nfunction(information_R_needs)\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\nConsider using the sqrt() function:\nsqrt(___)\n\n\n\n\n\n\n\n\n\n\n\nHint 2\n\n\n\n\n\nThe input information that sqrt() needs to make your calculation is the number you want the square root of: 64.\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution:\n\n\n\n\n\nsqrt(64)\n\n\n\n\nNow try computing the square root of 44, and then rounding it to the nearest integer:\n\n#| exercise: round-sqrt\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\nYou’ll need to use two functions this time:\nThe sqrt() function, and then the round() function.\nsqrt(___)\nround(___)\n\n\n\n\n\n\n\n\n\n\n\nHint 2\n\n\n\n\n\nThe input information that sqrt() needs to make your calculation is the number you want the square root of: 44. Run that code first, to get the input you will need for round()…\nsqrt(44)\nround(___)\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution:\n\n\n\n\n\nsqrt(44)\nround(6.63325)\nCan you do it all in one go? Well…yes!\nround(sqrt(44))\nThere’s also an easier-to-read way to do that, using a pipe operator |&gt;. It takes the output of one operation and passes it as input to the next. You can read it as |&gt; = “and then…” so we could do:\nsqrt(44) |&gt;\n  round()\n\nTake the square root of 44, and then\nround the result.\n\n(More on pipes later!)\n\n\n\n\n\n\nStoring information in R: variables\nIn the last section, you computed the square root of 44 and then rounded it, perhaps like this:\n\nsqrt(44)\n\n[1] 6.63325\n\nround(6.63325)\n\n[1] 7\n\n\nBut to do that, you probably had to first find the root, make a note of the result, and then provide that number to the round function. What a pain!\nA very useful option, if you have value (or a variable, dataset, or other R object) that you will want to use later on, is to store it as a named object in R. In the previous example, you might want to store the square root of 44 in a variable called my_root; then you can provide my_root to the round() function without checking the result of the sqrt() calculation first:\n\nmy_root &lt;- sqrt(44)\nround(my_root)\n\n[1] 7\n\n\nNotice that to assign a name to the results of some R code, you use the symbol &lt;-. You can think of it as an assignment arrow – it points from a value or item toward a name and assigns the name to the thing.\nTry editing the code to change the name of the variable from my_root to something else, then run your new code:\n\n#| exercise: name-a-variable\nmy_root &lt;- sqrt(44)\nround(my_root)\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nMake sure you change the name my_root in both places.\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nyour_new_name &lt;- sqrt(44)\nround(your_new_name)\n\n\n\n\n\n\nWhat if I have a list of numbers to store?\nSometime you might want to create a variable that contains more than one number. You can use the function c() to concatenate a list of numbers:\n\nmy_fave_numbers &lt;- c(4, 44, 16)\nmy_fave_numbers\n\n[1]  4 44 16\n\n\n(First we stored the list of numbers, calling it my_fave_numbers; then we printed the results to the screen by simply typing the variable name my_fave_numbers).\nTry making a list of your three favorite numbers, then using the function sum to add them all up:\n\n#| exercise:  c-and-sum\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFirst use c() to concatenate your chosen numbers (separated by commas).\nDon’t forget to use &lt;- to assign your list of numbers a name!\nThen, use sum() to add them up.\nmy_numbers &lt;- c(___,___,___)\nsum(___)\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nThis is just one possible solution.\nmy_numbers &lt;- c(4, 16, 44)\nsum(my_numbers)\nNotice you could also nest sum() and c(), or use the pipe operator |&gt; to calculate the numeric answer, but then you would not have the object my_numbers available for later use…\nsum(c(4, 16, 44))\n# or \nc(4, 16, 44) |&gt;\n  sum()\n\n\n\n\n\n\nWhat about data that are not numeric?\nR can work with categorical data as well as numeric data. For example, we could create a list of words and store it as a variable if we wanted (feel free to try changing the words if you want):\n\n#| exercise: cat-var\nmy_words &lt;- c('RStudio', 'is', 'awesome')\nmy_words\n\n\n\nWhat if I have a LOT more data to store?\nc() works great for creating small lists of just a few values, but it is not a good way to enter or store large data tables - there is lots of potential for user error. In this course, you will usually be given a dataset already in electronic form; if you need to create one, you would turn to spreadsheet or database software. Either way you read the existing data file into R directly.\nIn R, these larger datasets are stored as objects called data.frames. The next sections will get you started using them.",
+    "text": "2.2 Communicating with R\nYou will do most of your work in R with code or commands. Instead of pointing and clicking, you will type one or more lines of code, which R will execute (doing the work you have asked it to do).\nThen, R will return the results of whatever operation you asked it to do - sometimes producing a plot, other times creating a plot.\nSometimes executing code has almost no visible effect (no plot or text output is produced), but instead some object is created and stored in R’s environment for later use.\n\nTwo Key Questions\nTo get R (or any software) to do something for you, there are two important questions you must be able to answer. Before continuing, think about what those questions might be.\n\n\nThe Questions\nTo get R (or any software) to do a job for you, there are two important questions you must be able to answer:\n\n1. What do you want the computer to do?\n\n\n2. What must the computer know in order to do that?\n\n\n\nProviding R with the information it needs\nR functions provide R with the answer to the first question: what do you want the computer to do?\nMost functions in R have short, but descriptive names that describe what they do. For example, R has some functions to do basic mathematical operations: the function sqrt() computes the square root of a number, and the function round() rounds a number (by default, it rounds to the nearest integer).\nBut just giving R a function is not enough: you also need to answer the second question (what information does R need to do the job?). For example, if you want to use the function round(), you also need to provide R with the number you want to round!\nWe will provide answers to our two questions by filling in the boxes of a basic template:\n\n\nfunction (  information1  ,  information2  , …)\n\n\n \n(The ... indicates that there may be some additional input arguments (input information we could provide to R) we could add eventually. Some functions need only one input, but if a function takes more than one argument, they are separated by commas. They have names, and if named (like: function(input_name = value, input2_name = 'value')) they can be in any order.\n\n\nUsing simple functions\nLet’s practice what you just learned, trying out the mathematical sqrt() and round() functions.\nEdit the code below to compute the square root of 64:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\nConsider using the sqrt() function:\nsqrt(___)\n\n\n\n\n\n\n\n\n\n\n\nHint 2\n\n\n\n\n\nThe input information that sqrt() needs to make your calculation is the number you want the square root of: 64.\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nsqrt(64)\n\n\n\n\nNow try computing the square root of 44, and then rounding it to the nearest integer:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\nYou’ll need to use two functions this time:\nThe sqrt() function, and then the round() function.\nsqrt(___)\nround(___)\n\n\n\n\n\n\n\n\n\n\n\nHint 2\n\n\n\n\n\nThe input information that sqrt() needs to make your calculation is the number you want the square root of: 44. Run that code first, to get the input you will need for round()…\nsqrt(44)\nround(___)\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nsqrt(44)\nround(6.63325)\nCan you do it all in one go? Well…yes!\nround(sqrt(44))\nThere’s also an easier-to-read way to do that, using a pipe operator |&gt;. It takes the output of one operation and passes it as input to the next. You can read it as |&gt; = “and then…” so we could do:\nsqrt(44) |&gt;\n  round()\n\nTake the square root of 44, and then\nround the result.\n\n(More on pipes later!)\n\n\n\n\n\n\nStoring information in R: variables\nIn the last section, you computed the square root of 44 and then rounded it, perhaps like this:\n\nsqrt(44)\n\n[1] 6.63325\n\nround(6.63325)\n\n[1] 7\n\n\nBut to do that, you probably had to first find the root, make a note of the result, and then provide that number to the round function. What a pain!\nA very useful option, if you have value (or a variable, dataset, or other R object) that you will want to use later on, is to store it as a named object in R. In the previous example, you might want to store the square root of 44 in a variable called my_root; then you can provide my_root to the round() function without checking the result of the sqrt() calculation first:\n\nmy_root &lt;- sqrt(44)\nround(my_root)\n\n[1] 7\n\n\nNotice that to assign a name to the results of some R code, you use the symbol &lt;-. You can think of it as an assignment arrow – it points from a value or item toward a name and assigns the name to the thing.\nTry editing the code to change the name of the variable from my_root to something else, then run your new code:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nMake sure you change the name my_root in both places.\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\nyour_new_name &lt;- sqrt(44)\nround(your_new_name)\n\n\n\n\n\n\nWhat if I have a list of numbers to store?\nSometime you might want to create a variable that contains more than one number. You can use the function c() to concatenate a list of numbers:\n\nmy_fave_numbers &lt;- c(4, 44, 16)\nmy_fave_numbers\n\n[1]  4 44 16\n\n\n(First we stored the list of numbers, calling it my_fave_numbers; then we printed the results to the screen by simply typing the variable name my_fave_numbers).\nTry making a list of your three favorite numbers, then using the function sum to add them all up:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFirst use c() to concatenate your chosen numbers (separated by commas).\nDon’t forget to use &lt;- to assign your list of numbers a name!\nThen, use sum() to add them up.\nmy_numbers &lt;- c(___,___,___)\nsum(___)\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\nThis is just one possible solution.\nmy_numbers &lt;- c(4, 16, 44)\nsum(my_numbers)\nNotice you could also nest sum() and c(), or use the pipe operator |&gt; to calculate the numeric answer, but then you would not have the object my_numbers available for later use…\nsum(c(4, 16, 44))\n# or \nc(4, 16, 44) |&gt;\n  sum()\n\n\n\n\n\n\nWhat about data that are not numeric?\nR can work with categorical data as well as numeric data. For example, we could create a list of words and store it as a variable if we wanted (feel free to try changing the words if you want):\n\n\n\n\n\n\n\n\n\n\nWhat if I have a LOT more data to store?\nc() works great for creating small lists of just a few values, but it is not a good way to enter or store large data tables - there is lots of potential for user error. In this course, you will usually be given a dataset already in electronic form; if you need to create one, you would turn to spreadsheet or database software. Either way you read the existing data file into R directly.\nIn R, these larger datasets are stored as objects called data.frames. The next sections will get you started using them.",
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
@@ -191,7 +124,7 @@
     "href": "r-basics.html#using-built-in-datasets-in-r",
     "title": "2  R Basics",
     "section": "2.4 Using built-in datasets in R",
-    "text": "2.4 Using built-in datasets in R\nR has a number of built-in datasets that are accessible to you as soon as you start RStudio.\nIn addition to the datasets that are included with base R, there are add-on packages for R that contain additional software tools and sometimes datasets.\nTo use datasets contained in a package, you have to load the package by running the command:\n\nlibrary(packagename) \n\n\nExample of loading a package\nFor example, we will practice looking at a dataset from the package mosaic.\nBefore we can access the data, we have to load the package. The code might look like this:\n\nlibrary(mosaic)\n\n(Nothing obvious will happen when you run this code…it basically just gives R permission to access the package, so there is often no output visible.)\n\n\nViewing a dataset\nThe mosaic package includes a dataset called HELPrct.\nIf you just run the dataset name (HELPrct) as a command, R will print some (or all - egad!) of the dataset out to the screen! (So don’t…)\nBut…how can we extract selected, useful information about a dataset?\n\n\nGathering information about a dataset\nThere are a few functions that make it easier to take a quick look at a dataset:\n\nhead() prints out the first few rows of the dataset.\nnames() prints out the names of the variables (columns) in the dataset\ndplyr::glimpse() (function glimpse() from package dplyr) gives an short list-like overview of the dataset\nskimr::skim() (function skim() from the package skimr) prints out more detailed graphical summary information about a dataset\nnrow() reports the number of rows (observations or cases) in the dataset\nncol() reports the number of columns (variables) in the dataset\n\nTry applying each of these functions to the HELPrct data and see what the output looks like each time:\n\n#| exercise: check-out-data\nfunction(____)\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nThe input for each of the functions is the name of the dataset: HELPrct.\nhead(HELPrct)\nnames(HELPrct)\nnrow(HELPrct)\nncol(HELPrct)\nskimr::skim(HELPrct)\ndplyr::glimpse(HELPrct)\nIn this case, the point is usually to view the information on-screen, not to store it for later use, so we have not used &lt;- at all to store any output for later use or reference.\n\n\n\n\n\n\nGetting more help\nYou can get help related to R function, and built-in R datasets, using a special function: ?. Just type ? followed by the name of the function or dataset you want help on:\n\n#| exercise: get-help\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nFor example, if you want to know about the function nrow():\n?nrow",
+    "text": "2.4 Using built-in datasets in R\nR has a number of built-in datasets that are accessible to you as soon as you start RStudio.\nIn addition to the datasets that are included with base R, there are add-on packages for R that contain additional software tools and sometimes datasets.\nTo use datasets contained in a package, you have to load the package by running the command:\n\nlibrary(packagename) \n\n\nExample of loading a package\nFor example, we will practice looking at a dataset from the package mosaic.\nBefore we can access the data, we have to load the package. The code might look like this:\n\nlibrary(mosaic)\n\n(Nothing obvious will happen when you run this code…it basically just gives R permission to access the package, so there is often no output visible.)\n\n\nViewing a dataset\nThe mosaic package includes a dataset called HELPrct.\nIf you just run the dataset name (HELPrct) as a command, R will print some (or all - egad!) of the dataset out to the screen! (So don’t…)\nBut…how can we extract selected, useful information about a dataset?\n\n\nGathering information about a dataset\nThere are a few functions that make it easier to take a quick look at a dataset:\n\nhead() prints out the first few rows of the dataset.\nnames() prints out the names of the variables (columns) in the dataset\ndplyr::glimpse() (function glimpse() from package dplyr) gives an short list-like overview of the dataset\nskimr::skim() (function skim() from the package skimr) prints out more detailed graphical summary information about a dataset\nnrow() reports the number of rows (observations or cases) in the dataset\nncol() reports the number of columns (variables) in the dataset\n\nTry applying each of these functions to the HELPrct data and see what the output looks like each time:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\nThe input for each of the functions is the name of the dataset: HELPrct.\nhead(HELPrct)\nnames(HELPrct)\nnrow(HELPrct)\nncol(HELPrct)\nskimr::skim(HELPrct)\ndplyr::glimpse(HELPrct)\nIn this case, the point is usually to view the information on-screen, not to store it for later use, so we have not used &lt;- at all to store any output for later use or reference.\n\n\n\n\n\n\nGetting more help\nYou can get help related to R function, and built-in R datasets, using a special function: ?. Just type ? followed by the name of the function or dataset you want help on:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\nFor example, if you want to know about the function nrow():\n?nrow",
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
@@ -202,7 +135,7 @@
     "href": "r-basics.html#reading-in-data-from-a-file",
     "title": "2  R Basics",
     "section": "2.5 Reading in data from a file",
-    "text": "2.5 Reading in data from a file\nFor this class, you will often be asked to analyze data that is stored in files that are available online - usually in csv format. It’s simple to read them into R. For example, we can read in the file MI_lead.csv, which is stored at https://sldr.netlify.app/data/MI_lead.csv using the function read_csv() (from package readr or super-package tidyverse):\n\nlibrary(readr) # the readr package contains the read_csv() function\nMI_lead &lt;- read_csv(file = 'https://sldr.netlify.app/data/MI_lead.csv')\n\n\nThe most common mistakes\nThe code below contains several of the most common mistakes students make when they try to read in a data file. See if you can find and correct them all!\nThe code below - if corrected - would (on posit.cloud or in standalone R/RStudio) run without an error and read in some baseball statistics from the file http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv.\nHere in this tutorial, it may give the error: ! curl package not installed, falling back to using url() – there’s not a straightforward fix, sorry, but try it on the server if you want to prove to yourself that it works!\n\n#| exercise: baseball-mistakes\nread_csv(http://stacyderuiter.github.io/teachingdata/data-raw/base)\n\n\n\n\n\n\n\n\nHints\n\n\n\n\n\nThink about:\n\nIs the filename or URL spelled correctly, with no typos?\nIs the filename or URL in quotation marks (either ” or ’ work equally)?\nIs the URL complete (including the file extension “.csv”)\nWas &lt;- used to assign a name to the dataset once read in? (Otherwise it will just be uselessly printed to the screen and not available for later use!)\n\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nbaseball_data &lt;- read_csv(file = 'http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv')\n\n\n\n\n\n\nWhat about local files?\nThe same function, read_csv(), can be used to read in a local file. You just need to change the input to read_csv() – instead of a URL, you provide a path and filename (in quotes). For example, the input file = 'https://sldr.netlify.app/data/MI_lead.csv' might become file = 'C:\\\\Data\\\\MI_lead.csv'.\nWe won’t do an example in this tutorial because it’s not straightforward to work with local files within a tutorial environment, but you can practice it once you are working independently in RStudio.\nIf you are working on the server r.cs.calvin.edu, you will have to upload files to your cloud space on the server before you can read them in (RStudio on the server cannot access files on your computer’s hard drive). Look in the “Files” tab on the lower right, and then click “Upload.”\n\n\nNamed input arguments\nThe input argument we provided to R is the URL (in quotes – either single or double quotes are fine). But notice that this time, we gave the input argument a name, “file”, and specified its value with an equal sign.\nThis is not required - the command works fine without it:\n\nMI_lead &lt;- read_csv('https://sldr.netlify.app/data/MI_lead.csv')\n\nHowever, if a function has more than just one input argument, it’s good to get in the habit of providing names for the inputs. If you provide names, then the order in which you list the inputs doesn’t matter; without names, the order matters and you have to use ? to figure out what order R expects!\n\n\nRenaming variables in a dataset\nThis is an advanced topic, so don’t worry if it seems complicated; for now, it just nice to realize some of the power R has to clean up and reorganize data.\nWhat if we didn’t like the names of the MI_lead variables? For example, a new user of the dataset might not know that that ELL stands for “elevated lead levels” and that ELL2005 gives the proportion of tested kids who had elevated lead levels in the year 2005.\nIf we wanted to use a clearer (though longer) variable name, we might prefer “prop_elevated_lead_2005” instead of “ELL2005” – more letters to type, but a bit easier to understand for a new user. How can we tell R we want to rename a variable?\nWe use the code:\n\nMI_lead &lt;- MI_lead |&gt;\n  rename(prop_elevated_lead_2005 = ELL2005)\n\nglimpse(MI_lead)\n\nThe code above uses some tools you’ve seen, and some more advanced ones you haven’t seen yet. The symbol |&gt; is called a “pipe” and basically means “and then…” Translated into words, the code above tells R:\n\nMake a dataset called MI_lead by starting with the dataset MI_lead.\nNext, take the results do something more with them (|&gt;) …\nrename() a variable. What I want to rename is the variable ELL2005. Its new name should be prop_elevated_lead_2005.”\n\nSee…you can already start to make sense of even some pretty complicated (and useful) code.\nNote: If you give R several commands, not connected by pipes, it will do the first, then the second, then the third, and so on. R doesn’t need the pipe for permission to continue! Instead, the pipe tells R to take the results from the first command, and use them as the input or starting material for the next command.\n\n\nCheck out the data\nOK, back to business - simple functions and datasets in R.\nIt’s your turn to practice now. Use one of the functions you have learned so far to extract some information about the MI_lead dataset.\nHow many rows are in the dataset? How many variables (columns)?\nWhat are the variables named, and what are their values like?\nRemember, ? won’t work on MI_lead because it’s not a built-in R dataset. Also, the dataset MI_lead is already read in for you, here…so you don’t need to use read_csv().\n\n#| exercise: look-at-MI_lead",
+    "text": "2.5 Reading in data from a file\nFor this class, you will often be asked to analyze data that is stored in files that are available online - usually in csv format. It’s simple to read them into R. For example, we can read in the file MI_lead.csv, which is stored at https://sldr.netlify.app/data/MI_lead.csv using the function read_csv() (from package readr or super-package tidyverse):\n\nlibrary(readr) # the readr package contains the read_csv() function\nMI_lead &lt;- read_csv(file = 'https://sldr.netlify.app/data/MI_lead.csv')\n\n\nThe most common mistakes\nThe code below contains several of the most common mistakes students make when they try to read in a data file. See if you can find and correct them all!\nThe code below - if corrected - would (on posit.cloud or in standalone R/RStudio) run without an error and read in some baseball statistics from the file http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv.\nHere in this tutorial, it may give the error: ! curl package not installed, falling back to using url() – there’s not a straightforward fix, sorry, but try it on the server if you want to prove to yourself that it works!\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHints\n\n\n\n\n\nThink about:\n\nIs the filename or URL spelled correctly, with no typos?\nIs the filename or URL in quotation marks (either ” or ’ work equally)?\nIs the URL complete (including the file extension “.csv”)\nWas &lt;- used to assign a name to the dataset once read in? (Otherwise it will just be uselessly printed to the screen and not available for later use!)\n\n\n\n\n\n\n\n\n\n\n\n\nSolution\n\n\n\n\n\nbaseball_data &lt;- read_csv(file = 'http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv')\n\n\n\n\n\n\nWhat about local files?\nThe same function, read_csv(), can be used to read in a local file. You just need to change the input to read_csv() – instead of a URL, you provide a path and filename (in quotes). For example, the input file = 'https://sldr.netlify.app/data/MI_lead.csv' might become file = 'C:\\\\Data\\\\MI_lead.csv'.\nWe won’t do an example in this tutorial because it’s not straightforward to work with local files within a tutorial environment, but you can practice it once you are working independently in RStudio.\nIf you are working on the server r.cs.calvin.edu, you will have to upload files to your cloud space on the server before you can read them in (RStudio on the server cannot access files on your computer’s hard drive). Look in the “Files” tab on the lower right, and then click “Upload.”\n\n\nNamed input arguments\nThe input argument we provided to R is the URL (in quotes – either single or double quotes are fine). But notice that this time, we gave the input argument a name, “file”, and specified its value with an equal sign.\nThis is not required - the command works fine without it:\n\nMI_lead &lt;- read_csv('https://sldr.netlify.app/data/MI_lead.csv')\n\nHowever, if a function has more than just one input argument, it’s good to get in the habit of providing names for the inputs. If you provide names, then the order in which you list the inputs doesn’t matter; without names, the order matters and you have to use ? to figure out what order R expects!\n\n\nRenaming variables in a dataset\nThis is an advanced topic, so don’t worry if it seems complicated; for now, it just nice to realize some of the power R has to clean up and reorganize data.\nWhat if we didn’t like the names of the MI_lead variables? For example, a new user of the dataset might not know that that ELL stands for “elevated lead levels” and that ELL2005 gives the proportion of tested kids who had elevated lead levels in the year 2005.\nIf we wanted to use a clearer (though longer) variable name, we might prefer “prop_elevated_lead_2005” instead of “ELL2005” – more letters to type, but a bit easier to understand for a new user. How can we tell R we want to rename a variable?\nWe use the code:\n\nMI_lead &lt;- MI_lead |&gt;\n  rename(prop_elevated_lead_2005 = ELL2005)\n\nglimpse(MI_lead)\n\nThe code above uses some tools you’ve seen, and some more advanced ones you haven’t seen yet. The symbol |&gt; is called a “pipe” and basically means “and then…” Translated into words, the code above tells R:\n\nMake a dataset called MI_lead by starting with the dataset MI_lead.\nNext, take the results do something more with them (|&gt;) …\nrename() a variable. What I want to rename is the variable ELL2005. Its new name should be prop_elevated_lead_2005.”\n\nSee…you can already start to make sense of even some pretty complicated (and useful) code.\nNote: If you give R several commands, not connected by pipes, it will do the first, then the second, then the third, and so on. R doesn’t need the pipe for permission to continue! Instead, the pipe tells R to take the results from the first command, and use them as the input or starting material for the next command.\n\n\nCheck out the data\nOK, back to business - simple functions and datasets in R.\nIt’s your turn to practice now. Use one of the functions you have learned so far to extract some information about the MI_lead dataset.\nHow many rows are in the dataset? How many variables (columns)?\nWhat are the variables named, and what are their values like?\nRemember, ? won’t work on MI_lead because it’s not a built-in R dataset. Also, the dataset MI_lead is already read in for you, here…so you don’t need to use read_csv().",
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
@@ -396,6 +329,17 @@
     ]
   },
   {
+    "objectID": "r-results.html#including-results-of-r-calculations-in-your-text",
+    "href": "r-results.html#including-results-of-r-calculations-in-your-text",
+    "title": "4  R Results in Quarto Text",
+    "section": "",
+    "text": "Simple but Inefficient\nYou may want to cite the result in the text part of your file…so you would type:\nThe mean length of the kids’ feet was ` r mean(~length, data=KidsFeet) ` cm.\nTo get:\nThe mean length of the kids’ feet was 24.7230769 cm.\n\n\nSide Note: back-ticks\nThose accent marks (before the “r” and at the end of the R-code stuff) are not normal single quotes or apostrophes; they are “back-ticks” or “graves” ( ` ), just like those used to help define the start and end of R code chunks in your Quarto file. There should not actually be a space between the ` and the r.\n\n\nMore Efficient\nIt’s annoying (and sometimes not really practical) to (re)type the entire R command in the text part of your file. An option is to save the quantity you want to refer to as a variable in R:\n\nmean_length &lt;- mean(~length, data = KidsFeet)\n\nThen you can write: The mean foot length of the kids was ` r mean_length` cm.\nTo get: The mean foot length of the kids was 24.7230769 cm.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>R Results in Quarto Text</span>"
+    ]
+  },
+  {
     "objectID": "r-results.html#rounding",
     "href": "r-results.html#rounding",
     "title": "4  R Results in Quarto Text",
@@ -459,17 +403,6 @@
     "crumbs": [
       "Getting Started",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Math Notation in Quarto</span>"
-    ]
-  },
-  {
-    "objectID": "r-results.html#including-results-of-r-calculations-in-your-text",
-    "href": "r-results.html#including-results-of-r-calculations-in-your-text",
-    "title": "4  R Results in Quarto Text",
-    "section": "",
-    "text": "Simple but Inefficient\nYou may want to cite the result in the text part of your file…so you would type:\nThe mean length of the kids’ feet was ` r mean(~length, data=KidsFeet) ` cm.\nTo get:\nThe mean length of the kids’ feet was 24.7230769 cm.\n\n\nSide Note: back-ticks\nThose accent marks (before the “r” and at the end of the R-code stuff) are not normal single quotes or apostrophes; they are “back-ticks” or “graves” ( ` ), just like those used to help define the start and end of R code chunks in your Quarto file. There should not actually be a space between the ` and the r.\n\n\nMore Efficient\nIt’s annoying (and sometimes not really practical) to (re)type the entire R command in the text part of your file. An option is to save the quantity you want to refer to as a variable in R:\n\nmean_length &lt;- mean(~length, data = KidsFeet)\n\nThen you can write: The mean foot length of the kids was ` r mean_length` cm.\nTo get: The mean foot length of the kids was 24.7230769 cm.",
-    "crumbs": [
-      "Getting Started",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>R Results in Quarto Text</span>"
     ]
   },
   {
@@ -631,6 +564,39 @@
     ]
   },
   {
+    "objectID": "graph-design-text-elements.html#when-text-runs-off-the-edge",
+    "href": "graph-design-text-elements.html#when-text-runs-off-the-edge",
+    "title": "8  Text Elements",
+    "section": "8.3 When Text Runs “off the edge”",
+    "text": "8.3 When Text Runs “off the edge”\nSometimes a title or axis label is too long and runs off the edge of the figure. Using a smaller font is not often an ideal solution. If you can’t just use a shorter label, consider adding line breaks.",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html#examples",
+    "href": "graph-design-text-elements.html#examples",
+    "title": "8  Text Elements",
+    "section": "8.4 Examples",
+    "text": "8.4 Examples",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html#lets-talk-about-titles",
+    "href": "graph-design-text-elements.html#lets-talk-about-titles",
+    "title": "8  Text Elements",
+    "section": "8.5 Let’s Talk About Titles",
+    "text": "8.5 Let’s Talk About Titles\nShould your graph have a title?\nWell…maybe.\nHear me out.\nWhether or not titles are useful, allowed, or expected is pretty discipline- and audience-specific. In journalism and some parts of business, they are used very often. In the peer-reviewed scientific literature, they are exceedingly rare. In a slide deck, they are often useful…unless they say the same thing as your slide title! Know your goals and your audience.\n\nAvoid Redundant Titles\nIf you do want to use a title, make sure it provides information or details that are not already present in other text elements. A title that restates the axis labels is usually a waste:\n\n\n\n\n\n\n\n\n\nNotice that we can argue about this a little. Could we have the title instead of the axis labels? Maybe, but if it’s a scientific publication, having the units of measure is going to be important.\nIs this title actually adding info because it clarifies that “Town,” “City,” etc. are “Locations”? I think it’s a stretch, but sometimes you can make such a case.\nGenerally, my advice is…\n\n\nIf the title is not adding something new and crucial and helping the reader decipher the main story of the plot, then omit it!\n\n\nSo what might an “informative” title look like?",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
     "objectID": "graph-design-summary.html",
     "href": "graph-design-summary.html",
     "title": "9  Summary",
@@ -664,17 +630,6 @@
     ]
   },
   {
-    "objectID": "graph-design-summary.html#pause-for-reflection",
-    "href": "graph-design-summary.html#pause-for-reflection",
-    "title": "9  Summary",
-    "section": "9.4 Pause for Reflection",
-    "text": "9.4 Pause for Reflection\nTake a moment to reflect on what you learned. Which Tip do you remember most clearly, think is most important, or want to challenge? Consider making a few notes for yourself for the future (you’ll have to make and critique plenty of graphics in your homework assignments).",
-    "crumbs": [
-      "Designing Effective Visualizations",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Summary</span>"
-    ]
-  },
-  {
     "objectID": "graph-design-summary.html#a-critique-checklist",
     "href": "graph-design-summary.html#a-critique-checklist",
     "title": "9  Summary",
@@ -683,127 +638,6 @@
     "crumbs": [
       "Designing Effective Visualizations",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Summary</span>"
-    ]
-  },
-  {
-    "objectID": "graph-design-text-elements.html#when-text-runs-off-the-edge",
-    "href": "graph-design-text-elements.html#when-text-runs-off-the-edge",
-    "title": "8  Text Elements",
-    "section": "8.3 When Text Runs “off the edge”",
-    "text": "8.3 When Text Runs “off the edge”\nSometimes a title or axis label is too long and runs off the edge of the figure. Using a smaller font is not often an ideal solution. If you can’t just use a shorter label, consider adding line breaks.",
-    "crumbs": [
-      "Designing Effective Visualizations",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
-    ]
-  },
-  {
-    "objectID": "graph-design-text-elements.html#example",
-    "href": "graph-design-text-elements.html#example",
-    "title": "8  Text Elements",
-    "section": "8.4 Example",
-    "text": "8.4 Example",
-    "crumbs": [
-      "Designing Effective Visualizations",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
-    ]
-  },
-  {
-    "objectID": "graph-design-text-elements.html#examples",
-    "href": "graph-design-text-elements.html#examples",
-    "title": "8  Text Elements",
-    "section": "8.4 Examples",
-    "text": "8.4 Examples",
-    "crumbs": [
-      "Designing Effective Visualizations",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
-    ]
-  },
-  {
-    "objectID": "graph-design-text-elements.html#lets-talk-about-titles",
-    "href": "graph-design-text-elements.html#lets-talk-about-titles",
-    "title": "8  Text Elements",
-    "section": "8.5 Let’s Talk About Titles",
-    "text": "8.5 Let’s Talk About Titles\nShould your graph have a title?\nWell…maybe.\nHear me out.\nWhether or not titles are useful, allowed, or expected is pretty discipline- and audience-specific. In journalism and some parts of business, they are used very often. In the peer-reviewed scientific literature, they are exceedingly rare. In a slide deck, they are often useful…unless they say the same thing as your slide title! Know your goals and your audience.\n\nAvoid Redundant Titles\nIf you do want to use a title, make sure it provides information or details that are not already present in other text elements. A title that restates the axis labels is usually a waste:\n\n\n\n\n\n\n\n\n\nNotice that we can argue about this a little. Could we have the title instead of the axis labels? Maybe, but if it’s a scientific publication, having the units of measure is going to be important.\nIs this title actually adding info because it clarifies that “Town,” “City,” etc. are “Locations”? I think it’s a stretch, but sometimes you can make such a case.\nGenerally, my advice is…\n\n\nIf the title is not adding something new and crucial and helping the reader decipher the main story of the plot, then omit it!\n\n\nSo what might an “informative” title look like?",
-    "crumbs": [
-      "Designing Effective Visualizations",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
-    ]
-  },
-  {
-    "objectID": "graphics-choose-multiple-quant.html",
-    "href": "graphics-choose-multiple-quant.html",
-    "title": "14  Gallery: Multiple Quantitative Variables",
-    "section": "",
-    "text": "14.1 Scatter Plot",
-    "crumbs": [
-      "Choose a Graph Type",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
-    ]
-  },
-  {
-    "objectID": "graphics-choose-multiple-quant.html#scatter-plot",
-    "href": "graphics-choose-multiple-quant.html#scatter-plot",
-    "title": "14  Gallery: Multiple Quantitative Variables",
-    "section": "",
-    "text": "A scatterplot is the default for visualizing the relationship between two quantitative variables\nBe sure you actually have two quantitative variables! If not, another plot may be a better option.\n\n\n\nLet’s just reiterate: if one of your variables is actually or effectively categorical, a basic scatterplot is usually not ideal!",
-    "crumbs": [
-      "Choose a Graph Type",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
-    ]
-  },
-  {
-    "objectID": "graphics-choose-multiple-quant.html#line-plot",
-    "href": "graphics-choose-multiple-quant.html#line-plot",
-    "title": "14  Gallery: Multiple Quantitative Variables",
-    "section": "14.2 Line Plot",
-    "text": "14.2 Line Plot\n\n\n\n\n\n\n\n\n\n\nIf the x-axis variable is Time (or it otherwise makes sense to join the dots), a line can replace the dots, or be added to them\nMake sure connecting the dots makes sense in context and does not guide the eye to incorrect interpretations (for example, emphasizing outliers)",
-    "crumbs": [
-      "Choose a Graph Type",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
-    ]
-  },
-  {
-    "objectID": "graphics-choose-multiple-quant.html#quantitative-variables",
-    "href": "graphics-choose-multiple-quant.html#quantitative-variables",
-    "title": "14  Gallery: Multiple Quantitative Variables",
-    "section": "14.3 >2 Quantitative Variables",
-    "text": "14.3 &gt;2 Quantitative Variables\nWhat if you have three or four quantitative variables whose relationships you’re curious about?\nProceed with caution!\nIt’s possible to include 3+ variables on one plot, but ideally it should still be interpretable at a glance:\n\nWhat is the main point of the figure? Is it possible to make the point without showing all 3+ variables together?\nKeep things as simple as you can while still telling the story you want to tell.\n\n\nScatter + Size\n\n\n\n\n\n\n\n\n\n\nYou can adjust the size of each dot in a scatter plot to correspond to the value of a third variable\nThis is especially useful when the third variable measures the size of the population being represented – for example, a scatter plot of life expectancy vs income for many countries, with point size indicating population of each country\n\n\n\nScatter + Color\nYou can also color by a third quantitative variable:\n\n\n\n\n\n\n\n\n\nThis usually only works well visually if all three variables are clearly associate with each other, so that certain colors are clearly dominant in certain regions of the graph. Otherwise, you get a mishmash of colors all over, which can be distracting.\n\n\nAnimation\nIt may be possible to show a third quantitative variable via animation (this often works especially well if that third variable is actually time!)",
-    "crumbs": [
-      "Choose a Graph Type",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
-    ]
-  },
-  {
-    "objectID": "graphics-choose-cat-quant-mix.html",
-    "href": "graphics-choose-cat-quant-mix.html",
-    "title": "15  Gallery: Mixed Quantitative + Categorical",
-    "section": "",
-    "text": "15.1 Distribution by Groups\nThere are several plots designed specifically to look at the distribution of a quantitative variable, grouped by a categorical variable.",
-    "crumbs": [
-      "Choose a Graph Type\"",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
-    ]
-  },
-  {
-    "objectID": "graphics-choose-cat-quant-mix.html#distribution-by-groups",
-    "href": "graphics-choose-cat-quant-mix.html#distribution-by-groups",
-    "title": "15  Gallery: Mixed Quantitative + Categorical",
-    "section": "",
-    "text": "Boxplots\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe boxplot shows a summary of the distribution. The box spans the middle half of the data, with the line marking the median. The “whisker” lines extend to cover the range of “most of” the data, with outliers shown individually\nFor details, check out this optional explanation of how boxplots are constructed from Introduction to Modern Statistics by Mine Çetinkaya-Rundel and Johanna Hardin.\nIf your dataset is too small to estimate the median and quartiles of the data accurately, consider showing all the observations (for example, using or overlaying a jitter plot)\n\n\n\nViolin Plots\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThese show a mirrored density plot for each group\nAs for density plots, make sure you have a large enough dataset so that the bumps in the density curve don’t represent just one or a couple of observations\n\n\n\nJitter Plots\n\n\n\n\n\n\n\n\n\n\nThese show all the points in every category, “jittered” (moved slightly away from the category axis) to reduce overplotting\nIf the dataset is too large, overplotting may still be a big problem\nJitter plots are often used as an additional layer on top of boxplots or violin plots to make the size of the dataset, and the locations of individual datapoints, more visible\n\n\n\nSina Plots\n\n\n\n\n\n\n\n\n\n\nThese show all the points in every category, arranged so that the width of the point cloud corresponds to the density of observations\nIf the dataset is too large, overplotting may become an issue\nA sina plot is a bit of a hybrid between a violin plot and a jitter plot; or, a more organized, less random version of a jitter plot.",
-    "crumbs": [
-      "Choose a Graph Type\"",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
-    ]
-  },
-  {
-    "objectID": "graphics-choose-cat-quant-mix.html#facets",
-    "href": "graphics-choose-cat-quant-mix.html#facets",
-    "title": "15  Gallery: Mixed Quantitative + Categorical",
-    "section": "15.2 Facets?",
-    "text": "15.2 Facets?\nYou can also consider making multi-panel plots with one histogram, density plot, or dotplot per facet, but comparing between facets is usually harder than comparing boxplots or violin plots on a single axis.\nMulti-facet plots can show one panel per group, for any kind of plot seen so far: a bar graph for each group, a stacked bar for each group, a scatterplot for each group, a set of boxplots for each group, etc. etc.\n\n\n\n\n\n\n\n\n\n\nCheck Your Understanding: Quant. + Cat.\nThere are some errors and inconsistencies in the chart below!\nCheck it out – can you find them?\n\n\n\nchart choice infographic",
-    "crumbs": [
-      "Choose a Graph Type\"",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
     ]
   },
   {
@@ -901,11 +735,11 @@
     ]
   },
   {
-    "objectID": "graphics-choose-one-cat.html#cleveland-dot-plot",
-    "href": "graphics-choose-one-cat.html#cleveland-dot-plot",
+    "objectID": "graphics-choose-one-cat.html#cleveland-dot-lollipop-plot",
+    "href": "graphics-choose-one-cat.html#cleveland-dot-lollipop-plot",
     "title": "11  Gallery: One Categorical Variable",
-    "section": "11.3 Cleveland Dot Plot",
-    "text": "11.3 Cleveland Dot Plot\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMain difference is whether the “sticks” are drawn (Lollipop) or not (Cleveland Dot)\nMuch like a bar chart, but using dots or lollipops to mark the count or proportion in each category\nWork well when there are many categories to be ranked by frequency",
+    "section": "11.3 Cleveland Dot / Lollipop Plot",
+    "text": "11.3 Cleveland Dot / Lollipop Plot\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMain difference is whether the “sticks” are drawn (Lollipop) or not (Cleveland Dot)\nMuch like a bar chart, but using dots or lollipops to mark the count or proportion in each category\nWork well when there are many categories to be ranked by frequency",
     "crumbs": [
       "Choose a Graph Type",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Gallery: One Categorical Variable</span>"
@@ -989,17 +823,6 @@
     ]
   },
   {
-    "objectID": "graphics-choose-one-cat.html#cleveland-dot-lollipop-plot",
-    "href": "graphics-choose-one-cat.html#cleveland-dot-lollipop-plot",
-    "title": "11  Gallery: One Categorical Variable",
-    "section": "11.3 Cleveland Dot / Lollipop Plot",
-    "text": "11.3 Cleveland Dot / Lollipop Plot\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMain difference is whether the “sticks” are drawn (Lollipop) or not (Cleveland Dot)\nMuch like a bar chart, but using dots or lollipops to mark the count or proportion in each category\nWork well when there are many categories to be ranked by frequency",
-    "crumbs": [
-      "Choose a Graph Type",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Gallery: One Categorical Variable</span>"
-    ]
-  },
-  {
     "objectID": "graphics-choose-multiple-cat.html",
     "href": "graphics-choose-multiple-cat.html",
     "title": "13  Gallery: 2-3 Categorical Variables",
@@ -1042,5 +865,89 @@
       "Choose a Graph Type",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>Gallery: 2-3 Categorical Variables</span>"
     ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-quant.html",
+    "href": "graphics-choose-multiple-quant.html",
+    "title": "14  Gallery: Multiple Quantitative Variables",
+    "section": "",
+    "text": "14.1 Scatter Plot",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-quant.html#scatter-plot",
+    "href": "graphics-choose-multiple-quant.html#scatter-plot",
+    "title": "14  Gallery: Multiple Quantitative Variables",
+    "section": "",
+    "text": "A scatterplot is the default for visualizing the relationship between two quantitative variables\nBe sure you actually have two quantitative variables! If not, another plot may be a better option.\n\n\n\nLet’s just reiterate: if one of your variables is actually or effectively categorical, a basic scatterplot is usually not ideal!",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-quant.html#line-plot",
+    "href": "graphics-choose-multiple-quant.html#line-plot",
+    "title": "14  Gallery: Multiple Quantitative Variables",
+    "section": "14.2 Line Plot",
+    "text": "14.2 Line Plot\n\n\n\n\n\n\n\n\n\n\nIf the x-axis variable is Time (or it otherwise makes sense to join the dots), a line can replace the dots, or be added to them\nMake sure connecting the dots makes sense in context and does not guide the eye to incorrect interpretations (for example, emphasizing outliers)",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-quant.html#quantitative-variables",
+    "href": "graphics-choose-multiple-quant.html#quantitative-variables",
+    "title": "14  Gallery: Multiple Quantitative Variables",
+    "section": "14.3 >2 Quantitative Variables",
+    "text": "14.3 &gt;2 Quantitative Variables\nWhat if you have three or four quantitative variables whose relationships you’re curious about?\nProceed with caution!\nIt’s possible to include 3+ variables on one plot, but ideally it should still be interpretable at a glance:\n\nWhat is the main point of the figure? Is it possible to make the point without showing all 3+ variables together?\nKeep things as simple as you can while still telling the story you want to tell.\n\n\nScatter + Size\n\n\n\n\n\n\n\n\n\n\nYou can adjust the size of each dot in a scatter plot to correspond to the value of a third variable\nThis is especially useful when the third variable measures the size of the population being represented – for example, a scatter plot of life expectancy vs income for many countries, with point size indicating population of each country\n\n\n\nScatter + Color\nYou can also color by a third quantitative variable:\n\n\n\n\n\n\n\n\n\nThis usually only works well visually if all three variables are clearly associate with each other, so that certain colors are clearly dominant in certain regions of the graph. Otherwise, you get a mishmash of colors all over, which can be distracting.\n\n\nAnimation\nIt may be possible to show a third quantitative variable via animation (this often works especially well if that third variable is actually time!)",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-cat-quant-mix.html",
+    "href": "graphics-choose-cat-quant-mix.html",
+    "title": "15  Gallery: Mixed Quantitative + Categorical",
+    "section": "",
+    "text": "15.1 Distribution by Groups\nThere are several plots designed specifically to look at the distribution of a quantitative variable, grouped by a categorical variable.",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-cat-quant-mix.html#distribution-by-groups",
+    "href": "graphics-choose-cat-quant-mix.html#distribution-by-groups",
+    "title": "15  Gallery: Mixed Quantitative + Categorical",
+    "section": "",
+    "text": "Boxplots\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe boxplot shows a summary of the distribution. The box spans the middle half of the data, with the line marking the median. The “whisker” lines extend to cover the range of “most of” the data, with outliers shown individually\nFor details, check out this optional explanation of how boxplots are constructed from Introduction to Modern Statistics by Mine Çetinkaya-Rundel and Johanna Hardin.\nIf your dataset is too small to estimate the median and quartiles of the data accurately, consider showing all the observations (for example, using or overlaying a jitter plot)\n\n\n\nViolin Plots\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThese show a mirrored density plot for each group\nAs for density plots, make sure you have a large enough dataset so that the bumps in the density curve don’t represent just one or a couple of observations\n\n\n\nJitter Plots\n\n\n\n\n\n\n\n\n\n\nThese show all the points in every category, “jittered” (moved slightly away from the category axis) to reduce overplotting\nIf the dataset is too large, overplotting may still be a big problem\nJitter plots are often used as an additional layer on top of boxplots or violin plots to make the size of the dataset, and the locations of individual datapoints, more visible\n\n\n\nSina Plots\n\n\n\n\n\n\n\n\n\n\nThese show all the points in every category, arranged so that the width of the point cloud corresponds to the density of observations\nIf the dataset is too large, overplotting may become an issue\nA sina plot is a bit of a hybrid between a violin plot and a jitter plot; or, a more organized, less random version of a jitter plot.",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-cat-quant-mix.html#facets",
+    "href": "graphics-choose-cat-quant-mix.html#facets",
+    "title": "15  Gallery: Mixed Quantitative + Categorical",
+    "section": "15.2 Facets?",
+    "text": "15.2 Facets?\nYou can also consider making multi-panel plots with one histogram, density plot, or dotplot per facet, but comparing between facets is usually harder than comparing boxplots or violin plots on a single axis.\nMulti-facet plots can show one panel per group, for any kind of plot seen so far: a bar graph for each group, a stacked bar for each group, a scatterplot for each group, a set of boxplots for each group, etc. etc.\n\n\n\n\n\n\n\n\n\n\nCheck Your Understanding: Quant. + Cat.\nThere are some errors and inconsistencies in the chart below!\nCheck it out – can you find them?\n\n\n\nchart choice infographic",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
+    ]
+  },
+  {
+    "objectID": "cclicense.html",
+    "href": "cclicense.html",
+    "title": "DATA 545 Tutorial",
+    "section": "",
+    "text": "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.\n\n\n\nCC BY-SA 4.0"
   }
 ]

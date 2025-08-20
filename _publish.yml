@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: faec086a-99c1-4060-96e7-7c97739f7d84
+      url: https://sldr.quarto.pub/data-545-tutorial
