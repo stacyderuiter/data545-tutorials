@@ -1,0 +1,1046 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "DATA 545 Tutorial",
+    "section": "",
+    "text": "Preface\nThis book contains notes and materials for the Calvin University course DATA 545 (Applied Regression Modeling).",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "1.1 There will be some content.\nEventually.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "16  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
+    "crumbs": [
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "References"
+    ]
+  },
+  {
+    "objectID": "cclicense.html",
+    "href": "cclicense.html",
+    "title": "DATA 545 Tutorial",
+    "section": "",
+    "text": "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.\n\n\n\nCC BY-SA 4.0"
+  },
+  {
+    "objectID": "index.html#will-this-be-a-page",
+    "href": "index.html#will-this-be-a-page",
+    "title": "DATA 545 Tutorial",
+    "section": "Will this be a page?",
+    "text": "Will this be a page?\nThis book contains notes and materials for the Calvin University course DATA 545 (Applied Regression Modeling).",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#and-will-this",
+    "href": "index.html#and-will-this",
+    "title": "DATA 545 Tutorial",
+    "section": "And will this?",
+    "text": "And will this?",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "intro.html#and-will-this",
+    "href": "intro.html#and-will-this",
+    "title": "1  Introduction",
+    "section": "1.2 And will this?",
+    "text": "1.2 And will this?",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "install-r.html",
+    "href": "install-r.html",
+    "title": "1  Installation",
+    "section": "",
+    "text": "1.1 Motivation\nOne way to access R and RStudio is via an account at https://r.stem.calvin.edu/ (or if not a Calvin student, at posit.cloud). To use RStudio on one of these servers, all you need to do is log in, with nothing to install or maintain.\nFor many, this cloud approach is a great way to use RStudio, and they have no reason to install a standalone copy of the software on a personal computer. If you are happy using the server, exit this tutorial now and continue happily using the server!\nIf you have concerns about your internet bandwidth, speed, usage limits, or firewalls, or if you want to be able to work on assignments for this class somewhere without internet access, or if you need to analyze really large datasets or fit complex models, you may want to install R and RStudio and work locally instead of on the server.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
+    ]
+  },
+  {
+    "objectID": "install-r.html#goal",
+    "href": "install-r.html#goal",
+    "title": "1  Installation",
+    "section": "1.2 Goal",
+    "text": "1.2 Goal\nThis document will guide you through the process of installing R, RStudio, and other necessary R packages on your own computer, if you choose to do so. Again, there is no course requirement to do this.\nThe process will have three stages, which work best in order:\n\nInstall R\nInstall RStudio\nInstall necessary R packages from within RStudio",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
+    ]
+  },
+  {
+    "objectID": "install-r.html#downloadinstall-1-of-2-r",
+    "href": "install-r.html#downloadinstall-1-of-2-r",
+    "title": "1  Installation",
+    "section": "1.3 Download/Install 1 of 2: R",
+    "text": "1.3 Download/Install 1 of 2: R\nR downloads are available from https://cran.r-project.org/.\n\n\n\n\n\n\n\n\n\n\nSelect the download that matches your operating system and hardware (Mac OS, Windows, Linux, etc.)\nYou only need the “base” version.\nDownload the installer and run it. You may want to choose not to create shortcuts, since you will access R only through RStudio.\n\n\nMac with Homebrew\nWindows and Linux users: skip this section.\n\nIf working on Mac OS and already using Homebrew to manage software packages, you can skip the manual download above and just run:\n\n\nbrew install r\n\n\nIf you want to get Homebrew and install this way on a mac, there are detailed instructions online – scroll down to “Instructions for Mac Users”. Note that you don’t necessarily need OpenBLAS for this course (as recommended on the linked website); it does not really matter either way.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
+    ]
+  },
+  {
+    "objectID": "install-r.html#downloadinstall-2-of-2-rstudio",
+    "href": "install-r.html#downloadinstall-2-of-2-rstudio",
+    "title": "1  Installation",
+    "section": "1.4 Download/Install 2 of 2: RStudio",
+    "text": "1.4 Download/Install 2 of 2: RStudio\nOnce you have installed R, you next need to install RStudio.\n\nDownloads of RStudio are available at https://rstudio.com/products/rstudio/download/.\nYou should select the free version of RStudio Desktop.\nDownload and install the version that matches your operating system\n\n\n\n\n\n\n\n\n\n\n\nMac with Homebrew\nWindows and Linux users: you can’t use Homebrew.\n\nIf using a mac and Homebrew, you can alternatively install RStudio via:\n\n\nbrew cask install rstudio",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
+    ]
+  },
+  {
+    "objectID": "install-r.html#install-33-packages",
+    "href": "install-r.html#install-33-packages",
+    "title": "1  Installation",
+    "section": "1.5 Install 3/3: Packages",
+    "text": "1.5 Install 3/3: Packages\nIn addition to base R and the RStudio IDE, we use a few add-on packages that you will need to install yourself.\n\nOpen RStudio\nIn your RStudio Console window, which is on the lower left by default, type (or copy and paste) the code below and click “Enter” to run it:\n\n\ninstall.packages(c('rmarkdown', # reproducible research documents\n                   'tidyverse', 'remotes', # graphics and data wrangling\n                   'pander', # formatting tables\n                   'glmmTMB', 'mgcv', # fitting regression models\n                   'car', 'ggeffects'#,  working with fitted models\n                   # optional additions:\n                   # 'mosaic', # formula-based summary stats and resampling\n                   # 'openintro', # datasets\n                   # 'shiny', 'plotly', 'gganimate', 'leaflet' # interactive graphics/maps\n                   )) \n# if desired, for function to ggplot ACFs:\nremotes::install_github('stacyderuiter/s245')\n\n\nIn addition to the packages you listed specifically, a number of dependencies (other packages that the packages you requested require to work) will be installed.\nThe amount of time it takes will depend on your computer and internet connection speed, but as long as it finishes without any messages that literally say “Error: …”, it worked!.\nIf RStudio prompts you to update packages or install additional dependencies, it’s usually a good idea to do so.\nIf R asks you if you want to install a certain package “from source” blah, blah, “is newer…” usually you can answer yes (or no) and it will work either way.\nIf you get an error or have any questions, get in touch with your professor.\n\n\nTeX for PDF generation\nTo enable generation of PDF output from Rmarkdown documents, there is a little more code to run. (If you don’t know what this means yet, you will soon - and you do probably need to be able to do it.)\nThis one has two steps: installing the package, and then using the package to install the PDF-generation utility.\nIf you already have TeX/LaTeX/MikTeX installed on your computer, you can probably skip this installation (but it won’t hurt).\n\ninstall.packages('tinytex')\ntinytex::install_tinytex()  # install TinyTeX\n\n\n\nPoint-and-Click Option\nIf you would like to install the packages interactively instead of on the command line (as already shown above), you can click the Packages tab on the lower right in RStudio, then click Install at the top of the tab. Enter the names of the packages you want to install in the middle “Packages” blank, and leave the rest of the default options, then click “Install”.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
+    ]
+  },
+  {
+    "objectID": "install-r.html#you-did-it",
+    "href": "install-r.html#you-did-it",
+    "title": "1  Installation",
+    "section": "1.6 You did it!",
+    "text": "1.6 You did it!\nIf you complete all three steps above, you should have a working version of RStudio on your machine. To use it, just open RStudio; it should look nearly identical to the RStudio Server version you have been using online.\nYou don’t ever have to open or access R directly; RStudio does it all for you.\nIn case of any errors or problems, contact me (stacy.deruiter at calvin.edu) anytime and I’ll do my best to help.\n(Don’t contact school help desks; they don’t support this software).",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
+    ]
+  },
+  {
+    "objectID": "install-r.html#motivation",
+    "href": "install-r.html#motivation",
+    "title": "1  Installation",
+    "section": "",
+    "text": "Pros and Cons\nThe benefits of downloading your own copy are that you can work offline and should not be subject to any (hopefully rare) server-related errors, freezing, etc.\nThe negatives of downloading your own copy are that you have to maintain it yourself, installing and updating packages and software.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Installation</span>"
+    ]
+  },
+  {
+    "objectID": "r-basics.html",
+    "href": "r-basics.html",
+    "title": "2  R Basics",
+    "section": "",
+    "text": "2.1 Your Mission\nThe purpose of this tutorial is to help you start to get familiar with the way R works, and some basic R commands…even if you haven’t yet installed R on your computer or made a posit.cloud account.\nThis tutorial environment uses webr, which lets you read some helpful information, then immediately practice writing and running your own R code, all in your web browser.\nHere’s hoping it provides a nice, gentle introduction in a controlled environment!",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
+    ]
+  },
+  {
+    "objectID": "r-basics.html#communicating-with-r",
+    "href": "r-basics.html#communicating-with-r",
+    "title": "2  R Basics",
+    "section": "2.2 Communicating with R",
+    "text": "2.2 Communicating with R\nYou will do most of your work in R with code or commands. Instead of pointing and clicking, you will type one or more lines of code, which R will execute (doing the work you have asked it to do).\nThen, R will return the results of whatever operation you asked it to do - sometimes producing a plot, other times creating a plot.\nSometimes executing code has almost no visible effect (no plot or text output is produced), but instead some object is created and stored in R’s environment for later use.\n\nTwo Key Questions\nTo get R (or any software) to do something for you, there are two important questions you must be able to answer. Before continuing, think about what those questions might be.\n\n\nThe Questions\nTo get R (or any software) to do a job for you, there are two important questions you must be able to answer:\n\n1. What do you want the computer to do?\n\n\n2. What must the computer know in order to do that?\n\n\n\nProviding R with the information it needs\nR functions provide R with the answer to the first question: what do you want the computer to do?\nMost functions in R have short, but descriptive names that describe what they do. For example, R has some functions to do basic mathematical operations: the function sqrt() computes the square root of a number, and the function round() rounds a number (by default, it rounds to the nearest integer).\nBut just giving R a function is not enough: you also need to answer the second question (what information does R need to do the job?). For example, if you want to use the function round(), you also need to provide R with the number you want to round!\nWe will provide answers to our two questions by filling in the boxes of a basic template:\n\n\nfunction (  information1  ,  information2  , …)\n\n\n \n(The ... indicates that there may be some additional input arguments (input information we could provide to R) we could add eventually. Some functions need only one input, but if a function takes more than one argument, they are separated by commas. They have names, and if named (like: function(input_name = value, input2_name = 'value')) they can be in any order.\n\n\nUsing simple functions\nLet’s practice what you just learned, trying out the mathematical sqrt() and round() functions.\nEdit the code below to compute the square root of 64:\n\n#| exercise: find-sqrt\nfunction(information_R_needs)\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\nConsider using the sqrt() function:\nsqrt(___)\n\n\n\n\n\n\n\n\n\n\n\nHint 2\n\n\n\n\n\nThe input information that sqrt() needs to make your calculation is the number you want the square root of: 64.\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution:\n\n\n\n\n\nsqrt(64)\n\n\n\n\nNow try computing the square root of 44, and then rounding it to the nearest integer:\n\n#| exercise: round-sqrt\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\nYou’ll need to use two functions this time:\nThe sqrt() function, and then the round() function.\nsqrt(___)\nround(___)\n\n\n\n\n\n\n\n\n\n\n\nHint 2\n\n\n\n\n\nThe input information that sqrt() needs to make your calculation is the number you want the square root of: 44. Run that code first, to get the input you will need for round()…\nsqrt(44)\nround(___)\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution:\n\n\n\n\n\nsqrt(44)\nround(6.63325)\nCan you do it all in one go? Well…yes!\nround(sqrt(44))\nThere’s also an easier-to-read way to do that, using a pipe operator |&gt;. It takes the output of one operation and passes it as input to the next. You can read it as |&gt; = “and then…” so we could do:\nsqrt(44) |&gt;\n  round()\n\nTake the square root of 44, and then\nround the result.\n\n(More on pipes later!)\n\n\n\n\n\n\nStoring information in R: variables\nIn the last section, you computed the square root of 44 and then rounded it, perhaps like this:\n\nsqrt(44)\n\n[1] 6.63325\n\nround(6.63325)\n\n[1] 7\n\n\nBut to do that, you probably had to first find the root, make a note of the result, and then provide that number to the round function. What a pain!\nA very useful option, if you have value (or a variable, dataset, or other R object) that you will want to use later on, is to store it as a named object in R. In the previous example, you might want to store the square root of 44 in a variable called my_root; then you can provide my_root to the round() function without checking the result of the sqrt() calculation first:\n\nmy_root &lt;- sqrt(44)\nround(my_root)\n\n[1] 7\n\n\nNotice that to assign a name to the results of some R code, you use the symbol &lt;-. You can think of it as an assignment arrow – it points from a value or item toward a name and assigns the name to the thing.\nTry editing the code to change the name of the variable from my_root to something else, then run your new code:\n\n#| exercise: name-a-variable\nmy_root &lt;- sqrt(44)\nround(my_root)\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nMake sure you change the name my_root in both places.\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nyour_new_name &lt;- sqrt(44)\nround(your_new_name)\n\n\n\n\n\n\nWhat if I have a list of numbers to store?\nSometime you might want to create a variable that contains more than one number. You can use the function c() to concatenate a list of numbers:\n\nmy_fave_numbers &lt;- c(4, 44, 16)\nmy_fave_numbers\n\n[1]  4 44 16\n\n\n(First we stored the list of numbers, calling it my_fave_numbers; then we printed the results to the screen by simply typing the variable name my_fave_numbers).\nTry making a list of your three favorite numbers, then using the function sum to add them all up:\n\n#| exercise:  c-and-sum\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFirst use c() to concatenate your chosen numbers (separated by commas).\nDon’t forget to use &lt;- to assign your list of numbers a name!\nThen, use sum() to add them up.\nmy_numbers &lt;- c(___,___,___)\nsum(___)\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nThis is just one possible solution.\nmy_numbers &lt;- c(4, 16, 44)\nsum(my_numbers)\nNotice you could also nest sum() and c(), or use the pipe operator |&gt; to calculate the numeric answer, but then you would not have the object my_numbers available for later use…\nsum(c(4, 16, 44))\n# or \nc(4, 16, 44) |&gt;\n  sum()\n\n\n\n\n\n\nWhat about data that are not numeric?\nR can work with categorical data as well as numeric data. For example, we could create a list of words and store it as a variable if we wanted (feel free to try changing the words if you want):\n\n#| exercise: cat-var\nmy_words &lt;- c('RStudio', 'is', 'awesome')\nmy_words\n\n\n\nWhat if I have a LOT more data to store?\nc() works great for creating small lists of just a few values, but it is not a good way to enter or store large data tables - there is lots of potential for user error. In this course, you will usually be given a dataset already in electronic form; if you need to create one, you would turn to spreadsheet or database software. Either way you read the existing data file into R directly.\nIn R, these larger datasets are stored as objects called data.frames. The next sections will get you started using them.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
+    ]
+  },
+  {
+    "objectID": "r-basics.html#how-should-data-tables-be-organized-for-statistical-analysis",
+    "href": "r-basics.html#how-should-data-tables-be-organized-for-statistical-analysis",
+    "title": "2  R Basics",
+    "section": "2.3 How should data tables be organized for statistical analysis?",
+    "text": "2.3 How should data tables be organized for statistical analysis?\nA comprehensive guide to good practices for formatting data tables is available at http://kbroman.org/dataorg/.\nA few key points to keep in mind:\n\nThis data table is for the computer to read, not for humans! So eliminate formatting designed to make it “pretty” (color coding, shading, fonts…)\nUse short, simple variable names that do not contain any spaces or special characters (like ?, $, %, -, etc.)\nOrganize the table so there is one column for every variable, and one row for every observation (person/place/thing for which data were collected).\nUse informative variable values rather than arbitrary numeric codes. For example, a variable Color should have values ‘red’, ‘white’, and ‘blue’ rather than 1, 2, and 3.\n\nYou will have chances to practice making your own data files and importing them into R outside this tutorial.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
+    ]
+  },
+  {
+    "objectID": "r-basics.html#using-built-in-datasets-in-r",
+    "href": "r-basics.html#using-built-in-datasets-in-r",
+    "title": "2  R Basics",
+    "section": "2.4 Using built-in datasets in R",
+    "text": "2.4 Using built-in datasets in R\nR has a number of built-in datasets that are accessible to you as soon as you start RStudio.\nIn addition to the datasets that are included with base R, there are add-on packages for R that contain additional software tools and sometimes datasets.\nTo use datasets contained in a package, you have to load the package by running the command:\n\nlibrary(packagename) \n\n\nExample of loading a package\nFor example, we will practice looking at a dataset from the package mosaic.\nBefore we can access the data, we have to load the package. The code might look like this:\n\nlibrary(mosaic)\n\n(Nothing obvious will happen when you run this code…it basically just gives R permission to access the package, so there is often no output visible.)\n\n\nViewing a dataset\nThe mosaic package includes a dataset called HELPrct.\nIf you just run the dataset name (HELPrct) as a command, R will print some (or all - egad!) of the dataset out to the screen! (So don’t…)\nBut…how can we extract selected, useful information about a dataset?\n\n\nGathering information about a dataset\nThere are a few functions that make it easier to take a quick look at a dataset:\n\nhead() prints out the first few rows of the dataset.\nnames() prints out the names of the variables (columns) in the dataset\ndplyr::glimpse() (function glimpse() from package dplyr) gives an short list-like overview of the dataset\nskimr::skim() (function skim() from the package skimr) prints out more detailed graphical summary information about a dataset\nnrow() reports the number of rows (observations or cases) in the dataset\nncol() reports the number of columns (variables) in the dataset\n\nTry applying each of these functions to the HELPrct data and see what the output looks like each time:\n\n#| exercise: check-out-data\nfunction(____)\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nThe input for each of the functions is the name of the dataset: HELPrct.\nhead(HELPrct)\nnames(HELPrct)\nnrow(HELPrct)\nncol(HELPrct)\nskimr::skim(HELPrct)\ndplyr::glimpse(HELPrct)\nIn this case, the point is usually to view the information on-screen, not to store it for later use, so we have not used &lt;- at all to store any output for later use or reference.\n\n\n\n\n\n\nGetting more help\nYou can get help related to R function, and built-in R datasets, using a special function: ?. Just type ? followed by the name of the function or dataset you want help on:\n\n#| exercise: get-help\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nFor example, if you want to know about the function nrow():\n?nrow",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
+    ]
+  },
+  {
+    "objectID": "r-basics.html#reading-in-data-from-a-file",
+    "href": "r-basics.html#reading-in-data-from-a-file",
+    "title": "2  R Basics",
+    "section": "2.5 Reading in data from a file",
+    "text": "2.5 Reading in data from a file\nFor this class, you will often be asked to analyze data that is stored in files that are available online - usually in csv format. It’s simple to read them into R. For example, we can read in the file MI_lead.csv, which is stored at https://sldr.netlify.app/data/MI_lead.csv using the function read_csv() (from package readr or super-package tidyverse):\n\nlibrary(readr) # the readr package contains the read_csv() function\nMI_lead &lt;- read_csv(file = 'https://sldr.netlify.app/data/MI_lead.csv')\n\n\nThe most common mistakes\nThe code below contains several of the most common mistakes students make when they try to read in a data file. See if you can find and correct them all!\nThe code below - if corrected - would (on posit.cloud or in standalone R/RStudio) run without an error and read in some baseball statistics from the file http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv.\nHere in this tutorial, it may give the error: ! curl package not installed, falling back to using url() – there’s not a straightforward fix, sorry, but try it on the server if you want to prove to yourself that it works!\n\n#| exercise: baseball-mistakes\nread_csv(http://stacyderuiter.github.io/teachingdata/data-raw/base)\n\n\n\n\n\n\n\n\nHints\n\n\n\n\n\nThink about:\n\nIs the filename or URL spelled correctly, with no typos?\nIs the filename or URL in quotation marks (either ” or ’ work equally)?\nIs the URL complete (including the file extension “.csv”)\nWas &lt;- used to assign a name to the dataset once read in? (Otherwise it will just be uselessly printed to the screen and not available for later use!)\n\n\n\n\n\n\nSolution. \n\n\n\n\n\n\nSolution\n\n\n\n\n\nbaseball_data &lt;- read_csv(file = 'http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv')\n\n\n\n\n\n\nWhat about local files?\nThe same function, read_csv(), can be used to read in a local file. You just need to change the input to read_csv() – instead of a URL, you provide a path and filename (in quotes). For example, the input file = 'https://sldr.netlify.app/data/MI_lead.csv' might become file = 'C:\\\\Data\\\\MI_lead.csv'.\nWe won’t do an example in this tutorial because it’s not straightforward to work with local files within a tutorial environment, but you can practice it once you are working independently in RStudio.\nIf you are working on the server r.cs.calvin.edu, you will have to upload files to your cloud space on the server before you can read them in (RStudio on the server cannot access files on your computer’s hard drive). Look in the “Files” tab on the lower right, and then click “Upload.”\n\n\nNamed input arguments\nThe input argument we provided to R is the URL (in quotes – either single or double quotes are fine). But notice that this time, we gave the input argument a name, “file”, and specified its value with an equal sign.\nThis is not required - the command works fine without it:\n\nMI_lead &lt;- read_csv('https://sldr.netlify.app/data/MI_lead.csv')\n\nHowever, if a function has more than just one input argument, it’s good to get in the habit of providing names for the inputs. If you provide names, then the order in which you list the inputs doesn’t matter; without names, the order matters and you have to use ? to figure out what order R expects!\n\n\nRenaming variables in a dataset\nThis is an advanced topic, so don’t worry if it seems complicated; for now, it just nice to realize some of the power R has to clean up and reorganize data.\nWhat if we didn’t like the names of the MI_lead variables? For example, a new user of the dataset might not know that that ELL stands for “elevated lead levels” and that ELL2005 gives the proportion of tested kids who had elevated lead levels in the year 2005.\nIf we wanted to use a clearer (though longer) variable name, we might prefer “prop_elevated_lead_2005” instead of “ELL2005” – more letters to type, but a bit easier to understand for a new user. How can we tell R we want to rename a variable?\nWe use the code:\n\nMI_lead &lt;- MI_lead |&gt;\n  rename(prop_elevated_lead_2005 = ELL2005)\n\nglimpse(MI_lead)\n\nThe code above uses some tools you’ve seen, and some more advanced ones you haven’t seen yet. The symbol |&gt; is called a “pipe” and basically means “and then…” Translated into words, the code above tells R:\n\nMake a dataset called MI_lead by starting with the dataset MI_lead.\nNext, take the results do something more with them (|&gt;) …\nrename() a variable. What I want to rename is the variable ELL2005. Its new name should be prop_elevated_lead_2005.”\n\nSee…you can already start to make sense of even some pretty complicated (and useful) code.\nNote: If you give R several commands, not connected by pipes, it will do the first, then the second, then the third, and so on. R doesn’t need the pipe for permission to continue! Instead, the pipe tells R to take the results from the first command, and use them as the input or starting material for the next command.\n\n\nCheck out the data\nOK, back to business - simple functions and datasets in R.\nIt’s your turn to practice now. Use one of the functions you have learned so far to extract some information about the MI_lead dataset.\nHow many rows are in the dataset? How many variables (columns)?\nWhat are the variables named, and what are their values like?\nRemember, ? won’t work on MI_lead because it’s not a built-in R dataset. Also, the dataset MI_lead is already read in for you, here…so you don’t need to use read_csv().\n\n#| exercise: look-at-MI_lead",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
+    ]
+  },
+  {
+    "objectID": "r-basics.html#review",
+    "href": "r-basics.html#review",
+    "title": "2  R Basics",
+    "section": "2.6 Review",
+    "text": "2.6 Review\nWhat have you learned so far? More than you think!\n\nFunctions in R\nYou’ve learned that R code is made up of functions, which are generally named descriptively according to the job they do. Functions have one or more input arguments, which is where you provide R with all the data and information it needs to do the job. The syntax for calling a function uses the template:\n\n\nfunction (  information1  ,  information2  , …)\n\n\n \n\n\nVariables in R\nYou’ve practiced creating variables in R using c(), and saving information (or the results of a computation) using the assignment arrow &lt;-.\n\n\nDatasets in R\nYou’ve considered several different ways to get datasets to work with in R: you can use datasets that are built in to R or R packages, or you can use read_csv() to read in data files stored in .csv format.\n\n\nVocabulary\nYou should now be able to define and work with some R-related terms:\n\ncode or commands that R can execute\nfunction and inputs or arguments\nassignment arrow: &lt;-\npipe = “and then…”: |&gt; (note: |&gt; is an older way of writing a pipe, and it does basically the same thing as |&gt;)",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
+    ]
+  },
+  {
+    "objectID": "r-basics.html#congratulations",
+    "href": "r-basics.html#congratulations",
+    "title": "2  R Basics",
+    "section": "2.7 Congratulations!",
+    "text": "2.7 Congratulations!\nYou just completed your first tutorial on R, and wrote some of your own R code. I knew you could do it…\nWant more help and practice? Consider checking out outside resources from posit: https://posit.cloud/learn/primers",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R Basics</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html",
+    "href": "how-to-quarto.html",
+    "title": "3  Using Quarto",
+    "section": "",
+    "text": "3.1 Instructions\nWhile you work through this chapter, you will create a Quarto (.qmd) document.\nQuarto lets you combine R code, output, and text in a single document that can be rendered in HTML, PDF, Word and more formats.\nIt’s like magic: you save all your text and R code in a simple file; when you’re ready, push a button and it’s compiled into an output document with nicely formatted text, code (optional to include, but for this class you always will), and all the figures and tables generated by your code.\nSince all the data analysis and results are automatically included in the compiled output document, your work is reproducible and it’s easy to re-do analysis if the data change, or if a mistake is uncovered.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#reference-materials",
+    "href": "how-to-quarto.html#reference-materials",
+    "title": "3  Using Quarto",
+    "section": "3.2 Reference Materials",
+    "text": "3.2 Reference Materials\nFor more details on using Quarto, and detailed documentation, see https://Quarto.org/docs/guide/.\nQuarto and posit also provide substantial resources for learners. This tutorial is tailored to our course, including just the stuff you need and not much you won’t use frequently. But if you want even more about Quarto, you might check out:\n\nTutorials for beginners at https://Quarto.org/docs/get-started/hello/rstudio.html (Hello, Quarto! and Computations are most relevant.)\nDetailed documentation at https://Quarto.org/docs/guide/.\n\n\nOptional Video\nIf you love video introductions, consider also this 23-minute offering from posit and Mine Cetinkaya-Rundel:",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#logistics",
+    "href": "how-to-quarto.html#logistics",
+    "title": "3  Using Quarto",
+    "section": "3.3 Logistics",
+    "text": "3.3 Logistics\nTo create a .qmd file, you will have to work in RStudio (outside this tutorial environment). So, as you work on this tutorial, you will probably switch back and forth between the tutorial itself and an RStudio session on your computer or on the server at https://r.stem.calvin.edu (or if not at Calvin, at posit.cloud).\nHistorical Note: The precursor of the Quarto document is the Rmarkdown (.rmd) document (and even older - the Sweave document). If you know and love one of those, you may use it, but probably best to upgrade to Quarto, which is superceding them.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#getting-started",
+    "href": "how-to-quarto.html#getting-started",
+    "title": "3  Using Quarto",
+    "section": "3.4 Getting Started",
+    "text": "3.4 Getting Started\n\nLogging in to RStudio\nLog in to your account at https://r.stem.calvin.edu (or if not at Calvin, at posit.cloud).\nOr, if you installed R on your own machine, open RStudio.\n\n\nPanels\nWhen you open RStudio, you will see at least three different panels: The Console is on the left. On the upper right are Environment, History and maybe more; on the lower right are Files, Plots, and Packages. Explore a little to try to see what is there!\nFiles shows you the files saved in your personal space on the server. You can organize, upload, and delete files and folders.\n\n\nExecuting code in R\nYou can do things in R by typing commands in the Console panel.\nHowever, working that way makes it hard to keep a record of your work (and hard to redo things if anything changes or if a mistake was made).\nFor this class, you will instead work in Quarto files, which can contain text, R code, and R output (such as figures).\nAfter you have opened a file (like an RMarkdown file) on the RStudio server, the Console panel will be on the lower left and the newly opened file will be on the top left. Let’s learn how to do it…",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#quarto-qmd-files",
+    "href": "how-to-quarto.html#quarto-qmd-files",
+    "title": "3  Using Quarto",
+    "section": "3.5 Quarto (qmd) Files",
+    "text": "3.5 Quarto (qmd) Files\n\nQuarto files are stand-alone!\nEvery Quarto file (qmd file) must be completely stand-alone. It doesn’t share any information with the Console or the Environment that you see in your RStudio session. All R code that you need to do whatever you are trying to do must be included in the qmd file itself!\nFor example, if you use the point-and-click user interface in the RStudio Environment tab to import a data file, that dataset will not be available when rendering your qmd file.\nSimilarly, if you load the mosaic package by typing in the Console window,\n\nlibrary(mosaic)\n\nmosaic functions and data will not be available to use within the qmd file.\n\n\nSo: Keep your qmd files stand-alone! (You have no choice, actually…)\n\n\n\n\nCreate a Quarto file\nIn RStudio, navigate to File -&gt; New File -&gt; Quarto Document…, or click on the white rectangle with a green circle+ :\n\n\n\n\n\n\n\n\n\nand select Quarto from the drop-down menu.\nChoose html or pdf output.\n(Why not Word? Too much temptation to make changes and do formatting after the fact in Word…which makes your work no-longer-reproducible. In qmd, you have documented everything you’ve done. If you make changes after rendering to Word, that’s not true anymore.)\n\n\nSave your qmd file\nSave your file by clicking on the disk icon at the top of the file tab (give it a clear file name like deruiter_quarto_practice.qmd).\nDo your best to avoid spaces and special characters in your file names.\nIf on a server, the file will be saved to the cloud, not to your computer.\nAll your files will be accessible in the RStudio Files tab (lower right panel) whenever you log into RStudio, regardless of which computer you are using. You may organize them into directories (folders) if you want.\n\n\n\n\n\n\n\n\n\n\n\nRender!\nHow do qmd files actually work? What’s so cool about them?\nClick on the fat blue arrow next to the word “Render” at the top of the file window.\n\n\n\n\n\n\n\n\n\nCheck out the rendered html or pdf result, and compare it to the original Quarto file.\nWow!\n\n\nSource vs. Visual Editor\nLook to the upper right corner of your qmd file. You should see some buttons that allow you to toggle between “Source” and “Visual” editor modes.\n\n\n\n\n\n\n\n\n\nIn your own file, toggle back and forth a few times. The Source mode lets you see (and type) the straight-up markdown – which is probably nice if you’re already used to it, and annoying or mystifying if not. The Visual mode is more of a what-you-see-is-what-you-get (like the rendered version), point-and-click type interface. You may use whichever you prefer.\nBe aware that if you are going to copy/paste between documents, you probably want to do so in Source mode.\n\n\nPersonalize your Markdown file\nAt the top of the Quarto file, there is a section called the “YAML header”. It starts and ends with 3 dashes - - -.\n\n\nIn this part of the file, be very careful what you type: a stray space or character will lead to an error.\n\n\nThis is where you can enter an appropriate title, author(s), and date (within the quotation marks). You can also choose the format you want to render to (usually pdf or html – not in quotes).\n\n\n\n\n\n\n\n\n\nCustomize your YAML header in your own Quarto doc, and then render again to see the effect.\nMake sure you do this for every assignment! (No prof or boss likes getting submissions called “Untitled”…)",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#quarto-yaml-settings",
+    "href": "how-to-quarto.html#quarto-yaml-settings",
+    "title": "3  Using Quarto",
+    "section": "3.6 Quarto YAML settings",
+    "text": "3.6 Quarto YAML settings\n\nPDF or html?\nFor our course, you can choose to render to either an html file or a PDF file.\nSo, you’ll have either format: pdf or format: html in your YAML header. You can also try format: typst to render PDF files a bit faster (learn more about typst output format online).\nBut if you choose html, there’s an important change you have to make to the YAML header to ensure your html file is stand-alone. Meaning: you want all images, etc. to be embedded in the one file rather than stored in an accompanying folder. Otherwise, when you (say) upload the file on Moodle or email it, all the images and graphs will be omitted…yikes! Yes, embedding these makes the file larger, but if you are sharing the rendered html document, you need to.\nIf rendering to html, it is essential that you specify the setting embed-resources: true!\nSo, make sure you add embed-resources: true after the entry format: html: in your YAML header, exactly as shown below.\nMake sure to keep the spacing and line breaks just as shown.\nThe indents are each two spaces, so there are 2 spaces before html: and 4 before embed-resources:.\n\n\n\n\n\n\n\n\n\n\n\nCode tools\nNote that the YAML header shown above also had a second option activated for rendered html files: code-tools: true.\n\n\n\n\n\n\n\n\n\nWhat does this one do?\nIt adds a button “Code” at the top right of your file.\n\n\n\n\n\n\n\n\n\nIf you click it, you can view and copy the source code (basically, the contents of the original qmd file before rendering). This is not a bad option, for example for homework, as it allows me to see every detail of the settings you used and may help me troubleshoot any issues.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#text-and-code-in-quarto",
+    "href": "how-to-quarto.html#text-and-code-in-quarto",
+    "title": "3  Using Quarto",
+    "section": "3.7 Text and Code in Quarto",
+    "text": "3.7 Text and Code in Quarto\n\nText\nThe Quarto file is where you save all the R commands you want to use, plus any text commenting on the work you are doing and the results you get. Parts of the file with a plain white background are normal text.\nYou can format the text. For example, enclosing a word in asterisks will generate italics, so *my text* in the qmd file will become my text in the PDF. Using two asterisks instead of one will generate boldface, so **my text** becomes my text. You can also make bulleted lists, numbered lists, section headers, and more. For example,\n#### Some Text\nbecomes\n\nSome Text\n(a sub-section header). Fewer hashtags make the text even larger, and more make it smaller.\nCaution! Forgetting the space after the last hashtag will format your text verbatim rather than as a header (#fail). Failing to leave a blank line before the header can also make formatting fail.\nCheck out the Quarto Markdown Basics reference at https://quarto.org/docs/authoring/markdown-basics.html for more examples of how to format text in Quarto.\nBefore moving on, try a few of the tricks you just learned in your qmd file. Make it pretty!\n\n\n\nqmd file anatomy: R code chunks\nAn qmd file can (of course!) contain one or more R code chunks. These sections of the file have a grey background onscreen. In Source mode, each one begins with\n```{r}\nand ends with\n```\nlike so:\n\n\n\n\n\n\n\n\n\nIn Visual mode you can’t see the `:\n\n\n\n\n\n\n\n\n\n\n\nHow to add a new R code chunk to your file\nTo add a code chunk to your file in Source editor mode, you have three options.\n\nYou can type in the header and footer by hand to start and end the chunk.\nYou can click on the “add chunk” button at the top right. It’s a green box with the C inside (at the top of the qmd file; choose the first option, “R”, in the pulldown) to insert an empty chunk.\nYou can use a keyboard shortcut: Windows, Ctrl + Alt + I or OS X, Cmd + Option + I\n\nWhen you click the Render button, code in code chunks will be run, and any output will be included in the document.\n\n\n\n\n\n\n\n\n\n\n\nSetup Chunk\nConsider using the first R code chunk in a qmd file to specify settings (for graphics, display, etc.). In this chunk, you can also give R permission to use certain packages (software toolkits) with\n\nlibrary(packagename) \n\nFor example, we will use the ggformula package for graphics. So, verify that the first R code chunk in your file includes the line library(ggformula).\nYou can also specify options for each R code chunk - these go at the top, prefaced by #|. A typical setup chunk for our course might look like:\n\n\n\n\n\n\n\n\n\nNotice that several packages are loaded (that we will use frequently). theme_set() is used to specify some settings for graph output, and knitr::opts_chunk$set() is used to specify whether or not to include R code in the rendered file (Yes please: use echo: true!) and specify the default figure size.\nThere are tons more options and settings, and you can explore them at https://yihui.org/renderr/options/#chunk-options.\nBut for now, if you use something like the setup chunk shown above, it should work well and have what you need for almost all work in this course.\n\n\nThe settings chunk is invisible!\nIf you look carefully at the rendered output, you will see that the setup chunk does not appear there. That’s intentional - when you load packages with library(), they often print a lot of long and pretty useless messages, which you want to omit from your rendered document.\nThis is achieved by having the setting include: false\nHowever, for our course, no chunk other than the setup chunk should have the setting “include: false” (or echo: false for that matter). Generally, anyone evaluating your coursework needs to see all the code you used, not just its output.\n\n\nClean Up\nAt this point, you probably want to get rid of all the extra content in the template.\nIf you haven’t put a setup chunk into your own qmd file…do it now! Here’s another reminder of how it would look:\n\n\n\n\n\n\n\n\n\nNext, Delete everything in the file other than the YAML header and your setup R code chunk.\nNow the clutter is gone and you have space to include your own R code and text.\n(Before going further, make sure it still renders.)",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#run-r-code",
+    "href": "how-to-quarto.html#run-r-code",
+    "title": "3  Using Quarto",
+    "section": "3.8 Run R Code",
+    "text": "3.8 Run R Code\nThere are multiple ways to run and test R code from a markdown file. Sometimes you want to render the whole file and get the PDF or HTML; other times you want to run just a specific bit of code to make sure it’s working correctly.\n\nRunning R Code from a qmd file: Render the file\nEvery time you render the file, all R code will be run automatically.\nA side note: PDF or HTML? Which is preferable?\nI think PDFs are a little more portable and a good default option, and their formatting is best for anything you are going to print out or share via email (especially with less technically inclined folks).\nHowever, later in the semester we may see how to create some pretty cool interactive graphics and/or tables in R, and these can only be rendered in HTML. For this class, you may use either one. (But not Word, remember? Because you’ll lose reproducibility…)\n\n\nRunning R Code from a qmd file: Run Menu\nYou can also use shortcuts/buttons to run specific chunk(s). Here is one way to do it (option 1): Use the Run pulldown menu at the top of the file. (Choose the option you want based on what you are trying to do).\n\n\n\n\n\n\n\n\n\n\n\nRunning Code from a qmd file: Shortcut Button\nHere is another way to use shortcuts/buttons to run only a specific chunk (option 2): Click on the green arrow at the upper right of a code chunk to run the chunk.\n\n\n\n\n\n\n\n\n\n\n\nRunning Code from a qmd file: Copy and Paste\nFinally, here’s a third way to use shortcuts/buttons (option 3):\nCopy the code you want to run, paste to the console window, and hit Enter.\n(Or, place your cursor in the line you want to run and hit ctrl + enter (Windows) or cmd + enter (Mac).)",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#downloading-files-from-rstudio",
+    "href": "how-to-quarto.html#downloading-files-from-rstudio",
+    "title": "3  Using Quarto",
+    "section": "3.9 Downloading files from RStudio",
+    "text": "3.9 Downloading files from RStudio\nYou will have to download your files if you want a copy on your own computer, or to be able to upload a copy to Moodle to turn in.\nTo download, go to the File tab, check the box for the file you want, then select More - Export. from the menu at the top of the File tab.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#quarto-files-stand-alone",
+    "href": "how-to-quarto.html#quarto-files-stand-alone",
+    "title": "3  Using Quarto",
+    "section": "3.10 Quarto Files Stand Alone!",
+    "text": "3.10 Quarto Files Stand Alone!\nWe already covered this once, but we’re covering it again because it’s one of the most common student mistakes in qmd files!\nIf you run R code in the console or the RStudio GUI (for example, reading in a data set by pasting code into the console or using the Import Dataset button in the Environment tab), you won’t be able to use the results in your markdown file.\nAny and all commands you need, including reading in data, need to be included in the file.\nThe reverse is also true. If you run just one R code chunk in a qmd file using the “run” buttons mentioned above, or by copy-pasting into the console, you are effectively running that code in the console.\nIf R gives an error saying it cannot find a certain funtion, variable, or dataset, the most likely fix is to run the preceding code chunks (especially setup!) before the one you’re stuck on.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#data-from-a-url",
+    "href": "how-to-quarto.html#data-from-a-url",
+    "title": "3  Using Quarto",
+    "section": "3.11 Data from a URL",
+    "text": "3.11 Data from a URL\nYou can load online datafiles in .csv format into R using the function read_csv(). The input to read_csv() is the full url where the file is located, in quotation marks. (Single or double quotes – it doesn’t matter which you choose, as they are equivalent in R.)\nFor example, we will consider a dataset with counts of the numbers of birds of different species seen at different locations in Hawai’i. It is stored at https://sldr.netlify.app/data/hawaii_birds.csv, and can be read into R using the command below.\n\nhi_birds &lt;- read_csv('https://sldr.netlify.app/data/hawaii_birds.csv')\n\n\nWhen you read in data, store it to a named object\nNote that we didn’t just run the read_csv() function – we assigned the results a name so that instead of printing the data table to the screen, R stores the dataset for later use.\n\nhi_birds &lt;- read_csv('https://sldr.netlify.app/data/hawaii_birds.csv')\n\nHere, we assigned the name hi_birds to the dataset using an “assignment arrow” &lt;- (the “arrow” points from the object toward the name).",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#data-from-google-sheets",
+    "href": "how-to-quarto.html#data-from-google-sheets",
+    "title": "3  Using Quarto",
+    "section": "3.12 Data from Google Sheets",
+    "text": "3.12 Data from Google Sheets\nThere’s also a simple way to read in data from a Google Sheet.\nFirst, go to the Google Sheet online to prepare it by “publishing it online”.\nIn the File menu, choose “Publish to the Web”:\n\n\n\n\n\n\n\n\n\nIn the pop-up window, choose to publish your “Entire Document” as a .csv file:\n\n\n\n\n\n\n\n\n\nFinally, copy the resulting link.\n\n\n\n\n\n\n\n\n\nYou can use read_csv() with this link as input to read your data into R.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#data-from-a-file",
+    "href": "how-to-quarto.html#data-from-a-file",
+    "title": "3  Using Quarto",
+    "section": "3.13 Data from a File",
+    "text": "3.13 Data from a File\nYou can also upload your own data file to posit.cloud, or save it to your computer if you installed R/RStudio, and then read it in to R using read_csv(). The basic process is:\n\nUse spreadsheet software to create the data table\nSave the file as a csv file\nUpload the csv file if working on posit.cloud\nUse the read_csv() function to read the file into R",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "how-to-quarto.html#r-functions",
+    "href": "how-to-quarto.html#r-functions",
+    "title": "3  Using Quarto",
+    "section": "3.14 R functions",
+    "text": "3.14 R functions\nAfter reading the data in, you can use R functions to have a look at it, for example:\n\nhead(hi_birds)\nglimpse(hi_birds)\nnrow(hi_birds)\n\nTry each of the lines of code above in R. What do the functions head(), glimpse(), and nrow() do? Try to figure it out based on the output they produce.\nIf you get stuck, consult R’s built-in help files. Remember, you can access the help for a function by running the code ?functionName – for example, if you want help on head(), run:\n\n?head",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Using Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "r-results.html",
+    "href": "r-results.html",
+    "title": "4  R Results in Quarto Text",
+    "section": "",
+    "text": "4.1 Including results of R calculations in your text\nYou may want to include the results of R calculations in the TEXT part of a report. Then, if the calculated value changes, the text can be automatically updated to match.\nLet’s say you compute the mean of some kids’ foot lengths:\nmean(~length, data = KidsFeet)\n\n[1] 24.72308",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>R Results in Quarto Text</span>"
+    ]
+  },
+  {
+    "objectID": "r-results.html#rounding",
+    "href": "r-results.html#rounding",
+    "title": "4  R Results in Quarto Text",
+    "section": "4.2 Rounding",
+    "text": "4.2 Rounding\nWhat if you want to report numeric values with a more reasonable number of decimal places? Use : The mean foot length of the kids was ` r round(mean_length, digits = 2)` cm\nand you get: The mean foot length of the kids was 24.72 cm\nYou can also consider using the function signif() if you want to specify the number of significant digits rather than the number of decimal places.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>R Results in Quarto Text</span>"
+    ]
+  },
+  {
+    "objectID": "r-results.html#r-results-with-more-than-one-value-inside",
+    "href": "r-results.html#r-results-with-more-than-one-value-inside",
+    "title": "4  R Results in Quarto Text",
+    "section": "4.3 R results with more than one value inside",
+    "text": "4.3 R results with more than one value inside\nWhat if you want to cite a value from an object that contains more than one value?\n\nVectors\nFor example, what if you computed means for both boys and girls? The output would be a vector of two means, then.\nYou can use hard brackets ( [ … ] ) to refer to the first, second, etc. entries. For example:\n\ngirlboy.means &lt;- mean(~ length | sex,\n                      data = KidsFeet)\n\nYou type: The girls’ mean foot length was ` r girlboy.means[“G”] `, and the boys’ was ` r girlboy.means[“B”] `\nto get: The girls’ mean foot length was 24.3210526, and the boys’ was 25.105.\nYou can also use numeric indices – for example, ` r girlboy.means[2] ` instead of ` r girlboy.means[“G”] ` to get the girls’ value – but using names when you can is often safer because you don’t have to worry about whether things are stored in the order you think that they are!\n\n\nMatrices, Tables, data.frames, tibbles…\nIf you are referring to a data table or other object with multiple rows and columns, you can use the syntax [row.numbers, column.numbers] to extract a row, a column, or a specific value of interest. If you leave either row.numbers or column.numbers blank, all rows/columns will be included.\nFor example, consider a table showing some data from a survey of intro stat students (Ticket tells whether they have gotten a speeding ticket while driving a car, and Texted tells whether they have texted while driving a car):\n\nstudent_survey &lt;- read.csv('https://sldr.netlify.app/data/IntroStatStudents.csv', \n              na.strings = list('', 'NA'))\ntally(~Ticket | Texted, \n      data = student_survey, \n      format = 'proportion')\n\n               Texted\nTicket                  No        Yes\n  I don't drive 0.03703704 0.00000000\n  No            0.77777778 0.71900826\n  Yes           0.14814815 0.28099174\n  &lt;NA&gt;          0.03703704 0.00000000\n\n\nWhat if we want to print just the first column of data?\n(Note: Don’t count the row and column names when numbering the rows and columns.)\n\ntally(~Ticket | Texted, \n      data = student_survey,\n      format = 'proportion')[,1]\n\nI don't drive            No           Yes          &lt;NA&gt; \n   0.03703704    0.77777778    0.14814815    0.03703704 \n\n\nOr better (and clearer…)\n\ntally(~Ticket | Texted, \n      data = student_survey,\n      format = 'proportion')[, \"No\"]\n\nI don't drive            No           Yes          &lt;NA&gt; \n   0.03703704    0.77777778    0.14814815    0.03703704 \n\n\nWhat about the third row (for people who have gotten a ticket)?\n\ntally(~Ticket | Texted, \n      data = student_survey, \n      format = 'proportion')[\"Yes\",]\n\n       No       Yes \n0.1481481 0.2809917 \n\n\nWhat about the proportion of students with tickets, among those who’ve texted while driving? (Row 3, Column 2 = row “Yes” and column “Yes”)? Let’s first save the table so we don’t have to recompute…\n\ndriver_table &lt;- tally(~Ticket | Texted, \n      data = student_survey, \n      format = 'proportion')\n\nType: The proportion of students who have texted while driving who have gotten a speeding ticket is ` r driver_table[“Yes”,“Yes”] `.\nTo get: The proportion of students who have texted while driving who have gotten a speeding ticket is 0.2809917.\n(Like before, if it’s possible to use names instead of numeric indices, try to do so!)",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>R Results in Quarto Text</span>"
+    ]
+  },
+  {
+    "objectID": "math-notation.html",
+    "href": "math-notation.html",
+    "title": "5  Math Notation in Quarto",
+    "section": "",
+    "text": "5.1 Greek Letters, common symbols, subscripts and superscripts\nYou might be wondering…\nBasically, you enclose the name of the symbol you want with $...$\n(if you use LaTeX, this will be very familiar):\nFor other Greek letters, just spell out the name of the letter that you want (following the models above). If you want a capital Greek letter, capitalize the first letter of its name when you write it out (e.g. Sigma instead of sigma).\nNote: Avoid spaces before the final $ or after the initial $.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Math Notation in Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "math-notation.html#greek-letters-common-symbols-subscripts-and-superscripts",
+    "href": "math-notation.html#greek-letters-common-symbols-subscripts-and-superscripts",
+    "title": "5  Math Notation in Quarto",
+    "section": "",
+    "text": "How can I include Greek letters and other symbols in the text part of my Quarto (or RMarkdown) document?\n\n\n\n\n\n\n\nType this in qmd:\nTo get this when rendered:\n\n\n\n\n$\\hat{p}$\n\\(\\hat{p}\\)\n\n\n$\\bar{x}$\n\\(\\bar{x}\\)\n\n\n$\\alpha$\n\\(\\alpha\\)\n\n\n$\\beta$\n\\(\\beta\\)\n\n\n$\\gamma$\n\\(\\gamma\\)\n\n\n$\\Gamma$\n\\(\\Gamma\\)\n\n\n$\\mu$\n\\(\\mu\\)\n\n\n$\\sigma$\n\\(\\sigma\\)\n\n\n$\\sigma^2$\n\\(\\sigma^2\\)\n\n\n$\\rho$\n\\(\\rho\\)\n\n\n$\\epsilon$\n\\(\\epsilon\\)\n\n\n$\\sim$\n\\(\\sim\\)\n\n\n$\\mu_D$\n\\(\\mu_D\\)\n\n\n$\\mu_{longsubscript}$\n\\(\\mu_{longsubscript}\\)\n\n\n$\\hat{p}_{longsubscript}$\n\\(\\hat{p}_{longsubscript}\\)\n\n\n$\\mu\\neq 0$\n\\(\\mu \\neq 0\\)\n\n\n$\\mu\\geq 5$\n\\(\\mu \\geq 5\\)\n\n\n$\\mu\\leq 1$\n\\(\\mu \\leq 1\\)\n\n\n$\\cup$\n\\(\\cup\\)\n\n\n$\\cap$\n\\(\\cap\\)\n\n\n$\\vert$\n\\(\\vert\\)\n\n\n$\\sim$\n\\(\\sim\\)\n\n\n$\\frac{numerator}{denominator}$\n\\(\\frac{numerator}{denominator}\\)",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Math Notation in Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "math-notation.html#summations-and-products",
+    "href": "math-notation.html#summations-and-products",
+    "title": "5  Math Notation in Quarto",
+    "section": "5.2 Summations and Products",
+    "text": "5.2 Summations and Products\n\n\n\nType This:\nTo get this in your PDF:\n\n\n\n\n$\\sum_{i=1}^{n} x_i$\n\\(\\sum_{i=1}^{n} x_i\\)\n\n\n$\\prod_{i=1}^{n} f(i)}$\n\\(\\prod_{i=1}^{n} f(i)\\)\n\n\n\nThese will format as seen above if used in inline math mode (enclosed in single $s). If you put them in display math mode by using two $$ at the start and end instead of just one, then the result will be displayed centered on its own line and the limits of the summation/product will be above/below the \\(\\Sigma\\) or \\(\\Pi\\):\n\n\n\\[\\prod_{i=1}^{n} f(i)\\]",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Math Notation in Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "math-notation.html#long-equations",
+    "href": "math-notation.html#long-equations",
+    "title": "5  Math Notation in Quarto",
+    "section": "5.3 Long equations",
+    "text": "5.3 Long equations\nYou can use double $ to bracket equations you want to display on a line of their own. Inside can be multiple mathematical expressions. For example:\n$$\\hat{y} = \\beta_0 + \\beta_1x_1\\,$$\n\n$$\\hat{epsilon} = \\hat{y}_{i} - y_i$$\n\n$$\\epsilon \\sim N(0, \\sigma)$$\ngives\n\\[\\hat{y} = \\beta_0 + \\beta_1x_1\\]\n\\[\\hat{\\epsilon}_{i} = \\hat{y}_{i} - y_i\\]\n\\[\\epsilon \\sim N(0, \\sigma)\\]\nNote: Avoid spaces before the final $ or after the initial $. Also note, the equation will NOT be inside a code chunk…I only did that here because it’s hard to get the un-rendered source version to appear neatly in the text part of a rendered Quarto file otherwise.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Math Notation in Quarto</span>"
+    ]
+  },
+  {
+    "objectID": "r-results.html#including-results-of-r-calculations-in-your-text",
+    "href": "r-results.html#including-results-of-r-calculations-in-your-text",
+    "title": "4  R Results in Quarto Text",
+    "section": "",
+    "text": "Simple but Inefficient\nYou may want to cite the result in the text part of your file…so you would type:\nThe mean length of the kids’ feet was ` r mean(~length, data=KidsFeet) ` cm.\nTo get:\nThe mean length of the kids’ feet was 24.7230769 cm.\n\n\nSide Note: back-ticks\nThose accent marks (before the “r” and at the end of the R-code stuff) are not normal single quotes or apostrophes; they are “back-ticks” or “graves” ( ` ), just like those used to help define the start and end of R code chunks in your Quarto file. There should not actually be a space between the ` and the r.\n\n\nMore Efficient\nIt’s annoying (and sometimes not really practical) to (re)type the entire R command in the text part of your file. An option is to save the quantity you want to refer to as a variable in R:\n\nmean_length &lt;- mean(~length, data = KidsFeet)\n\nThen you can write: The mean foot length of the kids was ` r mean_length` cm.\nTo get: The mean foot length of the kids was 24.7230769 cm.",
+    "crumbs": [
+      "Getting Started",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>R Results in Quarto Text</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-design.html",
+    "href": "graphics-design.html",
+    "title": "Designing Effective Visualizations",
+    "section": "",
+    "text": "Section Learning Outcomes\nAfter this section, you will be able to:",
+    "crumbs": [
+      "Designing Effective Visualizations"
+    ]
+  },
+  {
+    "objectID": "graphics-design.html#section-learning-outcomes",
+    "href": "graphics-design.html#section-learning-outcomes",
+    "title": "Designing Effective Visualizations",
+    "section": "",
+    "text": "Critique statistical graphics based on design principles.\nRecognize common misleading design choices for data visualizations\nRecognize data visualization that tells a true story, identifying elements that emphasize the main finding and make the figure easy to interpret at a glance",
+    "crumbs": [
+      "Designing Effective Visualizations"
+    ]
+  },
+  {
+    "objectID": "graphics-design.html#reference-materials",
+    "href": "graphics-design.html#reference-materials",
+    "title": "Designing Effective Visualizations",
+    "section": "Reference Materials",
+    "text": "Reference Materials\n\nBeyond Multiple Linear Regression Ch. 1.5\nEcological Models & Data in R Ch. 2 discusses graphics, but is not recommended as the approach to reading in data, writing R code, and generating graphs in R is very different to that used in this course.\nA comprehensive, and free, supplemental reference is Fundamentals of Data Visualization by Claus Wilke\n\nIt’s suggested that you refer to the above materials as needed after doing this section, with particular focus on the topics you found most challenging.",
+    "crumbs": [
+      "Designing Effective Visualizations"
+    ]
+  },
+  {
+    "objectID": "graphics-design.html#inspiration",
+    "href": "graphics-design.html#inspiration",
+    "title": "Designing Effective Visualizations",
+    "section": "Inspiration",
+    "text": "Inspiration\n\nAbove all, show the data.\nE. Tufte, The Visual Display of Quantitative Information\n\nBut…\n\nThe Numbers Don’t Speak for Themselves.\nC. D’Ignazio and L. Klein, Data Feminism\n\nIn visualizing data, we use graphics to gain and communicate an honest understanding of data in context.",
+    "crumbs": [
+      "Designing Effective Visualizations"
+    ]
+  },
+  {
+    "objectID": "graphics-design.html#motivation-imagine-first",
+    "href": "graphics-design.html#motivation-imagine-first",
+    "title": "Designing Effective Visualizations",
+    "section": "Motivation: Imagine First!",
+    "text": "Motivation: Imagine First!\nFigures are a crucial tool for exploring your data and communicating what you learn from the data.\nWhether you are doing a quick check to assess basic features of a dataset or creating a key figure for an important presentation, the best practice is to work thoughtfully.\n\nThe I.C.E.E. method:\n\nImagine how you want your graph to look, before you\nCode. Once you have the basic starting point,\nEvaluate your work, and\nElaborate (refine it).\n\nRepeat until the figure is as awesome as it needs to be.\n\n\nNO To Mindless Copy/Paste\nToo many of us fall into the trap of starting to write code (or copy/pasting it!) before pausing to think carefully about the desired outcome, then settling for the first vaguely relevant result (or delighting in the unintended outcome…).\n\n\nYou can do better than mindless copying! Only mindful copy-pasting allowed.\n\n\nThis section provides some advice to get you started. It can also provide inspiration for constructive critique of others’ graphics.\nHere we focus only on the I_EE parts of the process, where you design and assess graphics. Code will come later.",
+    "crumbs": [
+      "Designing Effective Visualizations"
+    ]
+  },
+  {
+    "objectID": "graphics-design.html#appearance-goals",
+    "href": "graphics-design.html#appearance-goals",
+    "title": "Designing Effective Visualizations",
+    "section": "Appearance Goals",
+    "text": "Appearance Goals\nSpecifically, how exactly should a graphic look? There are so many choices: color, size, text and more. What are best practices for creating something beautiful, that represents the data honestly, and is easy to understand?\nThis section will provide some rules of thumb to help you Evaluate statistical graphics. It will also teach you to spot common problems and suggest ways to fix them, allowing you to provide constructive critique (to yourself or to others!) about how to Elaborate and refine data visualizations.\n\nYou still have your freedom!\nAs you digest all these rules and tips, you may wonder: “Do I have to always obey every one?” Well…No, of course not. Be creative!\nSometimes it’s OK to break these rules when you have thought it through and with a good justification.\nA good justification means that in your particular case, breaking a certain rule will make your graph more informative, easier to understand, or better at telling the story you’re highlighting.",
+    "crumbs": [
+      "Designing Effective Visualizations"
+    ]
+  },
+  {
+    "objectID": "graphics-design.html#learning-objectives",
+    "href": "graphics-design.html#learning-objectives",
+    "title": "Designing Effective Visualizations",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\nThis section will give you some basic tools to:\n\nGraph data with integrity, avoiding misleading design choices\nTell the right story, including elements that emphasize your main finding and make your figure easy to interpret at a glance",
+    "crumbs": [
+      "Designing Effective Visualizations"
+    ]
+  },
+  {
+    "objectID": "graph-design-no-junk.html",
+    "href": "graph-design-no-junk.html",
+    "title": "6  What is Necessary?",
+    "section": "",
+    "text": "6.1 Bye, Junk!\nOur first principle is: if it doesn’t need to be in your graph, it shouldn’t be there. Keep things as simple as possible. What are some justifications for a need to include an element in a plot?\nIf you need it, include it, but if not, keep it simple!\nImagine you are using very expensive ink to print every element of the graph. Is every drop of in you’re using really worth it? If not, take it out. As influential data visualization thinker Edward Tufte put it in The Visual Display of Quantitative Information,\nIn other words, don’t let annotations, labels, grids, etc. overwhelm the visual impact of your data – Don’t do this:\nCartoon source: https://freshspectrum.com/data-ink-ratio/",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>What is *Necessary*?</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-no-junk.html#bye-junk",
+    "href": "graph-design-no-junk.html#bye-junk",
+    "title": "6  What is Necessary?",
+    "section": "",
+    "text": "It is crucial to the story you are telling, or the research question you are answering.\nIt emphasizes your main point. For example, some plots may not need color, and in others it may add crucial visual contrast to highlight a main point.\nIt makes the graph easier to read and understand\nIt makes the main message of the graph more memorable\n\n\n\n\nA large share of ink on a graphic should present data-information, the ink changing as the data change. Data-ink is the non-erasable core of a graphic…\n\n\n\n\n\nCheck: Critique the Pie\nThe figure below, from a Forbes article on mobile operating system crashes, is pretty awful.\n\n\nA Conclusion?\nWhat is one main conclusion from the graph above?\n(It’s pretty confusing to interpret, so you may have to study carefully to find something…)\n\n\nRemove…What?\nNow that you have identified one main conclusion from the graph…\nWhat is one element of the plot that:\n\nobscures that conclusion,\nis NOT necessary, and\ncould be removed to improve the plot?\n\nAnswer constructively - as if the person who made the plot was incredibly smart and someone you admire, and to whom you wanted to be kind but helpful.",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>What is *Necessary*?</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-no-junk.html#grids-and-boxes",
+    "href": "graph-design-no-junk.html#grids-and-boxes",
+    "title": "6  What is Necessary?",
+    "section": "6.2 Grids and Boxes",
+    "text": "6.2 Grids and Boxes\nShould your graphics include boxes, axis lines, and grid lines?\nWell, it depends…\n\nRemoving unnecessary axes, grids, and labels yields a cleaner plot that may be easier to take in at a glance – there is less to distract from the main story\nBut… omitting needed baselines, tick marks, gridlines, and labels can cause confusion and make it hard to identify categories or estimate numeric values\nScientific graphics usually need axis lines, with tick marks\nIf a viewer will need to refer to an axis to estimate heights of bars or locations of points, then consider using gridlines for that axis.\nInstead of an entire grid, it may be more effective to include single lines indicating important threshold values\nConsider using a color that nearly blends into the background for grid lines, so that they detract as little attention as possible from the data\n\n\nExample\nStorytelling with Data provide an example of a cluttered figure where the trend over time pops out more as unnecessary grids and boxes are made less visible, then removed:\n\nOptionally, if you’d like more examples, read S. Few’s 3.5-page article on when grid lines are helpful.",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>What is *Necessary*?</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-color.html",
+    "href": "graph-design-color.html",
+    "title": "7  Color",
+    "section": "",
+    "text": "7.1 Using Color\nColor - used with care - can be an incredibly effective part of a data visualization.\nThe video below, created by Storytelling with Data, gives explanations and examples.",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Color</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-color.html#using-color",
+    "href": "graph-design-color.html#using-color",
+    "title": "7  Color",
+    "section": "",
+    "text": "Ensure your color choices highlight the story you want to tell\n\nConsider using black and grey to help some elements fade into the background - for example, grid lines and labels that must be present but aren’t the most important elements.\nOr, color all groups but the one you want to highlight in grey, and use a bold color for the “main” group…\n\nChoose color combinations that look good and are distinguishable by color-blind viewers and in greyscale\n\nDefaulting to pre-defined color palettes provided by your software may be better than haphazardly choosing colors manually\nConsider being redundant - use size and/or shape as well as color to indicate groups so figures are legible in greyscale, too.\n\nUse color consistently.\nExample: if “young” cases are red in one graph, don’t use red for “old” in the next graph. And if many graphs are colored by the same grouping variable, use the same colors in all of them.\n\n\n\nIf you have time, watch from 11:48 to 28:41 (about 17 minutes). This segment will play automatically in the clip below.\nIf you’re in a rush, the most important sections (about 10 minutes) are:\n\n13:57 - 15:12 (Sparing use of color)\n18:44 - 21:25; see also the infographic of color in culture\n22:25 - 23:10 (Color blindness - to view your graphs as someone with color blindness would, take a screen shot and try the simulator online\n23:50 - 28:41 (Consistency)\n\n\n\n\n\nWhich of the following are lessons from the Storytelling with Data video on Being Clever with Color? Mark all correct answers “TRUE”.\nColor grabs attention. TRUEFALSE\nColor signals where to look. TRUEFALSE\nColor should be used sparingly. TRUEFALSE\nToo much color, and everything is highlighted - the viewer does not know what to pay attention to. TRUEFALSE\nColor can show quantitative values, too, not just categories. TRUEFALSE\nColors have tone and meaning. TRUEFALSE\nNot everyone can see colors. TRUEFALSE\nUse color consistently. TRUEFALSE\nSimple black and white is always the best choice. TRUEFALSE\n\n\n\nClick for explanations of solutions above.\n\n\nThe human eye is naturally drawn to colors.\nSince color grabs attention, we expect it to direct us toward the most important stuff that is worthy of our attention.\nBut…Too much color, and everything is highlighted - the viewer does not know what to pay attention to.\nAlso, remember that the meaning and interpretation of colors varies by culture.\nSince some people can not see color, use color-blind friendly palettes and redundant coding (shape, text) where possible without cluttering the figure.\nInconsistent use of color can be confusing and distracting.\nSometimes black and white is great - but often color helps you tell a story!",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Color</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html",
+    "href": "graph-design-text-elements.html",
+    "title": "8  Text Elements",
+    "section": "",
+    "text": "8.1 Titles, Labels, Size\nWhen using text in a figure, ensure it is easy to read. Make sure no unneccessary text is included.\nRemember the melanoma rates over time figure we saw earlier?",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html#titles-labels-size",
+    "href": "graph-design-text-elements.html#titles-labels-size",
+    "title": "8  Text Elements",
+    "section": "",
+    "text": "Default size of text in figures produced by statistical software is almost always too small. Make sure your text is big enough to be easily legible in the context where you will present it (on the page in a report, on a slide for a presentation, etc.)\nOther than the title of the vertical (y) axis, all the text in a plot should be horizontal. This makes it easier to read.\nAxis labels should be self-explanatory\n\nViewers should be able to guess what they mean accurately without looking at anything but the figure\nUse words instead of numeric codes or cryptic abbreviations\n\nAxis labels should also be as short as possible while remaining easy to understand\nEvery plot should have a title. Sometimes this might be a literal title at the top of the graph, but those are relatively rare. More often in scientific work, a text caption appears below the figure. The first phrase/sentence of the caption acts as the figure’s title\n\n\n\n\nWhat helpful changes did Storytelling with Data make to the text labels as they improved the figure?\nThe x axis labels are rotated so they are horizonal. TRUEFALSE\nThe title color is changed to blue and the axis labels to grey. TRUEFALSE\nThe box around the plot is removed. TRUEFALSE\n\n\n\nClick for explanations of solutions above.\n\n\nRotating axis labels so they are horizontal is generally an improvement. To make this happen, the number of tick marks and labels on the x axis was also reduced. Notice the labels are much easier to read.\nThe color changes helped too. The blue links the title with the trend it describes, and the grey makes the axis titles less prominent and lets the viewer focus on the data. Continue to the next section for more on using color…\nThe box is gone, and it is a big improvement to the plot! But technically, you were asked about changes to the text labels…",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html#when-things-overlap",
+    "href": "graph-design-text-elements.html#when-things-overlap",
+    "title": "8  Text Elements",
+    "section": "8.2 When Things Overlap",
+    "text": "8.2 When Things Overlap\nEspecially when graphing variables with long category values, you may end up with ugly, illegible overlapping labels.\nSome solutions, in rough order of preference, are to:\n\nadjust the figure width or height so everything fits\nswitch x and y coordinates so the “long” labels are on the y axis (in R, this resizes the plot area so that labels fit); or,\nrotate the too-long labels, which eliminates the overlap but makes them harder to read than horizontal text.\nmake the font smaller (but this might make it annoyingly hard to read, or make your viz feel cluttered!)",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-summary.html",
+    "href": "graph-design-summary.html",
+    "title": "9  Summary",
+    "section": "",
+    "text": "9.1 Critique Practice\nAfter reviewing the preceding sections, you should be able to articulate some principles for designing good visualizations with respect to use of space, axis limits, use of color, and text elements.\nIn fact, you probably already knew these principles - at least, you knew ’em when you saw ’em (you could have easily sorted some terrible and better graphs even if you couldn’t have said exactly what was terrible, or better, about them).\nNow, think about how you could apply these principles in your own work, or in providing feedback or advice to others…\nTry using what you have learned to provide a constructive critique of an example. That might mean pointing out specific successes or positives as well as areas for improvement, with concrete advice about how to improve and why.\nConsider the graphic below. At a glance, what do you think it means? Looking more carefully, what do you notice?\nPause to think: What changes, if any, would you suggest to the figure’s creator to make it clearer and easier to understand? Be sure to be constructive - gently explain any problems and suggest solutions.",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-summary.html#video-review",
+    "href": "graph-design-summary.html#video-review",
+    "title": "9  Summary",
+    "section": "9.2 Video Review",
+    "text": "9.2 Video Review\nWow, that was quite a lot of information! If you could use a brief review from a different point of view, check out the optional video from Kristen Sosulski",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-summary.html#recap-reflect-12-tips",
+    "href": "graph-design-summary.html#recap-reflect-12-tips",
+    "title": "9  Summary",
+    "section": "9.3 Recap & Reflect: 12 Tips",
+    "text": "9.3 Recap & Reflect: 12 Tips\nThe 4-minute video below summarizes design principles for data visualization in the form of 12 tips.\nAs you watch, make note of one or two tips that strike you (you’ll report your thoughts in the next section). Is there one that nicely summarizes an idea introduced earlier in the section? One you’re not sure about? One that you think is incredibly important? One that makes you say “Aha! Now I see why I loved/hated that visualization!”\n\n\n\nPause for Reflection\nTake a moment to reflect on what you learned. Which Tip do you remember most clearly, think is most important, or want to challenge? Consider making a few notes for yourself for the future (you’ll have to make and critique plenty of graphics in your homework assignments).",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-summary.html#pause-for-reflection",
+    "href": "graph-design-summary.html#pause-for-reflection",
+    "title": "9  Summary",
+    "section": "9.4 Pause for Reflection",
+    "text": "9.4 Pause for Reflection\nTake a moment to reflect on what you learned. Which Tip do you remember most clearly, think is most important, or want to challenge? Consider making a few notes for yourself for the future (you’ll have to make and critique plenty of graphics in your homework assignments).",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-summary.html#a-critique-checklist",
+    "href": "graph-design-summary.html#a-critique-checklist",
+    "title": "9  Summary",
+    "section": "9.4 A Critique Checklist",
+    "text": "9.4 A Critique Checklist\nIf working to improve your own visualization or attempting to give feedback on one another analyst made, you might consider using a checklist to guide you.\nBased heavily on the advice and template provided by Evergreen Data…\n\n\nCheck out our Graphics Critique Checklist!",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html#when-text-runs-off-the-edge",
+    "href": "graph-design-text-elements.html#when-text-runs-off-the-edge",
+    "title": "8  Text Elements",
+    "section": "8.3 When Text Runs “off the edge”",
+    "text": "8.3 When Text Runs “off the edge”\nSometimes a title or axis label is too long and runs off the edge of the figure. Using a smaller font is not often an ideal solution. If you can’t just use a shorter label, consider adding line breaks.",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html#example",
+    "href": "graph-design-text-elements.html#example",
+    "title": "8  Text Elements",
+    "section": "8.4 Example",
+    "text": "8.4 Example",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html#examples",
+    "href": "graph-design-text-elements.html#examples",
+    "title": "8  Text Elements",
+    "section": "8.4 Examples",
+    "text": "8.4 Examples",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graph-design-text-elements.html#lets-talk-about-titles",
+    "href": "graph-design-text-elements.html#lets-talk-about-titles",
+    "title": "8  Text Elements",
+    "section": "8.5 Let’s Talk About Titles",
+    "text": "8.5 Let’s Talk About Titles\nShould your graph have a title?\nWell…maybe.\nHear me out.\nWhether or not titles are useful, allowed, or expected is pretty discipline- and audience-specific. In journalism and some parts of business, they are used very often. In the peer-reviewed scientific literature, they are exceedingly rare. In a slide deck, they are often useful…unless they say the same thing as your slide title! Know your goals and your audience.\n\nAvoid Redundant Titles\nIf you do want to use a title, make sure it provides information or details that are not already present in other text elements. A title that restates the axis labels is usually a waste:\n\n\n\n\n\n\n\n\n\nNotice that we can argue about this a little. Could we have the title instead of the axis labels? Maybe, but if it’s a scientific publication, having the units of measure is going to be important.\nIs this title actually adding info because it clarifies that “Town,” “City,” etc. are “Locations”? I think it’s a stretch, but sometimes you can make such a case.\nGenerally, my advice is…\n\n\nIf the title is not adding something new and crucial and helping the reader decipher the main story of the plot, then omit it!\n\n\nSo what might an “informative” title look like?",
+    "crumbs": [
+      "Designing Effective Visualizations",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Text Elements</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-quant.html",
+    "href": "graphics-choose-multiple-quant.html",
+    "title": "14  Gallery: Multiple Quantitative Variables",
+    "section": "",
+    "text": "14.1 Scatter Plot",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-quant.html#scatter-plot",
+    "href": "graphics-choose-multiple-quant.html#scatter-plot",
+    "title": "14  Gallery: Multiple Quantitative Variables",
+    "section": "",
+    "text": "A scatterplot is the default for visualizing the relationship between two quantitative variables\nBe sure you actually have two quantitative variables! If not, another plot may be a better option.\n\n\n\nLet’s just reiterate: if one of your variables is actually or effectively categorical, a basic scatterplot is usually not ideal!",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-quant.html#line-plot",
+    "href": "graphics-choose-multiple-quant.html#line-plot",
+    "title": "14  Gallery: Multiple Quantitative Variables",
+    "section": "14.2 Line Plot",
+    "text": "14.2 Line Plot\n\n\n\n\n\n\n\n\n\n\nIf the x-axis variable is Time (or it otherwise makes sense to join the dots), a line can replace the dots, or be added to them\nMake sure connecting the dots makes sense in context and does not guide the eye to incorrect interpretations (for example, emphasizing outliers)",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-quant.html#quantitative-variables",
+    "href": "graphics-choose-multiple-quant.html#quantitative-variables",
+    "title": "14  Gallery: Multiple Quantitative Variables",
+    "section": "14.3 >2 Quantitative Variables",
+    "text": "14.3 &gt;2 Quantitative Variables\nWhat if you have three or four quantitative variables whose relationships you’re curious about?\nProceed with caution!\nIt’s possible to include 3+ variables on one plot, but ideally it should still be interpretable at a glance:\n\nWhat is the main point of the figure? Is it possible to make the point without showing all 3+ variables together?\nKeep things as simple as you can while still telling the story you want to tell.\n\n\nScatter + Size\n\n\n\n\n\n\n\n\n\n\nYou can adjust the size of each dot in a scatter plot to correspond to the value of a third variable\nThis is especially useful when the third variable measures the size of the population being represented – for example, a scatter plot of life expectancy vs income for many countries, with point size indicating population of each country\n\n\n\nScatter + Color\nYou can also color by a third quantitative variable:\n\n\n\n\n\n\n\n\n\nThis usually only works well visually if all three variables are clearly associate with each other, so that certain colors are clearly dominant in certain regions of the graph. Otherwise, you get a mishmash of colors all over, which can be distracting.\n\n\nAnimation\nIt may be possible to show a third quantitative variable via animation (this often works especially well if that third variable is actually time!)",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Gallery: Multiple Quantitative Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-cat-quant-mix.html",
+    "href": "graphics-choose-cat-quant-mix.html",
+    "title": "15  Gallery: Mixed Quantitative + Categorical",
+    "section": "",
+    "text": "15.1 Distribution by Groups\nThere are several plots designed specifically to look at the distribution of a quantitative variable, grouped by a categorical variable.",
+    "crumbs": [
+      "Choose a Graph Type\"",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-cat-quant-mix.html#distribution-by-groups",
+    "href": "graphics-choose-cat-quant-mix.html#distribution-by-groups",
+    "title": "15  Gallery: Mixed Quantitative + Categorical",
+    "section": "",
+    "text": "Boxplots\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe boxplot shows a summary of the distribution. The box spans the middle half of the data, with the line marking the median. The “whisker” lines extend to cover the range of “most of” the data, with outliers shown individually\nFor details, check out this optional explanation of how boxplots are constructed from Introduction to Modern Statistics by Mine Çetinkaya-Rundel and Johanna Hardin.\nIf your dataset is too small to estimate the median and quartiles of the data accurately, consider showing all the observations (for example, using or overlaying a jitter plot)\n\n\n\nViolin Plots\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThese show a mirrored density plot for each group\nAs for density plots, make sure you have a large enough dataset so that the bumps in the density curve don’t represent just one or a couple of observations\n\n\n\nJitter Plots\n\n\n\n\n\n\n\n\n\n\nThese show all the points in every category, “jittered” (moved slightly away from the category axis) to reduce overplotting\nIf the dataset is too large, overplotting may still be a big problem\nJitter plots are often used as an additional layer on top of boxplots or violin plots to make the size of the dataset, and the locations of individual datapoints, more visible\n\n\n\nSina Plots\n\n\n\n\n\n\n\n\n\n\nThese show all the points in every category, arranged so that the width of the point cloud corresponds to the density of observations\nIf the dataset is too large, overplotting may become an issue\nA sina plot is a bit of a hybrid between a violin plot and a jitter plot; or, a more organized, less random version of a jitter plot.",
+    "crumbs": [
+      "Choose a Graph Type\"",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-cat-quant-mix.html#facets",
+    "href": "graphics-choose-cat-quant-mix.html#facets",
+    "title": "15  Gallery: Mixed Quantitative + Categorical",
+    "section": "15.2 Facets?",
+    "text": "15.2 Facets?\nYou can also consider making multi-panel plots with one histogram, density plot, or dotplot per facet, but comparing between facets is usually harder than comparing boxplots or violin plots on a single axis.\nMulti-facet plots can show one panel per group, for any kind of plot seen so far: a bar graph for each group, a stacked bar for each group, a scatterplot for each group, a set of boxplots for each group, etc. etc.\n\n\n\n\n\n\n\n\n\n\nCheck Your Understanding: Quant. + Cat.\nThere are some errors and inconsistencies in the chart below!\nCheck it out – can you find them?\n\n\n\nchart choice infographic",
+    "crumbs": [
+      "Choose a Graph Type\"",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Gallery: Mixed Quantitative + Categorical</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose.html",
+    "href": "graphics-choose.html",
+    "title": "Choose a Graph Type",
+    "section": "",
+    "text": "Section Learning Outcomes\nAfter this tutorial, you will:\nNote: You do NOT have to memorize all the information in this tutorial. Review it now, but know you will probably return to this tutorial for later reference. Your goal should be to finish with a basic idea of which graph types should be used for which variable types. Notice that the “Gallery” sections in the navigation bar are labeled by which variable types are to be shown!\nAt the end, you might want to finish with your own notes filling in a table like the one below:\nVariables\nGraphs\n\n\n\n\nOne Quantitative\nhistogram, density plot, …\n\n\nOne Categorical\n…\n\n\n…\n…",
+    "crumbs": [
+      "Choose a Graph Type"
+    ]
+  },
+  {
+    "objectID": "graphics-choose.html#section-learning-outcomes",
+    "href": "graphics-choose.html#section-learning-outcomes",
+    "title": "Choose a Graph Type",
+    "section": "",
+    "text": "Distinguish variable types: quantitative, categorical (nominal, ordinal, interval, ratio); explanatory, response, covariate.\nChoose an appropriate graphical display for a specified combination of variables.\n(Continue to) critique statistical graphics based on design principles.",
+    "crumbs": [
+      "Choose a Graph Type"
+    ]
+  },
+  {
+    "objectID": "graphics-choose.html#text-reference",
+    "href": "graphics-choose.html#text-reference",
+    "title": "Choose a Graph Type",
+    "section": "Text Reference",
+    "text": "Text Reference\n\nBeyond Multiple Linear Regression Ch. 1.5\nEcological Models & Data in R Ch. 2 discusses graphics, but is not recommended as the approach to reading in data, writing R code, and generating graphs in R is very different to that used in this course.\nA comprehensive, and free, supplemental reference is Fundamentals of Data Visualization by Claus Wilke",
+    "crumbs": [
+      "Choose a Graph Type"
+    ]
+  },
+  {
+    "objectID": "graphics-choose.html#motivation-imagine-first",
+    "href": "graphics-choose.html#motivation-imagine-first",
+    "title": "Choose a Graph Type",
+    "section": "Motivation: Imagine First!",
+    "text": "Motivation: Imagine First!\nFigures are a crucial tool for exploring your data and communicating what you learn from the data.\nWhether you are doing a quick check to assess basic features of a dataset or creating a key figure for an important presentation, the best practice is to work thoughtfully. You already learned about creating graphics by I.C.E.E:\n\nThe I.C.E.E. method:\n\nImagine how you want your graph to look, before you\nCode. Once you have the basic starting point,\nEvaluate your work, and\nElaborate (refine it).\n\nRepeat until the figure is as awesome as it needs to be.\n\n\nLimiting Your Imagination\nThere is really no limit to the creative data visualizations you might dream up.\nBut there is a set of basic, workhorse graphics that statisticians and data scientists use most frequently. What are the common options and how do you choose among them?\nThe best choice depends on what kind of data you have, and also on what you want to do with it: what question are your trying to answer? What story will you tell?",
+    "crumbs": [
+      "Choose a Graph Type"
+    ]
+  },
+  {
+    "objectID": "graphics-choose.html#goals",
+    "href": "graphics-choose.html#goals",
+    "title": "Choose a Graph Type",
+    "section": "Goals",
+    "text": "Goals\nSpecifically, you will now focus on choosing the right type of visualization for the task at hand.\nNote that the graphs shown in this tutorial are over-simplified versions - icons, really - with missing labels, huge titles, and huge data elements. This is intentional, to evoke the look of each plot type rather than to present actual data.",
+    "crumbs": [
+      "Choose a Graph Type"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-var-types.html",
+    "href": "graphics-choose-var-types.html",
+    "title": "10  Variable Types",
+    "section": "",
+    "text": "10.1 Distributions\nBefore designing a graphic, you need some data. Ideally, it will be in a tidy table, with one row per case and one column per variable.\nDifferent plots may be appropriate, depending on whether the variable is:\nThe video below gives a concise explanation of the different variable types you need to be able to recognize.\nSometimes, you need a plot that lets you see the distribution of a single variable:\nSometimes these graphs present the answer to a scientific question of interest, but often they are used during exploration or model assessment to better understand a dataset and:",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Variable Types</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-var-types.html#distributions",
+    "href": "graphics-choose-var-types.html#distributions",
+    "title": "10  Variable Types",
+    "section": "",
+    "text": "What values does it take on?\nHow often does each value occur?\n\n\n\nCheck the data\n\nAre there lots of missing values?\nAre missing values encoded as 999 or -1000 or some other impossible value, instead of being marked as missing via NA?\n\nVerify whether the variable’s distribution matches expectations (for example, symmetry, etc.)",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Variable Types</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-cat.html",
+    "href": "graphics-choose-one-cat.html",
+    "title": "11  Gallery: One Categorical Variable",
+    "section": "",
+    "text": "11.1 Consider your Audience\nTo show one categorical variable, we will mainly use bar charts. You might also consider lollipop/Cleveland dot plots, or pie graphs.",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Gallery: One Categorical Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-cat.html#bar-graph",
+    "href": "graphics-choose-one-cat.html#bar-graph",
+    "title": "11  Gallery: One Categorical Variable",
+    "section": "11.2 Bar Graph",
+    "text": "11.2 Bar Graph\n\n\n\n\n\n\n\n\n\n\nCan show either counts, proportions, or percentages\nEasy to see which categories have more/fewer observations",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Gallery: One Categorical Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-cat.html#cleveland-dot-plot",
+    "href": "graphics-choose-one-cat.html#cleveland-dot-plot",
+    "title": "11  Gallery: One Categorical Variable",
+    "section": "11.3 Cleveland Dot Plot",
+    "text": "11.3 Cleveland Dot Plot\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMain difference is whether the “sticks” are drawn (Lollipop) or not (Cleveland Dot)\nMuch like a bar chart, but using dots or lollipops to mark the count or proportion in each category\nWork well when there are many categories to be ranked by frequency",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Gallery: One Categorical Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-cat.html#pie-chart",
+    "href": "graphics-choose-one-cat.html#pie-chart",
+    "title": "11  Gallery: One Categorical Variable",
+    "section": "11.4 Pie Chart",
+    "text": "11.4 Pie Chart\n\n\n\n\n\n\n\n\n\n\nDisplay proportions, not counts\nUnpopular with many statisticians and data scientists because…\n\nHard to see which categories have more/fewer observation when proportions similar\nTemptation to clutter them up with annotation (for example, percentage for each slice)\nCan be inefficient use of space on rectangular page\n\nOften easier to interpret when there are few categories",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Gallery: One Categorical Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-quant.html",
+    "href": "graphics-choose-one-quant.html",
+    "title": "12  Gallery: One Quantitative Variable",
+    "section": "",
+    "text": "12.1 Dotplot\nWhat are some ways to display the distribution of one quantitative variable?",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Gallery: One Quantitative Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-quant.html#dotplot",
+    "href": "graphics-choose-one-quant.html#dotplot",
+    "title": "12  Gallery: One Quantitative Variable",
+    "section": "",
+    "text": "Intuitive representation: x-axis shows range of variable values, and dots are data points\nAs the idea is to show one dot per observation, may not work well for huge datasets",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Gallery: One Quantitative Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-quant.html#histogram",
+    "href": "graphics-choose-one-quant.html#histogram",
+    "title": "12  Gallery: One Quantitative Variable",
+    "section": "12.2 Histogram",
+    "text": "12.2 Histogram\n\n\n\n\n\n\n\n\n\n\nRange of variable values is divided into bins, then height of each bar corresponds to the number of observations in the bin\nEffective way to examine the shape of a distribution\nChoosing the number of bins to use is tricky: too many, and the shape is jagged; too few over-smooths (peaks blend together). Not sure? Find a number of bins that is definitely too few, and one that is definitely too many, and then try to settle on an in-between value that best shows the real shape of the distribution without over-smoothing.",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Gallery: One Quantitative Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-quant.html#density-plot",
+    "href": "graphics-choose-one-quant.html#density-plot",
+    "title": "12  Gallery: One Quantitative Variable",
+    "section": "12.3 Density Plot",
+    "text": "12.3 Density Plot\n\n\n\n\n\n\n\n\n\n\nLike a smoothed version of a histogram (obtained by kernel density estimation, if you want to look up mathematical details)\nCaution: for small datasets, the density plot may show “peaks” that really correspond to one or a few observations\nCan only show density (relative frequency of observation), not counts",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Gallery: One Quantitative Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-quant.html#qq-plot",
+    "href": "graphics-choose-one-quant.html#qq-plot",
+    "title": "12  Gallery: One Quantitative Variable",
+    "section": "12.4 QQ Plot",
+    "text": "12.4 QQ Plot\n\n\n\n\n\n\n\n\n\n\n“Q-Q Plot” is short for “Quantile-Quantile Plot”\nIn some cases, we want to examine the shape of a variable’s distribution to see if it matches a theoretical expectation. For example: do the regression residuals match a normal distribution? (If that example doesn’t make sense to you now - it will later in the course, don’t worry.)\nQuantile-quantile plots are one way to make this comparison. They plot the quantiles of the data as a function of the same quantiles of the expected theoretical distribution; if there’s a good match, the points should follow a line with slope = 1.\nHow close to the straight line is “close enough”? That’s the tricky part…",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Gallery: One Quantitative Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-quant.html#check-your-understanding-one-variable-plots",
+    "href": "graphics-choose-one-quant.html#check-your-understanding-one-variable-plots",
+    "title": "12  Gallery: One Quantitative Variable",
+    "section": "12.5 Check Your Understanding: One-variable plots",
+    "text": "12.5 Check Your Understanding: One-variable plots\n\n\nWhich plot would work best to show the distribution of 75 families’ household incomes?\n\n Lollipop plot Histogram Bar chart\n\nWhich plot would work best to show the distribution of 75 families’ postal codes?\n\n Bar chart Density plot Histogram Scatter plot\n\n\n\n\n\nClick for explanations of solutions above.\n\nLollipop plots and bar graphs work better for categorical variables – they show counts or proportions (or some other summary of counts in categories). By default, there would be one lollipop or bar for each unique value of income - what a mess! Histograms and density plots, on the other hand, show the distribution of one quantitative variable. (Scatter plots are usually used to show 2 quantitative variables.)",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Gallery: One Quantitative Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-one-cat.html#cleveland-dot-lollipop-plot",
+    "href": "graphics-choose-one-cat.html#cleveland-dot-lollipop-plot",
+    "title": "11  Gallery: One Categorical Variable",
+    "section": "11.3 Cleveland Dot / Lollipop Plot",
+    "text": "11.3 Cleveland Dot / Lollipop Plot\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMain difference is whether the “sticks” are drawn (Lollipop) or not (Cleveland Dot)\nMuch like a bar chart, but using dots or lollipops to mark the count or proportion in each category\nWork well when there are many categories to be ranked by frequency",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Gallery: One Categorical Variable</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-cat.html",
+    "href": "graphics-choose-multiple-cat.html",
+    "title": "13  Gallery: 2-3 Categorical Variables",
+    "section": "",
+    "text": "13.1 Stacked Bar Graph",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Gallery: 2-3 Categorical Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-cat.html#stacked-bar-graph",
+    "href": "graphics-choose-multiple-cat.html#stacked-bar-graph",
+    "title": "13  Gallery: 2-3 Categorical Variables",
+    "section": "",
+    "text": "Similar to side-by-side bar\nCompared to side-by-side, it’s harder to compare proportions in each group within a category, but easier to estimate the proportion in each category.",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Gallery: 2-3 Categorical Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-cat.html#faceted-bar-graph",
+    "href": "graphics-choose-multiple-cat.html#faceted-bar-graph",
+    "title": "13  Gallery: 2-3 Categorical Variables",
+    "section": "13.2 Faceted Bar Graph",
+    "text": "13.2 Faceted Bar Graph\n\n\n\n\n\n\n\n\n\n\nOne plot box – usually called a “panel” or “facet” – for each of a set of groups\nThink carefully about the question of interest and the relationship you want to highlight as you choose: should bar heights correspond to…\n\nNumber of observations?\nProportion of observations overall in the whole dataset?\nProportion of observations in the panel?\nSomething else?",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Gallery: 2-3 Categorical Variables</span>"
+    ]
+  },
+  {
+    "objectID": "graphics-choose-multiple-cat.html#combinations-stacked-bars-facets-etc.",
+    "href": "graphics-choose-multiple-cat.html#combinations-stacked-bars-facets-etc.",
+    "title": "13  Gallery: 2-3 Categorical Variables",
+    "section": "13.3 Combinations (Stacked bars + Facets, etc.)",
+    "text": "13.3 Combinations (Stacked bars + Facets, etc.)\nOf course, if you have 3 variables instead of just two, you can combine methods. Avoid it unless you are sure it is necessary and communicates clearly.\n\nBe sure that the resulting graph is not too complex to understand quickly, at a glance. Packing too much information into one graph sometimes means none of the info is actually communicated!\nAnd if showing proportions or percentages in such a display, be sure you understand what denominator is being used in the calculations – is it the fraction of the whole dataset, within facets, etc.?",
+    "crumbs": [
+      "Choose a Graph Type",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Gallery: 2-3 Categorical Variables</span>"
+    ]
+  }
+]

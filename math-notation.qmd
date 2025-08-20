@@ -1,0 +1,87 @@
+# Math Notation in Quarto
+
+```{r}
+#| setup: true
+#| include: false
+
+library(mosaic)
+```
+
+## Greek Letters, common symbols, subscripts and superscripts
+
+You might be wondering...
+
+>> How can I include Greek letters and other symbols in the text part of my Quarto (or RMarkdown) document?
+
+Basically, you enclose the name of the symbol you want with \$\...\$ 
+
+(if you use LaTeX, this will be very familiar):
+
+Type this in qmd:    | To get this when rendered:
+---------------------|----------------------------
+\$\\hat{p}\$   | $\hat{p}$
+\$\\bar{x}\$   | $\bar{x}$
+\$\\alpha\$ | $\alpha$
+\$\\beta\$  | $\beta$
+\$\\gamma\$ | $\gamma$
+\$\\Gamma\$ | $\Gamma$
+\$\\mu\$    | $\mu$
+\$\\sigma\$ | $\sigma$
+\$\\sigma\^2\$ | $\sigma^2$
+\$\\rho\$   | $\rho$
+\$\\epsilon\$ | $\epsilon$ 
+\$\\sim\$   | $\sim$
+\$\\mu\_D\$   | $\mu_D$
+\$\\mu\_\{longsubscript\}\$   | $\mu_{longsubscript}$
+\$\\hat{p}\_\{longsubscript\}\$   | $\hat{p}_{longsubscript}$
+\$\\mu\\neq 0\$   | $\mu \neq 0$
+\$\\mu\\geq 5\$   | $\mu \geq 5$
+\$\\mu\\leq 1\$   | $\mu \leq 1$
+\$\\cup\$ | $\cup$
+\$\\cap\$ | $\cap$
+\$\\vert\$ | $\vert$
+\$\\sim\$ | $\sim$
+\$\\frac{numerator}{denominator}\$ | $\frac{numerator}{denominator}$
+
+For other Greek letters, just spell out the name of the letter that you want (following the models above). If you want a capital Greek letter, capitalize the first letter of its name when you write it out (e.g. Sigma instead of sigma).
+
+*Note: Avoid spaces before the final \$ or after the initial \$.*
+
+## Summations and Products
+
+Type This:    | To get this in your PDF:
+--------------|----------------------------
+\$\\sum\_{i=1}\^{n} x\_i\$   | $\sum_{i=1}^{n} x_i$
+\$\\prod\_{i=1}\^{n} f(i)}\$   | $\prod_{i=1}^{n} f(i)$
+
+These will format as seen above if used in inline math mode (enclosed in single \$s). If you put them in display math mode by using two \$\$ at the start and end instead of just one, then the result will be displayed centered on its own line and the limits of the summation/product will be above/below the $\Sigma$ or $\Pi$:
+
+<!-- \$\$ $\text{\\prod\_{i=1}\\^ \{ n \} f(i)}$ \$\$ -->
+
+<!-- gives -->
+
+$$\prod_{i=1}^{n} f(i)$$
+
+## Long equations
+You can use double \$ to bracket equations you want to display on a line of their own. Inside can be multiple mathematical expressions. For example:
+
+````{verbatim}
+$$\hat{y} = \beta_0 + \beta_1x_1\,$$
+
+$$\hat{epsilon} = \hat{y}_{i} - y_i$$
+
+$$\epsilon \sim N(0, \sigma)$$
+````
+
+
+
+gives
+
+$$\hat{y} = \beta_0 + \beta_1x_1$$
+
+$$\hat{\epsilon}_{i} = \hat{y}_{i} - y_i$$
+
+
+$$\epsilon \sim N(0, \sigma)$$
+
+*Note: Avoid spaces before the final \$ or after the initial \$. Also note, the equation will NOT be inside a code chunk...I only did that here because it's hard to get the* **un-rendered source version** *to appear neatly in the text part of a rendered Quarto file otherwise.*

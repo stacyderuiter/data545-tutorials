@@ -1,0 +1,53 @@
+# Choose a Graph Type
+
+## Section Learning Outcomes
+
+After this tutorial, you will:
+
+1.  Distinguish variable types: quantitative, categorical (nominal, ordinal, interval, ratio); explanatory, response, covariate.
+2.  Choose an appropriate graphical display for a specified combination of variables.
+3.  (Continue to) critique statistical graphics based on design principles.
+
+**Note: You do NOT have to memorize all the information in this tutorial. Review it now, but know you will probably return to this tutorial for later reference. Your goal should be to finish with a basic idea of which graph types should be used for which variable types. Notice that the "Gallery" sections in the navigation bar are labeled by which variable types are to be shown!**
+
+At the end, you might want to finish with your own notes filling in a table like the one below:
+
+```{r, echo = FALSE}
+knitr::kable(tibble::tibble(Variables = c('One Quantitative', 'One Categorical', '...'),
+                            Graphs = c(' histogram, density plot, ...', '...', '...')))
+```
+
+## Text Reference
+
+-   [*Beyond Multiple Linear Regression* Ch. 1.5](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#explorech1){target="_blank"}
+-   *Ecological Models & Data in R* Ch. 2 discusses graphics, but is not recommended as the approach to reading in data, writing R code, and generating graphs in R is very different to that used in this course.
+-   A comprehensive, and free, supplemental reference is [Fundamentals of Data Visualization by Claus Wilke](https://clauswilke.com/dataviz/){target="_blank"}
+
+## Motivation: Imagine First!
+
+Figures are a crucial tool for exploring your data *and* communicating what you learn from the data.
+
+Whether you are doing a quick check to assess basic features of a dataset or creating a key figure for an important presentation, the best practice is to work thoughtfully. You already learned about creating graphics by I.C.E.E:
+
+### The **I.C.E.E. method**:
+
+-   **I***magine* how you want your graph to look, *before* you
+-   **C***ode*. Once you have the basic starting point,
+-   **E***valuate* your work, and
+-   **E***laborate* (refine it).
+
+Repeat until the figure is as awesome as it needs to be.
+
+### Limiting Your Imagination
+
+There is really no limit to the creative data visualizations you might dream up.
+
+But there is a set of basic, workhorse graphics that statisticians and data scientists use most frequently. What are the common options and how do you choose among them?
+
+The best choice depends on what kind of data you have, and also on what you want to do with it: what question are your trying to answer? What story will you tell?
+
+## Goals
+
+Specifically, you will now focus on **choosing the right type of visualization for the task at hand.**
+
+Note that the graphs shown in this tutorial are over-simplified versions - icons, really - with missing labels, huge titles, and huge data elements. This is intentional, to evoke the look of each plot type rather than to present actual data.

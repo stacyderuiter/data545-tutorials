@@ -1,0 +1,66 @@
+# What is *Necessary*?
+
+## Bye, Junk!
+
+Our first principle is: if it doesn't *need* to be in your graph, it shouldn't be there. Keep things as simple as possible. What are some justifications for a *need* to include an element in a plot?
+
+-   It is crucial to the story you are telling, or the research question you are answering.
+-   It emphasizes your main point. For example, some plots may not need color, and in others it may add crucial visual contrast to highlight a main point.
+-   It makes the graph easier to read and understand
+-   It makes the main message of the graph more memorable
+
+**If you need it, include it, but if not, keep it simple!**
+
+Imagine you are using *very* expensive ink to print every element of the graph. Is every drop of in you're using really worth it? If not, take it out. As influential data visualization thinker Edward Tufte put it in [*The Visual Display of Quantitative Information*](https://www.edwardtufte.com/tufte/books_vdqi){target="_blank"},
+
+> A large share of ink on a graphic should present data-information, the ink changing as the data change. Data-ink is the non-erasable core of a graphic...
+
+In other words, don't let annotations, labels, grids, etc. overwhelm the visual impact of your data -- Don't do this:
+
+![](https://freshspectrum.com/wp-content/uploads/2015/07/Data-ink-1024x768.png){alt="cartoon about data-ink ratio showing what not to do" title="cartoon about data-ink ratio showing what not to do" width="400px"}
+
+*Cartoon source: <https://freshspectrum.com/data-ink-ratio/>*
+
+### Check: Critique the Pie
+
+The figure below, from [a *Forbes* article on mobile operating system crashes](https://www.forbes.com/sites/tomiogeron/2012/02/02/does-ios-crash-more-than-android-a-data-dive/#4997f14d5385){target="_blank"}, **is pretty awful**.
+
+![](https://thumbor.forbes.com/thumbor/576x0/https%3A%2F%2Fblogs-images.forbes.com%2Ftomiogeron%2Ffiles%2F2012%2F02%2Fcrashes-ios-android-1.jpg){alt="terrible pie chart from Forbes" title="terrible pie chart from Forbes"}
+
+#### A Conclusion?
+What is **one main conclusion** from the graph above? 
+
+(It's pretty confusing to interpret, so you may have to study carefully to find something...)
+
+#### Remove...What?
+
+Now that you have identified one main conclusion from the graph...
+
+What is one element of the plot that:
+
+- obscures that conclusion, 
+- is NOT necessary, and 
+- could be removed to improve the plot? 
+
+Answer constructively - as if the person who made the plot was incredibly smart and someone you admire, and to whom you wanted to be kind but helpful.
+
+## Grids and Boxes
+
+Should your graphics include boxes, axis lines, and grid lines?
+
+Well, it depends...
+
+-   Removing unnecessary axes, grids, and labels yields a cleaner plot that may be easier to take in at a glance -- there is less to distract from the main story
+-   **But...** omitting needed baselines, tick marks, gridlines, and labels can cause confusion and make it hard to identify categories or estimate numeric values
+-   Scientific graphics usually need axis lines, with tick marks
+-   If a viewer will need to refer to an axis to estimate heights of bars or locations of points, then consider using gridlines for that axis.
+-   Instead of an entire grid, it may be more effective to include single lines indicating important threshold values
+-   Consider using a color that nearly blends into the background for grid lines, so that they detract as little attention as possible from the data
+
+### Example
+
+[Storytelling with Data](http://www.storytellingwithdata.com/blog/2011/07/gridlines-are-gratuitous){target="_blank"} provide an example of a cluttered figure where the trend over time pops out more as unnecessary grids and boxes are made less visible, then removed:
+
+![](https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1438044611950-YY4YYAYAY1O95P8VGJ8G/ke17ZwdGBToddI8pDm48kDa6fENzg3THuPXOjlBueplZw-zPPgdn4jUwVcJE1ZvWhcwhEtWJXoshNdA9f1qD7Xj1nVWs2aaTtWBneO2WM-s7QUvVpCKf9Q5vGl5-jKOjePt_rSAREIxGXEmq0OLmZA/image-asset.jpeg?format=300w){alt="cluttered figure where the trend over time pops out more as unnecessary grids and boxes are made less visible, then removed" width="300px"}
+
+Optionally, if you'd like more examples, read [S. Few's 3.5-page article on when grid lines are helpful.](http://www.perceptualedge.com/articles/dmreview/grid_lines.pdf){target="_blank"}

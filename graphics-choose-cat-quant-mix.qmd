@@ -1,0 +1,98 @@
+# Gallery: Mixed Quantitative + Categorical
+
+```{r}
+#| setup: true
+#| include: false
+
+library(tidyverse)
+library(ggformula)
+library(ggforce)
+
+theme_set(theme_void(base_size = 20))
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+crime <- read_csv('https://sldr.netlify.app/data/sscrime.csv')
+```
+
+
+## Distribution by Groups
+There are several plots designed specifically to look at the distribution of a quantitative variable, grouped by a categorical variable.
+
+### Boxplots
+
+```{r, boxplot, fig.alt = 'a boxplot (generic and unlabelled, serving as an icon)' }
+gf_boxplot(NEnrollment ~ Location, data = crime) |>
+  gf_labs(title = "BOXPLOTS")
+```
+
+```{r, boxplot-horiz, fig.alt = 'a horizontally-oriented boxplot (generic and unlabelled, serving as an icon)' }
+gf_boxplot(NEnrollment ~ Location, data = crime) |>
+  gf_refine(coord_flip()) |>
+  gf_labs(title = "BOXPLOTS (HORIZONTAL)")
+```
+
+- The boxplot shows a *summary* of the distribution. The box spans the middle half of the data, with the line marking the median. The "whisker" lines extend to cover the range of "most of" the data, with outliers shown individually
+- For details, check out [this optional explanation of how boxplots are constructed](https://openintro-ims.netlify.app/explore-numerical.html#boxplots){target="_blank"} from [Introduction to Modern Statistics](https://openintro-ims.netlify.app/index.html){target="_blank"} by Mine Çetinkaya-Rundel and Johanna Hardin.
+- If your dataset is too small to estimate the median and quartiles of the data accurately, consider showing all the observations (for example, using or overlaying a jitter plot) 
+
+### Violin Plots
+
+```{r, violin, fig.alt = 'a violin plot (generic and unlabelled, serving as an icon)' }
+gf_violin(TrainingHours ~ Enrollment, data = crime) |>
+  gf_labs(title = "VIOLIN PLOTS")
+```
+
+```{r, violin-horiz, fig.alt = 'a horisontally-oriented violion plot (generic and unlabelled, serving as an icon)' }
+gf_violin(TrainingHours ~ Enrollment, data = crime) |>
+  gf_refine(coord_flip()) |>
+  gf_labs(title = "VIOLIN (HORIZONTAL)")
+```
+
+- These show a mirrored density plot for each group
+- As for density plots, make sure you have a large enough dataset so that the bumps in the density curve don't represent just one or a couple of observations
+
+### Jitter Plots
+
+```{r, jitter, fig.alt = 'a jitter plot (generic and unlabelled, serving as an icon)' }
+gf_jitter(TrainingHours ~ Enrollment, data = crime) |>
+  gf_labs(title = "JITTER PLOTS")
+```
+
+- These show all the points in every category, "jittered" (moved slightly away from the category axis) to reduce overplotting
+- If the dataset is too large, overplotting may still be a big problem
+- Jitter plots are often used as an additional layer on top of boxplots or violin plots to make the size of the dataset, and the locations of individual datapoints, more visible
+
+### Sina Plots
+
+```{r, sina, fig.alt = 'a sina plot (generic and unlabelled, serving as an icon)' }
+gf_sina(TrainingHours ~ Enrollment, data = crime) |>
+  gf_labs(title = "SINA PLOTS")
+```
+
+- These show all the points in every category, arranged so that the width of the point cloud corresponds to the density of observations
+- If the dataset is too large, overplotting may become an issue
+- A sina plot is a bit of a hybrid between a violin plot and a jitter plot; or, a more organized, less random version of a jitter plot.
+
+## Facets?
+You can also consider making multi-panel plots with one histogram, density plot, or dotplot per facet, but comparing between facets is usually harder than comparing boxplots or violin plots on a single axis.
+
+Multi-facet plots can show one panel per group, for *any* kind of plot seen so far: a bar graph for each group, a stacked bar for each group, a scatterplot for each group, a set of boxplots for each group, etc. etc.
+
+```{r, facetted-box, fig.alt = 'a sina plot (generic and unlabelled, serving as an icon)' }
+gf_boxplot(TrainingHours ~ Enrollment, data = crime |>
+             mutate(Location = as.numeric(factor(Location)),
+                    Location = paste("GROUP", Location))) |>
+  gf_facet_wrap(~Location) |>
+  gf_labs(title = "FACETED BOXPLOTS")
+```
+
+### Check Your Understanding: Quant. + Cat.
+
+**There are some errors and inconsistencies in the chart below!**
+
+Check it out -- can you find them?
+
+![chart choice infographic](https://activewizards.com/content/blog/How_to_Choose_the_Right_Chart_Type_[Infographic]/chart-types-infographics04.png){width=600px}

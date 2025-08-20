@@ -1,0 +1,241 @@
+---
+format: live-html
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Proportion and Scale
+
+```{r}
+#| setup: true
+#| include: false
+
+
+library(tidyverse)
+library(ggformula)
+library(gganimate)
+library(webexercises)
+
+theme_set(theme_void(base_size = 20))
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+crime <- read_csv('https://sldr.netlify.app/data/sscrime.csv')
+```
+
+## Proportional Ink and Axis Scales
+
+For bar graphs and other filled-area plots, the **area** of a graphic element should correspond to the **proportion of the data** it represents.
+
+This principle might be violated if the lower limit of a count/frequency axis is not 0. If you're showing the number or proportion or percentage of observations in categories, it's usually best to set the lower limit of the axis to 0.
+
+If you don't start at 0, make sure the "at a glance" interpretation of your figure is not misleading!
+
+A similar principle applies for plots of quantitative variables...
+
+-   *if they use filled areas to represent numeric values* and
+-   *if there is some value (zero or another threshold value) that is an important reference point.*
+
+For optional additional detail on choosing honest axis limits and more examples, check out the blog post by the excellent but (sorry) profanely named [Calling B\*\*\* project](https://www.callingbullshit.org/tools/tools_misleading_axes.html){target="_blank"}.
+
+An example from [Chapter 17 of C. Wilke's \*Fundamentals of Data Visualization](https://clauswilke.com/dataviz/proportional-ink.html){target="_blank"} shows the "Stock price of Facebook (FB) from Oct. 22, 2016 to Jan. 21, 2017":
+
+![](https://clauswilke.com/dataviz/proportional_ink_files/figure-html/fb-stock-drop-bad-1.png){alt="chart showing facebook stock price over time, with limited price range visible" title="chart showing facebook stock price over time" width="400px"}
+
+::: {.webex-check .webex-box}
+**Why is the Facebook figure above 'bad'? Mark all correct answers as TRUE.**
+
+The graph suggests that Facebook stock value dropped dramatically around November 1, 2016. But it actually only lost about 10% of its value. `r torf(TRUE)`
+
+The grey area should be plain white, not colored in. `r torf(FALSE)`
+
+The stock price values appear too jagged and should be smoothed out. `r torf(FALSE)`
+
+There are some stock price values that appear to be outliers and should be removed. `r torf(FALSE)`
+:::
+
+`r hide("Click for explanations of solutions above.")`
+
+-   In this case, it would probably be less misleading to use a y axis ranging from 0 to 135 instead of 110 to 135.
+-   A line chart could also be used here (without filling in the grey area), but using the color emphasizes the values rather than the trend over time.
+-   We can not just change data values to make them look how we like. If we wanted to emphasize the smoothed trend over time, we could show the smoothed curve atop a scatter plot of the original data points, which would present the desired message without altering the data. If we did average over time before plotting, it should be clearly noted (for example, "Weekly average Facebook stock prices...").
+-   Even if there are outliers (there are not extreme ones here), it is only acceptable to exclude them from analysis if you can verify that they are errors.
+
+`r unhide()`
+
+Consider two ways to try to "fix" the figure (again from [Wilke](https://clauswilke.com/dataviz/proportional-ink.html){target="_blank"}).
+
+#### A.
+
+![](https://clauswilke.com/dataviz/proportional_ink_files/figure-html/fb-stock-drop-good-1.png){width="400px" alt="chart showing facebook stock price over time, with price range going down to 0"}
+
+#### B.
+
+![](https://clauswilke.com/dataviz/proportional_ink_files/figure-html/fb-stock-drop-inverse-1.png){alt="chart showing facebook stock price over time, showing price loss compared to initial date" width="400px"}
+
+::: {.webex-check .webex-box}
+**Why is the Facebook figure above 'bad'? Mark all correct answers as TRUE.**
+
+Which of the figures above solves the proportional-ink problem with the Facebook stock price plot?
+
+-   **A** does it! `r torf(TRUE)`
+-   **B** does it! `r torf(TRUE)`
+-   Actually maybe both of them do it...`r torf(TRUE)`
+-   Neither of them solves the problem. `r torf(FALSE)`
+:::
+
+`r hide("Click for explanations of solutions above.")` A accurately shows the reduction in stock price as a proportion of the initial price. But what about B? Some would say B accurately shows the amount of value lost (and then regained) over time. Others would argue that it is as bad as the original, for similar reasons - the graph shows the *absolute* lost value, not the proportion lost value. So B may be OK, or bad, depending on your perspective.
+
+Some would say B accurately shows the amount of value lost (and then regained) over time. Others would argue that it is as bad as the original, for similar reasons - the graph shows the <i>absolute</i> lost value, not the proportion lost value. `r unhide()`
+
+### Counts or Proportions or Percentages?
+
+-   For categorical data, should you show the Count in each category, or the Frequency (proportion or percent)? It depends!
+    -   When you want to compare by category across groups, and the total number in each group varies, frequency works well
+    -   If representing differences in sample size between groups is crucial, counts work better
+
+## Text Elements: Titles, Labels, Size
+
+When using text in a figure, ensure it is easy to read. Make sure no unneccessary text is included.
+
+-   Default size of text in figures produced by statistical software *is almost always too small*. Make sure your text is *big enough to be easily legible in the context where you will present it* (on the page in a report, on a slide for a presentation, etc.)
+-   Other than the title of the vertical (y) axis, all the text in a plot should be horizontal. This makes it easier to read.
+-   Axis labels should be self-explanatory
+    -   Viewers should be able to guess what they mean accurately without looking at anything but the figure
+    -   Use words instead of numeric codes or cryptic abbreviations
+-   Axis labels should also be as short as possible while remaining easy to understand
+-   Every plot should have a title. Sometimes this might be a literal title at the top of the graph, but those are relatively rare. More often in scientific work, a text caption appears below the figure. The first phrase/sentence of the caption acts as the figure's title
+
+Remember the melanoma rates over time figure from the last section?
+
+![](https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1438044611950-YY4YYAYAY1O95P8VGJ8G/ke17ZwdGBToddI8pDm48kDa6fENzg3THuPXOjlBueplZw-zPPgdn4jUwVcJE1ZvWhcwhEtWJXoshNdA9f1qD7Xj1nVWs2aaTtWBneO2WM-s7QUvVpCKf9Q5vGl5-jKOjePt_rSAREIxGXEmq0OLmZA/image-asset.jpeg?format=300w){alt="chart showing melanoma rates over time" width="300px"}
+
+::: {.webex-check .webex-box}
+**What helpful changes did Storytelling with Data make to the text labels as they improved the figure?**
+
+The x axis labels are rotated so they are horizonal. `r torf(TRUE)`
+
+The title color is changed to blue and the axis labels to grey. `r torf(TRUE)`
+
+The box around the plot is removed. `r torf(FALSE)`
+:::
+
+`r hide("Click for explanations of solutions above.")`
+
+-   Rotating axis labels so they are horizontal is generally an improvement. To make this happen, the number of tick marks and labels on the x axis was also reduced. Notice the labels are much easier to read.
+-   The color changes helped too. The blue links the title with the trend it describes, and the grey makes the axis titles less prominent and lets the viewer focus on the data. Continue to the next section for more on using color...
+-   The box is gone, and it is a big improvement to the plot! But technically, you were asked about changes to the text labels...
+
+`r unhide()`
+
+## Using Color
+
+Color - used with care - can be an incredibly effective part of a data visualization.
+
+-   Ensure your color choices highlight the story you want to tell
+    -   Consider using black and grey to help some elements fade into the background - for example, grid lines and labels that must be present but aren't the most important elements
+-   Choose color combinations that look good and are distinguishable by color-blind viewers and in greyscale
+    -   Default to using pre-defined color palettes provided by your software rather than choosing colors manually
+    -   Consider being redundant - use size and/or shape as well as color to indicate groups.
+-   Use color consistently. Example: if "young" cases are red in one graph, don't use red for "old" in the next graph
+
+The video below, from Storytelling with Data, gives explanations and examples.
+
+-   If you have time, watch from 11:48 to 28:41 (about 17 minutes). This segment will play automatically in the clip below.
+-   If you're in a rush, the most important sections (about 10 minutes) are:
+    -   13:57 - 15:12 (Sparing use of color)
+    -   18:44 - 21:25; see also the [infographic of color in culture](https://www.informationisbeautiful.net/visualizations/colours-in-cultures/){target="_blank"}
+    -   22:25 - 23:10 (Color blindness - to view your graphs as someone with color blindness would, take a screen shot and try the [simulator online](https://www.color-blindness.com/coblis-color-blindness-simulator/){target="_blank"}
+    -   23:50 - 28:41 (Consistency)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/AiD6etOB6qI?start=708&amp;end=1721" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+::: {.webex-check .webex-box}
+**Which of the following are lessons from the Storytelling with Data video on Being Clever with Color? Mark all correct answers "TRUE".**
+
+Color grabs attention. `r torf(TRUE)`
+
+Color signals where to look. `r torf(TRUE)`
+
+Color should be used sparingly. `r torf(TRUE)`
+
+Too much color, and everything is highlighted - the viewer does not know what to pay attention to. `r torf(TRUE)`
+
+Color can show quantitative values, too, not just categories. `r torf(TRUE)`
+
+Colors have tone and meaning. `r torf(TRUE)`
+
+Not everyone can see colors. `r torf(TRUE)`
+
+Use color consistently. `r torf(TRUE)`
+
+Simple black and white is always the best choice. `r torf(FALSE)`
+:::
+
+`r hide("Click for explanations of solutions above.")`
+
+-   The human eye is naturally drawn to colors.
+-   Since color grabs attention, we expect it to direct us toward the most important stuff that is worthy of our attention.
+-   But...Too much color, and everything is highlighted - the viewer does not know what to pay attention to.
+-   Also, remember that the meaning and interpretation of colors varies by culture.
+-   Since some people can not see color, use color-blind friendly palettes and redundant coding (shape, text) where possible without cluttering the figure.
+-   Inconsistent use of color can be confusing and distracting.
+-   Sometimes black and white is great - but often color helps you tell a story!
+
+`r unhide()`
+
+## When Things Overlap
+
+Especially when graphing variables with long category values, you may end up with ugly, illegible overlapping labels. Two easy solutions, in order of preference, are to switch x and y coordinates so the "long" labels are on the y axis (in R, this resizes the plot area so that labels fit); or, to rotate the too-long labels, which eliminates the overlap but makes them harder to read than horizontal text.
+
+Sometimes a title or axis label is too long and runs off the edge of the figure. Using a smaller font is *not* often an ideal solution. If you can't just use a shorter label, consider adding line breaks.
+
+```{r, bad-labels, fig.width = 4}
+theme_set(theme_minimal(base_size = 20))
+gf_boxplot(NEnrollment ~ Location, data = crime) |>
+  gf_labs(title = 'WORSE LABELS') |>
+  gf_theme(title = element_text(color = 'darkred'),
+           axis.title = element_text(color = 'black'))
+```
+
+```{r, better-labels, fig.width = 4}
+
+gf_boxplot(NEnrollment/1000 ~ Location, data = crime) |>
+  gf_labs(title = 'BETTER',
+          y = 'Enrollment\n (1000s)', x= '') |>
+  gf_refine(coord_flip()) |>
+  gf_theme(title = element_text(color = 'deepskyblue4'),
+           axis.title = element_text(color = 'black'))
+```
+
+## Critique Practice
+
+Try using what you have learned to provide a constructive critique of an example.
+
+Consider the graphic below. At a glance, what do you think it means? Looking more carefully, what do you notice?
+
+![](https://www.callingbullshit.org/tools/img/stand_your_ground.png){alt="chart showing gun deaths in Florida over time with inverted y axis" width="300px"}
+
+**Pause to think: What changes, if any, would you suggest to the figure's creator to make it clearer and easier to understand? Be sure to be constructive - gently explain any problems and suggest solutions.**
+
+## Video Review
+
+Wow, that was quite a lot of information! If you could use a brief review from a different point of view, check out the **optional** [video from Kristen Sosulski](https://www.youtube.com/watch?v=m9AhRIh49eU){target="_blank"}
+
+## Recap & Reflect: 12 Tips
+
+The 4-minute video below summarizes design principles for data visualization in the form of 12 tips.
+
+As you watch, make note of one or two tips that strike you (you'll report your thoughts in the next section). Is there one that nicely summarizes an idea introduced earlier in the section? One you're not sure about? One that you think is incredibly important? One that makes you say "Aha! *Now* I see why I loved/hated that visualization!"
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/185421073" width="640" height="360" frameborder="0" allowfullscreen>
+
+</iframe>
+
+## Pause for Reflection
+
+Take a moment to reflect on what you learned. Which Tip do you remember most clearly, think is most important, or want to challenge? Consider making a few notes for yourself for the future (you'll have to make and critique plenty of graphics in your homework assignments).

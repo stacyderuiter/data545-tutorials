@@ -1,0 +1,115 @@
+# Gallery: One Categorical Variable
+
+```{r}
+#| setup: true
+#| include: false
+
+library(tidyverse)
+library(ggformula)
+
+theme_set(theme_void(base_size = 20))
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+crime <- read_csv('https://sldr.netlify.app/data/sscrime.csv')
+```
+
+## Consider your Audience
+
+To show one categorical variable, we will mainly use bar charts. You might also consider lollipop/Cleveland dot plots, or pie graphs.
+
+```{r, fig.alt='A table showing features and benefits of different graph types for one categorical variable, highlighting statisticians bias against pie charts', out.width='80%'}
+# one_cat <- tibble(Graph = c('Bar', 
+#                             'Lollipop',
+#                             'Cleveland Dot',
+#                             #'waffle',
+#                             'Pie'),
+#                   `Show Proportions?` = sapply(c('white_check_mark', 
+#                                                #'white_check_mark', 
+#                                                'white_check_mark', 
+#                                                'white_check_mark', 
+#                                                'white_check_mark'), 
+#                                              emo::ji),
+#                   `Show Counts?` = sapply(c('white_check_mark',
+#                                             'white_check_mark',
+#                                             'white_check_mark', 
+#                                          # 'x', 
+#                                           'x'),
+#                                         emo::ji),
+#                   Statisticians = sapply(c('heart_eyes', 
+#                                             #'sunglasses', 
+#                                             'sunglasses',
+#                                            'sunglasses',
+#                                            'rage'),
+#                                          emo::ji)
+#                   )
+# 
+#
+# knitr::kable(one_cat)
+knitr::include_graphics('images/one-cat-emojis.png')
+```
+
+## Bar Graph
+
+```{r, echo = FALSE, fig.alt="a bar chart (generic and unlabelled, serving as an icon)"}
+gf_bar(~Location, data = crime) |>
+  gf_labs(title = 'BAR')
+```
+
+-   Can show either counts, proportions, or percentages
+-   Easy to see which categories have more/fewer observations
+
+## Cleveland Dot / Lollipop Plot
+
+```{r, cleveland, echo = FALSE, message = FALSE, fig.alt = 'a cleveland dotplot (generic and unlabelled, serving as an icon)'}
+loc <- crime |>
+  group_by(Location) |>
+  summarize(n = n(), freq = n / nrow(crime)) |>
+  mutate(Location = forcats::fct_reorder(factor(Location), n))
+
+gf_point(Location ~ n, data = loc,
+         size = 10) |>
+  gf_lims(x = c(0, 1.1*max(loc$n))) |>
+  gf_labs(title = 'CLEVELAND DOT') |>
+  gf_theme(panel.grid.major.y = element_line(color = 'grey70'),
+           panel.grid.major.x = element_blank(),
+           panel.grid.minor.x = element_blank(),
+          axis.line = element_line(color = 'black', linewidth = 3))
+```
+
+```{r, lollipop, echo = FALSE, message = FALSE, fig.alt = 'a lollipop chart (generic and unlabelled, serving as an icon)'}
+gf_point(Location ~ n, data = loc,
+         size = 10) |>
+  gf_segment(Location + Location ~ 0 + n,
+             color = 'black', linewidth = 2) |>
+  gf_labs(title = 'LOLLIPOP') |>
+  gf_theme(panel.grid.major.y = element_line(color = 'grey70'),
+           panel.grid.major.x = element_blank(),
+           panel.grid.minor.x = element_blank(),
+            axis.line = element_line(color = 'black', linewidth = 3))
+
+```
+
+-   Main difference is whether the "sticks" are drawn (Lollipop) or not (Cleveland Dot)
+-   Much like a bar chart, but using dots or lollipops to mark the count or proportion in each category
+-   Work well when there are many categories to be ranked by frequency
+
+## Pie Chart
+
+```{r, echo = FALSE, message = FALSE, fig.alt = 'a pie chart (generic and unlabelled, serving as an icon)'}
+gf_bar(~1, fill = ~Location, data = crime, width = 1) |>
+  gf_refine(coord_polar('y')) |>
+  gf_theme(legend.position = 'none') |>
+  gf_labs(title = 'PIE') |>
+  gf_refine(scale_fill_brewer(palette = 'Greys'))
+```
+
+-   Display proportions, not counts
+-   Unpopular with many statisticians and data scientists because...
+    -   Hard to see which categories have more/fewer observation when proportions similar
+    -   Temptation to clutter them up with annotation (for example, percentage for each slice)
+    -   Can be inefficient use of space on rectangular page
+-   Often easier to interpret when there are few categories
+

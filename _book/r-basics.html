@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; R Basics – DATA 545 Tutorial</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./how-to-quarto.html" rel="next">
+<link href="./install-r.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b7c2d8834e08b04a63bb76a724ffbcac.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="_include/webex.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./install-r.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./r-basics.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">DATA 545 Tutorial</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./install-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-basics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how-to-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R Results in Quarto Text</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math-notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Math Notation in Quarto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Designing Effective Visualizations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-no-junk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">What is <em>Necessary</em>?</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-color.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Color</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-text-elements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Text Elements</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#your-mission" id="toc-your-mission" class="nav-link active" data-scroll-target="#your-mission"><span class="header-section-number">2.1</span> Your Mission</a></li>
+  <li><a href="#communicating-with-r" id="toc-communicating-with-r" class="nav-link" data-scroll-target="#communicating-with-r"><span class="header-section-number">2.2</span> Communicating with R</a>
+  <ul class="collapse">
+  <li><a href="#two-key-questions" id="toc-two-key-questions" class="nav-link" data-scroll-target="#two-key-questions">Two Key Questions</a></li>
+  <li><a href="#the-questions" id="toc-the-questions" class="nav-link" data-scroll-target="#the-questions">The Questions</a></li>
+  <li><a href="#providing-r-with-the-information-it-needs" id="toc-providing-r-with-the-information-it-needs" class="nav-link" data-scroll-target="#providing-r-with-the-information-it-needs">Providing R with the information it needs</a></li>
+  <li><a href="#using-simple-functions" id="toc-using-simple-functions" class="nav-link" data-scroll-target="#using-simple-functions">Using simple functions</a></li>
+  <li><a href="#storing-information-in-r-variables" id="toc-storing-information-in-r-variables" class="nav-link" data-scroll-target="#storing-information-in-r-variables">Storing information in R: variables</a></li>
+  <li><a href="#what-if-i-have-a-list-of-numbers-to-store" id="toc-what-if-i-have-a-list-of-numbers-to-store" class="nav-link" data-scroll-target="#what-if-i-have-a-list-of-numbers-to-store">What if I have a list of numbers to store?</a></li>
+  <li><a href="#what-about-data-that-are-not-numeric" id="toc-what-about-data-that-are-not-numeric" class="nav-link" data-scroll-target="#what-about-data-that-are-not-numeric">What about data that are not numeric?</a></li>
+  <li><a href="#what-if-i-have-a-lot-more-data-to-store" id="toc-what-if-i-have-a-lot-more-data-to-store" class="nav-link" data-scroll-target="#what-if-i-have-a-lot-more-data-to-store">What if I have a LOT more data to store?</a></li>
+  </ul></li>
+  <li><a href="#how-should-data-tables-be-organized-for-statistical-analysis" id="toc-how-should-data-tables-be-organized-for-statistical-analysis" class="nav-link" data-scroll-target="#how-should-data-tables-be-organized-for-statistical-analysis"><span class="header-section-number">2.3</span> How should data tables be organized for statistical analysis?</a></li>
+  <li><a href="#using-built-in-datasets-in-r" id="toc-using-built-in-datasets-in-r" class="nav-link" data-scroll-target="#using-built-in-datasets-in-r"><span class="header-section-number">2.4</span> Using built-in datasets in R</a>
+  <ul class="collapse">
+  <li><a href="#example-of-loading-a-package" id="toc-example-of-loading-a-package" class="nav-link" data-scroll-target="#example-of-loading-a-package">Example of loading a package</a></li>
+  <li><a href="#viewing-a-dataset" id="toc-viewing-a-dataset" class="nav-link" data-scroll-target="#viewing-a-dataset">Viewing a dataset</a></li>
+  <li><a href="#gathering-information-about-a-dataset" id="toc-gathering-information-about-a-dataset" class="nav-link" data-scroll-target="#gathering-information-about-a-dataset">Gathering information about a dataset</a></li>
+  <li><a href="#getting-more-help" id="toc-getting-more-help" class="nav-link" data-scroll-target="#getting-more-help">Getting more help</a></li>
+  </ul></li>
+  <li><a href="#reading-in-data-from-a-file" id="toc-reading-in-data-from-a-file" class="nav-link" data-scroll-target="#reading-in-data-from-a-file"><span class="header-section-number">2.5</span> Reading in data from a file</a>
+  <ul class="collapse">
+  <li><a href="#the-most-common-mistakes" id="toc-the-most-common-mistakes" class="nav-link" data-scroll-target="#the-most-common-mistakes">The most common mistakes</a></li>
+  <li><a href="#what-about-local-files" id="toc-what-about-local-files" class="nav-link" data-scroll-target="#what-about-local-files">What about local files?</a></li>
+  <li><a href="#named-input-arguments" id="toc-named-input-arguments" class="nav-link" data-scroll-target="#named-input-arguments">Named input arguments</a></li>
+  <li><a href="#renaming-variables-in-a-dataset" id="toc-renaming-variables-in-a-dataset" class="nav-link" data-scroll-target="#renaming-variables-in-a-dataset">Renaming variables in a dataset</a></li>
+  <li><a href="#check-out-the-data" id="toc-check-out-the-data" class="nav-link" data-scroll-target="#check-out-the-data">Check out the data</a></li>
+  </ul></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">2.6</span> Review</a>
+  <ul class="collapse">
+  <li><a href="#functions-in-r" id="toc-functions-in-r" class="nav-link" data-scroll-target="#functions-in-r">Functions in R</a></li>
+  <li><a href="#variables-in-r" id="toc-variables-in-r" class="nav-link" data-scroll-target="#variables-in-r">Variables in R</a></li>
+  <li><a href="#datasets-in-r" id="toc-datasets-in-r" class="nav-link" data-scroll-target="#datasets-in-r">Datasets in R</a></li>
+  <li><a href="#vocabulary" id="toc-vocabulary" class="nav-link" data-scroll-target="#vocabulary">Vocabulary</a></li>
+  </ul></li>
+  <li><a href="#congratulations" id="toc-congratulations" class="nav-link" data-scroll-target="#congratulations"><span class="header-section-number">2.7</span> Congratulations!</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./install-r.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./r-basics.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell" data-setup="true" data-autorun="true" data-exercise="[&quot;find-sqrt&quot;,&quot;round-sqrt&quot;,&quot;c-and-sum&quot;,&quot;name-a-variable&quot;,&quot;cat-var&quot;,&quot;check-out-data&quot;,&quot;get-help&quot;,&quot;baseball-mistakes&quot;,&quot;look-at-MI_lead&quot;,&quot;rename-MI_lead&quot;]">
+<pre class="{webr}"><code>#| setup: true
+#| autorun: true
+#| include: false
+#| exercise:
+#|   - find-sqrt
+#|   - round-sqrt
+#|   - c-and-sum
+#|   - name-a-variable
+#|   - cat-var
+#|   - check-out-data
+#|   - get-help
+#|   - baseball-mistakes
+#|   - look-at-MI_lead
+#|   - rename-MI_lead
+
+library(readr)
+library(tidyr)
+library(dplyr)
+library(ggformula)
+library(mosaic)
+library(mosaicData)
+
+theme_set(theme_bw())
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+options("readr.edition" = 1)
+
+data(HELPrct, package = "mosaicData")
+
+MI_lead &lt;- read_csv(file='https://sldr.netlify.app/data/MI_lead.csv')</code></pre>
+</div>
+<style type="text/css">
+  span.boxed {
+    border:5px solid gray;
+    border-radius:10px;
+    padding: 5px;
+  }
+span.invboxed {
+  border:5px solid gray;
+  padding: 5px;
+  border-radius:10px;
+  color: white;
+}
+
+table, td, th { border:0px; }
+
+/* cellpadding */
+  th, td { padding: 5px; }
+
+</style>
+<section id="your-mission" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="your-mission"><span class="header-section-number">2.1</span> Your Mission</h2>
+<p>The purpose of this tutorial is to help you start to get familiar with the way R works, and some basic R commands…even if you haven’t yet installed R on your computer or made a <a href="https://posit.cloud">posit.cloud</a> account.</p>
+<p>This tutorial environment uses <a href="#0">webr</a>, which lets you read some helpful information, then immediately practice writing and running your own R code, <em>all in your web browser</em>.</p>
+<p>Here’s hoping it provides a nice, gentle introduction in a controlled environment!</p>
+</section>
+<section id="communicating-with-r" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="communicating-with-r"><span class="header-section-number">2.2</span> Communicating with R</h2>
+<p>You will do most of your work in R with <em>code</em> or <em>commands</em>. Instead of pointing and clicking, you will type one or more lines of code, which R will <em>execute</em> (doing the work you have asked it to do).</p>
+<p>Then, R will return the results of whatever operation you asked it to do - sometimes producing a plot, other times creating a plot.</p>
+<p>Sometimes executing code has almost no visible effect (no plot or text output is produced), but instead some object is created and stored in R’s <em>environment</em> for later use.</p>
+<section id="two-key-questions" class="level3">
+<h3 class="anchored" data-anchor-id="two-key-questions">Two Key Questions</h3>
+<p>To get R (or any software) to do something for you, there are two important questions you must be able to answer. Before continuing, think about what those questions might be.</p>
+</section>
+<section id="the-questions" class="level3">
+<h3 class="anchored" data-anchor-id="the-questions">The Questions</h3>
+<p>To get R (or any software) to do a job for you, there are two important questions you must be able to answer:</p>
+<section id="what-do-you-want-the-computer-to-do" class="level4">
+<h4 class="anchored" data-anchor-id="what-do-you-want-the-computer-to-do">1. What do you want the computer to do?</h4>
+</section>
+<section id="what-must-the-computer-know-in-order-to-do-that" class="level4">
+<h4 class="anchored" data-anchor-id="what-must-the-computer-know-in-order-to-do-that">2. What must the computer know in order to do that?</h4>
+</section>
+</section>
+<section id="providing-r-with-the-information-it-needs" class="level3">
+<h3 class="anchored">Providing R with the information it needs</h3>
+<p>R <em>functions</em> provide R with the answer to the first question: what do you want the computer to do?</p>
+<p>Most functions in R have short, but descriptive names that describe what they do. For example, R has some functions to do basic mathematical operations: the function <code>sqrt()</code> computes the square root of a number, and the function <code>round()</code> rounds a number (by default, it rounds to the nearest integer).</p>
+<p>But just giving R a function is not enough: you also need to answer the second question (what information does R need to do the job?). For example, if you want to use the function <code>round()</code>, you also need to provide R with the number you want to round!</p>
+<p>We will provide answers to our two questions by filling in the boxes of a basic template:</p>
+<center>
+<h2 class="anchored" data-anchor-id="providing-r-with-the-information-it-needs">
+<strong><span class="boxed">function</span> ( <span class="boxed">&nbsp;information1&nbsp; , &nbsp;information2&nbsp; , …)</span></strong>
+</h2>
+</center>
+<p>&nbsp;</p>
+<p>(The <code>...</code> indicates that there may be some additional <em>input arguments</em> (input information we could provide to R) we could add eventually. Some functions need only one input, but if a function takes more than one argument, they are separated by commas. They have names, and if named (like: <code>function(input_name = value, input2_name = 'value')</code>) they can be in any order.</p>
+</section>
+<section id="using-simple-functions" class="level3">
+<h3 class="anchored" data-anchor-id="using-simple-functions">Using simple functions</h3>
+<p>Let’s practice what you just learned, trying out the mathematical <code>sqrt()</code> and <code>round()</code> functions.</p>
+<p>Edit the code below to compute the square root of 64:</p>
+<div class="cell" data-exercise="find-sqrt">
+<pre class="{webr}"><code>#| exercise: find-sqrt
+function(information_R_needs)</code></pre>
+</div>
+<div class="hint" data-exercise="find-sqrt">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint 1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Consider using the <code>sqrt()</code> function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(___)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="hint" data-exercise="find-sqrt">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint 2
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The input information that <code>sqrt()</code> needs to make your calculation is the number you want the square root of: 64.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="proof solution" data-exercise="find-sqrt">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">64</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Now try computing the square root of 44, <em>and then</em> rounding it to the nearest integer:</p>
+<div class="cell" data-exercise="round-sqrt">
+<pre class="{webr}"><code>#| exercise: round-sqrt</code></pre>
+</div>
+<div class="hint" data-exercise="round-sqrt">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint 1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You’ll need to use <em>two</em> functions this time:</p>
+<p>The <code>sqrt()</code> function, and then the <code>round()</code> function.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(___)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(___)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="hint" data-exercise="round-sqrt">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint 2
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The input information that <code>sqrt()</code> needs to make your calculation is the number you want the square root of: 44. Run that code first, to get the input you will need for <code>round()</code>…</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">44</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(___)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="proof solution" data-exercise="round-sqrt">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">44</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">6.63325</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Can you do it all in one go? Well…yes!</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="dv">44</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>There’s also an easier-to-read way to do that, using a <em>pipe operator</em> <code>|&gt;</code>. It takes the output of one operation and passes it as input to the next. You can read it as <code>|&gt;</code> = “and then…” so we could do:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">44</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="1">
+<li>Take the square root of 44, <em>and then</em></li>
+<li>round the result.</li>
+</ol>
+<p>(More on pipes later!)</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="storing-information-in-r-variables" class="level3">
+<h3 class="anchored" data-anchor-id="storing-information-in-r-variables">Storing information in R: variables</h3>
+<p>In the last section, you computed the square root of 44 and then rounded it, perhaps like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">44</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.63325</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">6.63325</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+</div>
+<p>But to do that, you probably had to first find the root, make a note of the result, and then provide that number to the <code>round</code> function. What a pain!</p>
+<p>A very useful option, if you have value (or a variable, dataset, or other R object) that you will want to use later on, is to store it as a named object in R. In the previous example, you might want to store the square root of 44 in a variable called <code>my_root</code>; then you can provide my_root to the <code>round()</code> function without checking the result of the <code>sqrt()</code> calculation first:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>my_root <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">44</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(my_root)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+</div>
+<p>Notice that to assign a name to the results of some R code, you use the symbol <code>&lt;-</code>. You can think of it as an <em>assignment arrow</em> – it points <em>from</em> a value or item <em>toward a name</em> and assigns the name to the thing.</p>
+<p>Try editing the code to change the name of the variable from <code>my_root</code> to something else, then run your new code:</p>
+<div class="cell" data-exercise="name-a-variable">
+<pre class="{webr}"><code>#| exercise: name-a-variable
+my_root &lt;- sqrt(44)
+round(my_root)</code></pre>
+</div>
+<div class="hint" data-exercise="name-a-variable">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Make sure you change the name <code>my_root</code> in <em>both</em> places.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="proof solution" data-exercise="name-a-variable">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>your_new_name <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">44</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(your_new_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-if-i-have-a-list-of-numbers-to-store" class="level3">
+<h3 class="anchored" data-anchor-id="what-if-i-have-a-list-of-numbers-to-store">What if I have a list of numbers to store?</h3>
+<p>Sometime you might want to create a variable that contains more than one number. You can use the function <code>c()</code> to <em>concatenate</em> a list of numbers:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>my_fave_numbers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">44</span>, <span class="dv">16</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>my_fave_numbers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  4 44 16</code></pre>
+</div>
+</div>
+<p>(First we stored the list of numbers, calling it my_fave_numbers; then we printed the results to the screen by simply typing the variable name my_fave_numbers).</p>
+<p>Try making a list of your three favorite numbers, then using the function <code>sum</code> to add them all up:</p>
+<div class="cell" data-exercise="c-and-sum">
+<pre class="{webr}"><code>#| exercise:  c-and-sum</code></pre>
+</div>
+<div class="hint" data-exercise="c-and-sum">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>First use <code>c()</code> to concatenate your chosen numbers (separated by commas).</p>
+<p>Don’t forget to use <code>&lt;-</code> to assign your list of numbers a name!</p>
+<p>Then, use <code>sum()</code> to add them up.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>my_numbers <span class="ot">&lt;-</span> <span class="fu">c</span>(___,___,___)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(___)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="proof solution" data-exercise="c-and-sum">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>This is just one possible solution.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>my_numbers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">16</span>, <span class="dv">44</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(my_numbers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice you <em>could</em> also nest <code>sum()</code> and <code>c()</code>, or use the pipe operator <code>|&gt;</code> to calculate the numeric answer, <em>but then you would not have the object <code>my_numbers</code> available for later use</em>…</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">16</span>, <span class="dv">44</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or </span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">16</span>, <span class="dv">44</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-about-data-that-are-not-numeric" class="level3">
+<h3 class="anchored" data-anchor-id="what-about-data-that-are-not-numeric">What about data that are not numeric?</h3>
+<p>R can work with categorical data as well as numeric data. For example, we could create a list of words and store it as a variable if we wanted (feel free to try changing the words if you want):</p>
+<div class="cell" data-exercise="cat-var">
+<pre class="{webr}"><code>#| exercise: cat-var
+my_words &lt;- c('RStudio', 'is', 'awesome')
+my_words</code></pre>
+</div>
+</section>
+<section id="what-if-i-have-a-lot-more-data-to-store" class="level3">
+<h3 class="anchored" data-anchor-id="what-if-i-have-a-lot-more-data-to-store">What if I have a LOT more data to store?</h3>
+<p><code>c()</code> works great for creating small lists of just a few values, but it is <em>not</em> a good way to enter or store large data tables - there is lots of potential for user error. In this course, you will usually be given a dataset already in electronic form; if you need to create one, you would turn to spreadsheet or database software. Either way you read the existing data file into R directly.</p>
+<p>In R, these larger datasets are stored as objects called <code>data.frame</code>s. The next sections will get you started using them.</p>
+</section>
+</section>
+<section id="how-should-data-tables-be-organized-for-statistical-analysis" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="how-should-data-tables-be-organized-for-statistical-analysis"><span class="header-section-number">2.3</span> How should data tables be organized for statistical analysis?</h2>
+<p>A comprehensive guide to good practices for formatting data tables is available at <a href="http://kbroman.org/dataorg/" class="uri">http://kbroman.org/dataorg/</a>.</p>
+<p>A few key points to keep in mind:</p>
+<ul>
+<li>This data table is for the computer to read, not for humans! So eliminate formatting designed to make it “pretty” (color coding, shading, fonts…)</li>
+<li>Use short, simple variable names that do not contain any spaces or special characters (like ?, $, %, -, etc.)</li>
+<li>Organize the table so there is one column for every variable, and one row for every observation (person/place/thing for which data were collected).</li>
+<li>Use informative variable values rather than arbitrary numeric codes. For example, a variable Color should have values ‘red’, ‘white’, and ‘blue’ rather than 1, 2, and 3.</li>
+</ul>
+<p>You will have chances to practice making your own data files and importing them into R outside this tutorial.</p>
+</section>
+<section id="using-built-in-datasets-in-r" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="using-built-in-datasets-in-r"><span class="header-section-number">2.4</span> Using built-in datasets in R</h2>
+<p>R has a number of built-in datasets that are accessible to you as soon as you start RStudio.</p>
+<p>In addition to the datasets that are included with base R, there are add-on <em>packages</em> for R that contain additional software tools and sometimes datasets.</p>
+<p>To use datasets contained in a package, you have to load the package by running the command:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(packagename) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="example-of-loading-a-package" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-loading-a-package">Example of loading a package</h3>
+<p>For example, we will practice looking at a dataset from the package <code>mosaic</code>.</p>
+<p>Before we can access the data, we have to load the package. The code might look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>(Nothing obvious will happen when you run this code…it basically just gives R permission to access the package, so there is often no output visible.)</strong></p>
+</section>
+<section id="viewing-a-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="viewing-a-dataset">Viewing a dataset</h3>
+<p>The <code>mosaic</code> package includes a dataset called <code>HELPrct</code>.</p>
+<p>If you just run the dataset name (<code>HELPrct</code>) as a command, R will print some (or all - egad!) of the dataset out to the screen! (So don’t…)</p>
+<p><strong>But</strong>…how can we extract selected, useful information about a dataset?</p>
+</section>
+<section id="gathering-information-about-a-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="gathering-information-about-a-dataset">Gathering information about a dataset</h3>
+<p>There are a few functions that make it easier to take a quick look at a dataset:</p>
+<ul>
+<li><code>head()</code> prints out the first few rows of the dataset.</li>
+<li><code>names()</code> prints out the names of the variables (columns) in the dataset</li>
+<li><code>dplyr::glimpse()</code> (function <code>glimpse()</code> from package <code>dplyr</code>) gives an short list-like overview of the dataset</li>
+<li><code>skimr::skim()</code> (function <code>skim()</code> from the package <code>skimr</code>) prints out more detailed graphical summary information about a dataset</li>
+<li><code>nrow()</code> reports the number of rows (observations or cases) in the dataset</li>
+<li><code>ncol()</code> reports the number of columns (variables) in the dataset</li>
+</ul>
+<p>Try applying each of these functions to the <code>HELPrct</code> data and see what the output looks like each time:</p>
+<div class="cell" data-exercise="check-out-data">
+<pre class="{webr}"><code>#| exercise: check-out-data
+function(____)</code></pre>
+</div>
+<div class="proof solution" data-exercise="check-out-data">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The input for each of the functions is the name of the dataset: <code>HELPrct</code>.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HELPrct)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(HELPrct)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(HELPrct)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(HELPrct)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(HELPrct)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(HELPrct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case, the point is usually to view the information on-screen, not to store it for later use, so we have not used <code>&lt;-</code> at all to store any output for later use or reference.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="getting-more-help" class="level3">
+<h3 class="anchored" data-anchor-id="getting-more-help">Getting more help</h3>
+<p>You can get help related to R function, and built-in R datasets, using a special function: <code>?</code>. Just type ? followed by the name of the function or dataset you want help on:</p>
+<div class="cell" data-exercise="get-help">
+<pre class="{webr}"><code>#| exercise: get-help</code></pre>
+</div>
+<div class="proof solution" data-exercise="get-help">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>For example, if you want to know about the function <code>nrow()</code>:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>?nrow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="reading-in-data-from-a-file" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="reading-in-data-from-a-file"><span class="header-section-number">2.5</span> Reading in data from a file</h2>
+<p>For this class, you will often be asked to analyze data that is stored in files that are available online - usually in csv format. It’s simple to read them into R. For example, we can read in the file MI_lead.csv, which is stored at <a href="https://sldr.netlify.app/data/MI_lead.csv" class="uri">https://sldr.netlify.app/data/MI_lead.csv</a> using the function <code>read_csv()</code> (from package <code>readr</code> or super-package <code>tidyverse</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr) <span class="co"># the readr package contains the read_csv() function</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>MI_lead <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">'https://sldr.netlify.app/data/MI_lead.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="the-most-common-mistakes" class="level3">
+<h3 class="anchored" data-anchor-id="the-most-common-mistakes">The most common mistakes</h3>
+<p>The code below contains several of the <strong>most common mistakes</strong> students make when they try to read in a data file. See if you can find and correct them <strong>all</strong>!</p>
+<p>The code below - if corrected - <em>would</em> (on posit.cloud or in standalone R/RStudio) run without an error and read in some baseball statistics from the file <a href="http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv" class="uri">http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv</a>.</p>
+<p>Here in this tutorial, it may give the error: <code>! curl package not installed, falling back to using url()</code> – there’s not a straightforward fix, sorry, but try it on the server if you want to prove to yourself that it works!</p>
+<div class="cell" data-exercise="baseball-mistakes">
+<pre class="{webr}"><code>#| exercise: baseball-mistakes
+read_csv(http://stacyderuiter.github.io/teachingdata/data-raw/base)</code></pre>
+</div>
+<div class="hint" data-exercise="baseball-mistakes">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hints
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Think about:</p>
+<ul>
+<li>Is the filename or URL spelled correctly, with no typos?</li>
+<li>Is the filename or URL in quotation marks (either ” or ’ work equally)?</li>
+<li>Is the URL complete (including the file extension “.csv”)</li>
+<li>Was <code>&lt;-</code> used to assign a <em>name</em> to the dataset once read in? (Otherwise it will just be uselessly printed to the screen and not available for later use!)</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="proof solution" data-exercise="baseball-mistakes">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>baseball_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">'http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-about-local-files" class="level3">
+<h3 class="anchored" data-anchor-id="what-about-local-files">What about local files?</h3>
+<p>The same function, <code>read_csv()</code>, can be used to read in a local file. You just need to change the input to <code>read_csv()</code> – instead of a URL, you provide a path and filename (in quotes). For example, the input <code>file = 'https://sldr.netlify.app/data/MI_lead.csv'</code> might become <code>file = 'C:\\Data\\MI_lead.csv'</code>.</p>
+<p>We won’t do an example in this tutorial because it’s not straightforward to work with local files within a tutorial environment, but you can practice it once you are working independently in RStudio.</p>
+<p>If you are working on the server r.cs.calvin.edu, you will have to <em>upload</em> files to your cloud space on the server before you can read them in (RStudio on the server cannot access files on your computer’s hard drive). Look in the “Files” tab on the lower right, and then click “Upload.”</p>
+</section>
+<section id="named-input-arguments" class="level3">
+<h3 class="anchored" data-anchor-id="named-input-arguments">Named input arguments</h3>
+<p>The input argument we provided to R is the URL (in quotes – either single or double quotes are fine). But notice that this time, we gave the input argument a <em>name</em>, “file”, and specified its value with an equal sign.</p>
+<p>This is not <em>required</em> - the command works fine without it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>MI_lead <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://sldr.netlify.app/data/MI_lead.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>However, if a function has <em>more than just one</em> input argument, it’s good to get in the habit of providing names for the inputs. If you provide names, then the order in which you list the inputs doesn’t matter; without names, <strong>the order matters</strong> and you have to use ? to figure out what order R expects!</p>
+</section>
+<section id="renaming-variables-in-a-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="renaming-variables-in-a-dataset">Renaming variables in a dataset</h3>
+<p>This is an advanced topic, so don’t worry if it seems complicated; for now, it just nice to realize some of the power R has to clean up and reorganize data.</p>
+<p>What if we didn’t like the names of the <code>MI_lead</code> variables? For example, a new user of the dataset might not know that that ELL stands for “elevated lead levels” and that ELL2005 gives the <em>proportion</em> of tested kids who had elevated lead levels in the year 2005.</p>
+<p>If we wanted to use a clearer (though longer) variable name, we might prefer “prop_elevated_lead_2005” instead of “ELL2005” – more letters to type, but a bit easier to understand for a new user. How can we tell R we want to rename a variable?</p>
+<p>We use the code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>MI_lead <span class="ot">&lt;-</span> MI_lead <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">prop_elevated_lead_2005 =</span> ELL2005)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(MI_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code above uses some tools you’ve seen, and some more advanced ones you haven’t seen yet. The symbol <code>|&gt;</code> is called a “pipe” and basically means “and then…” Translated into words, the code above tells R:</p>
+<ul>
+<li>Make a dataset called <code>MI_lead</code> by starting with the dataset <code>MI_lead</code>.</li>
+<li><strong>Next, take the results do something more with them</strong> (<code>|&gt;</code>) …</li>
+<li><code>rename()</code> a variable. What I want to rename is the variable <code>ELL2005</code>. Its new name should be <code>prop_elevated_lead_2005</code>.”</li>
+</ul>
+<p><em>See…you can already start to make sense of even some pretty complicated (and useful) code.</em></p>
+<p>Note: If you give R several commands, <em>not</em> connected by pipes, it will do the first, then the second, then the third, and so on. R doesn’t need the pipe for permission to continue! Instead, the pipe tells R to take the <em>results</em> from the first command, and use them as the input or starting material for the next command.</p>
+</section>
+<section id="check-out-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="check-out-the-data">Check out the data</h3>
+<p>OK, back to business - simple functions and datasets in R.</p>
+<p>It’s your turn to practice now. Use one of the functions you have learned so far to extract some information about the MI_lead dataset.</p>
+<p>How many rows are in the dataset? How many variables (columns)?</p>
+<p>What are the variables named, and what are their values like?</p>
+<p><em>Remember, <code>?</code> won’t work on MI_lead because it’s not a built-in R dataset. Also, the dataset MI_lead is already read in for you, here…so you don’t need to use <code>read_csv()</code>.</em></p>
+<div class="cell" data-exercise="look-at-MI_lead">
+<pre class="{webr}"><code>#| exercise: look-at-MI_lead</code></pre>
+</div>
+</section>
+</section>
+<section id="review" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="review"><span class="header-section-number">2.6</span> Review</h2>
+<p>What have you learned so far? More than you think!</p>
+<section id="functions-in-r" class="level3">
+<h3 class="anchored">Functions in R</h3>
+<p>You’ve learned that R code is made up of functions, which are generally named descriptively according to the job they do. Functions have one or more input arguments, which is where you provide R with all the data and information it needs to do the job. The syntax for calling a function uses the template:</p>
+<center>
+<h2 class="anchored" data-anchor-id="functions-in-r">
+<strong><span class="boxed">function</span> ( <span class="boxed">&nbsp;information1&nbsp; , &nbsp;information2&nbsp; , …)</span></strong>
+</h2>
+</center>
+<p>&nbsp;</p>
+</section>
+<section id="variables-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="variables-in-r">Variables in R</h3>
+<p>You’ve practiced creating variables in R using <code>c()</code>, and saving information (or the results of a computation) using the assignment arrow &lt;-.</p>
+</section>
+<section id="datasets-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="datasets-in-r">Datasets in R</h3>
+<p>You’ve considered several different ways to get datasets to work with in R: you can use datasets that are built in to R or R packages, or you can use <code>read_csv()</code> to read in data files stored in .csv format.</p>
+</section>
+<section id="vocabulary" class="level3">
+<h3 class="anchored" data-anchor-id="vocabulary">Vocabulary</h3>
+<p>You should now be able to define and work with some R-related terms:</p>
+<ul>
+<li><em>code</em> or <em>commands</em> that R can <em>execute</em></li>
+<li><em>function</em> and <em>inputs</em> or <em>arguments</em></li>
+<li><em>assignment arrow</em>: <code>&lt;-</code></li>
+<li><em>pipe</em> = “and then…”: <code>|&gt;</code> (note: <code>|&gt;</code> is an older way of writing a pipe, and it does basically the <em>same</em> thing as <code>|&gt;</code>)</li>
+</ul>
+</section>
+</section>
+<section id="congratulations" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="congratulations"><span class="header-section-number">2.7</span> Congratulations!</h2>
+<p>You just completed your first tutorial on R, and wrote some of your own R code. I <em>knew</em> you could do it…</p>
+<p>Want more help and practice? Consider checking out outside resources from posit: <a href="https://posit.cloud/learn/primers" class="uri">https://posit.cloud/learn/primers</a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./install-r.html" class="pagination-link" aria-label="Installation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./how-to-quarto.html" class="pagination-link" aria-label="Using Quarto">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using Quarto</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="./cclicense.html">
+<p>License</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

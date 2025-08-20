@@ -1,0 +1,144 @@
+# Text Elements
+
+```{r}
+#| setup: true
+#| include: false
+
+library(webexercises)
+library(ggformula)
+library(tidyverse)
+
+theme_set(theme_void(base_size = 20))
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+crime <- read_csv('https://sldr.netlify.app/data/sscrime.csv')
+```
+
+## Titles, Labels, Size
+
+When using text in a figure, ensure it is easy to read. Make sure no unneccessary text is included.
+
+-   Default size of text in figures produced by statistical software *is almost always too small*. Make sure your text is *big enough to be easily legible in the context where you will present it* (on the page in a report, on a slide for a presentation, etc.)
+-   Other than the title of the vertical (y) axis, all the text in a plot should be horizontal. This makes it easier to read.
+-   Axis labels should be self-explanatory
+    -   Viewers should be able to guess what they mean accurately without looking at anything but the figure
+    -   Use words instead of numeric codes or cryptic abbreviations
+-   Axis labels should also be as short as possible while remaining easy to understand
+-   Every plot should have a title. Sometimes this might be a literal title at the top of the graph, but those are relatively rare. More often in scientific work, a text caption appears below the figure. The first phrase/sentence of the caption acts as the figure's title
+
+Remember the melanoma rates over time figure we saw earlier?
+
+![](https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1438044611950-YY4YYAYAY1O95P8VGJ8G/ke17ZwdGBToddI8pDm48kDa6fENzg3THuPXOjlBueplZw-zPPgdn4jUwVcJE1ZvWhcwhEtWJXoshNdA9f1qD7Xj1nVWs2aaTtWBneO2WM-s7QUvVpCKf9Q5vGl5-jKOjePt_rSAREIxGXEmq0OLmZA/image-asset.jpeg?format=300w){alt="chart showing melanoma rates over time" width="300px"}
+
+::: {.webex-check .webex-box}
+**What helpful changes did Storytelling with Data make to the text labels as they improved the figure?**
+
+The x axis labels are rotated so they are horizonal. `r torf(TRUE)`
+
+The title color is changed to blue and the axis labels to grey. `r torf(TRUE)`
+
+The box around the plot is removed. `r torf(FALSE)`
+:::
+
+`r hide("Click for explanations of solutions above.")`
+
+-   Rotating axis labels so they are horizontal is generally an improvement. To make this happen, the number of tick marks and labels on the x axis was also reduced. Notice the labels are much easier to read.
+-   The color changes helped too. The blue links the title with the trend it describes, and the grey makes the axis titles less prominent and lets the viewer focus on the data. Continue to the next section for more on using color...
+-   The box is gone, and it is a big improvement to the plot! But technically, you were asked about changes to the text labels...
+
+`r unhide()`
+
+## When Things Overlap
+
+Especially when graphing variables with long category values, you may end up with ugly, illegible overlapping labels. 
+
+Some solutions, in rough order of preference, are to:
+
+- adjust the figure width or height so everything fits
+- switch x and y coordinates so the "long" labels are on the y axis (in R, this resizes the plot area so that labels fit); or, 
+- rotate the too-long labels, which eliminates the overlap *but makes them harder to read than horizontal text.*
+- make the font smaller (*but this might make it annoyingly hard to read, or make your viz feel cluttered!*)
+
+## When Text Runs "off the edge"
+Sometimes a title or axis label is too long and runs off the edge of the figure. Using a smaller font is *not* often an ideal solution. If you can't just use a shorter label, consider adding line breaks.
+
+## Examples
+
+```{r, bad-labels, fig.width = 4}
+theme_set(theme_minimal(base_size = 20))
+gf_boxplot(NEnrollment ~ Location, data = crime) |>
+  gf_labs(title = 'NOT GREAT LABELS') |>
+  gf_theme(title = element_text(color = 'darkred'),
+           axis.title = element_text(color = 'black'))
+```
+
+```{r, also-better-labels, fig.width = 6}
+
+gf_boxplot(NEnrollment/1000 ~ Location, data = crime) |>
+  gf_labs(title = 'BETTER',
+          y = 'Enrollment (1000s)', x= '') |>
+  gf_refine(coord_flip()) |>
+  gf_theme(title = element_text(color = 'deepskyblue4'),
+           axis.title = element_text(color = 'black'))
+```
+
+```{r, better-labels, fig.width = 4, fig.height = 3.5}
+
+gf_boxplot(NEnrollment/1000 ~ Location, data = crime) |>
+  gf_labs(title = 'ALSO\nBETTER',
+          y = 'Enrollment\n (1000s)', x= '') |>
+  gf_refine(coord_flip()) |>
+  gf_theme(title = element_text(color = 'deepskyblue4'),
+           axis.title = element_text(color = 'black'))
+```
+
+## Let's Talk About Titles
+
+Should your graph have a title?
+
+Well...*maybe.*
+
+Hear me out.
+
+Whether or not titles are useful, allowed, or expected is pretty discipline- and audience-specific. In journalism and some parts of business, they are used very often. In the peer-reviewed scientific literature, they are exceedingly rare. In a slide deck, they are often useful...unless they say the same thing as your slide title! Know your goals and your audience.
+
+### Avoid Redundant Titles
+If you do want to use a title, make *sure* it provides information or details that are *not* already present in other text elements. A title that restates the axis labels is usually a waste:
+
+```{r, bad-title, fig.width = 6.5, fig.height = 3.5}
+
+gf_boxplot(NEnrollment/1000 ~ Location, data = crime) |>
+  gf_labs(title = 'Enrollment by Location',
+          subtitle = "AVOID titles like the one above\nthat repeat axis labels!",
+          y = 'Enrollment (1000s)', x= '') |>
+  gf_refine(coord_flip()) |>
+  gf_theme(
+    title = element_text(color = 'black'),
+    plot.subtitle = element_text(color = 'darkred'),
+    axis.title = element_text(color = 'black'))
+```
+
+Notice that we can argue about this a little. Could we have the title *instead* of the axis labels? Maybe, but if it's a scientific publication, having the units of measure is going to be important.
+
+Is this title *actually adding info* because it clarifies that "Town," "City," etc. are "Locations"? I think it's a stretch, but sometimes you can make such a case.
+
+Generally, my advice is...
+
+>> If the title is not adding something *new and crucial* and helping the reader decipher the main *story* of the plot, then omit it!
+
+So what might an "informative" title look like?
+
+```{r, ok-title, fig.width = 10, fig.height = 3.5}
+
+gf_boxplot(NEnrollment/1000 ~ fct_reorder(Location, NEnrollment),
+           data = crime) |>
+  gf_labs(title = 'Small Schools Dominate in More-Rural Areas',
+          y = 'Enrollment (1000s)', x= '') |>
+  gf_refine(coord_flip()) |>
+  gf_theme(
+    title = element_text(color = 'black'),
+    axis.title = element_text(color = 'black'))
+```

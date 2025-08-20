@@ -1,0 +1,77 @@
+# Designing Effective Visualizations
+
+## Section Learning Outcomes
+
+After this section, you will be able to:
+
+1.  Critique statistical graphics based on design principles.
+2.  Recognize common misleading design choices for data visualizations
+3.  Recognize data visualization that tells a true story, identifying elements that emphasize the main finding and make the figure easy to interpret at a glance
+
+## Reference Materials
+
+-   [*Beyond Multiple Linear Regression* Ch. 1.5](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#explorech1){target="_blank"}
+-   *Ecological Models & Data in R* Ch. 2 discusses graphics, but is not recommended as the approach to reading in data, writing R code, and generating graphs in R is very different to that used in this course.
+-   A comprehensive, and free, supplemental reference is [Fundamentals of Data Visualization by Claus Wilke](https://clauswilke.com/dataviz/){target="_blank"}
+
+It's suggested that you refer to the above materials as needed *after* doing this section, with particular focus on the topics you found most challenging.
+
+## Inspiration
+
+> Above all, show the data.
+>
+> E. Tufte, [*The Visual Display of Quantitative Information*](https://www.edwardtufte.com/tufte/books_vdqi){target="_blank"}
+
+But...
+
+> The Numbers Don't Speak for Themselves.
+>
+> C. D'Ignazio and L. Klein, [*Data Feminism*](https://data-feminism.mitpress.mit.edu/pub/czq9dfs5/release/2){target="_blank"}
+
+In visualizing data, we use graphics to gain and communicate an honest understanding of data in context.
+
+## Motivation: Imagine First!
+
+Figures are a crucial tool for exploring your data *and* communicating what you learn from the data.
+
+Whether you are doing a quick check to assess basic features of a dataset or creating a key figure for an important presentation, the best practice is to work thoughtfully.
+
+### The **I.C.E.E. method**:
+
+-   **I***magine* how you want your graph to look, *before* you
+-   **C***ode*. Once you have the basic starting point,
+-   **E***valuate* your work, and
+-   **E***laborate* (refine it).
+
+Repeat until the figure is as awesome as it needs to be.
+
+### NO To Mindless Copy/Paste
+
+Too many of us fall into the trap of starting to write code (or copy/pasting it!) *before* pausing to think carefully about the desired outcome, then settling for the first vaguely relevant result (or [delighting in the unintended outcome](https://twitter.com/accidental__art?lang=en){target="_blank"}...).
+
+> > You can do better than mindless copying! Only *mindful* copy-pasting allowed.
+
+This section provides some advice to get you started. It can also provide inspiration for constructive critique of others' graphics.
+
+Here we focus only on the **I_EE** parts of the process, where you design and assess graphics. Code will come later.
+
+## Appearance Goals
+
+Specifically, how *exactly* should a graphic look? There are so many choices: color, size, text and more. What are best practices for creating something beautiful, that represents the data honestly, and is easy to understand?
+
+This section will provide some rules of thumb to help you **Evaluate** statistical graphics. It will also teach you to spot common problems and suggest ways to fix them, allowing you to provide *constructive* critique (to yourself or to others!) about how to **Elaborate** and refine data visualizations.
+
+### You still have your freedom!
+
+As you digest all these rules and tips, you may wonder: "Do I *have* to always obey every one?" Well...No, of course not. Be creative!
+
+Sometimes it's OK to break these rules *when you have thought it through* and *with a good justification*.
+
+A good justification means that in your particular case, breaking a certain rule will make your graph more informative, easier to understand, or better at telling the story you're highlighting.
+
+## Learning Objectives
+
+This section will give you some basic tools to:
+
+1.  **Graph data with integrity**, avoiding misleading design choices
+2.  **Tell the right story**, including elements that *emphasize your main finding* and make your figure *easy to interpret at a glance*

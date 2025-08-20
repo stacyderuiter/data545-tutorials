@@ -1,0 +1,29 @@
+# Variable Types
+
+Before designing a graphic, you need some data. Ideally, it will be in a tidy table, with one row per case and one column per variable.
+
+Different plots may be appropriate, depending on whether the variable is:
+
+-   *Categorical* (either nominal or ordinal) or
+-   *Quantitative* (interval or ratio)
+-   Beware categorical variables that are stored using numeric codes: they are still categorical!
+-   *Note:* Variables that take on discrete numeric values can be treated as either, depending mainly on whether there are a lot of possible values (treat like numeric) or few (treat like categorical)
+-   Other courses or disciplines may distinguish carefully between ordinal and nominal data. We often won't, since we don't learn distinct methods for them, but treat both as *categorical*.
+
+The video below gives a concise explanation of the different variable types you need to be able to recognize.
+
+{{< video https://youtu.be/eghn__C7JLQ?si=Oozu0Z6p4xTBh64z >}}
+
+## Distributions
+
+Sometimes, you need a plot that lets you *see* the **distribution** of a single variable:
+
+-   What *values* does it take on?
+-   How *often* does each value occur?
+
+Sometimes these graphs present the answer to a scientific question of interest, but often they are used during exploration or model assessment to better understand a dataset and:
+
+-   Check the data
+    -   Are there lots of missing values?
+    -   Are missing values encoded as 999 or -1000 or some other impossible value, instead of being marked as missing via `NA`?
+-   Verify whether the variable's distribution matches expectations (for example, symmetry, etc.)

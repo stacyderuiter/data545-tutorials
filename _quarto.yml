@@ -1,0 +1,50 @@
+project:
+  type: book
+book:
+  title: DATA 545 Tutorial
+  author: Stacy DeRuiter
+  date: 8/20/2025
+  chapters:
+  - index.qmd
+  - part: Getting Started
+    chapters:
+    - install-r.qmd
+    - r-basics.qmd
+    - how-to-quarto.qmd
+    - r-results.qmd
+    - math-notation.qmd
+  - part: graphics-design.qmd
+    chapters:
+    - graph-design-no-junk.qmd
+    - graph-design-color.qmd
+    - graph-design-text-elements.qmd
+    - graph-design-summary.qmd
+  - part: graphics-choose.qmd
+    chapters:
+    - graphics-choose-var-types.qmd
+    - graphics-choose-one-cat.qmd
+    - graphics-choose-one-quant.qmd
+    - graphics-choose-multiple-cat.qmd
+    - graphics-choose-multiple-quant.qmd
+    - graphics-choose-cat-quant-mix.qmd
+  - references.qmd
+  page-footer:
+    center:
+    - text: License
+      href: cclicense.md
+  page-navigation: true
+number-depth: 2
+bibliography: references.bib
+format:
+  live-html:
+    theme: flatly
+    css: _include/webex.css
+    include-after-body: _include/webex.js
+  pdf:
+    documentclass: scrreprt
+  html:
+    theme: flatly
+    css: _include/webex.css
+    include-after-body: _include/webex.js
+engine: knitr
+editor: source

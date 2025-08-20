@@ -1,0 +1,6 @@
+# Preface {.unnumbered}
+
+This book contains notes and materials for the Calvin University course DATA 545 (Applied Regression Modeling).
+
+
+

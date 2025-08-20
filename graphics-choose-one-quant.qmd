@@ -1,0 +1,119 @@
+
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(ggformula)
+library(webexercises)
+
+theme_set(theme_void(base_size = 20))
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+crime <- read_csv('https://sldr.netlify.app/data/sscrime.csv')
+```
+
+
+# Gallery: One Quantitative Variable
+
+What are some ways to display the distribution of one quantitative variable?
+
+## Dotplot
+
+```{r, message = FALSE, warning = FALSE, fig.alt = 'a dotplot (generic and unlabelled, serving as an icon)'}
+set.seed(124)
+gf_dotplot(~TrainingHours, data = mosaic::sample(crime, size = 25, replace = TRUE), 
+           method = 'histodot', binwidth = 0.25) |>
+  gf_labs(title = 'DOTPLOT') |>
+  gf_theme(#panel.grid.major.y = element_line(color = 'grey70'),
+           #panel.grid.major.x = element_blank(),
+          # panel.grid.minor.x = element_blank(),
+            axis.line.x = element_line(color = 'black', linewidth = 3))
+```
+
+-   Intuitive representation: x-axis shows range of variable values, and dots are data points
+-   As the idea is to show one dot per observation, may not work well for huge datasets
+
+## Histogram
+
+```{r, fig.alt = 'a histogram (generic and unlabelled, serving as an icon)'}
+set.seed(124)
+gf_histogram(~TrainingHours, 
+             data = mosaic::sample(crime, size = 25, replace = TRUE),
+             binwidth = 0.7) |>
+  gf_labs(title = 'HISTOGRAM') |>
+  gf_theme(#panel.grid.major.y = element_line(color = 'grey70'),
+           #panel.grid.major.x = element_blank(),
+          # panel.grid.minor.x = element_blank(),
+            axis.line.x = element_line(color = 'black', linewidth = 3))
+```
+
+-   Range of variable values is divided into bins, then height of each bar corresponds to the number of observations in the bin
+-   Effective way to examine the *shape* of a distribution
+-   Choosing the number of bins to use is tricky: too many, and the shape is jagged; too few over-smooths (peaks blend together). Not sure? Find a number of bins that is definitely too few, and one that is definitely too many, and then try to settle on an in-between value that best shows the real shape of the distribution without over-smoothing.
+
+## Density Plot
+
+```{r, warning = FALSE, fig.alt = 'a  density plot (generic and unlabelled, serving as an icon)'}
+set.seed(124)
+gf_density(~TrainingHours, 
+           data = mosaic::sample(crime, size = 25, replace = TRUE)) |>
+  gf_labs(title = 'DENSITY') |>
+  gf_theme(#panel.grid.major.y = element_line(color = 'grey70'),
+           #panel.grid.major.x = element_blank(),
+          # panel.grid.minor.x = element_blank(),
+            axis.line.x = element_line(color = 'black', linewidth = 3))
+```
+
+-   Like a smoothed version of a histogram (obtained by kernel density estimation, if you want to look up mathematical details)
+-   Caution: for small datasets, the density plot may show "peaks" that really correspond to one or a few observations
+-   Can only show *density* (relative frequency of observation), *not counts*
+
+## QQ Plot
+
+```{r, warning= FALSE, fig.alt = 'a quantile-quantile (or QQ) plot (generic and unlabelled, serving as an icon)'}
+gf_qq(~TrainingHours, data = crime,
+      linewidth = 3) |>
+  gf_qqline(color = 'grey50', linetype = 'solid', linewidth = 2) |>
+  gf_labs(title = 'Q-Q', x = 'Theoretical', y = 'Data') |>
+  gf_theme(axis.line = element_line(color = 'black', linewidth = 3),
+           axis.title.x = element_text(),
+           axis.title.y = element_text(angle = 90))
+```
+
+-   "Q-Q Plot" is short for "Quantile-Quantile Plot"
+-   In some cases, we want to examine the shape of a variable's distribution *to see if it matches a theoretical expectation*. For example: do the regression residuals match a normal distribution? (If that example doesn't make sense to you now - it will later in the course, don't worry.)
+-   Quantile-quantile plots are one way to make this comparison. They plot the quantiles of the data as a function of the same quantiles of the expected theoretical distribution; if there's a good match, the points should follow a line with slope = 1.
+-   How close to the straight line is "close enough"? That's the tricky part...
+
+## Check Your Understanding: One-variable plots
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: income-postcode
+
+opts <- sample(c(answer = 'Histogram',
+        'Lollipop plot',
+        'Bar chart'))
+
+cat("Which plot would work best to show the distribution of 75 families' household incomes?",
+    longmcq(opts))
+
+opts <- sample(c('Histogram',
+        'Density plot',
+        'Scatter plot',
+        answer = 'Bar chart'))
+        
+cat("Which plot would work best to show the distribution of 75 families' postal codes?",
+    longmcq(opts))
+```
+:::
+
+`r hide("Click for explanations of solutions above.")`
+
+Lollipop plots and bar graphs work better for categorical variables -- they show counts or proportions (or some other summary of counts in categories). By default, there would be one lollipop or bar for each unique value of income - what a mess! Histograms and density plots, on the other hand, show the distribution of one quantitative variable. (Scatter plots are usually used to show 2 quantitative variables.)
+
+`r unhide()`

@@ -1,0 +1,110 @@
+
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(ggformula)
+library(plotly)
+
+
+theme_set(theme_void(base_size = 20))
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+crime <- read_csv('https://sldr.netlify.app/data/sscrime.csv')
+```
+
+# Gallery: Multiple Quantitative Variables
+
+## Scatter Plot
+
+```{r, scatter, warning = FALSE, message = FALSE, fig.alt = 'a scatter plot (generic and unlabelled, serving as an icon)' }
+gf_point(ViolentIncidentsTotal ~ NEnrollment, 
+         data = mosaic::sample(crime, size = 100, replace = TRUE),
+         size = 3) |>
+  gf_labs(title = 'SCATTER', x = '', y = '') |>
+  gf_theme(axis.line = element_line(color = 'black', linewidth = 3))
+```
+
+-   A scatterplot is the default for visualizing the relationship between two quantitative variables
+-   Be sure you actually have *two quantitative variables*! If not, another plot may be a better option.
+
+>> Let's just reiterate: if one of your variables is *actually* or *effectively* categorical, a basic scatterplot is usually not ideal!
+
+## Line Plot
+
+```{r, scatter-line, fig.alt = 'a line plot (generic and unlabelled, serving as an icon)' }
+d <- data.frame(t = 1:60)
+d <- d |> mutate(y = 50 + 0.75*t + rnorm(60, 0, 5))
+
+gf_line(y ~ t, 
+         data = d,
+         linewidth = 3) |>
+  gf_labs(title = 'LINE', x = '', y = '') |>
+  gf_theme(axis.line = element_line(color = 'black', linewidth = 3))
+```
+
+-   If the x-axis variable is **Time** (or it otherwise makes sense to join the dots), a line can replace the dots, or be added to them
+-   Make sure connecting the dots makes sense in context and does not guide the eye to incorrect interpretations (for example, emphasizing outliers)
+
+## >2  Quantitative Variables
+
+What if you have three or four quantitative variables whose relationships you're curious about?
+
+*Proceed with caution!*
+
+It's possible to include 3+ variables on one plot, but ideally **it should still be interpretable at a glance:**
+
+-   What is the main point of the figure? Is it possible to make the point without showing all 3+ variables together?
+-   Keep things as simple as you can while still telling the story you want to tell.
+
+### Scatter + Size
+
+```{r, scatter-with-size, fig.alt = 'a scatter plot with point size representing a third variable (generic and unlabelled, serving as an icon)' }
+set.seed(44)
+gf_point(log(AttacksWithoutWeapon) ~ log(Vandalism), size = ~NEnrollment, 
+         data = mosaic::sample(crime, size = 100, replace = TRUE)) |>
+  gf_labs(title = 'SCATTER + SIZE', x = '', y = '') |>
+  gf_theme(legend.position = 'none',
+           axis.line = element_line(color = 'black', linewidth = 3))
+```
+
+-   You can adjust the size of each dot in a scatter plot to correspond to the value of a third variable
+-   This is especially useful when the third variable measures the size of the population being represented -- for example, a scatter plot of life expectancy vs income for many countries, with point size indicating population of each country
+
+### Scatter + Color
+
+You can also color by a third quantitative variable:
+
+```{r, scatter-with-color, fig.alt = 'a scatter plot with point size representing a third variable (generic and unlabelled, serving as an icon)' }
+set.seed(44)
+gf_point(log(AttacksWithoutWeapon) ~ log(Vandalism), color = ~NEnrollment, 
+         size = 6,
+         data = mosaic::sample(crime, size = 100, replace = TRUE)) |>
+  gf_labs(title = 'SCATTER + COLOR', x = '', y = '') |>
+  gf_theme(legend.position = 'none',
+           axis.line = element_line(color = 'black', linewidth = 3))
+```
+
+This usually only works well visually if all three variables are clearly associate with each other, so that certain colors are clearly dominant in certain regions of the graph. Otherwise, you get a mishmash of colors all over, which can be distracting.
+
+### Animation
+
+It may be possible to show a third quantitative variable via animation (this often works especially well if that third variable is actually time!)
+
+```{r, scatter-with-animation, fig.alt = 'a scatter plot with point size representing a third variable (generic and unlabelled, serving as an icon)', warning = FALSE }
+set.seed(44)
+gf_point(log(AttacksWithoutWeapon) ~ log(Vandalism),
+         size = 6,
+         frame = ~Time,
+         data = mosaic::sample(crime, size = 100, replace = TRUE) |>
+           mutate(Time = round(NEnrollment / 100) * 100)) |>
+  gf_labs(title = 'ANIMATED SCATTER', x = '', y = '') |>
+  gf_theme(legend.position = 'none',
+           axis.line = element_line(color = 'black', linewidth = 3)) |>
+  ggplotly()
+```
+

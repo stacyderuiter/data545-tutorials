@@ -1,0 +1,68 @@
+# Color
+
+```{r}
+#| include: false
+
+library(webexercises)
+
+```
+
+## Using Color
+
+Color - used with care - can be an incredibly effective part of a data visualization.
+
+-   Ensure your color choices **highlight the story** you want to tell
+    - Consider using black and grey to help some elements fade into the background - for example, grid lines and labels that must be present but aren't the most important elements. 
+    - Or, color all groups but the one you want to highlight in grey, and use a bold color for the "main" group...
+-   Choose color combinations that look good and are **distinguishable by color-blind viewers and in greyscale**
+    -   Defaulting to pre-defined color palettes provided by your software may be better than haphazardly choosing colors manually
+    -   Consider being redundant - use size and/or shape as well as color to indicate groups so figures are legible in greyscale, too.
+-   Use color **consistently**. 
+  - Example: if "young" cases are red in one graph, don't use red for "old" in the next graph. And if many graphs are colored by the same grouping variable, use the same colors in all of them.
+
+The video below, created by [Storytelling with Data](https://www.youtube.com/c/storytellingwithdata), gives explanations and examples.
+
+-   If you have time, watch from 11:48 to 28:41 (about 17 minutes). This segment will play automatically in the clip below.
+-   If you're in a rush, the most important sections (about 10 minutes) are:
+    -   13:57 - 15:12 (Sparing use of color)
+    -   18:44 - 21:25; see also the [infographic of color in culture](https://www.informationisbeautiful.net/visualizations/colours-in-cultures/){target="_blank"}
+    -   22:25 - 23:10 (Color blindness - to view your graphs as someone with color blindness would, take a screen shot and try the [simulator online](https://www.color-blindness.com/coblis-color-blindness-simulator/){target="_blank"}
+    -   23:50 - 28:41 (Consistency)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/AiD6etOB6qI?start=708&amp;end=1721" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+::: {.webex-check .webex-box}
+**Which of the following are lessons from the Storytelling with Data video on Being Clever with Color? Mark all correct answers "TRUE".**
+
+Color grabs attention. `r torf(TRUE)`
+
+Color signals where to look. `r torf(TRUE)`
+
+Color should be used sparingly. `r torf(TRUE)`
+
+Too much color, and everything is highlighted - the viewer does not know what to pay attention to. `r torf(TRUE)`
+
+Color can show quantitative values, too, not just categories. `r torf(TRUE)`
+
+Colors have tone and meaning. `r torf(TRUE)`
+
+Not everyone can see colors. `r torf(TRUE)`
+
+Use color consistently. `r torf(TRUE)`
+
+Simple black and white is always the best choice. `r torf(FALSE)`
+:::
+
+`r hide("Click for explanations of solutions above.")`
+
+-   The human eye is naturally drawn to colors.
+-   Since color grabs attention, we expect it to direct us toward the most important stuff that is worthy of our attention.
+-   But...Too much color, and everything is highlighted - the viewer does not know what to pay attention to.
+-   Also, remember that the meaning and interpretation of colors varies by culture.
+-   Since some people can not see color, use color-blind friendly palettes and redundant coding (shape, text) where possible without cluttering the figure.
+-   Inconsistent use of color can be confusing and distracting.
+-   Sometimes black and white is great - but often color helps you tell a story!
+
+`r unhide()`

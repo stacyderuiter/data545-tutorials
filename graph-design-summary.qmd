@@ -1,0 +1,43 @@
+# Summary
+
+After reviewing the preceding sections, you should be able to articulate some principles for designing good visualizations with respect to use of space, axis limits, use of color, and text elements.
+
+In fact, you probably already *knew* these principles - at least, you knew 'em when you saw 'em (you could have easily sorted some terrible and better graphs even if you couldn't have said *exactly* what was terrible, or better, about them).
+
+Now, think about how you could apply these principles in your own work, or in providing feedback or advice to others...
+
+## Critique Practice
+
+Try using what you have learned to provide a *constructive* critique of an example. That might mean pointing out specific successes or positives as well as areas for improvement, with concrete advice about how to improve and why.
+
+Consider the graphic below. At a glance, what do you think it means? Looking more carefully, what do you notice?
+
+![](https://www.callingbullshit.org/tools/img/stand_your_ground.png){alt="chart showing gun deaths in Florida over time with inverted y axis" width="300px"}
+
+**Pause to think: What changes, if any, would you suggest to the figure's creator to make it clearer and easier to understand? Be sure to be constructive - gently explain any problems and suggest solutions.**
+
+## Video Review
+
+Wow, that was quite a lot of information! If you could use a brief review from a different point of view, check out the **optional** [video from Kristen Sosulski](https://www.youtube.com/watch?v=m9AhRIh49eU){target="_blank"}
+
+## Recap & Reflect: 12 Tips
+
+The 4-minute video below summarizes design principles for data visualization in the form of 12 tips.
+
+As you watch, make note of one or two tips that strike you (you'll report your thoughts in the next section). Is there one that nicely summarizes an idea introduced earlier in the section? One you're not sure about? One that you think is incredibly important? One that makes you say "Aha! *Now* I see why I loved/hated that visualization!"
+
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/185421073" width="640" height="360" frameborder="0" allowfullscreen>
+
+</iframe>
+
+### Pause for Reflection
+
+Take a moment to reflect on what you learned. Which Tip do you remember most clearly, think is most important, or want to challenge? Consider making a few notes for yourself for the future (you'll have to make and critique plenty of graphics in your homework assignments).
+
+## A Critique Checklist
+
+If working to improve your own visualization or attempting to give feedback on one another analyst made, you might consider using a checklist to guide you.
+
+Based heavily on the advice and template provided by [Evergreen Data](https://stephanieevergreen.com/data-visualization-checklist/)...
+
+>>Check out our [Graphics Critique Checklist](https://stacyderuiter.github.io/stat245-sp25/GraphicsCritiqueChecklist.pdf)!

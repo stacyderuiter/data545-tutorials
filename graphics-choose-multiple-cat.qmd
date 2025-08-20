@@ -1,0 +1,99 @@
+
+
+```{r}
+#| setup: true
+#| include: false
+
+library(tidyverse)
+library(ggformula)
+
+theme_set(theme_void(base_size = 20))
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+crime <- read_csv('https://sldr.netlify.app/data/sscrime.csv')
+```
+
+# Gallery: 2-3 Categorical Variables
+
+```{r, fig.alt = 'a side-by-side bar graph (generic and unlabelled, serving as an icon)'}
+gf_bar(~Location, fill = ~DressCode,
+       position = 'dodge',
+       data = crime) |>
+  gf_labs(title = 'SIDE-BY-SIDE BAR') |>
+  gf_theme(legend.position = 'none') |>
+  gf_theme(scale_fill_brewer(palette = 'Greys'))
+```
+
+-   One set of bars per "category", colored by "groups" -- shows *two* categorical variables at once
+-   Good for showing *counts* in each combination of categories/groups
+-   It is hard to compare proportion in each group across categories, if the total number in each category differs.
+
+## Stacked Bar Graph
+
+```{r, stacked-bar, fig.alt = 'a stacked bar chart (generic and unlabelled, serving as an icon)'}
+gf_bar(~Location, fill = ~DressCode,
+       position = 'stack',
+       data = crime) |>
+  gf_labs(title = 'STACKED BAR') |>
+  gf_theme(legend.position = 'none') |>
+  gf_theme(scale_fill_brewer(palette = 'Greys'))
+```
+
+-   Similar to side-by-side bar
+-   Compared to side-by-side, it's *harder* to compare proportions in each group within a category, but *easier* to estimate the proportion in each category.
+
+## Faceted Bar Graph
+
+```{r, facet-bar, fig.alt = 'a faceted bar chart (generic and unlabelled, serving as an icon)'}
+gf_props(~Location | DressCode,
+       data = crime,
+       denom = ~PANEL) |>
+  gf_labs(title = 'FACETED BAR') |>
+  gf_theme(legend.position = 'none',
+           strip.text.x = element_blank(),
+           panel.border = element_rect(fill = NA, linewidth = 2)) |>
+  gf_theme(scale_fill_brewer(palette = 'Greys'))
+```
+
+-   One plot box -- usually called a "panel" or "facet" -- for each of a set of groups
+-   Think carefully about the question of interest and the relationship you want to highlight as you choose: should bar heights correspond to...
+    -   Number of observations?
+    -   Proportion of observations *overall in the whole dataset*?
+    -   Proportion of observations *in the panel*?
+    -   Something else?
+
+## Combinations (Stacked bars + Facets, etc.)
+
+Of course, if you have 3 variables instead of just two, you *can* combine methods. Avoid it unless you are sure it is necessary and communicates clearly.
+
+-   **Be sure that the resulting graph is not too complex to understand quickly, at a glance.** Packing too much information into one graph sometimes means *none* of the info is actually communicated!
+-   And if showing proportions or percentages in such a display, **be sure you understand what denominator is being used in the calculations** -- is it the fraction of the whole dataset, within facets, etc.?
+
+```{r, stacked-and-facetted-bar, fig.width = 9, fig.alt = 'a bar chart with stacked bars plus facets (generic and unlabelled, serving as an icon)' }
+gf_props(~Location | DressCode,
+         fill = ~StudentIDBadges,
+       data = crime,
+       denom = ~PANEL) |>
+  gf_labs(title = 'STACKED BAR + FACETS') |>
+  gf_theme(legend.position = 'none',
+           strip.text.x = element_blank(),
+           panel.border = element_rect(fill = NA, linewidth = 2)) |>
+  gf_theme(scale_fill_brewer(palette = 'Greys'))
+```
+
+```{r, side-by-side-and-facetted-bar, fig.width = 9, fig.alt = 'a bar chart with side-by-side bars plus facets (generic and unlabelled, serving as an icon)' }
+gf_props(~Location | DressCode,
+         fill = ~StudentIDBadges,
+         position = 'dodge',
+       data = crime,
+       denom = ~PANEL) |>
+  gf_labs(title = 'SIDE-BY-SIDE + FACETS') |>
+  gf_theme(legend.position = 'none',
+           strip.text.x = element_blank(),
+           panel.border = element_rect(fill = NA, linewidth = 2)) |>
+  gf_theme(scale_fill_brewer(palette = 'Greys'))
+```
+
