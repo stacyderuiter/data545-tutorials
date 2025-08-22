@@ -1,0 +1,85 @@
+---
+format: live-html
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - readr
+    - stringr
+    - ggplot2
+    - ggformula
+    - ggforce
+    - mosaic
+    - mosaicData
+    - skimr
+    - gt
+    - pander
+    - reactable
+    - NHANES
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Data Visualization with ggformula
+
+## Section Learning Outcomes
+
+After this section, you will:
+
+1.Choose, and use R to create, an appropriate graphical display for a specified (combination of) variables. 3. Plan and critique statistical graphics based on design principles.
+
+**Note: You NEED NOT memorize all the information in this section.**
+
+Review it now, but know you will probably return to this section for later reference.
+
+Your goal should be to finish with a basic idea of how ggformula (`gf_...()`) graphics functions work, and knowing where in this section to look for examples to follow.
+
+## Background
+
+### What's a "**graph**"?
+
+A note about vocabulary: in this course, when we say "visualization" or "graph" or "plot" we mean a *picture* displaying *data.*
+
+Spreadsheets and tables presenting data are *not* included - If you are asked to "produce a graph" or "create a visualization" a table of summary statistics is not generally a desirable response.
+
+Tables are not unimportant; they just don't count, to us, as graphs, plots, or visualizations.
+
+Often a table might accompany a visualization, for additional reference and numeric values to cite...but we'd argue that it's usually the picture that is memorable, and that tells the story.
+
+### Libraries
+
+There are many ways to generate graphics in R. Some popular packages for visualization in R include `graphics` (which is included in the most basic R installation) and `ggplot2`. If you don't know any of those yet, don't worry a bit (and maybe continue right to the next section). If you do know one of those other systems, read on...
+
+In this course we will use [`ggformula`](https://www.mosaic-web.org/ggformula/){target="_blank"}, which is built on top of `ggplot2` (so the graphs you create will be ggplot objects and can be modified as such). However, the syntax `ggformula` uses to specify input variables and settings is a bit different than `ggplot2.` The differences are desirable to us because:
+
+-   We like **consistency**: `ggformula` input syntax is more like that of the functions we'll be using to fit models to data
+-   We often create graphics with several **layers**: Overlaying one graph on top of another is a bit easier in `ggformula` than in `ggplot`
+
+**Because of the variety of graphics packages in use in the R ecosystem, it is highly recommended that you *not* do a web search to find code examples to produce a certain graph. This section, course notes, and other course materials should have all the examples that you need (and if not, request additions!). In particular, mixing together code from different graphics packages generally leads to confusing disasters.**
+
+### Motivation: Realize the Dream!
+
+Figures are a crucial tool for exploring your data *and* communicating what you learn from the data.
+
+Whether you are doing a quick check to assess basic features of a dataset or creating a key figure for an important presentation, the best practice is to work thoughtfully. You already learned about creating graphics by I.C.E.E:
+
+#### The **I.C.E.E. method**:
+
+-   **I***magine* how you want your graph to look, *before* you
+-   **C***ode*. Once you have the basic starting point,
+-   **E***valuate* your work, and
+-   **E***laborate* (refine it).
+
+Repeat until the figure is as awesome as it needs to be.
+
+**What's the missing piece that we left for last? That's right: the code. Not most important, but crucial.**
+
+Specifically, you will now focus on **implementation** -- you have a plan in mind; now how can you **do** it in R?
+
+This section provides a set of code examples and practice exercises, but *leaves out* the details of design already covered in previous sections. Here, the assumption is you know what you want, and just need the technique to create it.
+
+**Treat this section like a reference manual: it's more important that you know how to look stuff up here than that you spend lots of time on** *every* **topic, and you don't need to memorize. Complete the first 4 sections if you are new to ggformula, and then refer to the others as needed and as time allows. Get used to using this site as a "manual" to look stuff up on demand.**
+
+**Graph types marked with an (o) and with their section header in** *italics* **are ones that are optional and/or more advanced - skip if you wish.**

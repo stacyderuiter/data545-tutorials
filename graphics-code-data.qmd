@@ -1,0 +1,215 @@
+---
+format: live-html
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - readr
+    - stringr
+    - ggplot2
+    - ggformula
+    - ggforce
+    - mosaic
+    - mosaicData
+    - skimr
+    - gt
+    - pander
+    - reactable
+    - NHANES
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Datasets Used
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(webexercises)
+library(ggformula)
+library(ggforce)
+library(NHANES)
+
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.width = 4.5, 
+                      fig.height = 3.5)
+
+
+theme_set(theme_minimal())
+
+data(Births, package = "mosaicData")
+data(NHANES, package = "NHANES")
+for (y in unique(Births$year)) {
+  assign(paste0("Births", y),  Births |>
+           dplyr::filter(year == y))
+}
+
+Births1978 <- Births |> 
+  dplyr::filter(year == 1978)
+data(Galton, package = "mosaicData")
+
+D <- data.frame(
+  group = LETTERS[1:3],
+  count = c(20, 25, 18)
+)
+
+#mmr <- read.csv('https://sldr.netlify.app/data/MammalMetabolicRates.csv')
+mmr <- read.csv('data/MammalMetabolicRates.csv')
+
+mmr_tab <- mmr |>
+  group_by(Order) |>
+  summarize(n = n(),
+            prop = n() / nrow(mmr),
+            perc = prop / 100) |>
+  ungroup()
+
+# university_teachers <- read.csv("http://bit.ly/chance-staff")
+university_teachers <- read.csv('data/university_teachers.csv')
+
+university_teachers <- university_teachers |>
+pivot_longer(cols = -faculty_type, names_to = "year", values_to = "percentage") |>
+  mutate(year = parse_number(year))
+```
+
+```{webr}
+#| setup: true
+#| include: false
+#| exercise:
+#|   - gf-point
+#|   - gf-shape
+#|   - gf_point-xy
+#|   - NHANES
+#|   - gf_list
+#|   - hist
+#|   - hist-dens
+#|   - density-w-color
+#|   - dens-w-color
+#|   - boxplot-groups
+#|   - violins
+#|   - jitter-alone
+#|   - jitter-layer
+#|   - fixed-jitter
+#|   - boxplot-no-outliers
+#|   - sina-plot
+#|   - teachers-by-median
+#|   - boxplot-by-median
+#|   - boxplot-by-mean
+#|   - manual-order-boxplots
+#|   - order-in-freq
+#|   - simple-scatter
+#|   - scatter-size
+#|   - bubble-overplot
+#|   - bubble
+#|   - line-graph
+#|   - multi-layered
+#|   - ref-lines
+#|   - simple-line
+#|   - bar-graphs
+#|   - prop-graphs
+#|   - stacked-bar
+#|   - change-denom
+#|   - position-fill
+#|   - making-pie
+#|   - col-plot
+#|   - mmr
+#|   - cleveland-dot
+#|   - lolly-lolly
+#|   - births-facets
+#|   - births-facet-wrap
+#|   - births-facet-practice
+#|   - births-facet-grid
+#|   - facet-grid2
+#|   - gf-options-1
+#|   - color-mapping
+#|   - color-mapping-contin
+#|   - density-w-color-recap
+#|   - dens-w-color-recap
+#|   - brewer-pal-test
+#|   - one-color-highlight
+#|   - gf-labs-example
+#|   - axis-limits
+#|   - axis-limits2
+#|   - control-grids
+#|   - custom-legend-title
+#|   - bye-legend
+#|   - top-legend
+
+
+data(Births, package = "mosaicData")
+data(NHANES, package = "NHANES")
+for (y in unique(Births$year)) {
+  assign(paste0("Births", y),  Births |>
+           dplyr::filter(year == y))
+}
+
+Births1978 <- Births |> 
+  dplyr::filter(year == 1978)
+
+data(Galton, package = "mosaicData")
+
+D <- data.frame(
+  group = LETTERS[1:3],
+  count = c(20, 25, 18)
+)
+
+#mmr <- read.csv('https://sldr.netlify.app/data/MammalMetabolicRates.csv')
+mmr <- read.csv('data/MammalMetabolicRates.csv')
+
+mmr_tab <- mmr |>
+  group_by(Order) |>
+  summarize(n = n(),
+            prop = n() / nrow(mmr),
+            perc = prop / 100) |>
+  ungroup()
+
+# university_teachers <- read.csv("http://bit.ly/chance-staff")
+university_teachers <- read.csv('data/university_teachers.csv')
+
+university_teachers <- university_teachers |>
+pivot_longer(cols = -faculty_type, 
+             names_to = "year", 
+             values_to = "percentage") |>
+  mutate(year = parse_number(year))
+```
+
+Several datasets will be used in this section.
+
+## Dataset Descriptions
+
+-   The `Births1978` dataset contains information about the number of babies born in the U.S.A. on each day of the year 1978
+
+-   The `university_teachers` dataset gives the proportion of university instructors who held different job titles (for example, Tenured Professor or Part-time Instructor), for a selection of years.
+
+-   The `NHANES` dataset contains measurements from 10,000 human subjects in the National Health and Nutrition Evaluation Survey. To learn more about the data, try one or more of these (Shown for `NHANES`, but can do for any dataset):
+
+    -   `?NHANES` (only for NHANES and other built-in R datasets)
+    -   `names(NHANES)`
+    -   `glimpse(NHANES)`
+    -   `inspect(NHANES)`
+
+```{webr}
+#| exercise: NHANES
+?NHANES
+```
+
+## Plotting Functions
+
+There are many `gf_...` functions in the `ggfomula` package that create different types of plots. Some are covered here; many are not.
+
+There are also helper functions that can customize axis labels, make multi-panel plots, and more.
+
+Just to get an idea of what is included in the `ggformula` package, run the code below to get a list of all the `gf_` functions that exist (not *all* are covered here):
+
+```{webr}
+#| exercise: gf_list
+
+# list all functions starting gf_
+apropos("gf_")
+```
+
+The following sections give examples of how to use many of the `gf_` functions to create graphics.
+

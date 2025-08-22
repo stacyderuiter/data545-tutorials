@@ -27,6 +27,11 @@ book:
     - graphics-choose-multiple-cat.qmd
     - graphics-choose-multiple-quant.qmd
     - graphics-choose-cat-quant-mix.qmd
+  - part: graphics-code.qmd
+    chapters:
+    - graphics-code-ggformula.qmd
+    - graphics-code-data.qmd
+    - graphics-code-plots.qmd
   - references.qmd
   page-footer:
     center:

@@ -1,0 +1,1337 @@
+---
+format: live-html
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - readr
+    - stringr
+    - ggplot2
+    - ggformula
+    - ggforce
+    - mosaic
+    - mosaicData
+    - skimr
+    - gt
+    - pander
+    - reactable
+    - NHANES
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Code Examples
+
+Below, you'll find code examples to create and customize many types of graphs using `ggformula`.
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(webexercises)
+library(ggformula)
+library(ggforce)
+library(NHANES)
+
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.width = 4.5, 
+                      fig.height = 3.5)
+
+
+theme_set(theme_minimal())
+
+data(Births, package = "mosaicData")
+data(NHANES, package = "NHANES")
+for (y in unique(Births$year)) {
+  assign(paste0("Births", y),  Births |>
+           dplyr::filter(year == y))
+}
+
+Births1978 <- Births |> 
+  dplyr::filter(year == 1978)
+data(Galton, package = "mosaicData")
+
+D <- data.frame(
+  group = LETTERS[1:3],
+  count = c(20, 25, 18)
+)
+
+#mmr <- read.csv('https://sldr.netlify.app/data/MammalMetabolicRates.csv')
+mmr <- read.csv('data/MammalMetabolicRates.csv')
+
+mmr_tab <- mmr |>
+  group_by(Order) |>
+  summarize(n = n(),
+            prop = n() / nrow(mmr),
+            perc = prop / 100) |>
+  ungroup()
+
+# university_teachers <- read.csv("http://bit.ly/chance-staff")
+university_teachers <- read.csv('data/university_teachers.csv')
+
+university_teachers <- university_teachers |>
+pivot_longer(cols = -faculty_type, names_to = "year", values_to = "percentage") |>
+  mutate(year = parse_number(year))
+```
+
+```{webr}
+#| setup: true
+#| include: false
+#| exercise:
+#|   - gf-point
+#|   - gf-shape
+#|   - gf_point-xy
+#|   - NHANES
+#|   - gf_list
+#|   - hist
+#|   - hist-dens
+#|   - density-w-color
+#|   - dens-w-color
+#|   - boxplot-groups
+#|   - violins
+#|   - jitter-alone
+#|   - jitter-layer
+#|   - fixed-jitter
+#|   - boxplot-no-outliers
+#|   - sina-plot
+#|   - teachers-by-median
+#|   - boxplot-by-median
+#|   - boxplot-by-mean
+#|   - manual-order-boxplots
+#|   - order-in-freq
+#|   - simple-scatter
+#|   - scatter-size
+#|   - bubble-overplot
+#|   - bubble
+#|   - line-graph
+#|   - multi-layered
+#|   - ref-lines
+#|   - simple-line
+#|   - bar-graphs
+#|   - prop-graphs
+#|   - stacked-bar
+#|   - change-denom
+#|   - position-fill
+#|   - making-pie
+#|   - col-plot
+#|   - mmr
+#|   - cleveland-dot
+#|   - lolly-lolly
+#|   - births-facets
+#|   - births-facet-wrap
+#|   - births-facet-practice
+#|   - births-facet-grid
+#|   - facet-grid2
+#|   - gf-options-1
+#|   - color-mapping
+#|   - color-mapping-contin
+#|   - density-w-color-recap
+#|   - dens-w-color-recap
+#|   - brewer-pal-test
+#|   - one-color-highlight
+#|   - gf-labs-example
+#|   - axis-limits
+#|   - axis-limits2
+#|   - control-grids
+#|   - custom-legend-title
+#|   - bye-legend
+#|   - top-legend
+
+
+data(Births, package = "mosaicData")
+data(NHANES, package = "NHANES")
+for (y in unique(Births$year)) {
+  assign(paste0("Births", y),  Births |>
+           dplyr::filter(year == y))
+}
+
+Births1978 <- Births |> 
+  dplyr::filter(year == 1978)
+
+data(Galton, package = "mosaicData")
+
+D <- data.frame(
+  group = LETTERS[1:3],
+  count = c(20, 25, 18)
+)
+
+#mmr <- read.csv('https://sldr.netlify.app/data/MammalMetabolicRates.csv')
+mmr <- read.csv('data/MammalMetabolicRates.csv')
+
+mmr_tab <- mmr |>
+  group_by(Order) |>
+  summarize(n = n(),
+            prop = n() / nrow(mmr),
+            perc = prop / 100) |>
+  ungroup()
+
+# university_teachers <- read.csv("http://bit.ly/chance-staff")
+university_teachers <- read.csv('data/university_teachers.csv')
+
+university_teachers <- university_teachers |>
+pivot_longer(cols = -faculty_type, 
+             names_to = "year", 
+             values_to = "percentage") |>
+  mutate(year = parse_number(year))
+
+theme_set(theme_minimal())
+```
+
+Before making any graphs, you may want to choose a **theme** -- this sets options like the background color of the plot (grey or white?), the presence/absence of gridlines, and more.
+
+You can follow the link to see [examples of available themes](https://ggplot2.tidyverse.org/reference/ggtheme.html).
+
+For general use, I recommend you chose `theme_minimal`...put the code below in your qmd setup chunk (once) and all your plots will have the desired theme.
+
+(For technical reasons, to avoid having to set the theme in every single R chunk, many plots will be shown in the default theme in this section.)
+
+```{r}
+#| eval: false
+#| echo: true
+
+theme_set(theme_minimal())
+```
+
+## Histograms
+
+-   Histograms require a formula with only one variable in it: `~ x`. (Notice that `x` goes on the right side.)
+-   You can change the size of the bins using either `bins` (the number of bins) or `binwidth` (the width of the bins). Experiment with different bins, trying to find balance between too many and too few. (If you don't provide `bins` or `binwidth` information, R will just make something up. You can usually do better if you take control.)
+-   To get density instead of counts on the y-axis, switch from function `gf_histogram()` to `gf_dhistogram()`.
+
+Try out the code below, and adjust the number of bins to better display the distribution.
+
+```{webr}
+#| exercise: hist
+gf_histogram( ~ BPSysAve, data = NHANES, bins = 100)
+```
+
+## Density plots
+
+A density plot is a smoothed contour tracing the shape of a dataset's distribution. The `gf_density()` and `gf_dens()` functions produce these plots (in slightly different ways): `gf_density()` plots are filled-in, while `gf_dens()` just plots a line showing the shape of the distribution.
+
+```{webr}
+#| exercise: hist-dens
+gf_density( ~ BPSysAve, data = NHANES) 
+gf_dens( ~ BPSysAve, data = NHANES) 
+```
+
+Often density plots can be a nice way to show distributions of a quantitative variable for each category in a categorical variable. To do that, we add the `fill` input to a `gf_density()` call, with the form `fill = ~ categorical_variable_name` to change the color of the *filled* regions by category:
+
+```{webr}
+#| exercise: density-w-color
+
+gf_density( ~BPSysAve, data = NHANES, fill = ~AgeDecade)
+```
+
+If you wanted to change the *color* of the lines in a `gf_dens()` plot, you would use `color` instead of fill:
+
+```{webr}
+#| exercise: dens-w-color
+
+gf_dens( ~BPSysAve, data = NHANES, color = ~AgeDecade)
+```
+
+## Boxplots
+
+Boxplots are most often used to allow a quick comparison of the distribution of a quantitative variable in different groups, as shown here.
+
+```{webr}
+#| exercise: boxplot-groups
+
+gf_boxplot(TVHrsDay ~ BPSysAve, data = NHANES)
+```
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: boxplot-swap-axes
+
+opts <- sample(c(answer = 'The coordinates flip (whichever variable is "y" in the formula ends up on the y-axis).',
+        'An error. The quantitative variable must always be "y", after the ~.',
+        'Nothing. The plot looks the same.'))
+
+cat('What happens if you swap the "x" and the "y" in the formula for a boxplot? (Try it and see before answering.)',
+    longmcq(opts))
+```
+:::
+
+`r hide("Click for explanations of solution above.")`
+
+For graphs where one variable is shown on the x axis and one on the y axis, swapping the order of the variables in the formula usually flips the coordinates.
+
+`r unhide()`
+
+## *Violin Plots (o)*
+
+Violin plot construction is very similar to that of boxplots, detailed in the previous section.
+
+```{webr}
+#| exercise: violins
+
+gf_violin(BPSysAve ~ MaritalStatus, data = NHANES)
+```
+
+## *Jitter Plots (o)*
+
+To "jitter" is to slightly alter the location of points in a graph, so that instead of being overplotted, you can see individual ones more clearly.
+
+It *can* be used on its own:
+
+```{webr}
+#| exercise: jitter-alone
+
+gf_jitter(BPSysAve ~ MaritalStatus, data = NHANES)
+```
+
+But more frequently is used as a layer in combination with boxplots or violin plots. We use a pipe (`|>`) to add the jitter layer:
+
+```{webr}
+#| exercise: jitter-layer
+
+gf_violin(BPSysAve ~ MaritalStatus, data = NHANES) |>
+  gf_jitter()
+```
+
+::: {.webex-check .webex-box}
+**What do you think might help the (awful) preceding violin/jitter plot to be more informative? Mark all correct answers TRUE.'**
+
+Maybe adding the jitter plot just is not ideal for this data `r torf(TRUE)`
+
+Making the jittered points semi-transparent could help. `r torf(TRUE)`
+
+Making the dots in the jitter plot larger and adding color and shape by `MaritalStatus` could help. `r torf(FALSE)`
+
+Changing the color of the jittered points so they fade into the background a bit could help. `r torf(TRUE)`
+
+Adjusting the width of the jittered point-column (by making input `width` *smaller* than its default 0.4) could help. `r torf(TRUE)`
+:::
+
+`r hide("Click for explanations of solution above.")`
+
+-   Jitter plots often work better with smaller datasets
+-   For a larger dataset you may need to make the points semi-transparent (by setting input `alpha`, which ranges from 0-1, closer to 0).
+-   Sometimes making the `width` of the jitter wider or narrower can make the plot easier to interpret (and more beautiful).
+-   If a plot is already a bit overwhelming, the solution is usually *not* to add more variables and colors and distracting features!
+
+`r unhide()`
+
+### Making the fixes
+
+Can you make it even better than this?
+
+```{webr}
+#| exercise: fixed-jitter
+
+gf_violin(BPSysAve ~ MaritalStatus, data = NHANES) |>
+  gf_jitter(color = 'grey', alpha = 0.1, width= 0.15)
+```
+
+### Boxplots without Outliers
+
+If you add a jitter plot on a boxplot, any outliers get plotted *twice*: once in the boxplot layer and once in the jitter layer. Not good. You can remove them from the boxplot in this case by setting `outlier.shape = NA`.
+
+Try running the example code, then adjust the jitter plot as you think is needed (`color`, transparency `alpha`, `width`).
+
+<!-- ```{webr} -->
+
+<!-- #| exercise: boxplot-no-outliers -->
+
+<!-- #| setup: true -->
+
+<!-- #| envir: university -->
+
+<!-- university_teachers <- read.csv("http://bit.ly/chance-staff") -->
+
+<!-- university_teachers <- university_teachers |> -->
+
+<!-- pivot_longer(cols = -faculty_type,  -->
+
+<!--              names_to = "year",  -->
+
+<!--              values_to = "percentage") |> -->
+
+<!--   mutate(year = parse_number(year)) -->
+
+<!-- ``` -->
+
+```{webr}
+#| exercise: boxplot-no-outliers
+
+gf_boxplot(faculty_type ~ percentage, 
+           data = university_teachers, 
+           outlier.shape = NA) |>
+  gf_jitter()
+```
+
+## *Sina Plots (o)*
+
+Similar to a jitter plot is a sina plot -- the difference is that the sina plot shapes the dot cloud to indicate data density, rather than fitting all the dots into a rectange.
+
+We need the additional package `ggforce` to make a sina plot using the `gf_sina()` function.
+
+Check it out...and play a bit! What does the sina plot look like overlaid on boxplots? What if you adjust `size`, transparency `alpha`, or even `color`?
+
+```{webr}
+#| exercise: sina-plot
+
+
+gf_sina(faculty_type ~ percentage,
+        data = university_teachers)
+```
+
+## Ordering Groups by Median
+
+When plotting boxplots or violinplots (etc.), R's default is to order the levels of the categorical variable in *alphabetical order*.
+
+Alphabetical is **so** rarely the order you want!
+
+More often, you should order by median (or mean) value, or by some intrinsic order.
+
+Take the boxplots from the last example:
+
+```{r, echo = FALSE}
+gf_boxplot(faculty_type ~ percentage, data = university_teachers)
+```
+
+The alphabetical order is nonsense. We can sort the categories by median `percentage` using the function `fct_reorder()` from the `forcats` package.
+
+```{webr}
+#| exercise: teachers-by-median
+
+
+gf_boxplot(fct_reorder(faculty_type, percentage) ~ percentage, 
+           data = university_teachers)
+```
+
+The first input to `fct_reorder()` is the categorical variable containing the groups; the second is the quantitative variable whose median you want to order by.
+
+If you want to use some other function of the second variable, say the `mean()` instead of median, you add the input `.fun`:
+
+```{webr}
+#| exercise: boxplot-by-mean
+
+
+gf_boxplot(fct_reorder(faculty_type, percentage) ~ percentage, 
+           .fun = mean,
+           data = university_teachers)
+```
+
+(Which ends up looking about the same, in this particular case.)
+
+## Ordering Groups Manually
+
+In some cases, you may want to use some human-meaningful ordering of groups. For example, we might order the teacher titles from least to most senior: Grad students, the part-time employees, then Full-time non-tenure-track, then Full-time tenure-track, then Full-time tenured.
+
+There is no easy way to tell R the required order other than just listing it out.
+
+A function to carry out such re-ordering is `fct_relevel()`.
+
+Since the code to reorganize the levels is a bit long to do *inside* the plotting call, and since we usually want the *same* ordering every time we use such a variable, we modify the variable in the dataset before plotting.
+
+Add the missing levels to the code below, then run it.
+
+```{webr}
+#| exercise: manual-order-boxplots
+
+
+university_teachers <- university_teachers |>
+  mutate(faculty_type = fct_relevel(faculty_type,
+                                    "Graduate Student Employees",
+                                    "Part-Time Faculty",
+                                    "Full-Time Non-Tenure-Track Faculty",
+                                    ...)
+  )
+
+ gf_boxplot(faculty_type ~  percentage, 
+           data = university_teachers)
+```
+
+:::: {.solution exercise="manual-order-boxplots"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+university_teachers <- university_teachers |>
+  mutate(faculty_type = fct_relevel(faculty_type,
+                                    "Graduate Student Employees",
+                                    "Part-Time Faculty",
+                                    "Full-Time Non-Tenure-Track Faculty",
+                                    "Full-Time Tenure-Track Faculty",
+                                    "Full-Time Tenured Faculty")
+         )
+ gf_boxplot(faculty_type ~  percentage, 
+           data = university_teachers)
+```
+:::
+::::
+
+## Ordering Groups by Frequency
+
+Finally, we might order groups by the number of observations in each group (frequency).
+
+To do this, we can use function `fct_infreq()`.
+
+Add a sina or jitter plot to the violins to verify the re-ordering:
+
+```{webr}
+#| exercise: order-in-freq
+
+gf_violin(BPSysAve ~ fct_infreq(MaritalStatus), data = NHANES) 
+```
+
+:::: {.solution exercise="manual-order-boxplots"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+gf_violin(BPSysAve ~ fct_infreq(MaritalStatus), data = NHANES) |>
+  gf_jitter(color = 'grey', alpha = 0.1, width= 0.15)
+  
+gf_violin(BPSysAve ~ fct_infreq(MaritalStatus), data = NHANES) |>
+  gf_sina(color = 'grey', alpha = 0.1, width= 0.15)
+```
+
+(NA (missing) stays at the end, even if it's commonly observed.)
+:::
+::::
+
+## Scatter Plot
+
+A simple scatter plot is created with `gf_point()` and has a formula like `y ~ x`.
+
+```{webr}
+#| exercise: simple-scatter
+
+gf_point(births ~ date, data = Births1978)
+```
+
+## Point/Line Size
+
+To control the size of points and lines in scatter and line charts, use input `size`. It has a relative numeric value -- larger than 1 means larger than the default.
+
+Try adjusting the size of the points in the plot below. You might want them bigger or smaller depending on the point you are trying to make.
+
+```{webr}
+#| exercise: scatter-size
+
+gf_point(births ~ date, 
+         size = 4,
+         data = Births1978)
+```
+
+## *Bubble Chart (o)*
+
+A bubble chart is a scatter plot where the *size* of the points is controlled by some third variable. This can be useful when the "dots" represent items that should be visually weighted differently - for example, one point per country (where countries have different population sizes) or one point per class (with different class sizes).
+
+We use the input `size = ~x` where `x` is the name of the variable that will control the point size.
+
+Note that our example datasets don't have any great examples of when this is *useful* -- in the example below the bubble chart may not be necessary.
+
+```{webr}
+#| exercise: bubble-overplot
+
+gf_point(HomeRooms ~ Poverty, 
+         size = ~Age,
+         data = NHANES)
+```
+
+Why is this ineffective? One big reason is that the dataset is so big that the points overlap - making some of them bigger just makes it worse. Just so you can see a bubble chart, let's redo the plot with a subsample of the data.
+
+**There is not usually any reason to do this with real data - you need to find a way to show it all!**
+
+We are showing a subset of the data here just to illustrate bubble plots, not because it's ok to do this.
+
+```{webr}
+#| exercise: bubble
+
+gf_point(HomeRooms ~ Poverty, 
+         size = ~Age,
+         data = mosaic::sample(NHANES, size = 100))
+```
+
+## Line Plot
+
+To plot a line instead of dots, simply use `gf_line()` instead of `gf_point()`. If you want the dots connected *in the order of the rows of the dataset* instead of in ascending x, you can replace `gf_line()` with `gf_path()`.
+
+```{webr}
+#| exercise: line-graph
+
+gf_line(births ~ date, data = Births1978)
+
+```
+
+## Multiple layers with pipes \|\>
+
+A single plot may have multiple layers. For example, you might want a scatter plot with a trend line overlaid on it, or a histogram with a standard normal curve overlaid.
+
+To create a multi-layered plot, simply append `|>` at the end of the code for one layer and follow that with another layer. *(The `|>` symbol is called a "pipe" because it sends the results of one operation on to the next operation for further processing. We often read `|>` as "and then...")*
+
+### Exercise
+
+1.  If you run the following code as is, you will get two separate plots.
+2.  Combine these two layers into a single plot by appending `|>` at the end of the first line.
+3.  Try adding another layer for a third variable.
+
+```{webr}
+#| exercise: multi-layered
+
+gf_density(~ BPSysAve, data = NHANES)
+gf_density(~ BPDiaAve, data = NHANES, fill = "cornflowerblue")
+```
+
+## Adding Lines
+
+There are three helper functions to help add lines to `gf_` graphics:
+
+-   `gf_vline(xintercept = ___)` (vertical line)
+-   `gf_hline(yintercept = ___)` (horizontal line)
+-   `gf_abline(slope = ___, intercept = ___)` (straight line)
+
+For example, add a line at x = 4, one at y = 2, and one at y = x (just as a demonstration - there is not a very good reason to add the x - 4 and y = 2 reference lines to *this* plot...)
+
+```{webr}
+#| exercise: ref-lines
+
+gf_point(nBabies ~ nPregnancies, data = NHANES) |>
+  gf_vline(xintercept = 4) |>
+  gf_hline(yintercept = 2) |>
+  gf_abline(slope = 1, intercept = 0)
+```
+
+## Best fit line?
+
+We *could* add a (simple) linear regression line to a scatter plot using the function `gf_lm()`, or a smooth using `gf_smooth()`.
+
+### BUT PLEASE DON'T. JUST NO. ALMOST NEVER A GOOD PLAN.
+
+It looks so nice! Why is it a bad idea?
+
+```{webr}
+#| exercise: simple-line
+
+gf_point(TotChol ~ Weight, data = NHANES, alpha = 0.1) |>
+  gf_lm()
+```
+
+```{r results = 'asis'}
+opts <- sample(c("My prof is just mean and opinionated.",
+                 "The function has too many bugs and causes trouble.",
+                 answer = "It is usually misleading and will contradict other parts of the data analysis I present.",
+                 "Who even cares?"))
+
+cat("So why am I not allowed to use gf_lm() and gf_smooth()?",
+    longmcq(opts))
+
+```
+
+`r hide("Umm...so why is it misleading?")`
+
+In most cases, our response (y) variable is expected to be associated with not just *one* predictor. But unless ALL the variables whose relationships you're interested in quantifying are ALL shown in the graph, the line `gf_lm()` draws won't match up with the statistical analysis you'll do with the same data.
+
+In other words, you will be *showing* one thing and later *saying* (and maybe also showing) another contradictory thing. Not ideal!
+
+In the case of the smooth, it gets even more complicated. If you are modeling a relationship as linear, then showing a curve contradicts your later analysis (just like the problem with `gf_lm()`). If you are fitting a GLM or a GAM (where the model might estimate a nonlinear relationship), it will *still* almost certainly be a different one from the one that `gf_smooth()` will draw.
+
+SO adding these lines usually makes you a liar: one part of your report ends up contradicting another.
+
+`r unhide()`
+
+## Bar graphs
+
+Bar graphs help visualize the distribution of a **categorical** variable, and we can create them with `gf_bar()`.
+
+```{webr}
+#| exercise: bar-graphs
+
+gf_bar( ~ TVHrsDay, data = NHANES)
+```
+
+### Percents and Proportions?
+
+What if we want to show the percent or proportion in each category, rather than the number of observations? `gf_percents()` and `gf_props()` to the rescue! Try changing the function from `gf_bar()` to `gf_percents()` or `gf_props()` and see what happens.
+
+You can also add `|> gf_refine(coord_flip())` to swap the axes. Try that too!
+
+*But you CANNOT use a formula of the form `y ~ x`! It might seem to run, but trust me, R is ignoring your `y`. It knows it already needs to use the y axis to show counts (or proportions or percents) -- no room for another data variable there...*
+
+```{webr}
+#| exercise: prop-graphs
+gf_bar( ~ TVHrsDay, data = NHANES)
+```
+
+:::: {.solution exercise="prop-graphs"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+gf_props( ~ TVHrsDay, data = NHANES)
+gf_percents( ~ TVHrsDay, data = NHANES)
+gf_percents( ~ TVHrsDay, data = NHANES) |>
+  gf_refine(coord_flip())
+```
+:::
+::::
+
+## Stacked bar graphs
+
+What if, instead of one figure panel per group, you want to see a stacked bar graph for the same data? Here's an example. You use the input:
+
+`fill= ~ variable_name`
+
+to specify the name of the variable that defines the groups (here, `Marijuana`).
+
+Try to see what happens if you use `gf_props()` or `gf_percents()`.
+
+```{webr}
+#| exercise: stacked-bar
+
+gf_bar( ~ TVHrsDay, fill = ~ Marijuana, data = NHANES)
+```
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: bar-denom
+
+opts <- sample(c(answer = 'The total number of observations in the dataset (so all the parts of all the bars together sum to 1)',
+        'The number of observations in the stack (so the parts of one bar together sum to 1)',
+        'The number of observations in the "fill" variable group (so all bar-parts of the same color sum to 1)'))
+
+cat('When showing a stacked bar graph with proportions, what is the default DENOMINATOR used to computing the proportions? Use the graph you just made to figure it out.',
+    longmcq(opts))
+```
+:::
+
+Argh! That's not usually what you want...
+
+## Changing the Denominator
+
+You can control the denominator used to compute bar graph proportions with the input `denom`. Its value should be a one-sided function of the form `~ x` giving the *role in the plot* of the variable defining the groups to use as the denominator. Other options include `fill` and `PANEL`.
+
+In our `gf_props()` plot above, we might pick `x`, so that the total proportion in each T.V. hours group sums to 1. Give it a try:
+
+```{webr}
+#| exercise: change-denom
+
+gf_props( ~ TVHrsDay, fill = ~ Marijuana, data = NHANES)
+```
+
+:::: {.solution exercise="change-denom"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+gf_props( ~ TVHrsDay, fill = ~ Marijuana, data = NHANES,
+          denom = ~ x)
+```
+:::
+::::
+
+This works generally. A shortcut in the stacked-bar-graph case is to use the input `position = "fill"` instead of `denom`:
+
+```{webr}
+#| exercise: position-fill
+
+gf_props( ~ TVHrsDay, fill = ~ Marijuana, 
+          data = NHANES, 
+          position = 'fill')
+```
+
+## Side-by-Side bar graphs
+
+What if, instead of stacked bars, you want side-by-side bars? Simply add the additional argument
+
+-   `position='dodge'`.
+
+```{r, echo=TRUE}
+gf_bar( ~ TVHrsDay, 
+        fill = ~ Marijuana,
+        data = NHANES, 
+        position = 'dodge')
+```
+
+Note that if you want to change the denominator, you can use `position = 'dodge'` *and* `denom = ~x` together, but you can't have `position` be both "stack" and "fill".
+
+```{r}
+gf_props( ~ TVHrsDay, 
+        fill = ~ Marijuana,
+        data = NHANES, 
+        position = 'dodge',
+        denom = ~ x)
+```
+
+## *Pie Chart (o)*
+
+Making nice pie charts in R is a bit of work, because most of the plotting libraries are not set up to do it well...you have to force them to do your will. Don't say you weren't warned! But, with a little effort, you can make decent pie charts.
+
+A pie chart usually doesn't have any background elements like axis labels or gridlines. To make one, we make a bar graph with `gf_bar()`, put it in polar coordinates, and ensure we are using a plot template with no background elements via `theme_set(theme_void())`.
+
+Strangely enough, we want to start with a stacked bar chart *colored by* our variable of interest. We include 1 rather than a variable name in the formula (because we want just one stacked bar), and we add the input `width=1` because we want the single bar to take up the whole width of the graph. And we swap the y-axis into polar coordinates (try removing the `gf_refine()` line to see how it looks before pie-ification).
+
+```{webr}
+#| exercise: making-pie
+
+theme_set(theme_void())
+gf_bar(~1, fill = ~Diabetes, data = NHANES,
+       width = 1) |>
+  gf_refine(coord_polar('y'))
+```
+
+**After creating a pie chart, make sure you revoke the "void" theme by running the code below (or your later graphs will have no visible axes or axis labels...)**
+
+```{r, echo = TRUE}
+theme_set(theme_minimal()) 
+```
+
+You can see examples of available themes at: <https://ggplot2.tidyverse.org/reference/ggtheme.html>
+
+## *Bar graph, pre-tabulated (o)*
+
+Sometimes, you may be given data that is already tabulated. Instead of a dataset with one row for every case, you will have one row for every group, and a variable that gives the number of observations in each group. The `university_teachers` dataset is an example, with one row for each combination of job title and year.
+
+```{r, echo = TRUE}
+DT::datatable(university_teachers)
+```
+
+We can use the function `gf_col` to make a bar graph of pre-tabulated data. This function always expects the counts (or proportions or percentages) as the `y` part of the formula, and the group names as `x` (after the tilde).
+
+```{webr}
+#| exercise: col-plot
+
+
+gf_col(percentage ~ faculty_type, 
+       data = university_teachers)
+```
+
+This plot illustrates a common issue -- category labels that overlap and become illegible. What can we do to fix it?
+
+## Axis Labels that Don't Fit
+
+Sometimes - particularly for bar graphs of categorical variables with long category names - axis tick labels overlap in an ugly way. For example:
+
+```{r, echo=TRUE, fig.width=4}
+gf_bar(~Education, data=NHANES)
+```
+
+### Flip the Axes
+
+One simple way to solve this problem is to flip the x and y axes of the plot.
+
+```{r, echo=TRUE}
+gf_bar(~Education, data=NHANES) |>
+  gf_refine(coord_flip())
+```
+
+### Rotate the Labels
+
+Another solution is to rotate the axis labels.
+
+**This is not a great solution since horizontal labels are easier to read and make your graph faster to digest!**
+
+We can do it, though, by modifying the `angle` and `hjust` values for the x tick labels in the plot's `theme`. `angle` is the angle in degrees by which to rotate the labels, and `hjust` moves them up and down (positive `hjust` moves down, and negative moves up).
+
+For example:
+
+```{r, echo=TRUE}
+gf_bar(~Education, data = NHANES) |> 
+    gf_theme(axis.text.x = element_text(angle = 65, hjust = 1))
+```
+
+### Your Turn!
+
+The dataset at <http://sldr.netlify.app/data/MammalMetabolicRates.csv> provides data on mammal metabolic rates. Read it in and make a bar graph of the number of observations per Order (or per Family, Genus, or Species) with legible axis tick labels.
+
+```{webr}
+#| exercise: mmr
+
+```
+
+:::: {.solution exercise="mmr"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+mmr <- read_csv('http://sldr.netlify.app/data/MammalMetabolicRates.csv')
+gf_bar(~ Order, data = mmr) |>
+  gf_refine(coord_flip())
+
+# to be extra: adjust the order of groups
+mmr <- read_csv('http://sldr.netlify.app/data/MammalMetabolicRates.csv')
+gf_bar(~ fct_infreq(Order), data = mmr) |>
+  gf_refine(coord_flip())
+# note: other solutions are possible.
+```
+:::
+::::
+
+## *Tabulating Data (o)*
+
+To make a Cleveland dot-plot or lollipop plot, you need to switch from a dataset with one row per *observation* to one row per *group* that you want to plot. We will learn more about this kind of data wrangling later.
+
+Here, we want to `group_by()` the variable that defines the groups, and then `summarize()` within each group by computing the number of observations `n()` or the proportion or percentage of interest. Finally, always `ungroup()` at the end. Let's try it with the `mmr` data.
+
+```{r}
+#| label: to-summary
+#| echo: true
+
+mmr_tab <- mmr |>
+  group_by(Order) |>
+  summarize(n = n(), # n() is special function to compute n in group
+            prop = n() / nrow(mmr),
+            perc = prop / 100) |>
+  ungroup()
+```
+
+**Note that I'm intentionally showing you how to do this for proportions / categorical variables and** *not* **for means of quantitative variables!**
+
+There's a reason for that. Our best practice is the show *all* the data as much as we can. For more on why, see [Bang goes the detonator plot!](https://rep.bioscientifica.com/view/journals/rep/159/2/REP-19-0547.xml)
+
+But for a categorical variable - particularly a binary one - a proportion *is* pretty much "all" of the data, much more so than a mean summarizes "all" of the values of a quantitative variable!
+
+## *Cleveland Dotplot (o)*
+
+*Note: this requires tabulated data.*
+
+With tabulated data, a Cleveland dot plot is just a scatter plot. But we need to order `n` -- by what?? Give it a try!
+
+```{webr}
+#| exercise: cleveland-dot
+
+gf_point(Order ~ n, data = mmr_tab)
+```
+
+:::: {.hint exercise="cleveland-dot"}
+::: {.callout-note collapse="true"}
+## Hint 1
+
+``` r
+gf_point(fct_reorder(___, ___) ~ n, data = mmr_tab)
+```
+:::
+::::
+
+:::: {.solution exercise="cleveland-dot"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+gf_point(fct_reorder(Order, n) ~ n, data = mmr_tab)
+```
+:::
+::::
+
+## *Lollipop Plot (o)*
+
+This is just a Cleveland dot plot plus "sticks"; we use `gf_segment()` to add the sticks. The formula for `gf_segment()` has the form: `y + yend ~ x + xend.`.
+
+```{webr}
+#| exercise: lolly-lolly
+
+gf_point(fct_reorder(Order, n) ~ n, data = mmr_tab) |>
+  gf_segment(Order + Order ~ 0 + n, data = mmr_tab)
+```
+
+## Facets (Multi-panel plots)
+
+If we want to look at all 20 years of birth data, overlaying the data is likely to put too much information in too little space and make it hard to tell which data is from which year. (Even with good color and symbol choices, deciphering 20 colors or 20 shapes is hard.) Instead, we can put each year in separate **facet** or sub-plot. By default the coordinate systems will be shared across the facets which can make comparisons across facets easier.
+
+There are two ways to create facets. The simplest way is to add a vertical bar `|` to our formula.
+
+```{webr}
+#| exercise: births-facets
+#| fig-height: 6
+
+gf_point(births ~ day_of_year | year, 
+         data = Births, size = 0.5)
+```
+
+The second way is to add on a facet command using `|>`:
+
+```{webr}
+#| exercise: births-facet-wrap
+#| fig-height: 6
+
+gf_point(births ~ day_of_year, data = Births, size = 0.5) |>
+gf_facet_wrap( ~ year)
+```
+
+#### Practice with facets
+
+Edit the plot below to:
+
+1.  make one facet for each day of the week (`wday`)
+2.  map color to `year`
+
+```{webr}
+#| exercise: births-facet-practice
+#| fig-height: 6
+
+gf_point(births ~ day_of_year, data = Births, 
+         size = 0.5, color = "cornflowerblue")
+```
+
+:::: {.solution exercise="births-facet-practice"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+gf_point(births ~ day_of_year | wday, 
+         data = Births, 
+         size = 0.5, 
+         color = ~ year)
+```
+:::
+::::
+
+## Facet Grids
+
+Create a multi-panel plot that uses rows, or columns, or both in a fixed way. For example, you want to show a scatter plot of data for each of three years (three rows of facets) and four seasons (four columns of facets).
+
+To do this, add *another formula* after the `|` in the formula input, as done below. Can you figure out what the formula does? If you need a hint, try changing `year ~ wday` to `wday ~ year` and see what happens...
+
+```{webr}
+#| exercise: births-facet-grid
+#| fig-height: 9
+
+gf_point(births ~ day_of_year | year ~ wday, data = Births, size = 0.5)
+```
+
+### The Facet Grid Formula
+
+Hopefully, you figured out that the facet grid formula (the one to the right of the `|`) is interpreted as "row variable \~ column variable" -- the resulting plot will have one row of facets for every value of the first variable, and one column of facets for every value of the second variable.
+
+### Practice with the facet grid formula
+
+Recreate the plot below using `gf_facet_grid()`. This works much like `gf_facet_wrap()` and accepts a formula with one of three shapes:
+
+-   `y ~ x` (facets along both axes)
+-   `~ x` (facets only along x-axis)
+-   `y ~ .` (facets only along y-axis; notice the important dot in this one)
+
+(These three formula shapes can also be used on the right side of `|`.)
+
+```{webr}
+#| exercise: facet-grid2
+#| fig-height: 9
+
+gf_bar( ~ TVHrsDay | Marijuana ~ Gender, fill = ~ Marijuana, data = NHANES)
+```
+
+## Color: One custom choice
+
+We can manually set the color of the main element of a simple plot (like the line in `gf_line()`, or the points in `gf_point()`) using the `...` part of our template.
+
+ 
+
+<center>
+
+<h3><strong>[goal]{.boxed} ( [ y ]{.boxed} \~ [ x ]{.boxed} , data = [mydata]{.boxed} , ...)</strong></h3>
+
+</center>
+
+ 
+
+The general form for things in `...` is `attribute = value`.
+
+For example,
+
+-   `color = "red"` or `fill = "navy"` (note quotes) can be used to change the colors of things.
+
+-   (`fill` is typically used for regions that are "filled in" and `color` for dots and lines.)
+
+After running the code below, find the name of an R color at [datanovia](https://www.datanovia.com/en/blog/awesome-list-of-657-r-color-names/){target="_blank"} and change the points in the scatterplot to be that color.
+
+```{webr}
+#| exercise: gf-options-1
+
+gf_point(births ~ date, data = Births1978, 
+         color = "navy")
+```
+
+## Color: by variable values
+
+Often, rather than manually setting all elements to be one color, we want to *map* color to some variable (so that each value of that variable corresponds to a distinct color).
+
+To do it, we provide the input `color = ~variable` to our plotting function. \* `color = ~wday` **maps** color to the day of the week `wday`.
+
+For example, to map color to `wday` in a time-series plot of 1978 births:
+
+```{webr}
+#| exercise: color-mapping
+
+gf_point(births ~ date, data = Births1978, color = ~wday)
+```
+
+This works for continuous variables, too, but the color scale used will be continuous instead of distinct discrete colors that are easy to tell apart. Try mapping color to `day_of_year` in the same time-series plot as above.
+
+```{webr}
+#| exercise: color-mapping-contin
+
+```
+
+:::: {.hint exercise="color-mapping-contin"}
+::: {.callout-note collapse="true"}
+## Hint 1
+
+``` r
+gf_point(births ~ date, data = Births1978, ...)
+```
+:::
+::::
+
+:::: {.hint exercise="color-mapping-contin"}
+::: {.callout-note collapse="true"}
+## Hint 2
+
+``` r
+gf_point(births ~ date, data = Births1978, color = _______)
+```
+:::
+::::
+
+:::: {.solution exercise="color-mapping-contin"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+gf_point(births ~ date, data = Births1978, color = ~day_of_year)
+```
+:::
+::::
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: color-mapping-quiz
+
+opts <- sample(c(answer = 'yes',
+        'no',
+        'more data would be needed to be able to answer'))
+
+cat('Does it appear that the number of births is different on weekends and weekdays?',
+    longmcq(opts))
+
+opts <- sample(c(answer = "There is an error message: 'wday' not found.",
+        'It works just the same.  The tilde is not required.',
+        'All the dots are the same color.'))
+
+cat('What actually happens if you omit the `~` before `~ wday`?  (Try it and see.)',
+    longmcq(opts))
+```
+:::
+
+Earlier, we saw how to change the fill color in density plots:
+
+```{webr}
+#| exercise: density-w-color-recap
+
+gf_density( ~BPSysAve, data = NHANES, fill = ~AgeDecade)
+```
+
+If you wanted to change the *color* of the lines in a `gf_dens()` plot, you would use `color` instead of fill:
+
+```{webr}
+#| exercise: dens-w-color-recap
+
+gf_dens( ~BPSysAve, data = NHANES, color = ~AgeDecade)
+```
+
+We saw something similar in stacked bar graphs. So, you can `color` lines or `fill` shapes by a variable in many graph types - experiment!
+
+## Change Color Palette
+
+We can use `gf_theme(scale_---_---( ))`.
+
+The first `---` is often either `color` or `fill`, to choose a color palette for the color or fill in the plot. (`scale_fill_---()` or `scale_color_---()`).
+
+The second `---` is the name of the type of color palette to use. There are lots of options, depending on the variable type and how you want to select the colors -- type `?scale_color_` and let autofill show you all the choices!
+
+A good set of palettes to begin with is the `RColorBrewer` palettes:
+
+```{r, echo = TRUE, fig.width = 6.5, fig.height = 6}
+RColorBrewer::display.brewer.all()
+```
+
+The middle group works better for categorical scales.
+
+To choose one, note its name on the left. Then call (for example) `scale_color_brewer(palette = 'Dark2')`. You can add `direction = -1` to reverse the order.
+
+Try the plot below, then test some other palette options (try reversing the order, too). Which do you prefer?
+
+```{webr}
+#| exercise: brewer-pal-test
+
+gf_percents(~AgeDecade, 
+            fill = ~Race1, 
+            denom = ~x,
+            data = NHANES) |>
+  gf_theme(scale_fill_brewer(palette = 'Set1'))
+```
+
+## Color one group
+
+Sometimes you may wish to highlight the data for one particular group by greying out all other data. An easy way to do this is to create a variable that "keeps" only the group you want with `fct_other()`, then use `gf_theme(scale_color_manual())` to set a manual color palette with two colors (grey and the other one you want).
+
+What if we want to highlight the proportion of teachers who are grad students? We make a new variable `grad_stud` that tells whether the faculty type is "Grad Student" or not, and color by it. We still `group` by `faculty_type` so that we get only one line per faculty type (try removing this to see the problem that happens).
+
+```{webr}
+#| exercise: one-color-highlight
+
+
+university_teachers <- university_teachers |>
+  mutate(grad_stud = fct_other(faculty_type, 
+                               keep = 'Graduate Student Employees'))
+
+gf_path(percentage ~ year, data = university_teachers,
+        color = ~grad_stud,
+        group = ~faculty_type) |>
+  gf_theme(scale_color_manual(values = c('hotpink', 'grey')))
+```
+
+## Axis labels
+
+One of the most common customizations you will want to make to your plots will be to change the title, subtitle, and axis labels (and maybe add a caption). All these things can be done by chaining (`|>`) the function `gf_labs()` with a plot layer.
+
+Check out the example below, and try changing the text labels to ones that make sense to you. Note that all the input arguments to `gf_labs` are optional. So, for example, you could alter *only* the x-axis label by chaining the command `gf_labs(x = 'My X Axis Label')` with your plot.
+
+```{webr}
+#| exercise: gf-labs-example
+
+gf_bar(~Race1, data=NHANES) |>
+  gf_labs(title = "Race in NHANES Data",
+    subtitle = "(2009-2012)",
+    caption = "These data were collected by the US National Center for Health Statistics (NCHS), which has conducted a series of health and nutrition surveys since the early 1960's.",
+    x = "",  # empty quotes here results in no x-axis label!
+    y = "Number of Observations"
+  )
+```
+
+## Axis limits
+
+You can also `gf_lims()` to set custom x and y axis limits.
+
+How does adjusting the axis limits alter your interpretation of the plot?
+
+```{webr}
+#| exercise: axis-limits
+
+gf_line(births ~ date, data = Births1978) |>
+  gf_lims(y = c(0, 14000))
+```
+
+```{webr}
+#| exercise: axis-limits2
+
+
+gf_boxplot(faculty_type ~ percentage, data = university_teachers) |>
+  gf_lims(x = c(0, 50))
+```
+
+## *Grid Lines (o)*
+
+Grid lines can be controlled using `gf_theme()` with inputs
+
+-   `panel.grid`
+-   `panel.grid.major`
+-   `panel.grid.minor`
+-   `panel.grid.major.x`
+-   `panel.grid.major.y`
+-   `panel.grid.minor.x`
+-   `panel.grid.minor.y`
+
+If you don't specify `x` or `y` or `major` or `minor`, your options apply to all.
+
+Setting any of these to `element_blank()` removes them. Try a few different grid options. How can you remove the minor gridlines and the vertical gridlines?
+
+```{webr}
+#| exercise: control-grids
+
+
+gf_path(percentage ~ year, color = ~faculty_type,
+        data = university_teachers) |>
+  gf_theme(panel.grid.minor = element_blank())
+```
+
+:::: {.solution exercise="control-grids"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+gf_path(percentage ~ year, color = ~faculty_type,
+        data = university_teachers) |>
+  gf_theme(panel.grid.minor = element_blank(),
+           panel.grid.major.x = element_blank())
+```
+:::
+::::
+
+## *Custom Legend Title (o)*
+
+Sometimes you might want to remove the legend title, or replace it with a more readable one. You can do it with `gf_theme()`. Try the plot below with and without the `gf_theme()` line to see how it changes. Replace `"Activity"` with `""` (empty quotes) to remove the legend title entirely.
+
+```{webr}
+#| exercise: custom-legend-title
+
+gf_bar(~AgeDecade, fill = ~PhysActive, 
+       position = 'stack', 
+       data = NHANES) |>
+  gf_theme(scale_fill_discrete('Activity'))
+```
+
+Notice, we used the function `scale_fill_discrete()` to adjust the legend because we had a graph with a **fill** color tied to a **discrete** (categorical) variable, `PhysActive`. We would replace the function `scale_fill_discrete()` with another depending on variable type and whether our plot call includes `color = ~variable` or `fill = ~variable`:
+
+-   fill by categorical variable: `scale_fill_discrete()`
+-   fill by quantitative variable: `scale_fill_continouous()`
+-   color by categorical variable: `scale_color_discrete()`
+-   color by quantitative variable: `scale_color_continuous()`
+
+There are more...type `?scale_` and let autofill show you all the options!
+
+## (Re)Move Legend
+
+To remove the legend entirely (make sure you really want to do this!) you chain from your plot layer to `gf_theme()` with input `legend.position = 'none'`.
+
+```{webr}
+#| exercise: bye-legend
+
+gf_bar(~AgeDecade, fill = ~PhysActive, 
+       position = 'stack', 
+       data = NHANES) |>
+  gf_theme(legend.position = 'none')
+```
+
+To change the legend's location, set `legend.position` to `left`, `right`, `top`, or `bottom`.
+
+```{webr}
+#| exercise: top-legend
+
+gf_bar(~AgeDecade, fill = ~PhysActive, 
+       position = 'stack', 
+       data = NHANES) |>
+  gf_theme(legend.position = 'top')
+```
+
+## Adjust Figure Size
+
+You will almost certainly want to adjust figure sizes in your own RMarkdown documents. There are several ways - you can set a file-wide default in the header of the Rmd file as is done in some class files - or you can set the figure size for one R code chunk in the settings in the first lines of the chunk, as shown below.
+
+The values of `fig-width` and `fig-height` are expected to be given in inches, by default.
+
+```{r}
+#| fig-width: 6
+#| fig-height: 0.7
+```
+
+You can also put these settings inside the {}:
+
+```{r}
+knitr::include_graphics('images/fig-size.png')
+```
+
+## More?
+
+Whew! That was a lot. You made it!!
+
+Remember, you don't have to store all this information in your head now (although that will come with practice) - you will not need to make graphs without being able to access reference information (like this section).
+
+The organization of these examples may not be perfect but please keep in mind...they are searchable!

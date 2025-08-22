@@ -1,0 +1,460 @@
+---
+format: live-html
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - readr
+    - stringr
+    - ggplot2
+    - ggformula
+    - ggforce
+    - mosaic
+    - mosaicData
+    - skimr
+    - gt
+    - pander
+    - reactable
+    - NHANES
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# ggformula and Formulas 
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(webexercises)
+library(ggformula)
+library(ggforce)
+library(NHANES)
+
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.width = 4.5, 
+                      fig.height = 3.5)
+
+
+theme_set(theme_minimal())
+
+data(Births, package = "mosaicData")
+data(NHANES, package = "NHANES")
+for (y in unique(Births$year)) {
+  assign(paste0("Births", y),  Births |>
+           dplyr::filter(year == y))
+}
+
+Births1978 <- Births |> 
+  dplyr::filter(year == 1978)
+data(Galton, package = "mosaicData")
+
+D <- data.frame(
+  group = LETTERS[1:3],
+  count = c(20, 25, 18)
+)
+
+#mmr <- read.csv('https://sldr.netlify.app/data/MammalMetabolicRates.csv')
+mmr <- read.csv('data/MammalMetabolicRates.csv')
+
+mmr_tab <- mmr |>
+  group_by(Order) |>
+  summarize(n = n(),
+            prop = n() / nrow(mmr),
+            perc = prop / 100) |>
+  ungroup()
+
+# university_teachers <- read.csv("http://bit.ly/chance-staff")
+university_teachers <- read.csv('data/university_teachers.csv')
+
+university_teachers <- university_teachers |>
+pivot_longer(cols = -faculty_type, names_to = "year", values_to = "percentage") |>
+  mutate(year = parse_number(year))
+```
+
+```{webr}
+#| setup: true
+#| include: false
+#| exercise:
+#|   - gf-point
+#|   - gf-shape
+#|   - gf_point-xy
+#|   - NHANES
+#|   - gf_list
+#|   - hist
+#|   - hist-dens
+#|   - density-w-color
+#|   - dens-w-color
+#|   - boxplot-groups
+#|   - violins
+#|   - jitter-alone
+#|   - jitter-layer
+#|   - fixed-jitter
+#|   - boxplot-no-outliers
+#|   - sina-plot
+#|   - teachers-by-median
+#|   - boxplot-by-median
+#|   - boxplot-by-mean
+#|   - manual-order-boxplots
+#|   - order-in-freq
+#|   - simple-scatter
+#|   - scatter-size
+#|   - bubble-overplot
+#|   - bubble
+#|   - line-graph
+#|   - multi-layered
+#|   - ref-lines
+#|   - simple-line
+#|   - bar-graphs
+#|   - prop-graphs
+#|   - stacked-bar
+#|   - change-denom
+#|   - position-fill
+#|   - making-pie
+#|   - col-plot
+#|   - mmr
+#|   - cleveland-dot
+#|   - lolly-lolly
+#|   - births-facets
+#|   - births-facet-wrap
+#|   - births-facet-practice
+#|   - births-facet-grid
+#|   - facet-grid2
+#|   - gf-options-1
+#|   - color-mapping
+#|   - color-mapping-contin
+#|   - density-w-color-recap
+#|   - dens-w-color-recap
+#|   - brewer-pal-test
+#|   - one-color-highlight
+#|   - gf-labs-example
+#|   - axis-limits
+#|   - axis-limits2
+#|   - control-grids
+#|   - custom-legend-title
+#|   - bye-legend
+#|   - top-legend
+
+
+data(Births, package = "mosaicData")
+data(NHANES, package = "NHANES")
+for (y in unique(Births$year)) {
+  assign(paste0("Births", y),  Births |>
+           dplyr::filter(year == y))
+}
+
+Births1978 <- Births |> 
+  dplyr::filter(year == 1978)
+
+data(Galton, package = "mosaicData")
+
+D <- data.frame(
+  group = LETTERS[1:3],
+  count = c(20, 25, 18)
+)
+
+#mmr <- read.csv('https://sldr.netlify.app/data/MammalMetabolicRates.csv')
+mmr <- read.csv('data/MammalMetabolicRates.csv')
+
+mmr_tab <- mmr |>
+  group_by(Order) |>
+  summarize(n = n(),
+            prop = n() / nrow(mmr),
+            perc = prop / 100) |>
+  ungroup()
+
+# university_teachers <- read.csv("http://bit.ly/chance-staff")
+university_teachers <- read.csv('data/university_teachers.csv')
+
+university_teachers <- university_teachers |>
+pivot_longer(cols = -faculty_type, 
+             names_to = "year", 
+             values_to = "percentage") |>
+  mutate(year = parse_number(year))
+```
+
+```{=html}
+<style type="text/css">
+  span.boxed {
+    border:5px solid gray;
+    border-radius:10px;
+    padding: 5px;
+  }
+span.invboxed {
+  border:5px solid gray;
+  padding: 5px;
+  border-radius:10px;
+  color: white;
+}
+
+table, td, th { border:0px; }
+
+/* cellpadding */
+  th, td { padding: 5px; }
+
+</style>
+```
+
+*Note: Much of the content in this part was originally written by Randall Pruim, a Calvin colleague who's also the author of the `ggformula` package, with co-author Danny Kaplan. Thanks, Randy and Danny! You can view other [reference material related to `ggformula` online](https://www.mosaic-web.org/ggformula/articles/pkgdown/ggformula-long.html).*
+
+## Two important questions
+
+```{r, echo = FALSE}
+gf_point(births ~ date, data = Births1978)
+```
+
+To get R (or any software) to create the above plot (or do anything else, really), there are two important questions you must be able to answer. Before continuing, see if you can figure out what they are.
+
+**What two questions do you have in mind?**
+
+## The Questions
+
+To get R (or any software) to create the plot, there are two important questions you must be able to answer:
+
+### 1. What do you want the computer to do?
+
+### 2. What must the computer know in order to do that?
+
+## Answers to the questions
+
+To make the scatter plot you saw before, the answers to our questions are
+
+### 1. What do you want the computer to do?
+
+**A.** Make a scatter plot (i.e., a **plot** consisting of **points**)
+
+### 2. What must the computer know in order to do that?
+
+**A.** The data used for the plot:
+
+-   The variable to be plotted along the vertical ($y$) axis.
+-   The variable to be plotted along the horizontal ($x$) axis.
+-   The data set that contains the variables.
+
+We just need to learn how to tell R these answers.
+
+## Graphics with Formulas
+
+## The Formula Template
+
+We will provide answers to our two questions by filling in the boxes of this important template:
+
+<center>
+
+<h2><strong>[goal]{.invboxed} ( [yyy]{.invboxed} \~ [xxx]{.invboxed} , data = [mydata]{.invboxed} )</strong></h2>
+
+</center>
+
+ 
+
+We just need to identify which portions of our answers go into which boxes.
+
+## The Name of the Game
+
+It is useful to provide names for the boxes:
+
+<center>
+
+<h2><strong>[goal]{.boxed} ( [ y ]{.boxed} \~ [ x ]{.boxed} , data = [mydata]{.boxed} , ...)</strong></h2>
+
+</center>
+
+ 
+
+These names can help us remember which things go where. (The `...` indicates that there are some additional input arguments we will add eventually.)
+
+### Other versions
+
+Sometimes we will add or subtract a bit from our formula. Here are some other forms we will eventually see.
+
+```{r eval = FALSE, echo = TRUE}
+# simpler version
+goal( ~ x, data = mydata )          
+# fancier version
+goal( y ~ x | z , data = mydata )   
+# unified version
+goal( formula , data = mydata )     
+```
+
+## 2 Questions and the Formula Template
+
+ 
+
+<center>
+
+<h2><strong>[goal]{.boxed} ( [ y ]{.boxed} \~ [ x ]{.boxed} , data = [mydata]{.boxed} )</strong></h2>
+
+</center>
+
+ 
+
+### Q. What do you want R to do? A. goal
+
+-   Your answer to this question determines the **function** to use.
+-   For a plot, the function will describe what sorts of marks to draw (points, in our example).
+
+### Q. What must R know to do that? A. arguments
+
+-   Your answer to this question determines the inputs to the function.
+-   For a plot, we must identify the variables and the data frame that contains them.
+
+## Assembling the pieces
+
+### Template
+
+ 
+
+<center>
+
+<h2><strong>[goal]{.boxed} ( [ y ]{.boxed} \~ [ x ]{.boxed} , data = [mydata]{.boxed} )</strong></h2>
+
+</center>
+
+ 
+
+### Pieces
+
++------------+----------------+------------------+
+| box        | fill in with   | purpose          |
++============+================+==================+
+| \`goal\`   | \`gf_point\`   | plot some points |
++------------+----------------+------------------+
+| \`y\`      | \`births\`     | y-axis variable  |
++------------+----------------+------------------+
+| \`x\`      | \`date\`       | x-axis variable  |
++------------+----------------+------------------+
+| \`mydata\` | \`Births1978\` | name of data set |
++------------+----------------+------------------+
+
+### Your Turn
+
+Put each piece in its place in the template below and then run the code to create the plot.
+
+```{webr}
+#| exercise: gf-point
+
+goal(y ~ x, data = mydata)
+```
+
+:::: {.hint exercise="gf-point"}
+::: {.callout-note collapse="true"}
+
+## Hint
+
+If you get an "object not found" or "could not find function" error message, that indicates that you have not correctly filled in one of the four boxes from the template.
+
+Note: R is case sensitive, so watch your capitalization.
+:::
+::::
+
+:::: {.solution exercise="gf-point"}
+::: {.callout-tip collapse="true"}
+
+## Solution:
+
+``` r
+gf_point(births ~ date, data = Births1978)
+```
+:::
+::::
+
+For reference, here are the first three rows of `Births1978`.
+
+```{r}
+Births1978 |> 
+  head(3) |> 
+  select(births, date, day_of_year)
+```
+
+## Using formulas to describe plots
+
+### The tilde (wiggle)
+
+The most distinctive feature of `ggformula` plots is the use of formulas to describe the positional information of a plot. Formulas in R always involve the tilde character, which is easy to overlook. It looks like this:
+
+ 
+
+<center>
+
+<h2><strong> [ \~ ]{.boxed} </strong></h2>
+
+</center>
+
+ 
+
+Make sure you know where the tilde is located on your computer's keyboard! It is often near the upper left-hand corner on US keyboards.
+
+```{r echo = FALSE, fig.align = "center", out.width = "40%"}
+knitr::include_graphics("images/keyboard-tilde.png")
+```
+
+### Formula shapes
+
+Most `gf_` functions take a formula that describes the positional attributes of the plot. Using one of these functions with no arguments will show you the "shape" of the formula it requires.
+
+### Getting help on formula shapes
+
+Run this code to see the formula shape for `gf_point()`.
+
+```{webr}
+#| exercise: gf_shape
+gf_point()
+```
+
+You should see that `gf_point()`'s formula has the shape `y ~ x`, so the y-variable name goes before the tilde and the x-variable name goes after. (Think: "y depends on x". Another way to remember the order is `y ~ x`: the y-axis label appears farther left than the x-axis label.)
+
+### Order matters in formulas!
+
+Reverse the roles of the variables, changing `births ~ date` to `date ~ births`. How does the plot change?
+
+```{webr}
+#| exercise: gf_point-xy
+
+gf_point(births ~ date, data = Births1978)
+```
+
+## Style Note
+
+### Size Matters
+
+```{r results = 'asis'}
+opts <- sample(c("return/enter",
+                 "caps lock",
+                 "delete",
+                 "the arrow keys",
+                 answer = "the space bar"))
+
+cat("What is the largest key on your keyboard?",
+    longmcq(opts))
+
+```
+
+`r hide("Umm...so why did I ask you that?")`
+
+Maybe there is a reason that the space bar key is biggest -- you should use it **a lot!**.
+
+`r unhide()`
+
+### R, People, and Spaces
+
+R is not very picky about spaces.
+
+-   Any number of spaces is equivalent to a single space.
+-   Sometimes (but not always) spaces are optional.
+
+My advice is to use spaces liberally. Even if R doesn't care, it makes your code easier for people to read.
+
+-   Always put a space around things like `+`, `*`, `~` etc. (This is a place where R doesn't care whether you have a space or not, but I recommend you do.)
+
+-   Always put a space after each comma
+
+-   Never put a space between a function name and its parentheses (write `head(data)` not `head (data)`)
+
+-   Use spaces and line breaks to make your code easy to read.
+
+Mimic the examples you see in this section. And if you want a more comprehensive code style guide for R, check out [the tidyverse style guide](https://style.tidyverse.org/index.html){target="_blank"}.
+
+*Bonus points if you point out my own style inconsistencies to me so I can correct them!*
