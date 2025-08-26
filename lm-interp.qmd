@@ -1,0 +1,382 @@
+---
+live-html:
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - readr
+    - stringr
+    - ggplot2
+    - ggformula
+    - mosaic
+    - ggforce
+    - wordcloud
+    - RColorBrewer
+    - car
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Interpretation and Inference for Regression Models
+
+```{r}
+#| label: setup
+#| include: false
+
+library(webexercises)
+library(tidyverse)
+library(ggformula)
+library(wordcloud)
+library(RColorBrewer)
+library(car)
+library(mosaic)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+grateful <- read.csv('data/gratitude-experiment.csv') 
+
+grateful2 <- grateful |>
+  filter(group != 'events') |>
+  mutate(group = factor(group))
+
+bonobos <- read.csv('data/bonobo_faces.csv') |> na.omit()
+```
+
+```{webr}
+#| setup: true
+#| include: false
+#| exercise:
+#|   - bonobo-lm
+#|   - bonobo-ci-fun
+#|   - bonobo-ci-fun-2
+#|   - bonobo-test
+#|   - life-model-CI
+#|   - two-group-lm
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+grateful <- read.csv('data/gratitude-experiment.csv') 
+
+grateful2 <- grateful |>
+  filter(group != 'events') |>
+  mutate(group = factor(group))
+
+bonobos <- read.csv('data/bonobo_faces.csv') |> na.omit()
+```
+
+## Section Learning Outcomes
+
+Knowing how to plan and fit a model isn't the end of the process (at all). What's next? This section we've explored how to assess whether a model really is appropriate for a particular dataset, and thus reliable.
+
+**Remember that if a model doesn't pass assessment - if** *any* **of the conditions go unmet - then the model can't be trusted to provide reliable results at all.**
+
+But if a model *does* pass assessment, we can finally turn to model **interpretation** - what do the results mean, and how can we communicate the insights the model provides via words and visualizations?
+
+Also part of this topic is something commonly called *model selection.* That term is a bit confusing given the approach taught in our course, as we won't actually *select* certain variables to include/exclude from a model at this stage.
+
+Rather, we are deciding whether and in what way each candidate predictor relates to the response variable. So for us, "model selection" is all about interpreting and understanding the model results, including using inferential statistics.
+
+By the end of the section you will:
+
+1)  Create and interpret prediction plots for multiple linear regression models
+2)  Interpret confidence intervals for linear regression coefficients and in prediction plots
+3)  Articulate how different modeling goals (prediction vs inference) influence how an analyst engages in the modeling process
+4)  Interpret p-values or information criteria to do model selection for linear regression models
+
+## Text Reference
+
+Recommended reading for the materials covered in this section can be found in:
+
+-   [*Beyond Multiple Linear Regression* Chapter 1.6](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#multreg){target="_blank"}
+-   *Regression Modeling Strategies* Chapters 2.3, 4, and 5.1
+-   Course Notes [Chapter 1.8-1.11](https://stacyderuiter.github.io/regression/lm1.html#predictions-from-the-model){target="_blank"} and [Chapter 3](https://stacyderuiter.github.io/regression/IC-based-selection.html){target="_blank"}
+
+## Prediction Plots
+
+Once we have fitted a regression model and it passes assessment checks, how can we use it to draw conclusions?
+
+One of the most useful tools we can have is a *picture* of what the model tells us about the relationships between our response and predictor(s).
+
+**Note: in the video, it'll suggest you use the function `ggpredict()` (which still works) but it's been superseded - now the preferred function to use is `predict_response()`. It has the same inputs.**
+
+How can we get one?
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ao822zkZCj8?si=ozCVWFhDgUT44aZF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+
+</iframe>
+
+
+## Prediction vs Inference
+
+In this course we will focus on modeling for statistical inference, rather than for the purpose of making predictions for new scenarios based on our fitted model. Why? And why does the distinction matter? Before we dive into *how* to do inference, let's discuss.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YOE5UK0gxjE?si=LgPqpsAqcvoQ6EJx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+
+</iframe>
+
+## Inference, TL;DR
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8cHtbU42DAY?si=EyZYL1iBpzwcf2FN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+
+</iframe>
+
+### Ooh, Slow down...
+
+*Much* of the rest of this section fills in *a lot* of details that were skimmed over in the very brief overview in that video. Focus first on understanding and applying what was in that video - the rest is elaboration.
+
+## Inference
+
+<!-- *Text book reference: [IMS Chapter 8](https://openintro-ims.netlify.app/inference-reg.html#inference-reg)* -->
+
+Our goal: establish a method to generate confidence intervals and carry out tests for linear models, especially $\beta_0$ and $\beta_i$, the intercept and slope(s). In fact, we focus almost entirely on the slopes, but the exact same methods work for the intercept too (it's just that the slope is almost always of much more practical interest than the intercept).
+
+We want to be able to test:
+
+$$H_0: \beta_1 = 0$$
+
+$$H_A: \beta_1 \neq 0$$
+
+If the null hypothesis above is *true*, that means there is *no* linear association between the predictor and response variables -- informally, it means *the predictor is useless at predicting the response*.
+
+If we reject the null, that suggests there *is* a real association between the two variables (and the predictor is "worthwhile" statistically to help predict the response).
+
+Before we carry out any tests, let's establish an example model.
+
+### Example
+
+We will use the `bonobos` dataset as an example. You may recall the dataset from earlier examples. Briefly, the dataset is from a [2019 paper by J.S. Martin and colleagues on bonobo face measurements](https://royalsocietypublishing.org/doi/10.1098/rsbl.2019.0232). The authors worked with 117 bonobos in European zoos and recorded data including their `Sex`, `Age` in years, `weight`, and some measurements about their face:
+
+```{r, echo = FALSE, out.width = '350px'}
+knitr::include_graphics('images/bonobo-face-measures.jpg')
+```
+
+Finally, they also measured each bonobo's assertiveness score (`AssR`) and dominance score (`normDS`).
+
+The dataset is at <https://sldr.netlify.app/data/bonobo_faces.csv> and so you could read the dataset in to R by running:
+
+```{r}
+#| echo: true
+#| eval: false
+bonobos <- readr::read_csv('http://sldr.netlify.app/data/bonobo_faces.csv')
+```
+
+### Practice
+
+We might wonder whether size (as measured by `weight`) is a good predictor of the dominance score, `normDS`. Graphically:
+
+```{r, echo = TRUE, fig.width = 6, fig.height = 4}
+gf_point(normDS ~ weight, data = bonobos)
+```
+
+Fit the corresponding regression model in R and view its `summary()`. Note, the dataset `bonobos` is already read in for you here:
+
+```{webr}
+#| exercise: bonobo-lm
+
+```
+
+:::: {.hint exercise="bonobo-lm"}
+::: {.callout-note collapse="true"}
+## Hint
+
+Fill in the blanks with the right formula, dataset name, and fitted model object name!
+
+```{r, eval = FALSE}
+bonobo_lm <- lm(___ , data = ___)
+summary(___)
+```
+:::
+::::
+
+:::: {.solution exercise="bonobo-lm"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+bonobo_lm <- lm(normDS ~ weight, data = bonobos)
+summary(bonobo_lm)
+```
+:::
+::::
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: bonobo-lm-quiz
+
+bs <- summary(lm(normDS ~ weight, data = bonobos))
+bs$coefficients <- round(bs$coefficients, digits = 3)
+bs$sigma <- round(bs$sigma, digits = 3)
+
+opts1 <- sample(c(answer = paste0(bs$coefficients[1,1]),
+              paste0(bs$coefficients[1,2]),
+              paste0(bs$coefficients[2,1]),
+              paste0(bs$coefficients[2,2]),
+              paste0(bs$sigma)))
+
+cat("What is the intercept estimate for the model you just fitted?",
+    longmcq(opts1))
+
+opts2 <- sample(c(answer =  paste0(bs$coefficients[2,1]),
+                  paste0(bs$coefficients[1,1]),
+              paste0(bs$coefficients[1,2]),
+              paste0(bs$coefficients[2,2]),
+              paste0(bs$sigma)))
+
+cat("What is the slope for the model you just fitted?",
+    longmcq(opts2))
+
+opts3 <- sample(c(answer =  paste0(bs$sigma),
+                  paste0(bs$coefficients[2,2]),
+                  paste0(bs$coefficients[1,1]),
+                  paste0(bs$coefficients[1,2]),
+                  paste0(bs$coefficients[2,1])))
+
+cat("What is sigma, the standard deviation of the residuals, for the model you just fitted?",
+    longmcq(opts3))
+```
+:::
+
+### SE of Sampling Distributions
+
+<!-- *Text book reference: [IMS Ch. 8.1.3](https://openintro-ims.netlify.app/inference-reg.html#variability-of-the-statistic-26)* -->
+
+As you may have noticed, the `summary()` of an `lm()` (or `glmmTMB()`) regression model fit includes not only estimates of the parameters $\beta_0$ and $\beta_1$, but also the *standard errors of the corresponding sampling distributions*! (Hooray.) These measure the standard deviation we'd expect to see in our parameter estimates from sample to sample, if we were somehow able to collect data many many times. They can be used to calibrate our uncertainty in our estimates of the $\beta$s, and they are found in the coefficient table, labelled `"Std. Error"`.
+
+```{r echo = TRUE}
+normDS_model <- lm(normDS ~ weight, data = bonobos)
+summary(normDS_model)
+```
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: bonobo-lm-se-quiz
+
+opts1 <- sample(c(answer = paste0(bs$coefficients[2,2]),
+                  paste0(bs$sigma),
+                  paste0(bs$coefficients[1,1]),
+                  paste0(bs$coefficients[1,2]),
+                  paste0(bs$coefficients[2,1])
+                  ))
+
+cat("What is the SE for the slope, for the regression to predict normDS as a function of weight for our bonobo dataset?",
+    longmcq(opts1))
+
+```
+:::
+
+### CI for the slope
+
+<!-- *Text book reference: [IMS Chapter 8.1.3](https://openintro-ims.netlify.app/inference-reg.html#confidence-interval-for-a-coefficient)* -->
+
+Although we won't derive the reasons why in detail, the sampling distribution for the slope has **a t distribution** with $n - 2$ degrees of freedom (where $n$ is the number of rows in the dataset).
+
+So, after all that, we *could* find a CI for a regression slope according to:
+
+$$ \hat{\beta}_1 \pm t_*SE(\hat{\beta}_1)$$ Where $t_*$ is a critical value from a $t(n-2)$ distribution, and SE($\hat{\beta}_1$) is the standard error of the slope from the coefficient table in the model `summary()`.
+
+As an example, find a 95% CI for the slope of our `bonobo` regression model.
+
+We *can* do this somewhat manually:
+
+```{r}
+#| label: manual-ci
+#| echo: true
+
+
+bm <- lm(normDS ~ weight, data= bonobos)
+summary(bm)
+CI95 <- -0.14278 + c(-1,1) * 
+  qt(0.975, df = nrow(bonobos) - 2) * 0.06668
+CI95
+```
+
+Or... we will generally take advantage of the fact that there's a function for that:
+
+```{webr}
+#| exercise: bonobo-ci-fun
+# a shortcut:
+normDS_model <- lm(normDS ~ weight, data= bonobos)
+confint(normDS_model, "weight", level = 0.95)
+```
+
+**Notice the shortcut -- the R function `confint()` returns CIs (with a default confidence level of 95%).**
+
+We can also omit specifying which predictor(s) we want CIs for and `confint()` will return them all...
+
+```{webr}
+#| exercise: bonobo-ci-fun-2
+normDS_model <- lm(normDS ~ weight, data= bonobos)
+confint(normDS_model)
+```
+
+### Test for a slope
+
+<!-- *Text book reference: [IMS Chapter 8.1.3](https://openintro-ims.netlify.app/inference-reg.html#variability-of-the-statistic-26)* -->
+
+We can also test the null hypothesis $H_0: \beta_1 = \beta_{1\text{null}}$ (where $\beta_{1\text{null}}$ is some hypothetical slope value of interest) using the standardized test statistic
+
+$$ t = \frac{\hat{\beta}_1 - \beta_{1\text{null}}}{SE(\hat{\beta}_1)}$$
+
+The most common value for $\beta_{1\text{null}}$ is $0$, because if $\beta_1 = 0$ that means that there is *no* relationship between the predictor and response and the predictor is useless as a predictor. If we can reject that null hypothesis, we can conclude that the predictor *does* have some utility.
+
+To practice, you *could* carry out a two-sided test of $H_0: \beta_1 = 0$ for the `bonobo` regression as shown in the hints below (if you learned R in your intro stat course and remember your intro stat pretty well).
+
+```{webr}
+#| exercise: bonobo-test
+
+```
+
+:::: {.solution exercise="bonobo-test"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+normDS_model <- lm(normDS ~ weight, data= bonobos)
+summary(normDS_model)
+t_stat <- (-0.14278 - 0) / (0.06668)
+p_val <- 2 * pt(t_stat, df = nrow(bonobos) - 2, lower.tail = TRUE)
+p_val
+```
+:::
+::::
+
+**ORRRR...A shortcut (which you can take!): Notice that this p-value is already in the model summary (in the last column of the coefficient table, labelled "Pr(**$>\vert$t$\vert$)").
+
+```{r}
+#| label: bonobo-test-shortcut
+#| echo: true
+#shortcut: just use model summary
+normDS_model <- lm(normDS ~ weight, data= bonobos)
+summary(normDS_model)
+```
+
+What does it all mean? The p-value of this test measures the strength of evidence in our data *against* the null hypothesis of no association. Smaller p-values can be considered stronger evidence (and ones bigger than ~0.05-0.1 give weak to no evidence against the null).
+
+Here, the p-values is really, really big (about 0.6), so we have no evidence against the null hypothesis of no association between a bonobo's weight and normDS score.
+
+*But that doesn't mean we can't conclude anything!*
+
+Concluding "we have no evidence, based on this data, of any association between weight and dominance score" *is* an answer to the question of whether they are associated. The answer just seems to be...*no.*
+
+## What's next?
+
+Well, we have explored some ways of using linear regression model results to make inferences about whether or not a quantitative predictor is associated with a response variable. The ones we've seen have, hopefully, helped you to understand the models a bit better, too!
+
+*But we don't have enough tools in our tool-box yet.*
+
+Consider, for example: what if you have a categorical predictor with multiple possible values? We don't yet have a tool that lets us address whether such a predictor is associated with the response, nor to compare multiple candidate models.
+
+Continue forward to learn approaches that can take us further!
+

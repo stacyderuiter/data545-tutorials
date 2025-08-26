@@ -1,0 +1,77 @@
+# Study Design & Model Planning
+
+```{r}
+#| label: setup
+#| include: false
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+```
+
+## Preface: What's a Model?
+
+We will spend most of this course learning to fit different kinds of
+*regression models*. What are they?
+
+We will learn as we go. But as a starting point...
+
+-   In a regression model, we have one main **response** or **outcome**
+    variable of interest
+-   We want to assess whether our response variable is or isn't
+    associated with (some of) a suite of possible **predictor**
+    variables (also sometimes known as *covariates* but we'll avoid the
+    word "covariates" because it sometimes means slightly different
+    things in different disciplines).
+
+Essentially, we are looking to quantify relationships between our
+response and predictor(s) -- accompanied by appropriate measures of the
+uncertainty of our estimates.
+
+## Section Learning Outcomes
+
+This section, we will learn strategies for planning a regression model -
+how many variables, and which ones, should be included as predictors?
+How does an analyst decide? What principles underlie these decisions?
+
+By the end of the section you will:
+
+1)  Define a causal diagram, and the variable types that can be depicted
+    in one
+2)  Use a causal diagram to determine which variables to include as
+    predictors in a regression model
+3)  Apply the n/15 rule-of-thumb in model planning, to determine how
+    many coefficients can be reliably estimated with a given dataset
+4)  Combine a causal diagram, the n/15 rule, and a modeling goal to
+    articulate a well-reasoned plan for a multiple linear regression
+    model
+
+Along the way, we will also review some introductory stat material on
+study design and types of experiments, to make sure we are all have the
+same vocabulary in place. You won't be directly assessed on this
+material and so it is marked as optional.
+
+```{r, echo = FALSE, out.width='75%'}
+knitr::include_graphics('https://imgs.xkcd.com/comics/correlation.png')
+```
+
+*Comic from [xkcd](https://xkcd.com/552/)*
+
+## Text Reference
+
+Recommended reading for the materials covered in this tutorial can be
+found in:
+
+-   [*Beyond Multiple Linear Regression* Ch.
+    1.4-1.6](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#review-of-multiple-linear-regression){target="_blank"}
+-   *Ecological Models & Data in R* Ch. 9
+-   [Course Notes Chapter
+    1](https://stacyderuiter.github.io/regression/lm1.html){target="_blank"}
+-   *Statistical Modeling: A Fresh Approach* [Chapter
+    18](https://statistical-modeling.netlify.app/18-causation.html){target="_blank"}
+-   See also: [A biologist's guide to causal
+    inference](https://royalsocietypublishing.org/doi/10.1098/rspb.2020.2815)
+
+It's suggested that you read these chapters *after* reviewing this section,
+with particular focus on the topics you found most challenging.

@@ -1,0 +1,574 @@
+---
+format: live-html
+webr:
+  packages:
+    - tidyverse
+    - mosaic
+    - faraway
+    - plotly
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Maximum Likelihood Estimation
+
+```{r, setup, include=FALSE}
+library(webexercises)
+library(tidyverse)
+library(mosaic)
+library(faraway)
+library(plotly)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+```
+
+```{webr}
+#| setup: true
+#| exercises:
+#|   - cheesey-plots
+#|   - cheese-model
+#|   - mle-grid
+#|   - fitted-fun
+#|   - mle-grid-fitted
+#|   - mle-grid-resid
+#|   - mle-grid-sig
+#|   - mle-grid-ll
+#|   - mle-grid-plot
+#|   - mle-grid-plot-colored
+#|   - mle-grid-plot-interact
+#|   - mle-grid-sort
+#|   - lm-check
+#|   
+set.seed(9)
+harp_seals <- data.frame(ice_cover = runif(18, min = 10, max = 80)) |>
+  mutate(strandings = 75.22 - 0.88*ice_cover + rnorm(18, 0, 16)) |>
+  mutate(strandings = ifelse(strandings < 0, -strandings, strandings))
+
+# get_fitted <- function(slope, intercept, data){
+#   fitted <- intercept + slope * pull(data, H2S)
+# }
+# 
+# get_fitted <- Vectorize(get_fitted, c('slope', 'intercept'), SIMPLIFY = FALSE)
+
+get_resids <- function(slope, intercept, data){
+  fitted <- intercept + slope * pull(data, H2S)
+  resids <- pull(data, taste) - fitted
+}
+
+get_resids <- Vectorize(get_resids, c('slope', 'intercept'), SIMPLIFY = FALSE)
+
+get_loglik <- function(resids, sigma){
+  LL <- sum(dnorm(resids, mean = 0, sd = sigma, log = TRUE))
+}
+
+get_loglik <- Vectorize(get_loglik, c('resids', 'sigma'), SIMPLIFY = TRUE)
+
+data("cheddar", package = "faraway")
+```
+
+## Module Learning Outcomes
+
+So far, we have gotten quite a bit of practice with the practicalities of the regression modeling process. We have spent less time considering how our statistical software is actually doing the model fitting for us, or examining the mathematics used to do that fitting. 
+
+Now is our chance to do both of those things! In addition to deepening our understanding of multiple linear regression, this week's material will prepare us to understand and fit other types of models in coming modules.
+
+By the end of the module you will:
+
+1) Define "Likelihood"
+2) Understand and explain how maximum likelihood estimation is used to fit regression models
+3) Recognize several common PDFs and PMFs beyond the Normal, stating their support, parameters, and possible shapes
+
+## Text Reference
+Recommended reading for the materials covered in this tutorial can be found in:
+
+- *Beyond Multiple Linear Regression* [Chapter 2](https://bookdown.org/roback/bookdown-BeyondMLR/ch-beyondmost.html){target="_blank"} and [Chapter 3](https://bookdown.org/roback/bookdown-BeyondMLR/ch-distthry.html){target="_blank"}
+- Course Notes [Chapter 4](https://stacyderuiter.github.io/regression/likelihood.html){target="_blank"} and [Chapter 5](https://stacyderuiter.github.io/regression/pdf-pmf.html){target="_blank"}
+- *Ecological Models & Data in R* Chapter 4, Chapter 6
+
+It's suggested that you consider consulting these chapters *after* doing this tutorial, with particular focus on any topics you found most challenging.
+
+## Likelihood to Compare
+
+What's "likelihood," and how can we use it to compare models? Let's find out...with seals.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Nq_4rdRXuFs?si=ZhZMfqgaSfY10fFJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+As you move through the video, you may want to visit
+
+- [An online normal distribution calculator](https://www.danielsoper.com/statcalc/calculator.aspx?id=54)
+- [Our class spreadsheet with likelihoods](https://bit.ly/harp-seal-likelihood)
+
+## Recap
+
+So far, we have seen that the **likelihood** of a dataset given a particular model...
+
+- Can be used to measure model-data match
+- (...and then as ingredient to AIC/BIC)
+- Can be used to *fit* one model: which parameter estimates are "best"?
+
+## Cheese Data
+
+Next, this tutorial will guide you through an exercise designed to deepen your understanding of likelihood and maximum-likelihood estimation of linear regression models. 
+
+We will use a small dataset to try to answer: **What makes cheese tasty?**  ...while learning about **Maximum Likelihood Estimation**.
+
+The dataset, called `cheddar` (and available in package `faraway`) has data on expert cheese tastiness ratings, as well as several chemical properties of each cheese. 
+
+(Unfortunately, we don't have a lot of detail about the units of measure or method of determining these properties -- it is obvious that Dr. Faraway, who provided the data, is a statistician and not a chemist.)
+
+To use this dataset, all you have to do is load the package `faraway` with `library()` and then you can start using the `cheddar` dataset immediately. 
+
+```{r}
+library(faraway)
+glimpse(cheddar)
+```
+
+Before you continue,  make 1-2 quick exploratory data plots to see whether you note any trends in `taste` depending on the `H2S`, `Acetic` acid, or `Lactic` acid content of the cheeses in the dataset.
+
+```{webr}
+#| exercise: cheesey-plots
+
+```
+
+## Cheese Model
+
+There are just 30 data points, so we'd be best off considering a model with 1-2 predictors (at most!) and not all 3 that are present in the dataset. 
+
+For this exercise, let's do just one predictor; we will choose *one*: `H2S`. 
+(This is "night science" -- fun and exploration -- so we won't worry about the fact that that choice may have been based on the data plots you just made!)
+
+Adjust the code below to fit a one-predictor linear regression model with **our chosen predictor**, and view its `summary()`.
+
+```{webr}
+#| exercise: cheese-model
+cheese_model <- lm(taste ~ predictor, data = cheddar)
+```
+
+
+## MLE
+Earlier we used likelihood to compare two models fitted to the seal data (one with the `ice_cover` predictor, and one without).  
+
+That's part of  how AIC and BIC work. 
+
+But we can use likelihood another way, too: to "fit" a single model to data, *figuring out which exact slope and intercept values are BEST for a given dataset and model.* 
+
+How can we use **likelihood** to find these "best" slope and intercept parameter estimates, *ourselves*?  
+
+### Caveats
+What you'll do next isn't exactly what R does to fit an `lm()`. For the linear regression case, smart folks have used calculus and linear algebra to derive analytical solutions for the parameter estimates $\hat{\beta}$ of a multiple linear regression model, in terms of the dataset - that's why `lm()` can return results super fast. 
+
+And in cases where R does need to maximize a likelihood to fit a model, it uses smarter methods than what we are about to do! We will just try a huge range of reasonable possibilities for slope and intercept, getting the likelihood of the data for *every* slope/intercept guess, and finally choosing the best among them. What are are about to do (it's called a grid search) is a great illustration of the *idea* of maximum-likelihood estimation, but it is **not** the fastest algorithm to carry it out. (Stay tuned for an optimization course to learn smarter and more efficient algorithms.)
+
+**You don't have to be able to replicate the R code in the following sections (up through the interactive plot). But do your best to UNDERSTAND what each code chunk is doing. I suggest adding making your own notes file with additional explanation or code comments as needed.**
+
+## Guess the parameters
+
+Based on what you have seen in the scatter plots, you can probably give reasonable upper and lower boundaries on the intercept and slope for your regression line.
+
+**Don't** use the estimates from the `lm()` summary to give unreasonably precise guesses - the point here is to give a wider range of somewhat-reasonable slope values that you can then "search" for the best parameter values.
+
+In the code below, do you think a range of reasonable intercepts and slopes is covered? The function `seq()` takes inputs `from` (the minimum value to try), `to` (the maximum), and the amount to increment `by`. Due to the way the tutorial interface works, you can't really change the values here, but if you run all the code on your own in your own Quarto document, you can try other options if you wish!
+
+```{webr}
+#| exercise: mle-grid
+#| envir: mle-demo
+MLE_grid <- expand_grid(intercept = seq(from = -15, by = 0.1, to = 10),
+                        slope = seq(from = 3, by = 0.1, to = 7))
+glimpse(MLE_grid)
+```
+
+Each row of `MLE_grid` give one set of guesses of a possible slope and intercept for our regression model.  
+
+Now, we want to compute the **likelihood of the dataset given each of those sets of parameters**. We can compare the likelihoods to see which estimates are best!
+
+## Compute fitted values
+
+How will we compute the likelihood of the dataset, given a particular slope and intercept guess? Well, first we need to get the model *residuals* (since we compare those to a normal distribution in order to get the likelihood).
+
+And to get the residuals, we need to subtract the model-predicted values $\hat{y}$ from the observed values of the response $y$.
+
+We already have the response variable values $y$, in the dataset.  But we need the predicted values $\hat{y}$!  We have to compute them by hand, since we are not using `lm()` -- we can't use `predict()` without the fitted model object that comes from `lm()`!
+
+But no problem, we can do this.
+
+Our model is:
+
+$$y = \beta_0 + \beta_1x + \epsilon$$
+
+And according to this model, the predicted value of $y$ (on average) is $\beta_0 + \beta_1x$.
+
+Well, $x$ is the predictor -- we have data on that. We also have candidate values of $\beta_0$ (the intercepts) and $\beta_1$ (the slopes).  
+
+We will make our own function to compute fitted values, given a dataset and candidate slope and intercept. Change this to make sure it uses "your" predictor! Running this chunk will create a FUNCTION you can use later -- so there will be no output yet.
+
+```{webr}
+#| envir: mle-demo
+#| exercise: fitted-fun
+
+get_fitted <- function(slope, intercept, data){
+  # make sure you are using the correct predictor variable name
+  fitted <- intercept + slope * pull(data, H2S)
+}
+
+get_fitted <- Vectorize(get_fitted, c('slope', 'intercept'), SIMPLIFY = FALSE)
+```
+
+Now we can add a column to our `MLE_grid` with the fitted values for slope/intercept guess. 
+
+This will take a while to run. 
+
+When it's done, look what has happened: each *row* of the dataset (corresponding to one guessed slope and intercept) contains a *list* of all 30 fitted values! (Cool.)
+
+```{webr}
+#| exercise: mle-grid-fitted
+#| envir: mle-demo
+MLE_grid <- MLE_grid |>
+  mutate(fitted = get_fitted(slope, intercept, data = cheddar))
+glimpse(MLE_grid)
+```
+
+## Compute the Residuals
+
+OK. Shoot. We didn't actually need the fitted values themselves: we need the *residuals*. We can compute them in a similar way, though.  We just need to subtract the fitted values from the observed response variable values!
+
+Here is some code we can use to *create a function* to make this calculation for us:
+
+```{r}
+get_resids <- function(slope, intercept, data){
+  fitted <- intercept + slope * pull(data, H2S)
+  resids <- pull(data, taste) - fitted
+}
+
+get_resids <- Vectorize(get_resids, c('slope', 'intercept'), SIMPLIFY = FALSE)
+```
+
+Now we can add a column to our `MLE_grid` with the *residuals* for each row (change the code below to use the predictor variable for *your* model). This will take a while to run. When it's done, look what has happened: each *row* of the dataset contains a *list* of 30 residuals! (Still totally cool.)
+
+```{webr}
+#| exercise: mle-grid-resid
+#| envir: mle-demo
+
+MLE_grid <- MLE_grid |>
+  mutate(resids = get_resids(slope, intercept, data = cheddar))
+glimpse(MLE_grid)
+```
+
+<!-- NEED TO SEE IF THIS "CHAIN OF SETUPS" works or not. If not, will have to specify which predictor to use -->
+
+### Estimate the residual standard error
+
+To be able to get the **likelihood** from the **residuals**, we need to first estimate the residual standard error $\sigma$. The code below takes each list of 30 residuals and computes its standard deviation (`sd`).
+
+```{webr}
+#| exercise: mle-grid-sig
+#| envir: mle-demo
+MLE_grid <- MLE_grid |>
+  mutate(sigma = sapply(resids, sd))
+glimpse(MLE_grid)
+```
+
+### Compute the actual likelihood
+
+Finally, we are ready to compute the **natural log of the likelihood of the dataset, given each proposed model (each "proposed model" is one set of candidate $\beta_0$, $\beta_1$, and $\sigma$).**
+
+For each row, we need to compute the **natural logarithm of the product of the likelihoods of all the residuals, in a normal distribution with mean 0 and sd $\sigma$**. We will do the mathematical equivalent: find the **sum of the natural logarithms of the normal likelihoods of each residual value**.
+
+Another explanation (add your own additional detail if needed):
+
+- For each single residual, we find its likelihood by finding the density of a normal (mean = 0, standard deviation = $\sigma$) distribution for x = "our residual"
+- We take the natural log of each residual's likelihood (working on a log scale reduces calculation problems for the computer)
+- For each row of `MLE_grid` -- that is, for each proposed slope/intercept combination -- we add up all the residual log-likelihoods to get one joint log-likelihood for the whole dataset
+
+```{r}
+get_loglik <- function(resids, sigma){
+  LL <- sum(dnorm(resids, mean = 0, sd = sigma, log = TRUE))
+}
+
+get_loglik <- Vectorize(get_loglik, c('resids', 'sigma'), SIMPLIFY = TRUE)
+```
+
+Be patient, this will take a minute:
+
+```{webr}
+#| exercise: mle-grid-ll
+#| envir: mle-demo
+MLE_grid <- MLE_grid |>
+  mutate(log_likelihood = get_loglik(resids, sigma))
+glimpse(MLE_grid)
+```
+
+## Best Model?
+
+The BEST model (according to maximum likelihood estimation) is the one with the BIGGEST log-likelihood.  Which one is that?
+
+Yes, we could just sort the data table by likelihood values. We could also...
+
+Use a plot to figure it out!
+
+```{webr}
+#| exercise: mle-grid-plot
+#| envir: mle-demo
+gf_point(log_likelihood ~ slope, data = MLE_grid)
+```
+
+Why all the dots? Well, the intercept helps determine the likelihood, too...color by the models candidate `intercept` value to better see what I mean:
+
+
+```{webr}
+#| exercise: mle-grid-plot-colored
+#| envir: mle-demo
+
+```
+
+:::: {.solution exercise="mle-grid-plot-colored"}
+::: {.callout-note collapse="true"}
+
+#### Solution:
+
+``` r
+gf_point(log_likelihood ~ slope, data = MLE_grid,
+         color = ~intercept)
+```
+
+:::
+::::
+
+OK, *kind of* helpful -- we can start to see where the highest values are...
+
+Making it interactive might help!
+
+```{webr}
+#| exercise: mle-grid-plot-interact
+#| envir: mle-demo
+#| fig-width: 8
+#| fig-height: 6
+
+```
+
+:::: {.hint exercise="mle-grid-plot-interact"}
+::: {.callout-note collapse="true"}
+
+#### Hint:
+
+``` r
+library(plotly)
+gf_point(...) |>
+  ggplotly()
+```
+
+:::
+::::
+
+:::: {.hint exercise="mle-grid-plot-interact"}
+::: {.callout-note collapse="true"}
+
+#### Solution:
+
+``` r
+library(plotly)
+gf_point(log_likelihood ~ slope, data = MLE_grid,
+         color = ~intercept) |>
+  ggplotly()
+```
+
+:::
+::::
+
+In the interactive plot, we can mouse over to find the exact slopes and intercepts that seem to have the highest likelihood.
+
+To find the absolute top ones, we can also `arrange()` the dataset in order of `desc`ending likelihood and check out the top entries:
+
+```{webr}
+#| exercise: mle-grid-sort
+#| envir: mle-demo
+MLE_grid |>
+  arrange(desc(log_likelihood)) |>
+  head()
+```
+
+
+## Comparison
+
+How do the slope and intercept that you just found compare with the one from `summary()` and `lm()`?
+
+(If we did everything right, they should be quite close! We only estimated to one decimal place, though.)
+
+```{webr}
+#| exercise: lm-check
+#| envir: mle-demo
+
+```
+
+:::: {.hint exercise="lm-check"}
+::: {.callout-note collapse="true"}
+
+#### Solution:
+
+``` r
+cheese_model <- lm(taste ~ H2S, data = cheddar)
+summary(cheese_model)
+```
+
+:::
+::::
+
+## MLE, the Mathy Recap
+This section is more or less option, but provides a bit more mathematical explanation and presentation for those interested.
+
+### The Likelihood Function
+
+Well, if we want to find the $\beta$s that maximize the likelihood, we're going to need a likelihood function!
+
+They often involve PDFs, and the only one of *those* that is involved in the linear regression equation is the normal distribution that we assume the residuals to follow.
+
+We said that
+
+$$ y = \beta_0 + \beta_1x + \epsilon$$
+
+with
+
+$$\epsilon \sim N(0,\sigma)$$
+Remember, the Normal probability density function is
+
+$$f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{\frac{- (x - \mu)^2}{2 \sigma^2}}$$
+In our case, the random variable $x$ being modeled is the residuals, whose mean $\mu$ is 0.
+
+And so the $i$th residual is
+
+$$e_i = y_i - \beta_0 - \beta_1x_i$$
+
+The *likelihood* of the $i$th residual $e_i$ is the normal density from the normal PDF with mean 0, and standard deviation $\sigma$.  So it turns out that in order to estimate the $\beta$s this way, we will also have to estimate $\sigma$, the residual standard error.
+
+The joint likelihood of the whole dataset is just the product of the likelihoods of all the individual residuals (i.e., all the individual datapoints); so we have
+
+$$L(\beta_0, \beta_1, \sigma; \mathbf{x}, \mathbf{y}) = \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2\pi}} e^{\frac{- (e_i - 0)^2}{2 \sigma^2}} = \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2\pi}} e^{\frac{- (y_i - \beta_0 - \beta_1x_i)^2}{2 \sigma^2}}$$
+
+Your turn: take the natural logarithm of the expression above to get the log-likelihood. We'll compare notes in the next section.
+
+### Log-Likelihood Function
+
+The log-likelihood function for simple linear regression (with just one predictor) is:
+
+$$ \ell(\beta_0, \beta_1, \sigma; \mathbf{x}, \mathbf{y}) = \sum_{i = 1}^{n} -log(\sigma) - \frac{1}{2} log(2\pi) - \frac{(y_i - \beta_0 - \beta_1x_i)^2}{2\sigma^2}$$
+
+It is left as an exercise for you - if you are interested - to *maximize* the above expression using methods from calculus (find partial derivatives with respect to $beta_0$ and $\beta_1$, set equal to 0, and solve for the parameters).  Or, it can also be done using linear algebra. You should find that the estimates are *identical* to the ones you would get using least squares estimation, and/or using `lm()`.
+
+#### An estimate for the residual standard error
+You can also use calculus to find an estimate of $\sigma$ using the log-likelihood. First, try differentiating the full log-likelihood with respect to $\sigma$ -- again we'll compare notes in the next section.
+
+#### What's your derivative?
+
+$$ \frac{\partial{\ell}}{\partial{\sigma}} = \frac{-n}{\sigma} + \frac{1}{\sigma^3} \sum_{i = 1}^{n} (y_i - \beta_0 - \beta_1x_i)^2  $$
+
+$$ = \frac{-1}{\sigma^3} \bigg{(} n\sigma^2 - \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1x_i)^2 \bigg{)} = \frac{-1}{\sigma^3} \bigg{(} n\sigma^2 - \sum_{i=1}^{n} e_i^2\bigg{)}$$
+
+Setting this equal to 0, we immediately know that the $\frac{-1}{\sigma^3}$ can not be 0, giving
+
+$$0 = n\sigma^2 - \sum_{i=1}^{n} e_i^2$$
+
+$$ \sigma^2 = \frac{\sum e_i^2}{n}$$
+
+Which seems very sensible -- the mean of the sum of squared residuals estimates the variance.
+
+Unfortunately (as so often happens) this estimator is biased; an unbiased version that is more often used is:
+
+$$ \hat{\sigma}^2 = \frac{\sum e_i^2}{(n - 2)}$$
+
+## Probability Distributions 
+
+This may be a review, or it may be new to you.
+
+So far, we've seen the Normal distribution in our course (and you likely saw a lot of that in your intro stat course, as well). 
+
+There are [A LOT MORE](http://www.math.wm.edu/~leemis/chart/UDR/UDR.html) options out there! Really, click the link to check out an overwhelming schematic.
+
+Each probability distribution is a *function* that matches possible *values* of a variable (usually depicted on the x-axis) with a measure of *how often they occur* (usually shown on the y-axis).
+
+### Discrete & Continuous Distributions
+We can classify probability distributions into the categories of **discrete** and **continuous** distributions.
+
+- Discrete distributions model variable that can take on a discrete set of values (for example, the number of successes in *n* trials, or the number of birds spotted in the forest). For these, the function values are a set of probabilities that sum to 1.
+- Continuous distributions model variables that can take on any numeric value within a specified range (for example, proportion between 0 and 1, or height of people in cm). For these, the function values are in "density" or "likelihood" units -- they are scaled such that the total area under the functions' curve is 1.
+
+### Support
+The **support** of a distribution describes the range of values a variable can have (it might be 0-1, 0-$\infty$, $-\infty$ - $\infty$, or (for the Uniform!) values between some specified minimum and maximum).
+
+Knowing all this, you can choose a distribution that is a good fit for a variable by matching its type and support.
+
+## Many PDFs
+Here are some flow charts that try to illustrate the variety of probability distributions that are out there, organized by their *shape* (symmetry/skew, number of modes...) and *support*:
+
+
+```{r, echo = FALSE, out.width = '90%', fig.cap="Figure 6A.15 from Damodaran's 'Probabilistic approaches to risk', republished in Fong Chun Chan's Blog"}
+knitr::include_graphics('https://tinyheero.github.io/assets/prob-distr/overview-prob-distr.png')
+```
+
+(You can also [view the image online](https://tinyheero.github.io/assets/prob-distr/overview-prob-distr.png).)
+
+
+```{r, echo = FALSE, out.width = '90%', fig.cap="From Ghanegolmohammadi et al. 2022, BMC Biology"}
+knitr::include_graphics('https://media.springernature.com/full/springer-static/image/art%3A10.1186%2Fs12915-022-01283-6/MediaObjects/12915_2022_1283_Fig3_HTML.png')
+```
+
+(You can also [view the image online](https://media.springernature.com/full/springer-static/image/art%3A10.1186%2Fs12915-022-01283-6/MediaObjects/12915_2022_1283_Fig3_HTML.png).)
+
+## Distributions in R
+
+In R, each distribution has 2 functions we may use often. (Fill in the `___` with the (often shortened) name of the distribution.)  
+
+- `d____()` returns the value(s) of the function corresponding to given variable value(s). The result are in *Likelihood* units: either probability for discrete distributions, or density for continuous ones. The first input is `x`, the variable value(s). Examples: `dnorm()` for Normal, `dpois()` for Poisson, `dbinom()` for Binomial, `dgamma()` for Gamma, `dbeta()` for Beta...
+- `r____()` returns random sample(s) drawn from the specified distribution. The first input is `n`, the number of samples to draw.
+
+To get information about parameter/input names for a specific function, ask R for help...for example,
+
+```{r}
+?dunif
+```
+
+## Yikes
+
+Don't get overwhelmed. We know there are lots of distributions out there. But we will ease into it.
+
+## Normal (Gaussian)
+The main distribution we'll really use for the moment is the **Normal or Gaussian distribution**, which you should have seen before.  It has parameters $\mu$, the `mean` or center; and $\sigma$, the `sd` (standard deviation) or spread. 
+
+**Why the Normal??** The very short answer is that is comes up, and proves useful, often...both mathematically and with real-world data.
+
+#### Question: Drawing on previous knowledge (and maybe the charts above), is the Normal distribution discrete or continuous? What is its support?
+
+#### Challenge: Try to explain in words what the R code, and output, below mean.
+
+```{webr}
+#| exercise: pdf-practice
+dnorm(0, mean = 0, sd = 0.1)
+dnorm(0, mean = 2, sd = 10)
+rnorm(7, mean = 44, sd = 10)
+```
+
+*Hint: remember you can also use `gf_dist('dist_name', parameter_name = value, parameter2_name = value)` to draw a probability distribution if it helps you visualize!*
+
+```{webr}
+#| exercise: gf-dist
+gf_dist('norm', mean = 0, sd = 0.1)
+```
+
+## Not Normal
+
+In upcoming modules, we will start to learn about additional kinds of regression models that are appropriate when...
+
+- The response variable is **count data**
+- The response variable is **binary data**
+- The response variable is bounded between 0 and 1
+- (maybe if we're lucky) The response variable is continuous and quantitative, but only takes on *non-negative* values and often has a right-skewed distribution
+
+For each of these, go back to the flow charts we just saw. Which probability distribution(s) will come in handy in each case? We'll return to them soon!
+
+For now, take the [PDF/PMF Treasure Hunt sheet](https://stacyderuiter.github.io/data545/pdf-pmf-treasure-hunt.pdf), consult the graphics from before with various probability distributions, and see if you can complete all the treasure hunt...this will be very useful later in the course as we build models for different response variable types!

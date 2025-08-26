@@ -1,5 +1,7 @@
 ---
 format: live-html
+resources:
+  - data
 webr:
   packages:
     - dplyr

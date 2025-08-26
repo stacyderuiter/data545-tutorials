@@ -1,0 +1,668 @@
+---
+format: live-html
+resources:
+  - data
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - stringr
+    - ggplot2
+    - ggformula
+    - ggeffects
+    - mosaic
+    - car
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Interactions in Regression Models
+
+```{r setup, include=FALSE}
+library(webexercises)
+library(tidyverse)
+library(mosaic)
+library(ggeffects)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+teach_beauty <- read.csv('data/ProfEvaltnsBeautyPublic.csv') |>
+  rename(beauty = btystdave,
+         eval = courseevaluation) |>
+  mutate(race_eth = ifelse(minority == 0, 'White/Caucasian', 'Other'),
+         native_language = ifelse(nonenglish == 1, 'English', 'Other Language'),
+         formal = ifelse(formal == 1, 'Formal Dress', 'Informal Dress'),
+         female = ifelse(female == 1, 'female', 'not female')) |>
+  dplyr::select(beauty, eval, race_eth, native_language, age, students, formal, profnumber, female)
+```
+
+```{webr}
+#| setup: true
+#| exercise:
+#|   - SET-graph
+#|   - SET-graph-again
+#|   - SET-graph-2
+#|   - beauty-model
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+teach_beauty <- read.csv('data/ProfEvaltnsBeautyPublic.csv') |>
+  rename(beauty = btystdave,
+         eval = courseevaluation) |>
+  mutate(race_eth = ifelse(minority == 0, 'White/Caucasian', 'Other'),
+         native_language = ifelse(nonenglish == 1, 'English', 'Other Language'),
+         formal = ifelse(formal == 1, 'Formal Dress', 'Informal Dress'),
+         female = ifelse(female == 1, 'female', 'not female')) |>
+  dplyr::select(beauty, eval, race_eth, native_language, age, students, formal, profnumber, female)
+```
+
+## Module Learning Outcomes
+
+We've already seen how to include multiple predictors - both categorical and quantitative - in a regression model. We know how to deal with confounders, mediators, and even colliders in terms of model planning. But what about moderators? Two variables have an interaction - or, one moderates the effect of the other - when the size or direction of the first predictor variable's effect on the response changes depending on the value of the second predictor. Interactions are a bit tricky to understand and interpret, so we'll spend some time with them (which will also allow us time to hone our model planning, fitting, assessment, and interpretation skills).
+
+By the end of the module you will:
+
+1) Define interactions in the context of a regression model
+2) Gain facility at using causal diagrams to identify variables as mediators, moderators, confounders, colliders
+3) Practice choosing which to include in a regression model
+4) Use appropriate notation to fit models with interactions
+5) Interpret output of a fitted model with interactions, making appropriate use of prediction plots and other model selection tools
+6) Practice and gain confidence at the regression modeling process, including planning, fitting, assessment, and interpretation/selection phases
+
+*This module is a little bit lighter in content load than the last few...in part to leave room for the complicated concept of interaction to sink in, and in part to give you some time to catch your breath and catch up if needed!*
+
+## Text Reference
+Recommended reading for the materials covered in this tutorial can be found in:
+
+- [*Beyond Multiple Linear Regression* Chapter 1.6.6](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#multiple-linear-regression-with-an-interaction-term){target="_blank"}
+- Course Notes [Chapter 8](https://stacyderuiter.github.io/regression/interactions.html){target="_blank"}
+- *Regression Modeling Strategies* Chapters 2.3.2, 2.7.2
+
+It's suggested that you consider consulting these chapters *after* doing this tutorial, with particular focus on any topics you found most challenging.
+
+## Interactions Defined
+
+Two predictors **interact** when you need to know values of *both* in order to make an accurate prediction of the response variable value.
+
+Predictors can interact in *any* type of regression model (so this chapter could really be placed almost anywhere in our course).
+
+## Interactions: what are they?
+
+Ok, so we *just* saw a definition of interactions. We also learned before about *moderation*, which is another term for interaction. But it's a tricky concept to fully understand, so let's see some more explanations.
+
+Here's a pretty energetically-delivered video (not specifically made for *our* course this time, but useful) that explains what interactions are, with some helpful examples.
+
+**Challenge:** Watch for a graph in the video where the *data* shown doesn't match the verbal interpretation! (I think this is probably because of a labeling mistake or a data-simulation mistake rather than dishonesty or anything...)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3CCkeFShB3U?si=YunTWwImluB0wxH6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+### Another (optional) interaction video
+
+Still scratching your head and wondering exactly what an interaction is?
+
+It's a challenging concept for almost everyone, so I want you to hear definitions straight from me, plus have access to our texts, plus hear definitions from several other people...below is another video option. I think it's a bit more boring than the previous one, but if you want another brief review, it's worth the 5-minute watch...
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Xn3B_YI1JQw?si=BZq0peRxCCuPv_Sa" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+## SET Examples
+
+We need to see some more examples of this. To do so, let's consider a dataset called `teach_beauty`, on course evaluation scores (`eval`) for a lot of university professors. You can find a copy of the dataset at: <https://sldr.netlify.app/data/ProfEvaltnsBeautyPublic.csv>.
+
+
+These data are included in a textbook by Andrew Gelman of Columbia University, and they might be real course evaluations from Columbia (or they might be simulated; we're not sure).
+
+Some additional information is given about each faculty member, including
+
+- whether their native language is English or something else: `native_language`
+- a ranking of their `beauty` (somehow, we don't know how) 
+- their `age`
+- whether they tended to dress in a `formal` way
+- whether or not they are `female`
+- whether or not they are White/Caucasian (`race_eth`)
+
+A bunch of research has suggested that scores from student evaluations of teaching (SETs) don't really measure teaching skill well (for example, [Spooren et al. 2013](https://doi.org/10.3102/0034654313496870), [Hornstein 2017](https://www.tandfonline.com/doi/full/10.1080/2331186X.2017.1304016), and [Kreitzer & Sweet-Cushman 2022](https://link.springer.com/article/10.1007/s10805-021-09400-w)). So, it could be interesting to consider what they *do* actually measure...and a number of studies have found discrepancies in which faculty who are younger, female, and more tend to get lower scores. 
+
+Here, we will not dive into a full model plan and causal diagram, but just play with and explore a few example model to help deepen our understanding of how interactions work.
+
+Since we're doing "night science" and not focused on later inference, we can take a peek at the data. Feel free to make some additional graphs if you like!
+
+```{webr}
+#| exercise: SET-graph
+gf_point(eval ~ beauty | female, 
+         color = ~female, 
+         shape = ~female, 
+         data = teach_beauty) |>
+  gf_lm()
+```
+
+### Categorical-Quantitative Interaction
+
+That graph you just saw might show evidence of an interaction...
+
+```{webr}
+#| exercise: SET-graph-again
+gf_point(eval ~ beauty | female, 
+         color = ~female, 
+         shape = ~female, 
+         data = teach_beauty) |>
+  gf_lm()
+```
+
+`Eval` may go up as `beauty` increases, but the *slope* of the relationship seems like it might be *different* for the female group.  
+
+This would be an **interaction** between `beauty` and `female`.
+
+### Categorical-Categorical Interaction 
+
+We just saw an interaction between categorical and quantitative variables. What about a *categorical* variable modulating the effect of another categorical variable?
+
+```{webr}
+#| exercise: SET-graph-2
+gf_boxplot(eval ~ formal | female, data = teach_beauty)
+```
+
+Perhaps *Informal Dress* affects `eval` scores, but really only if the teacher is not female -- for females, `formal` dress doesn't make a difference either way.
+
+The effect of `formal` dress is *different* depending on the value of `female`. This is an interaction between `formal` and `female`.
+
+### Quant-Quant interactions?
+Yes, these are possible, but very hard to visualize and conceptualize. 
+
+Basically, it would mean that **the slope of the line for one predictor changes gradually as the value of a second variable changes.**
+
+In other words, the response variable depends not only on each of the two predictors, *but also on their product.*
+
+You'll see one example later on, but generally I recommend you initially *avoid* interactions of two quantitative variables unless you are pretty sure you need one and have confidence in your ability to interpret the result.
+
+### R code
+If you want to include an interaction term in a model in R, in the model forumla, use a `*` rather than a `+` between the predictors that (may) interact. For example, consistent with our exploration above, we might try:
+
+```{webr}
+#| exercise: beauty-model
+#| envir: beauty-model-env
+beauty_mod <- lm(eval ~ beauty * female +
+                   formal * female, 
+                 data = teach_beauty, 
+                 na.action = 'na.fail' # this is to allow dredge() to work later
+                 )
+summary(beauty_mod)
+```
+
+Notice the additional indicator variables in the coefficient table/model equation. These function to *adjust* the effects of the `beauty` predictor depending on the values of `formal` and `female`, which interact with it. (More details on that equation-y stuff later.)
+
+We could use IC-based model selection to determine whether including these interactions in a model is important or not.
+
+```{webr}
+#| exercise: beauty-dredge
+#| envir: beauty-model-env
+dredge(beauty_mod, rank = 'AIC')
+```
+
+In the case of the particular model we fitted, the "best" model starting from this full model is actually one *without* interactions. If you want to explore the dataset further, you will find that actually a model where `age`, `beauty` AND `female` interact fits much better...I encourage you to give that a try!
+
+```{webr}
+#| exercise: beauty-sandbox
+#| envir: beauty-model-env
+#| 
+```
+
+### Cautionary note
+If you include an interaction in a regression model, you **must** also include the corresponding "fixed effects" -- this means if you have an indicator variable/slope term for an interaction in your model, you must also have the indicator variables/slopes corresponding to the individual predictors. Our fitting functions (`lm()`, `glm()`, `glmmTMB()`, etc.) are smart enough to ensure this for you. So is `dredge()`. (It would take effort to mess this up in R.) 
+
+## Bee Examples
+
+It's nearly impossible to have *too many* examples when introducing the idea of interactions. So let's see some more...
+
+We will use data from a 2019 paper by Adam Dolezal and colleagues, entitled *Interacting stressors matter: diet quality and virus infection in honeybee health* (<https://doi.org/10.1098/rsos.181803>). Its abstract reads:
+
+>>Honeybee population declines have been linked to multiple stressors, including reduced diet diversity and increased exposure to understudied viruses. Despite interest in these factors, few experimental studies have explored the interaction between diet diversity and viral infection in honeybees... In laboratory experiments, we found that high-quality diets have the potential to reduce mortality in the face of infection with Israeli acute paralysis virus (IAPV).
+
+You can find a copy of the dataset at: <https://sldr.netlify.app/data/bee-virus.csv>. Here, we could read in and prepare the data like so:
+
+```{r, eval = FALSE, echo = TRUE}
+bees <- readr::read_csv('data/bee-virus.csv', show_col_types = FALSE) |>
+  rename(Cage_id = `Cage Number`,
+         Virus = `Virus Treatment`,
+         Food = `Pollen Treatment`,
+         Experiment_id = `Experimental replicate code`,
+         Mortality = `72 hpi proportion mortality`) |>
+  drop_na(Virus, Food, Mortality)
+```
+
+```{webr}
+#| setup: true
+#| exercise: bee-plot
+#| eval: true
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 8, fig.height = 6)
+ 
+bees <- read.csv('data/bee-virus.csv') |>
+  rename(Cage_id = `Cage Number`,
+         Virus = `Virus Treatment`,
+         Food = `Pollen Treatment`,
+         Experiment_id = `Experimental replicate code`,
+         Mortality = `72 hpi proportion mortality`) |>
+  drop_na(Virus, Food, Mortality)
+
+glimpse(bees)
+```
+
+### Categorical-Quantitative Interaction
+What would it mean for the effect of `Virus` and the effect of `Food` to interact?
+
+Here's a graphical exploration:
+
+```{webr}
+#| exercise: bee-plot
+#| envir: bee-env
+gf_boxplot(Mortality ~ Virus | Food, 
+           data = bees)
+```
+
+If food is "None" that is low-quality food with no pollen added (the other kinds have pollen, with "Poly" being the highest quality).  
+
+Some cages were infected with a virus, and some were not. 
+
+Do bees on different diets take a *different* survival hit when infected with the virus? We'd need to fit some models to find out!
+
+Before we go further...
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: bee-interaction-interp
+
+opts1 <- sample(c(answer = "Diet and virus interact if the effect of the virus on bee mortality rates is BIGGER for some diet(s) than others.",
+"An interaction between diet and virus means that diet and virus affect one another, that is, they are associated with each other",
+"Both diet AND virus infection have effects on the number of bees that die",
+"None of the above")
+)
+
+cat("What would it *mean* for the bees' diet to modulate the effect of the virus on the bees? (If you're struggling, refer to the data graph shown earlier, which may help you to understand...)",
+    longmcq(opts1))
+```
+:::
+
+`r hide("Click for explanations of solution above.")`
+
+An interaction means that the proportion of bees killed by virus infection *depends on* the diet they are eating. 
+
+Here, we might think that bees eating the best food are better able to survive infection, while those with the lowest quality of the food die more once infected. 
+
+All bees die more with virus than without, but the jump (proportion of extra death when the virus infection is present) is much bigger when the food is bad.
+
+It's not correct to say that "interaction means diet and virus are associated with each other..." Yikes! Sorry, no. This is a *very* common misconception. Two predictors ARE sometimes associated with each other. But whether they are or not, that is NOT an interaction. An interaction is when the value of one predictor ALTERS the relationship between the other predictor and the response variable.
+
+It's also not complete to say that there's interaction if "both diet AND virus infection have effects on the number of bees that die." This answer answer doesn't describe an interaction -- this could just describe an additive model, where diet and virus both affect mortality.
+
+`r unhide()`
+
+OK! Let's go ahead and fit that model:
+
+```{webr}
+#| envir: bee-plot
+#| exercise: bee-int-model
+bee_int_model <- lm(Mortality ~ Virus * Food, data = bees)
+summary(bee_int_model)
+```
+
+Eek. What does it all mean?
+
+### Selection: ANOVA
+
+You'll see some examples of how to write and understand the model equation a bit later. But for this example, let's think about how we would make inferences -- for example, how could we test whether `Virus` and `Food` really interact?
+
+One approach would use ANOVA; see if you can code it...
+
+```{webr}
+#| envir: bee-plot
+#| exercise: bee-anova
+bee_int_model <- lm(Mortality ~ Virus * Food, data = bees)
+```
+
+:::: {.hint exercise="bee-anova"}
+::: {.callout-note collapse="true"}
+
+#### Hint
+
+``` r
+bee_int_model <- lm(Mortality ~ ____ * ____, data = bees)
+car::Anova(...)
+```
+
+:::
+::::
+
+:::: {.solution exercise="bee-anova"}
+::: {.callout-note collapse="true"}
+
+#### Solution:
+
+``` r
+bee_int_model <- lm(Mortality ~ Virus * Food, data = bees)
+car::Anova(bee_int_model)
+```
+
+:::
+::::
+
+
+Based on the ANOVA results, do we have evidence that `Virus` and `Food` interact?
+
+Wait...before you answer that...
+
+## Selection: Note about p-values
+
+We have not spent much time reviewing how to interpret p-values; for one thing, we often use information criteria to compare models, and for another, interpreting p-values was *hopefully* covered in the intro stat course you once took. But, perhaps that was long, long ago. Or, perhaps you took a more traditional course with a different approach to interpreting p-values.
+
+For this course, I **strongly** request that you:
+
+- Report the exact p-value of any hypothesis test you carry out (*not* just ~~"< 0.05"~~ or ~~"< 0.01"~~ etc. -- I crossed those out for emphasis!)
+- Based on the size of the p-value you obtain, make a judgment call about the *strength of evidence it gives you* against the null hypothesis. (Remember, for regression models, the null is usually "there is no association between $X$ and $Y$," or maybe today, "there is no interaction between $X$ and $Z$.") 
+  - The smaller the p-value, the stronger the evidence; and p-values above about 0.05-0.1 are essentially *no* evidence against the null hypothesis. 
+  
+For different practitioners, and in different contexts, different scales for strength-of-evidence provided by p-values have been suggested.
+
+In [*A reckless guide to p-values*](https://link.springer.com/chapter/10.1007/164_2019_286) Michael Lew discusses the history and practical application of p-values at length and suggests that "Strength of evidence against the null hypothesis scales semi-geometrically with the smallness of the P-value" as shown in his Figure 3:
+
+```{r, out.width='80%', echo = FALSE}
+knitr::include_graphics('https://media.springernature.com/lw685/springer-static/image/chp%3A10.1007%2F164_2019_286/MediaObjects/432910_1_En_286_Fig3_HTML.png')
+```
+  
+Alternately, in [*In defense of p-values*](https://www.jstor.org/stable/43495185),  Paul Murtaugh suggests:
+
+```{r, out.width='80%', echo = FALSE}
+knitr::include_graphics('https://d3i71xaburhd42.cloudfront.net/a60c78a15903b0312e0b8c03eeded3c89f23c8f2/3-Figure1-1.png')
+```
+
+These should give you an idea of how to interpret p-values and draw conclusion from them, but a key point is to avoid memorizing some algorithm or rule to decide whether or not you have a "significant" result, and to avoid summarizing results with that single word -- so, we **do not** ~~simply say a conclusion is "significant" if it is based on a p-value below 0.05~~ (again, the words are crossed out for emphasis!) There are lots of reasons -- see the articles linked above by Murtaugh and Lew if you want to read more.
+
+So what *do* we say, if we are avoiding the fraught shorthand of calling it "significant"? 
+
+A key best practice is to **accompany all hypothesis testing results with a discussion of the "effect size"** -- for example, how big is the slope, or the difference between groups? Try to consider whether the size of the estimated difference is big enough to be of practical importance. 
+
+Now, back to our question: 
+
+```{webr}
+#| envir: bee-plot
+#| exercise: bee-anova-result
+#| echo: true
+bee_int_model <- lm(Mortality ~ Virus * Food, data = bees)
+car::Anova(bee_int_model)
+```
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: bee-anova-interp
+
+opts1 <- sample(
+                c(answer = "Some; with a p-value of about 0.02, the evidence is moderate but not completely compelling",
+                  "Yes, I'm basically sure",
+                  "Nope, most definitely NOT",
+                  "There is significant evidence (p < 0.05)"
+                  )
+                )
+
+cat("Based on the ANOVA results, do we have evidence that `Virus` and `Food` interact?",
+    longmcq(opts1))
+```
+:::
+
+`r hide("Click for explanations of solution above.")`
+
+The p-value for the interaction term is 0.024. How strong or convincing is that as evidence against the null hypothesis that there's *no* association?
+
+If you said you were "basically sure" or that there was "definitely NOT" evidence, maybe reconsider your phrasing and level of certainty? We rarely want to sound *that* sure. Also, consider the exact p-value and the strength of evidence it provides...
+
+Also remember that in our course, we avoid the word 'significant' like it's contaminated! Because...it kind of is, by decades of dubious stats teaching and practice reinforcing the idea that hypothesis testing yield ironclad yes-or-no results. Try the strength-of-evidence way outlined above, instead...
+
+`r unhide()`
+
+## Selection: IC
+
+What if we wanted to make the same comparison -- of models *with* and *without* the interaction -- but using information criteria instead of hypothesis testing?
+
+Give it a try...
+
+```{webr}
+#| evir: bee-plot
+#| exercise: bee-ic
+bee_int_model <- lm(Mortality ~ Virus * Food, data = bees)
+```
+
+:::: {.hint exercise="bee-ic"}
+::: {.callout-note collapse="true"}
+#### Hint 1
+
+``` r
+bee_int_model <- lm(Mortality ~ Virus * Food, data = bees)
+bee_no_int_model <- ...
+AIC(...)
+```
+:::
+::::
+
+:::: {.solution exercise="bee-ic"}
+::: {.callout-note collapse="true"}
+#### Solution:
+
+``` r
+bee_int_model <- lm(Mortality ~ Virus * Food, data = bees)
+bee_no_int_model <- lm(Mortality ~ Virus + Food, data = bees)
+AIC(bee_int_model, bee_no_int_model)
+```
+:::
+::::
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: bee-aic-interp
+
+opts1 <- sample(
+                c(answer = "The AIC is about 4 units lower for the model with the interaction, so the model with the interaction fits a fair amount better and according to this analysis, there probably is an interaction",
+                  "There's most definitely an interaction",
+                  "Nope, most definitely NOT an interaction there!",
+                  "The AIC is about 4 units lower for the model with the interaction, so the model with the interaction doesn't fit as well, and according to this analysis, there probably is NOT an interaction",
+"Since the AIC score is negative (-154) for the model with the interaction and also for the one without, we have some doubts about the validity of the model overall."
+                  )
+                )
+
+cat("Based on your results (using AIC), what do you conclude?",
+    longmcq(opts1))
+```
+:::
+
+`r hide("Click for explanations of solution above.")`
+
+The difference in AIC between the models is about 4, which is getting big enough that we think one model really does fit noticeably better than the other.
+
+Some points to remember:
+
+- Carefully choose your level of certainty in presenting your results.
+- Lower AIC scores are better.
+- The answer focusing on the sign of the AIC value is basically nonsense in a sentence. Remember, for information criteria, it's the *relative* value that matters - that is, the *difference* in IC values between models under comparison. The absolute AIC number for one model tells you...not much! Positive, negative, big, small...it's only *differences* in IC values between models being compared that are informative for inference.
+
+`r unhide()`
+
+Are the results the same with BIC? (not that you would normally do both -- but just for practice, alter the code above to use BIC instead and then answer this question!) Since BIC enacts a different definition of "goodness" of model quality, the two will *not necessarily* always agree.
+
+### Categorical-Quantitative Interaction
+
+We can also interact a categorical and a quantitative variable. Then, what we essentially want is a *different* slope for the quantitative variable for each category.
+
+*We don't have a quantitative variable in our dataset. I am adding a fake one ONLY to show how the code would work to fit a C-Q interaction model. You don't need to be able to do this, of course...and in a real analysis it would be a TERRIBLE and dishonest idea! However, here for practice purposes only, we will do it.*
+
+```{webr}
+#| setup: true
+#| exercise: bee-cq
+#| echo: true
+
+bees <- read.csv('data/bee-virus.csv') |>
+  rename(Cage_id = `Cage Number`,
+         Virus = `Virus Treatment`,
+         Food = `Pollen Treatment`,
+         Experiment_id = `Experimental replicate code`,
+         Mortality = `72 hpi proportion mortality`) |>
+  drop_na(Virus, Food, Mortality)
+
+bees <- bees |>
+  mutate(fake_qvar = rnorm(n = nrow(bees), mean = 0, sd = 1),
+         Virus_ix = as.numeric(factor(Virus)))
+
+```
+
+Now, fit a model with and effect of `Virus` and *also* a different slope for `fake_qvar` for each level of virus: one slope if there was no virus infection, and a different slope if there *was* viral infection.
+
+```{webr}
+#| envir: bee-cq
+#| exercise: bee-cq-model
+
+```
+
+:::: {.solution exercise="bee-cq"}
+::: {.callout-note collapse="true"}
+#### Solution:
+
+``` r
+bee_model <- lm(Mortality ~ Virus * fake_qvar, data = bees)
+```
+:::
+::::
+
+Now, since I made that `fake_qvar` data up totally at random, we *expect* that it shouldn't really be associated with `Mortality` or interacting with `Virus`. 
+
+Can you confirm that using either ANOVA or information criteria?
+
+```{webr}
+#| envir: bee-cq
+#| exercise: bee-cq-model-select
+
+```
+
+:::: {.solution exercise="bee-cq"}
+::: {.callout-note collapse="true"}
+#### Solution(s):
+
+``` r
+# you would likely do one of these three:
+car::Anova(bee_model)
+bee_model_noint <- lm(Mortality ~ Virus + fake_qvar, data = bees)
+AIC(bee_model, bee_model_noint)
+BIC(bee_model, bee_model_noint)
+```
+:::
+::::
+
+### Quant-Quant Interaction
+
+One more time, I'll say: 
+
+Probably just don't go there. It's quite hard to make sense of. 
+
+A quantitative-quantitative interaction means that the slope for one predictor variable changes continuously as the value of the other predictor changes...in other words, the response depends on both predictors *plus* it depends on their *product.* Keep going for *one* example of this later on, though.
+
+### Going Further
+
+Any other models or comparisons you want to try? 
+
+Feel free to experiment a bit if so...
+
+```{webr}
+#| envir: bee-cq
+#| exercise: bee-sandbox
+bee_model <- lm(..., data = bees)
+```
+
+## Prediction Plots
+
+What about prediction plots for a model with interaction(s)? Certainly, we'd want to be able to show them...
+
+>> The key thing to remember is that if predictors interact in a model, you shouldn't show a prediction plot with *any* of them unless it shows *all* of them.
+
+Luckily, that's easy to do with `predict_response()` -- just make sure your `terms` input contains the names of both variables.
+
+For example, with our bee model:
+
+```{webr}
+#| envir: bee-cq
+#| exercise: bee-preds
+bee_int_model <- lm(Mortality ~ Virus * Food, data = bees)
+predict_response(bee_int_model,
+          terms = c('Virus', 'Food')) |>
+  plot()
+```
+
+If you want to customize the plot *a lot*, you can omit the `|> plot()` and make your own graph of the results table returned by `predict_response()`. 
+
+But there's one thing you may often want to try...see what happens if you *change* the order of the predictors in the terms list. 
+
+Which graph is easier to interpret, in your opinion? 
+
+Often one way tells the story a lot better than the other, so it pays to consider carefully which to show (or try both, and then choose).
+
+## Car Examples
+
+How does the model equation work when you have an interaction? For each pair of interacting variables, you get an *additional term in the model* that is the *product* of the interacting variables. 
+
+If one or more of them are *categorical*, then there will be a new product term *for every pair of indicator variables possible* between the two variables! (So interactions between categorical variables with many groups can quickly lead to a need to estimate a LOT of parameters...)
+
+We focus more on understanding what interactions are and *when* to include them in our models, but let's spend just a bit of time considering the model equation with interactions.
+
+Let's go!
+
+For these examples, we'll consider a toy example in which we want to model the price of a car as a function of its mileage, color, and age.
+
+## Model Equations?
+
+
+### One Quantitative Predictor
+
+This one should be all review...no interactions yet.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qxF0kk3tAAw?si=0hSJppSnVWTnlfY7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+### Two Quantitative Predictors
+Again, this is review - still no interactions
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/e1HYMmX2jAE?si=C0xqKbOjE88ZpO7f" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+### Interacting Quantitative Predictors
+
+Here is the *one* example I promised you of two *quantitative* predictors interacting!
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2Z6ClpCbqLU?si=6Kftv1TC7jTUursG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+### Categorical-Quantitative Interaction
+
+Finally, what about a categorical variable interacting with a quantitative predictor?
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wf29ZJEZe0k?si=a9E7vWoHZqHQajPk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+
+## Interactions: what are they, again?
+
+This might be a good time to watch that initial video one more time, to review and maybe pick up something you missed the first time through:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3CCkeFShB3U?si=YunTWwImluB0wxH6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+
+## More Practice
+It can be really challenging to understand what an interaction *means* and gain skills at using and interpreting them.
+
+Here is one way to see some additional examples, and collaborate with me and students from your class *and even beyond*! Check out the instructions and examples in [our shared Google slide deck.](https://docs.google.com/presentation/d/1lzS4ipQbfQDwp6L69AFdqr_S9we1zDbmcK9geqwiL8g/edit?usp=sharing)

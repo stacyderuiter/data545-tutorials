@@ -1,0 +1,196 @@
+# Sample and Study Design 
+
+Before you can start modeling, you need data.
+
+In our course, we focus on analyzing data (not collecting it), and we use datasets that have already been collected by others.
+
+But to do analysis well, you need to consider the *metadata* -- for example, who collected your data, and why? How was it obtained exactly? To know how these things might influence our analysis and conclusions, we might need a quick review of sampling strategies and study design.
+
+```{r}
+#| label: setup
+#| include: false
+
+library(webexercises)
+library(tidyverse)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+```
+
+
+## Sampling Strategies 
+
+Almost every dataset contains information on a *sample* of cases from a
+larger *population*.
+
+```{r, echo = FALSE, out.width = '75%'}
+knitr::include_graphics('images/pop-sample-param-stat.png')
+```
+
+And if the sample is biased -- that is, not representative of the full
+population in important ways -- then we won't be able to make any valid
+inferences from it. So the process used to choose a sample is crucial to
+the validity of all results! What are ways to choose a sample?
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/be9e-Q-jC-0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+## Sampling Infographic 
+
+Here's an infographic version of the main ideas here, in infographic
+form. This infographic includes a couple additional sampling approaches
+that are used in human health studies, and also introduces one more bit
+of terminology: *probability* vs. *non-probability* sampling. In
+probability methods, there is some element of random selection that is
+used; in non-probability samping, there is not.
+
+*You can also [view the infographic on the
+web](https://www.slideshare.net/Intellspot/types-of-sampling-methods-infographic).*
+
+```{r, echo = FALSE, out.width='90%'}
+knitr::include_graphics('images/sampling-schemes-infographic.png')
+```
+
+## Study Design 
+
+A crucial distinction is between two broad classes of research studies:
+*observational* studies and *experimental* studies.
+
+*Side note: many students in the sciences find that the statistical
+definition of an "experimental study" doesn't mesh perfectly with the
+definition of an "experiment" that they learn in science courses. If it
+helps, you can think of "experiment" keeping the colloquial meaning it
+has in your field, and think of "experimental study" as a technical
+statistical descriptor of a study (as we will learn it today).*
+
+You probably have prior knowledge or a good intuitive guess as to the
+difference between studies that are observational and experimental.
+We'll review key concepts more later on, but to start, take a chance to
+assess your existing hunches. Study the infographic below with this
+distinction in mind: **Does the infographic confirm, modify, or add
+nuance to your initial idea of how "observational" and "experimental"
+studies differ?** As a bonus, the image also details a few kinds of
+studies within each broad class, and orders them in terms of the
+strength of evidence they can provide.
+
+```{r, echo = FALSE, out.width = '90%'}
+knitr::include_graphics('https://i0.wp.com/www.compoundchem.com/wp-content/uploads/2015/04/A-Rough-Guide-to-Types-of-Scientific-Evidence.png?ssl=1')
+```
+
+### An Alternative
+
+You may spend less time with this one - but here's [an alternative
+infographic](https://www.nih.gov/sites/default/files/about-nih/public-trust/clinical-trials-infographic.pdf)
+covering much of the same information. It's organized differently, but
+consistent - dive in if you'd like to review again!
+
+```{r, echo = FALSE, out.width = '50%'}
+knitr::include_graphics('images/study-types-infographic.png')
+```
+
+One thing to notice in this version is the emphasis on **randomized
+experimental studies** like clinical trials as a source of possible
+**causal conclusions** -- the NIH notes that a randomized experiment has
+the best chance of allowing researchers to conclude that one thing
+*causes* another, while that is difficult to impossible in observational
+work. Why?
+
+### Why Randomization?
+
+*Randomization* is a key tactic for ensuring the results of an
+experimental study are reliable, and providing a strong basis for
+concluding that a particular treatment or intervention *causes* a
+certain outcome or result.
+
+Randomization means participants are *assigned randomly* to different
+"treatments;" they are randomly chosen to receive different assigned
+values of the key variable(s) that researchers are controlling or
+manipulating. If this procedure is not followed, then the different
+treatment groups may differ systematically in some important feature
+(like gender, motivation, initial health status - anything that might
+influence the outcome). Here's one more video that explains the issue
+quite clearly, in the context of human randomized controlled trials:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MmpF1zxfQZ8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+*You can also watch it [outside the
+tutorial](https://www.youtube.com/watch?v=MmpF1zxfQZ8).*
+
+### Random SAMPLE vs RANDOMIZATION
+
+Careful! Many students confuse random sampling with randomization, or
+use one term when they mean the other. Check your understanding: which
+is which?
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: randomization-def
+
+opts <- sample(c(answer = "Random sampling has to do with how cases to study are randomly chosen from the population, while randomization has to do with how already-chosen participants are randomly assigned to experimental treatment groups.",
+        "It depends on the context; they are very similar",
+        "Randomization has to do with how cases to study are randomly chosen from the population, while random sampling has to do with how already-chosen participants are randomly assigned to experimental treatment groups."))
+
+cat("What is the difference between random sampling and randomization?",
+    longmcq(opts))
+```
+:::
+
+`r hide("Click for explanations of solution above.")`
+
+The words seem similar, but are distinct technical terms!
+
+*Randomization* has to do with how values of a "treatment" variable of
+special interest are assigned: randomly!
+
+*Random sampling* means that the individuals (whether they are people,
+places, or things...) in the study were selected from the population at
+random.
+
+`r unhide()`
+
+## Observational vs Experimental Studies 
+
+We mentioned earlier that the key distinction for us will be between
+observational and experimental studies. Hopefully you've already started
+to form a mental map of the differences. Here's one of the most clear,
+concise, complete statements of the main ideas I've ever heard:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/RSSFS9XWMG0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+*You can also [watch outside this
+tutorial.](https://www.youtube.com/watch?v=RSSFS9XWMG0)*
+
+And now, a one-minute review of the basics:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/kaoWPEzvf9A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+*You can also [watch outside this
+tutorial.](https://www.youtube.com/watch?v=kaoWPEzvf9A)*
+
+By now, you should be able to provide a short definition of each study
+type and note key differences between *observational* and *experimental*
+studies.
+
+### Even more
+
+If you would like to know more about some of the other study types
+featured in the infographics but not discussed in detail so far, you can
+check out the **optional video** below:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/iCgC32Cf8ac" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+*You can also watch [outside this
+tutorial](https://www.youtube.com/watch?v=iCgC32Cf8ac).*

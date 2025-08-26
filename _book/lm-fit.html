@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>21&nbsp; Fitting Linear Models in R – DATA 545 Tutorial</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./lm-assess.html" rel="next">
+<link href="./plan.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b7c2d8834e08b04a63bb76a724ffbcac.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="_include/webex.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm-fit.html">Multiple Linear Models</a></li><li class="breadcrumb-item"><a href="./lm-fit.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Fitting Linear Models in R</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">DATA 545 Tutorial</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/stacyderuiter/data545-tutorials/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./install-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how-to-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R Results in Quarto Text</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math-notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Math Notation in Quarto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Designing Effective Visualizations</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-no-junk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">What is <em>Necessary</em>?</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-color.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Color</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-text-elements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Text Elements</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-choose.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Choose a Graph Type</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-var-types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Variable Types</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Gallery: One Categorical Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gallery: One Quantitative Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gallery: 2-3 Categorical Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Gallery: Multiple Quantitative Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-cat-quant-mix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Gallery: Mixed Quantitative + Categorical</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization with ggformula</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-ggformula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ggformula and Formulas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Datasets Used</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Code Examples</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./design-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study Design &amp; Model Planning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Sample and Study Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./plan.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Model Planning for Inference</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Multiple Linear Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-fit.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Fitting Linear Models in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-assess.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Assessment for Linear Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interpretation and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Selection and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Interactions in Regression Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Maximum Likelihood Estimation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link active" data-scroll-target="#learning-outcomes"><span class="header-section-number">21.1</span> Learning Outcomes</a></li>
+  <li><a href="#text-reference" id="toc-text-reference" class="nav-link" data-scroll-target="#text-reference"><span class="header-section-number">21.2</span> Text Reference</a></li>
+  <li><a href="#quick-review-of-lines" id="toc-quick-review-of-lines" class="nav-link" data-scroll-target="#quick-review-of-lines"><span class="header-section-number">21.3</span> Quick review of lines</a>
+  <ul class="collapse">
+  <li><a href="#intercept-and-slope" id="toc-intercept-and-slope" class="nav-link" data-scroll-target="#intercept-and-slope">Intercept and Slope</a></li>
+  </ul></li>
+  <li><a href="#simple-linear-regression-equation" id="toc-simple-linear-regression-equation" class="nav-link" data-scroll-target="#simple-linear-regression-equation"><span class="header-section-number">21.4</span> Simple Linear Regression Equation</a></li>
+  <li><a href="#multiple-predictors" id="toc-multiple-predictors" class="nav-link" data-scroll-target="#multiple-predictors"><span class="header-section-number">21.5</span> Multiple Predictors</a></li>
+  <li><a href="#toy-dataset-pigeons" id="toc-toy-dataset-pigeons" class="nav-link" data-scroll-target="#toy-dataset-pigeons"><span class="header-section-number">21.6</span> Toy Dataset: Pigeons</a></li>
+  <li><a href="#fitting-a-normal-distribution" id="toc-fitting-a-normal-distribution" class="nav-link" data-scroll-target="#fitting-a-normal-distribution"><span class="header-section-number">21.7</span> Fitting a normal distribution</a>
+  <ul class="collapse">
+  <li><a href="#a-no-predictor-model" id="toc-a-no-predictor-model" class="nav-link" data-scroll-target="#a-no-predictor-model">A no-predictor model</a></li>
+  </ul></li>
+  <li><a href="#one-predictor" id="toc-one-predictor" class="nav-link" data-scroll-target="#one-predictor"><span class="header-section-number">21.8</span> One Predictor</a></li>
+  <li><a href="#finding-the-betas" id="toc-finding-the-betas" class="nav-link" data-scroll-target="#finding-the-betas"><span class="header-section-number">21.9</span> Finding the Betas</a></li>
+  <li><a href="#least-squares-visually" id="toc-least-squares-visually" class="nav-link" data-scroll-target="#least-squares-visually"><span class="header-section-number">21.10</span> Least Squares (visually)</a></li>
+  <li><a href="#least-squares-practically" id="toc-least-squares-practically" class="nav-link" data-scroll-target="#least-squares-practically"><span class="header-section-number">21.11</span> Least Squares (practically)</a></li>
+  <li><a href="#least-squares-explained" id="toc-least-squares-explained" class="nav-link" data-scroll-target="#least-squares-explained"><span class="header-section-number">21.12</span> Least Squares (explained)</a></li>
+  <li><a href="#in-r-lm" id="toc-in-r-lm" class="nav-link" data-scroll-target="#in-r-lm"><span class="header-section-number">21.13</span> In R: <code>lm()</code></a>
+  <ul class="collapse">
+  <li><a href="#model-formula-left-hand-side" id="toc-model-formula-left-hand-side" class="nav-link" data-scroll-target="#model-formula-left-hand-side">Model Formula: Left Hand Side</a></li>
+  <li><a href="#model-formula-right-hand-side" id="toc-model-formula-right-hand-side" class="nav-link" data-scroll-target="#model-formula-right-hand-side">Model Formula: Right Hand Side</a></li>
+  <li><a href="#practice" id="toc-practice" class="nav-link" data-scroll-target="#practice">Practice</a></li>
+  <li><a href="#intercepts" id="toc-intercepts" class="nav-link" data-scroll-target="#intercepts">Intercepts</a></li>
+  <li><a href="#omitting-the-intercept" id="toc-omitting-the-intercept" class="nav-link" data-scroll-target="#omitting-the-intercept">Omitting the Intercept</a></li>
+  </ul></li>
+  <li><a href="#interpreting-summarylm..." id="toc-interpreting-summarylm..." class="nav-link" data-scroll-target="#interpreting-summarylm..."><span class="header-section-number">21.14</span> Interpreting <code>summary(lm(...))</code></a></li>
+  <li><a href="#model-equation-practice" id="toc-model-equation-practice" class="nav-link" data-scroll-target="#model-equation-practice"><span class="header-section-number">21.15</span> Model Equation Practice</a>
+  <ul class="collapse">
+  <li><a href="#an-example-model" id="toc-an-example-model" class="nav-link" data-scroll-target="#an-example-model">An example model</a></li>
+  </ul></li>
+  <li><a href="#linear-regression-conditions" id="toc-linear-regression-conditions" class="nav-link" data-scroll-target="#linear-regression-conditions"><span class="header-section-number">21.16</span> Linear Regression Conditions</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/lm-fit.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm-fit.html">Multiple Linear Models</a></li><li class="breadcrumb-item"><a href="./lm-fit.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Fitting Linear Models in R</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Fitting Linear Models in R</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell" data-layout-align="center" data-setup="true" data-exercise="nerd-lm">
+<script type="exercise-setup-nerd-lm-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbIm5lcmQtbG0iXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG50aGVtZV9zZXQodGhlbWVfYncoYmFzZV9zaXplPTE2KSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gRkFMU0UsXG4gIGZpZy5hbGlnbiA9IFwiY2VudGVyXCIsXG4gIGZpZy53aWR0aCA9IDYsIGZpZy5oZWlnaHQgPSAyLjUpXG5cbk1JX2xlYWQgPC0gcmVhZC5jc3YoZmlsZT0naHR0cHM6Ly9zbGRyLm5ldGxpZnkuYXBwL2RhdGEvTUlfbGVhZC5jc3YnKVxuXG5cbnNldC5zZWVkKDE0KVxuYm9ub2JvcyA8LSByZWFkLmNzdignaHR0cHM6Ly9zbGRyLm5ldGxpZnkuYXBwL2RhdGEvYm9ub2JvX2ZhY2VzLmNzdicpIHw+XG4gIG5hLm9taXQoKSBcbmdyYXRlZnVsIDwtIHJlYWQuY3N2KCdodHRwczovL3NsZHIubmV0bGlmeS5hcHAvZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YnKSBcblxuZWxlcGhhbnRfc3VydmV5IDwtIHJlYWQuY3N2KCdkYXRhL2VsZXBoYW50U3VydmV5LmNzdicpXG5nYXBtaW5kZXJfY2xlYW4gPC0gcmVhZC5jc3YoJ2RhdGEvZ2FwbWluZGVyX2NsZWFuLmNzdicpXG5IYURpdmVQYXJhbWV0ZXJzIDwtIHJlYWQuY3N2KCdkYXRhL0hhRGl2ZVBhcmFtZXRlcnMuY3N2JylcbilcblxuZWFybiA8LSBmb3JlaWduOjpyZWFkLmR0YSgnZGF0YS9oZWlnaHRzLmR0YScpIHw+XG4gIG11dGF0ZShzZXggPSBpZmVsc2Uoc2V4ID09IDIsICdmZW1hbGUnLCAnbWFsZScpKSB8PlxuICBuYS5vbWl0KCkgfD5cbiAgZHBseXI6OmZpbHRlcihlYXJuID4gMCkifQ==
+</script>
+</div>
+<style type="text/css">
+  span.boxed {
+    border:5px solid gray;
+    border-radius:10px;
+    padding: 5px;
+  }
+span.invboxed {
+  border:5px solid gray;
+  padding: 5px;
+  border-radius:10px;
+  color: white;
+}
+
+table, td, th { border:0px; }
+
+/* cellpadding */
+  th, td { padding: 5px; }
+
+</style>
+<section id="learning-outcomes" class="level2" data-number="21.1">
+<h2 data-number="21.1" class="anchored" data-anchor-id="learning-outcomes"><span class="header-section-number">21.1</span> Learning Outcomes</h2>
+<p>This section, we’ve already considered strategies for planning a regression model - how many variables, and which ones, should be included as predictors? How does an analyst decide?</p>
+<p>Now, here, we will also learn to fit the models in R and examine the results.</p>
+<p>By the end of the section you will:</p>
+<ol type="1">
+<li>Fit a multiple linear regression to a dataset in R, using multiple quantitative and/or categorical predictors</li>
+<li>State the equation of a linear regression model, based on a model description or an R model summary</li>
+</ol>
+</section>
+<section id="text-reference" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="text-reference"><span class="header-section-number">21.2</span> Text Reference</h2>
+<p>Recommended reading for the materials covered in this tutorial can be found in:</p>
+<ul>
+<li><a href="https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#review-of-multiple-linear-regression" target="_blank"><em>Beyond Multiple Linear Regression</em> Chapter 1.4-1.6</a></li>
+<li>Course Notes <a href="https://stacyderuiter.github.io/regression/lm1.html" target="_blank">Chapter 1</a></li>
+<li><em>Intro to Modern Statistics</em> <a href="https://openintro-ims.netlify.app/intro-linear-models.html#intro-linear-models">Chapter 3</a>*</li>
+<li><em>Ecological Models &amp; Data in R</em> Chapter 9</li>
+<li><em>Statistical Modeling: A Fresh Approach</em> <a href="https://statistical-modeling.netlify.app/06-language.html" target="_blank">Chapters 6-8</a></li>
+</ul>
+</section>
+<section id="quick-review-of-lines" class="level2" data-number="21.3">
+<h2 data-number="21.3" class="anchored" data-anchor-id="quick-review-of-lines"><span class="header-section-number">21.3</span> Quick review of lines</h2>
+<p>Consider the line below.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="lm-fit_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You may remember that lines have equations that look like</p>
+<p><span class="math display">\[y = mx + b\]</span></p>
+<p>where <span class="math inline">\(m\)</span> is the <strong>slope</strong> and <span class="math inline">\(b\)</span> is the <span class="math inline">\(y\)</span>-intercept (the value of <span class="math inline">\(y\)</span> when <span class="math inline">\(x = 0\)</span>). So we can read off an equation for our line by figuring out the slope and the intercept.</p>
+<section id="intercept-and-slope" class="level3">
+<h3 class="anchored" data-anchor-id="intercept-and-slope">Intercept and Slope</h3>
+<p>When <span class="math inline">\(x = 0\)</span> on the line we just looked at, <span class="math inline">\(y = 2\)</span>, so the intercept is <span class="math inline">\(2\)</span>. It’s indicated by the red dot below:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="lm-fit_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The slope is computed as “rise over run”. We can compute this by comparing the red and blue dots and doing a little arithmetic.</p>
+<div class="cell" data-layout-align="center" data-exercise="rise-run">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InJpc2UtcnVuIn0sImNvZGUiOiJyaXNlIDwtIDEwIC0gMjsgcmlzZVxucnVuIDwtIDIgLSAwOyBydW5cbiMgc2xvcGUgPSByaXNlIC8gcnVuXG5yaXNlIC8gcnVuIn0=
+</script>
+</div>
+</div>
+<p>Any two points on the line give the same slope. Chose two different points on the line and recompute the rise and the run. You should get the same slope.</p>
+<p>So the equation for our line is</p>
+<p><span class="math display">\[y = 4x + 2\]</span></p>
+<p>Statisticians like to write this a different way (with the intercept first and with different letters):</p>
+<p><span class="math display">\[ y = \beta_0 + \beta_1 x\]</span></p>
+<p><span class="math display">\[y = 2 + 4x\]</span></p>
+<p>So <span class="math inline">\(\beta_0\)</span> (read “beta zero”) is the intercept and <span class="math inline">\(\beta_1\)</span> (read “beta one”) is the slope.</p>
+</section>
+</section>
+<section id="simple-linear-regression-equation" class="level2" data-number="21.4">
+<h2 data-number="21.4" class="anchored" data-anchor-id="simple-linear-regression-equation"><span class="header-section-number">21.4</span> Simple Linear Regression Equation</h2>
+<p>In your intro stat course (whenever that was!) you likely learned to fit simple linear regression models, and hopefully also to check the conditions that must hold for such models to give reliable results. (If you didn’t learn that condition-checking, known as model assessment, don’t worry - stay tuned for next week!) Some of the material early in our course may be review for some, but we will build on it rapidly too.</p>
+<p>Here, we start with a reminder of the form of the linear regression equation, which is a small elaboration of the equation of a line we just saw:</p>
+<p><span class="math display">\[ y = \beta_0 + \beta_1 x + \epsilon, \epsilon \sim \text{Norm}(0, \sigma)\]</span></p>
+<ul>
+<li><span class="math inline">\(y\)</span> is the response variable</li>
+<li><span class="math inline">\(x\)</span> is the predictor (or explanatory) variable</li>
+<li><span class="math inline">\(\beta_0\)</span> is the intercept. To fit the model to a specific dataset, we have to estimate the numeric value of this parameter.</li>
+<li><span class="math inline">\(\beta_1\)</span> is the slope. To fit the model to a specific dataset, we have to estimate the numeric value of this parameter.</li>
+<li><span class="math inline">\(\epsilon\)</span> are the residuals (or errors).
+<ul>
+<li>They measure the vertical distance between an observed data point (<span class="math inline">\(y_i\)</span> is the <span class="math inline">\(i\)</span>th one) and the predicted (or fitted) value <em>on the line</em> for the same predictor variable value (<span class="math inline">\(\hat{y}_i\)</span>). Much more about residuals later one!</li>
+<li>Residuals have a normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma\)</span> (some value that we can estimate once we have the slope and intercept: we compute the fitted values <span class="math inline">\(\beta_0 + \beta_1x\)</span> and subtract from the observed response variable values to get the residuals, then estimate their standard deviation <span class="math inline">\(\sigma\)</span>.)</li>
+</ul></li>
+</ul>
+</section>
+<section id="multiple-predictors" class="level2" data-number="21.5">
+<h2 data-number="21.5" class="anchored" data-anchor-id="multiple-predictors"><span class="header-section-number">21.5</span> Multiple Predictors</h2>
+<p>Often, statisticians consider more than one <span class="math inline">\(x\)</span> variable. Why? Well, most response variables we are interested are associated with not just one but many different variables – in the language we just learned, many variables could be potential causes, confounders, mediators, or moderators (but not colliders…because we would not put those in the model).</p>
+<p>With multiple predictors, the linear regression equation looks more like</p>
+<p><span class="math display">\[ Y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots \beta_p x_p + \varepsilon\]</span> <span class="math display">\[\varepsilon \sim \text{Norm}(0, \sigma)\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(\mathbf{Y}\)</span> is the response variable value,</li>
+<li>the <span class="math inline">\(\beta_0\)</span> is the intercept,</li>
+<li><span class="math inline">\(\beta_1, \dots \beta_p\)</span> are the <span class="math inline">\(p\)</span> “slopes”,</li>
+<li><span class="math inline">\(x\)</span>s are the <span class="math inline">\(p\)</span> predictor variable values, and</li>
+<li><span class="math inline">\(\varepsilon\)</span> are the “errors” (since real data doesn’t all fall exactly on a line).</li>
+</ul>
+<p>When we use data to estimate the <span class="math inline">\(\beta_i\)</span>’s, we may write it this way:</p>
+<p><span class="math display">\[ \hat Y = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \dots \hat{\beta}_p x_p\]</span></p>
+<ul>
+<li>The <strong>hats</strong> on top of the the <span class="math inline">\(\beta\)</span>s and <span class="math inline">\(Y\)</span> indicate that they are being <strong>estimated from data</strong> (they are statistics or estimates rather than parameters now!)</li>
+<li>Note that the error term is gone now: we know <em>exactly</em> what our estimate <span class="math inline">\(\hat Y\)</span> is, with <em>no</em> error.<br>
+</li>
+<li>But <span class="math inline">\(\hat Y\)</span> isn’t (usually) identical to <span class="math inline">\(Y\)</span>. The <em>difference</em> is our friend the residual:</li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+\mbox{residual} = \hat\varepsilon &amp; = Y - \hat Y \\
+&amp; = \mbox{observed reponse} - \mbox{model response}
+\end{align*}
+\]</span></p>
+<p>Again, the <strong>hats indicate that we are making estimates using data</strong> (hats basically always mean this in statistics). Those “beta hat” and “Y hat” values come from our fitted model. The <span class="math inline">\(\hat \beta\)</span>s are called the <strong>coefficients</strong> (or, more precisely, the <strong>estimated coefficients</strong>) or the “<strong>beta hats</strong>”.</p>
+<div class="boxed" data-label="Notation Note">
+<p>You will sometimes encounter slightly different notation for linear models. Two common things are:</p>
+<ul>
+<li><p>The use of <span class="math inline">\(b_0, b_1, \dots, b_p\)</span> instead of <span class="math inline">\(\hat \beta_0, \hat \beta_1, \dots \hat \beta_p\)</span>.</p></li>
+<li><p>Dropping of hats. In particular, the hat is often left off of the response variable when the model is presented with the numerical coefficient estimates plugged in.</p></li>
+</ul>
+<p>And the models themselves go by different names: regression model, least squares model, least squares regression model, etc.</p>
+<p>Don’t let these little differences distract you. If you focus on the important concepts, you should be able to navigate the notation, whichever way someone does it.</p>
+</div>
+<!-- ## Matrix Formulation -->
+<!-- The form we just saw for the simple linear regression equation can be pretty simply and intuitively extended to the case of **more than one predictor:** -->
+<!-- $$ Y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots \beta_p x_p + \epsilon$$ -->
+<!-- where $\mathbf{Y}$ are the response variable values, the $\beta$s are the $p + 1$ intercept and slopes, $x$s are the $p$ predictor variable values, and $\epsilon$ are the errors or *residuals*. -->
+<!-- ### A problem -->
+<!-- But...this form of the regression equation doesn't keep track of the individual data points. The $\mathbf{Y}$ up there (capitalized because it's a random variable) is a *vector*, not a scalar -- it's a list of $n$ response variable values. Same for the data. So maybe we could say something like: -->
+<!-- $$\mathbf{Y}_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots \beta_p x_{ip} + e_i $$ -->
+<!-- but...*OH*, those double subscripts are already getting cumbersome! -->
+<!-- ### A solution -->
+<!-- We can fix that by writing our regression equation as a matrix equation. Let $\mathbf{i} = <1, 2, 3, \dots n>$ be the indices identifying each observation in the data, and $\mathbf{j} = <0, 1, 2, 3, \dots p>$ the indices identifying the different (intercept and) slope values. -->
+<!-- Now let $\mathbf{Y}$ be a length $n$ column vector of response variable values, and $\mathbf{\beta}$ a length $p$ column vector of parameter values. -->
+<!-- $\mathbf{X}$ is a $n$ by $(p+1)$ matrix, whose first column is a length $n$ vector of ones, and whose other columns are length $n$ vectors of values of the $jth$ predictor variable. $\mathbf{X}$ is often called the **model matrix**. -->
+<!-- We then have the equation: -->
+<!-- $$ \mathbf{Y} = \mathbf{X} \mathbf{\beta} + \mathbf{\epsilon}$$ -->
+<!-- (the same as before, but using vectors and a matrix to avoid all those pesky subscripts). -->
+<!-- ### Comprehension Check: Model Matrix Size -->
+<!-- ::: {.webex-check .webex-box} -->
+<!-- ```{r results = 'asis'} -->
+<!-- #| label: matrix-size -->
+<!-- opts <- sample(c(answer = "46 x 5", -->
+<!--         "46 x 4", -->
+<!--         "46 x 3", -->
+<!--         "4 x 46", -->
+<!--         "4 x 47" -->
+<!--         )) -->
+<!-- cat("Consider a regression model with 4 predictor variables being fitted to a dataset with 46 observations. What will be the size of the model matrix X?", -->
+<!--     longmcq(opts)) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- 
+<div class='webex-solution'><button>Click for explanations of solution above.</button>
+ -->
+<!-- If you said... -->
+<!-- -   46 x 3, Think about what each column represents. -->
+<!-- -   46 x 4, Do not forget the intercept! -->
+<!-- -   4 x 46 or 4 x 47, It is one row per datapoint and one column per beta... -->
+<!-- 
+</div>
+ -->
+</section>
+<section id="toy-dataset-pigeons" class="level2" data-number="21.6">
+<h2 data-number="21.6" class="anchored" data-anchor-id="toy-dataset-pigeons"><span class="header-section-number">21.6</span> Toy Dataset: Pigeons</h2>
+<p>For the next few examples, we’ll consider a very small dataset on <a href="https://www.independent.co.uk/news/world/europe/armando-racing-pigeon-auction-sell-record-pipa-a8829101.html">racing pigeons</a> from Michigan. Their <code>unirate</code> scores measure their racing performance (smaller is better).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/armando-6.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="500"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 25%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Unirate</th>
+<th style="text-align: center;">OwnerName</th>
+<th style="text-align: center;">Sex</th>
+<th style="text-align: center;">Age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">2.864</td>
+<td style="text-align: center;">KENNIER PALMIRA</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">1.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2.965</td>
+<td style="text-align: center;">TOM RICHARDS</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">1.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4.304</td>
+<td style="text-align: center;">KENNIER PALMIRA</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">2.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5.027</td>
+<td style="text-align: center;">TOM RICHARDS</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">2.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">9.189</td>
+<td style="text-align: center;">TOM KUIPER</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">2.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="fitting-a-normal-distribution" class="level2" data-number="21.7">
+<h2 data-number="21.7" class="anchored" data-anchor-id="fitting-a-normal-distribution"><span class="header-section-number">21.7</span> Fitting a normal distribution</h2>
+<p>Let’s try to reformulate a familiar exercise – fitting a normal distribution to a dataset – as a linear regression problem.</p>
+<p>We might want to consider a model where the pigeon <code>Unirate</code> scores are <span class="math inline">\(iid\)</span> (independent, identically distributed) samples from a <span class="math inline">\(N(\mu, \sigma)\)</span> distribution.</p>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+How could we reformulate that model <em>as a linear regression</em>?
+<div id="radio_BXATKCMPPE" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value=""> <span>Two</span></label><label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value=""> <span>4 x 46</span></label><label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value=""> <span>One</span></label><label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value=""> <span>4 x 47</span></label><label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value="answer"> <span>None</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for explanations of solution above.
+</button>
+<p>What predictor(s) does the unirate score depend on in this model? Well…none, in fact!</p>
+</div>
+<section id="a-no-predictor-model" class="level3">
+<h3 class="anchored" data-anchor-id="a-no-predictor-model">A no-predictor model</h3>
+<p>It can make sense to think of the residuals <span class="math inline">\(\mathbf{\epsilon}\)</span> of a linear regression having a <span class="math inline">\(N(0, \sigma)\)</span> distribution – they are normally distributed, and the model is right <em>on average</em>, but not spot on <em>for every data observation</em>. This gives us the “intercept-only” regression model:</p>
+<p><span class="math display">\[ \mathbf{Y} = \mu \mathbf{1} + \epsilon,\]</span></p>
+<p><span class="math display">\[\epsilon \stackrel{iid}{\sim} N(0, \sigma)\]</span></p>
+<p>Here <span class="math inline">\(\mathbf{X}\)</span> is just a column vector of ones, since there are no predictors, and the intercept <span class="math inline">\(\beta_0\)</span> is <span class="math inline">\(\mu\)</span>, the mean <code>Unirate</code> score.</p>
+</section>
+</section>
+<section id="one-predictor" class="level2" data-number="21.8">
+<h2 data-number="21.8" class="anchored" data-anchor-id="one-predictor"><span class="header-section-number">21.8</span> One Predictor</h2>
+<p>Of course, we can also fit models <em>with</em> one or more predictor variables.</p>
+<!-- A model matrix is shown below. -->
+<!-- \begin{bmatrix} -->
+<!-- 1 & 1.9 \\ -->
+<!-- 1 & 1.5 \\ -->
+<!-- 1 & 2.3 \\ -->
+<!-- 1 & 2.2 \\ -->
+<!-- 1 & 2.8 \\ -->
+<!-- \end{bmatrix} -->
+<!-- for the pigeon data: -->
+<!-- ```{r} -->
+<!-- pander::pander(pigeons) -->
+<!-- ``` -->
+<!-- ::: {.webex-check .webex-box} -->
+<!-- ```{r results = 'asis'} -->
+<!-- #| label: less-tiny-lm -->
+<!-- opts <- sample(c(answer = "A regression in which age predicts unirate score", -->
+<!--         "A different model with no predictors, but Gamma distributed errors", -->
+<!--         "A regression where the response variable is the pigeon age instead of unirate score" -->
+<!--         )) -->
+<!-- cat("What is the regression model corresponding to the model matrix above?", -->
+<!--     longmcq(opts)) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- 
+<div class='webex-solution'><button>Click for a hint...</button>
+ -->
+<!-- Think: which variable(s) are represented in the model matrix? -->
+<!-- 
+</div>
+ -->
+<!-- ## Categorical Predictors (2 categories) -->
+<!-- Let's consider another model: one where both `Age` *and* `Sex` ("H" for hen and "C" for cock) predict `Unirate` score. -->
+<!-- How can we formulate a model matrix *now*? -->
+<!-- Take a moment to brainstorm before you reveal the answer. A hint (especially for data science or computer science types): some people call this trick "one hot encoding." -->
+<!-- ### Another hint -->
+<!-- Another hint, if you haven't gotten it yet: Think of a way to encode the information from the `Sex` variable numerically by changing it from a categorical variable to a logical one. -->
+<!-- ### The solution -->
+<!-- The idea is to convert our categorical variable into an **indicator variable** that is 1 if an observation fits in a certain category, and 0 otherwise (i.e., 0 if the observation is in the other category). -->
+<!-- ```{r} -->
+<!-- pander::pander(pigeons) -->
+<!-- ``` -->
+<!-- Our model for `Unirate` score as a function of `Age` and `Sex` would have the model matrix: -->
+<!-- \begin{bmatrix} -->
+<!-- 1 & 1.9 & 1 \\ -->
+<!-- 1 & 1.5 & 1\\ -->
+<!-- 1 & 2.3 & 1\\ -->
+<!-- 1 & 2.2 & 0\\ -->
+<!-- 1 & 2.8 & 0\\ -->
+<!-- \end{bmatrix} -->
+<!-- ::: {.webex-check .webex-box} -->
+<!-- ```{r results = 'asis'} -->
+<!-- #| label: sex-quiz -->
+<!-- opts <- sample(c(answer = "Hen", -->
+<!--                  "Cock" -->
+<!--         )) -->
+<!-- cat("What would be the best name for this new numeric variable indicating sex?", -->
+<!--     longmcq(opts)) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- 
+<div class='webex-solution'><button>Click for an explanation of the answer above.</button>
+ -->
+<!-- Since "H" is encoded as 1, that would be a better name. -->
+<!-- Cocks are encoded as 0s, which usually corresponds to "FALSE." Best to name the variable after the value that 1 (or TRUE) stands for. -->
+<!-- 
+</div>
+ -->
+<!-- ## Categorical Predictors with More Categories -->
+<!-- What if we have a categorical predictor with more than two categories? -->
+<!-- No problem -- we just need *more than one* indicator variables! -->
+<!-- ::: {.webex-check .webex-box} -->
+<!-- ```{r results = 'asis'} -->
+<!-- #| label: cat-pred-5 -->
+<!-- opts <- sample(c(answer = "4", -->
+<!--                  "3", -->
+<!--                  "5" -->
+<!--         )) -->
+<!-- cat("How many indicator variables would be needed to construct the model matrix for a regression with one predictor, which is a categorical variable with 5 categories?", -->
+<!--     longmcq(opts)) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- 
+<div class='webex-solution'><button>Click for an explanation of the answer above.</button>
+ -->
+<!-- If we have indicator variables for 4 of the 5 categories and they are all 0, then the observation must be from the fifth category. Another way of saying this is that one of the categories is "included in the intercept". -->
+<!-- 
+</div>
+ -->
+<!-- The category that is included in the intercept value is often called the "base" level. -->
+</section>
+<section id="finding-the-betas" class="level2" data-number="21.9">
+<h2 data-number="21.9" class="anchored" data-anchor-id="finding-the-betas"><span class="header-section-number">21.9</span> Finding the Betas</h2>
+<p>OK, but how do we go from a model plan and dataset to an actual fitted model? In other words, how do we estimate the <span class="math inline">\(\beta\)</span>s and find the best-fitting regression model?</p>
+<p>To find the “best-fitting” regression model for a dataset, we need to first define a metric to measure how “well” a line fits, and then find the <span class="math inline">\(\beta\)</span>s (intercept and slope(s)) that maximize it. (Actually, we’ll come up with a way to measure the mismatch between a line and the data, and find the <span class="math inline">\(\beta\)</span>s that minimize it - but it’s the same idea.)</p>
+<p>In other words, our goal at the moment is to figure out <strong>how to estimate the</strong> <span class="math inline">\(\beta\)</span>s.</p>
+</section>
+<section id="least-squares-visually" class="level2" data-number="21.10">
+<h2 data-number="21.10" class="anchored" data-anchor-id="least-squares-visually"><span class="header-section-number">21.10</span> Least Squares (visually)</h2>
+<p>One idea is to choose the “best-fit” line as the one that <em>minimizes the sum of squared residuals</em>.</p>
+<p>This method is often called <strong>Least Squares Estimation</strong> (or <em>Ordinary Least Squares</em>).</p>
+<p>First, check out <a href="https://setosa.io/ev/ordinary-least-squares-regression/">Ordinary Least Squares Estimation (explained visually)</a>. <em>Be sure to take advantage of the interactive elements to play around!)</em></p>
+</section>
+<section id="least-squares-practically" class="level2" data-number="21.11">
+<h2 data-number="21.11" class="anchored" data-anchor-id="least-squares-practically"><span class="header-section-number">21.11</span> Least Squares (practically)</h2>
+<p>Next, try your hand at off-the-cuff least squares estimation. Visit <a href="https://phet.colorado.edu/sims/html/least-squares-regression/latest/least-squares-regression_en.html">the PhET interactive simulator</a> and:</p>
+<ul>
+<li>Pick an example from the central upper pull-down menu (or create your own dataset) and:
+<ul>
+<li>Choose your best-guess slope and intercept (menu on the right)</li>
+<li>Compare your result with the best-fit line (menu on the left). How close were you? Why/how do you think you went wrong?</li>
+<li>View the residuals, and the squared residuals, for the best-fit line.</li>
+<li>Verify that you understand exactly what the <em>residuals</em> and the <em>SSE</em> = <em>RSE</em> = <strong>sum of squared residuals</strong> are measuring. In what sense does the minimal-SSE line come “closest” to the data points?</li>
+</ul></li>
+<li>Repeat the exercise for at least one more example.</li>
+</ul>
+</section>
+<section id="least-squares-explained" class="level2" data-number="21.12">
+<h2 data-number="21.12" class="anchored" data-anchor-id="least-squares-explained"><span class="header-section-number">21.12</span> Least Squares (explained)</h2>
+<p>Optionally, if you would like one more presentation of the idea of least squares fitting, watch the (slightly boring but very clear) StatQuest video explanation:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PaFPbb66DxQ?si=Jiz0AUhNLVJ6UTG9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
+</iframe>
+<p>(You can also <a href="https://www.youtube.com/watch?v=PaFPbb66DxQ">watch directly on YouTube</a> if you prefer.)</p>
+</section>
+<section id="in-r-lm" class="level2" data-number="21.13">
+<h2 data-number="21.13" class="anchored" data-anchor-id="in-r-lm"><span class="header-section-number">21.13</span> In R: <code>lm()</code></h2>
+<p>So, now we understand the principle of least squares estimation. But we certainly won’t employ it via guess-and-check to actually fit models to real data!</p>
+<p>In fact, either via calculus or linear algebra, it’s possible to obtain formulas for the slope and intercept that minimize the SSE for a given dataset. (And, of course, software knows how to use them.)</p>
+<p>The function we’ll use to fit a linear regression model in R is <code>lm()</code>.</p>
+<p>The first input to <code>lm()</code> (and basically all other R functions that fit regression models) is a <strong>model formula</strong> of the form:</p>
+<p>&nbsp;</p>
+<center>
+<h2 class="anchored">
+<strong><span class="boxed">lm</span> ( <span class="invboxed">&amp;yy</span> ~ <span class="invboxed">&amp;xx</span> , data = <span class="boxed">mydata</span> )</strong>
+</h2>
+</center>
+<p>&nbsp;</p>
+<p>How do we fill in the empty boxes?</p>
+<section id="model-formula-left-hand-side" class="level3">
+<h3 class="anchored">Model Formula: Left Hand Side</h3>
+<p>The left hand side of the formula is simplest: we just need to provide the name of the <strong>response variable</strong> that we want to model.</p>
+<p>&nbsp;</p>
+<center>
+<h2 class="anchored" data-anchor-id="model-formula-left-hand-side">
+<strong><span class="boxed">lm</span> ( <span class="boxed">&nbsp;Y&nbsp;</span> ~ <span class="invboxed">&amp;xx</span> , data = <span class="boxed">mydata</span> )</strong>
+</h2>
+</center>
+<p>&nbsp;</p>
+<p>For example, if we use dataset <code>MI_lead</code> and our response variable is <code>ELL2012</code>, the skeleton of our formula would look like:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>my_model <span class="ot">&lt;-</span> <span class="fu">lm</span>( ELL2012 <span class="sc">~</span> _______, <span class="at">data =</span> MI_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dataset note: The <code>MI_lead</code> dataset stores CDC-provided data on Michigan kids’ blood lead levels, by county, from 2005 and 2012. The dataset is at <a href="https://sldr.netlify.app/data/MI_lead.csv" class="uri">https://sldr.netlify.app/data/MI_lead.csv</a> and also provides:</p>
+<ul>
+<li><code>County</code> name</li>
+<li>Proportion kids with elevated blood lead levels, <code>ELL</code> in years 2005 and 2012</li>
+<li>the <code>Difference</code> in proportion kids with high lead levels between the two years (2012-2005)</li>
+<li>The proportion of houses in the county that were built before 1950 (and thus more likely have lead paint), <code>PropPre1950</code></li>
+<li>Which <code>Peninsula</code> of MI the county is in</li>
+</ul>
+</section>
+<section id="model-formula-right-hand-side" class="level3">
+<h3 class="anchored" data-anchor-id="model-formula-right-hand-side">Model Formula: Right Hand Side</h3>
+<p>On the other side of the formula (after the tilde symbol <span class="math inline">\(\sim\)</span>), we need to specify the name of the predictor variable(s).</p>
+<p>While this initial example is a <em>simple linear regression</em> (“simple” means just one predictor), it’s possible to have multiple ones, separated by <code>+</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>my_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(ELL2012 <span class="sc">~</span> ELL2005 <span class="sc">+</span> Peninsula, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> MI_lead)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(my_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ELL2012 ~ ELL2005 + Peninsula, data = MI_lead)
+
+Residuals:
+       Min         1Q     Median         3Q        Max 
+-0.0048244 -0.0013235 -0.0006547  0.0012533  0.0072038 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     0.0012767  0.0003786   3.372  0.00116 ** 
+ELL2005         0.1576778  0.0311305   5.065 2.67e-06 ***
+PeninsulaUpper -0.0006220  0.0008028  -0.775  0.44083    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.002407 on 78 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.2758,    Adjusted R-squared:  0.2573 
+F-statistic: 14.86 on 2 and 78 DF,  p-value: 3.417e-06</code></pre>
+</div>
+</div>
+</section>
+<section id="practice" class="level3">
+<h3 class="anchored" data-anchor-id="practice">Practice</h3>
+<p>Your turn: fit a few linear regression models of your own. You can use the <code>MI_lead</code> data, or use one of the other suggested datasets (already read in for you here):</p>
+<ul>
+<li><code>elephantSurvey</code></li>
+<li><code>gapminder_clean</code></li>
+<li><code>HaDiveParameters</code></li>
+</ul>
+<p>Each time, consider:</p>
+<ul>
+<li>How do you choose a <em>response</em> and a <em>predictor</em> variable?
+<ul>
+<li>Usually the <em>response</em> is the main variable of interest, that you would like to predict or understand.</li>
+<li>The <em>predictor</em> might cause, or be associated with, changes in the response; it might be easier to measure. Or, we might want to test whether it is associated with changes in the response or not.</li>
+</ul></li>
+<li>See if you can express a <em>scientific question</em> which can be answered by your linear regression model.
+<ul>
+<li>For example, a model with formula <code>ELL2012 ~ ELL2005</code> would answer, “Does the proportion of kids with elevated lead levels in a county in 2005 predict the proportion in 2012? (Do the same locations have high/low levels in the two years?)”</li>
+</ul></li>
+<li>Don’t forget to consider your understanding of causal relationships between variables of interest in planning your model - consdier drawing a causal diagram to help you decide which predictors should be included.</li>
+</ul>
+<div class="cell" data-layout-align="center" data-exercise="lm-formula-practice">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImxtLWZvcm11bGEtcHJhY3RpY2UifSwiY29kZSI6Im15X21vZGVsIDwtIGxtKF9fX19fIH4gX19fX18sIGRhdGEgPSBfX19fX18pXG5zdW1tYXJ5KG15X21vZGVsKSJ9
+</script>
+</div>
+</div>
+</section>
+<section id="intercepts" class="level3">
+<h3 class="anchored" data-anchor-id="intercepts">Intercepts</h3>
+<p>A (potentially non-zero) intercept is always included in all <code>lm()</code> models, by default.</p>
+<p>If you wish, you can specifically tell R to include it (which doesn’t change the default behavior, but just makes it explicit). You do this by using a right-hand-side formula like <code>1 + predictor</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(ELL2012 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> ELL2005, <span class="at">data =</span> MI_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="omitting-the-intercept" class="level3">
+<h3 class="anchored" data-anchor-id="omitting-the-intercept">Omitting the Intercept</h3>
+<p>You can omit estimation of an intercept by replacing that <code>1</code> with a <code>0</code> or a <code>-1</code>. This will force the intercept to be 0 (line goes through the origin).</p>
+<p>The 0 makes sense to me, because it’s like you’re forcing the first column of the model matrix to contain zeros instead of ones, multiplying the intercept by 0 to force it to be 0.</p>
+<p>(I’m not sure of the logic of the -1.)</p>
+<p>For example,</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(ELL2012 <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> ELL2005 <span class="sc">+</span> Peninsula,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> MI_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>But usually, we want to estimate an intercept and we don’t need this code.</strong></p>
+<!-- ### Last Chance to Practice -->
+<!-- Your turn. Try fitting a model with the same response, and the same predictor(s), but using 0, 1, and -1 to specify whether to estimate an intercept. -->
+<!-- If you don't want to use the lead dataset, or want more practice, try: -->
+<!-- - <https://sldr.netlify.app/data/elephantSurvey.csv> -->
+<!-- - <https://sldr.netlify.app/data/gapminder_clean.csv> -->
+<!-- - <https://sldr.netlify.app/data/HaDiveParameters.csv> -->
+<!-- ```{r intercept-practice, exercise = TRUE} -->
+<!-- ``` -->
+</section>
+</section>
+<section id="interpreting-summarylm..." class="level2" data-number="21.14">
+<h2 data-number="21.14" class="anchored" data-anchor-id="interpreting-summarylm..."><span class="header-section-number">21.14</span> Interpreting <code>summary(lm(...))</code></h2>
+<p>Once you’ve fitted an <code>lm()</code> in R, how can you view and interpret the results? You may have already noticed the use above of the R function <code>summary()</code>. Let’s consider in more detail…</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/x0nsEBuLm0M?si=Qom-oa7UMGlzusw5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+<p>(You can also <a href="https://youtu.be/x0nsEBuLm0M">watch directly on YouTube</a> if you prefer.)</p>
+</section>
+<section id="model-equation-practice" class="level2" data-number="21.15">
+<h2 data-number="21.15" class="anchored" data-anchor-id="model-equation-practice"><span class="header-section-number">21.15</span> Model Equation Practice</h2>
+<p><strong>You should be able to use <code>lm()</code> to fit a linear model, and then use <code>summary()</code> output to fill in numerical parameter estimates</strong> <span class="math inline">\(\hat{\beta}_0\)</span>, <span class="math inline">\(\hat{\beta}_1\)</span>, <span class="math inline">\(\hat{\beta}_2\)</span>, <span class="math inline">\(\hat{\beta}_3\)</span>, <span class="math inline">\(\hat{\beta}_n\)</span>, and <span class="math inline">\(\hat{\sigma}\)</span> in the regression equation:</p>
+<p><span class="math display">\[ y_i = \beta_0 + \beta_1x_i + \epsilon, \epsilon \sim \text{Norm}(0, \sigma)\]</span></p>
+<section id="an-example-model" class="level3">
+<h3 class="anchored" data-anchor-id="an-example-model">An example model</h3>
+<p>To practice, let’s fit a simple linear regression model in R. For data, let’s consider a dataset containing scores of 542 people who chose to take an online nerdiness quiz. Higher scores mean more nerdiness. The participants also provided their ages. Variables in the data include <code>score</code> and <code>age</code>. Does someone’s age predict their nerdiness score?</p>
+<p>Plot the data and use <code>lm()</code> to fit a simple linear regression model (just one predictor) to explore this question. The code to read in the dataset is provided for you.</p>
+<div class="cell" data-layout-align="center" data-exercise="nerd-lm">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6Im5lcmQtbG0ifSwiY29kZSI6Im5lcmRzIDwtIHJlYWQuY3N2KCdodHRwczovL3NsZHIubmV0bGlmeS5hcHAvZGF0YS9uZXJkcy5jc3YnKSJ9
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="nerd-lm">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint 1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nerds <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'https://sldr.netlify.app/data/nerds.csv'</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(_____ <span class="sc">~</span> _____, <span class="at">data =</span> ______)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="nerd-lm">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>nerds <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'https://sldr.netlify.app/data/nerds.csv'</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(score <span class="sc">~</span> age, <span class="at">data =</span> nerds)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>nerd_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(score <span class="sc">~</span> age, <span class="at">data =</span> nerds)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(nerd_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+What is beta0 for the model you just fitted?
+<div id="radio_OVEPQVKPNU" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value=""> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value=""> <span>0.22</span></label><label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value=""> <span>15.81</span></label><label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value="answer"> <span>95.8</span></label>
+</div>
+What is beta1 for the model you just fitted?
+<div id="radio_MTLEIRJTNP" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value=""> <span>15.81</span></label><label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value="answer"> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value=""> <span>95.8</span></label><label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value=""> <span>0.22</span></label>
+</div>
+What is sigma, the standard deviation of the residuals, for the model you just fitted?
+<div id="radio_VKZVMQDBTC" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value=""> <span>95.8</span></label><label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value=""> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value=""> <span>0.22</span></label><label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value="answer"> <span>15.81</span></label>
+</div>
+</div>
+</div>
+<!-- ## Another Categorical Example -->
+<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/DqdtE7Qdfg4?si=YU1pI30o1_gHjmBl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen> -->
+<!-- </iframe> -->
+</section>
+</section>
+<section id="linear-regression-conditions" class="level2" data-number="21.16">
+<h2 data-number="21.16" class="anchored" data-anchor-id="linear-regression-conditions"><span class="header-section-number">21.16</span> Linear Regression Conditions</h2>
+<p>What’s next? Before we interpret the results of a model, we have to be confident that we trust the model is appropriate enough for the data, and fits well enough, to produce results that will be reliable.</p>
+<p>So, next module, we’ll learn to do model assessment (checking that conditions are met to verify that a model is appropriate for a particular dataset).</p>
+<p>We will also go into <em>much</em> more detail about how to interpret our fitted model!</p>
+
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImRwbHlyIiwidGlkeXIiLCJyZWFkciIsInN0cmluZ3IiLCJnZ3Bsb3QyIiwiZ2dmb3JtdWxhIiwiZ2dmb3JjZSJdLCJyZXBvcyI6W119LCJyZW5kZXJfZGYiOiJkZWZhdWx0In0=
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV80O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici00LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItNC1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzQgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzQsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzQgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzQuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTMiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMyA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0zLWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfMyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMywge30pO1xuX3dlYnJfZmVlZGJhY2tfMyA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfMy5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8yID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTItY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV8yID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yLCB7fSk7XG5fd2Vicl9mZWVkYmFja18yID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV8yLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ3ZWJST2pzID0ge1xuICBjb25zdCB7IFdlYlIsIENoYW5uZWxUeXBlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lLldlYlI7XG4gIGNvbnN0IHtcbiAgICBXZWJSRXZhbHVhdG9yLFxuICAgIFdlYlJFbnZpcm9ubWVudE1hbmFnZXIsXG4gICAgc2V0dXBSLFxuICAgIGI2NERlY29kZSxcbiAgICBjb2xsYXBzZVBhdGhcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIHdlYlIgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgLy8gVXNlIFBvc3RNZXNzYWdlIGNoYW5uZWwgZm9yIGFzeW5jIGNvbW11bmljYXRpb25cbiAgLy8gV2UgZG8gbm90IGV4cGVjdCB0byB0YWtlIG5lc3RlZCBwcm9tcHQgaW5wdXQgaW4gUXVhcnRvIExpdmUgY2VsbHNcbiAgZGF0YS5vcHRpb25zLmNoYW5uZWxUeXBlID0gQ2hhbm5lbFR5cGUuUG9zdE1lc3NhZ2U7XG5cbiAgLy8gSW5pdGlhbGlzZSB3ZWJSIGFuZCBzZXR1cCBmb3IgUiBjb2RlIGV2YWx1YXRpb25cbiAgbGV0IHdlYlJQcm9taXNlID0gKGFzeW5jICh3ZWJSKSA9PiB7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIC8vIEluc3RhbGwgcHJvdmlkZWQgbGlzdCBvZiBwYWNrYWdlc1xuICAgIC8vIEVuc3VyZSB3ZWJSIGRlZmF1bHQgcmVwbyBpcyBpbmNsdWRlZFxuICAgIGRhdGEucGFja2FnZXMucmVwb3MucHVzaChcImh0dHBzOi8vcmVwby5yLXdhc20ub3JnXCIpXG4gICAgYXdhaXQgZGF0YS5wYWNrYWdlcy5wa2dzLm1hcCgocGtnKSA9PiAoKSA9PiB7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgICB3ZWJyOjppbnN0YWxsKHBrZywgcmVwb3MgPSByZXBvcylcbiAgICAgICAgbGlicmFyeShwa2csIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSlcbiAgICAgIGAsIHsgZW52OiB7XG4gICAgICAgIHBrZzogcGtnLFxuICAgICAgICByZXBvczogZGF0YS5wYWNrYWdlcy5yZXBvcyxcbiAgICAgIH19KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICBjb25zdCBhbmFseXNpcyA9IGF3YWl0IHdlYlIuRlMuYW5hbHl6ZVBhdGgocGF0aCk7XG4gICAgICAgIGlmICghYW5hbHlzaXMuZXhpc3RzKSB7XG4gICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yOiBcIiR7ZS5tZXNzYWdlfVwiLmApO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH0pKG5ldyBXZWJSKGRhdGEub3B0aW9ucykpO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgd2ViUlByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIHdlYlJQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIn1dfQ==
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./plan.html" class="pagination-link" aria-label="Model Planning for Inference">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Model Planning for Inference</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./lm-assess.html" class="pagination-link" aria-label="Assessment for Linear Models">
+        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Assessment for Linear Models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="./cclicense.html">
+<p>License</p>
+</a>
+  </li>  
+</ul>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/lm-fit.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

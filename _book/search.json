@@ -1067,7 +1067,7 @@
     "href": "graphics-code-ggformula.html#style-note",
     "title": "16  ggformula and Formulas",
     "section": "16.10 Style Note",
-    "text": "16.10 Style Note\n\nSize Matters\nWhat is the largest key on your keyboard?\n\n the arrow keys return/enter the space bar caps lock delete\n\n\n\nUmm…so why did I ask you that?\n\nMaybe there is a reason that the space bar key is biggest – you should use it a lot!.\n\n\n\nR, People, and Spaces\nR is not very picky about spaces.\n\nAny number of spaces is equivalent to a single space.\nSometimes (but not always) spaces are optional.\n\nMy advice is to use spaces liberally. Even if R doesn’t care, it makes your code easier for people to read.\n\nAlways put a space around things like +, *, ~ etc. (This is a place where R doesn’t care whether you have a space or not, but I recommend you do.)\nAlways put a space after each comma\nNever put a space between a function name and its parentheses (write head(data) not head (data))\nUse spaces and line breaks to make your code easy to read.\n\nMimic the examples you see in this section. And if you want a more comprehensive code style guide for R, check out the tidyverse style guide.\nBonus points if you point out my own style inconsistencies to me so I can correct them!",
+    "text": "16.10 Style Note\n\nSize Matters\nWhat is the largest key on your keyboard?\n\n caps lock the arrow keys the space bar delete return/enter\n\n\n\nUmm…so why did I ask you that?\n\nMaybe there is a reason that the space bar key is biggest – you should use it a lot!.\n\n\n\nR, People, and Spaces\nR is not very picky about spaces.\n\nAny number of spaces is equivalent to a single space.\nSometimes (but not always) spaces are optional.\n\nMy advice is to use spaces liberally. Even if R doesn’t care, it makes your code easier for people to read.\n\nAlways put a space around things like +, *, ~ etc. (This is a place where R doesn’t care whether you have a space or not, but I recommend you do.)\nAlways put a space after each comma\nNever put a space between a function name and its parentheses (write head(data) not head (data))\nUse spaces and line breaks to make your code easy to read.\n\nMimic the examples you see in this section. And if you want a more comprehensive code style guide for R, check out the tidyverse style guide.\nBonus points if you point out my own style inconsistencies to me so I can correct them!",
     "crumbs": [
       "Data Visualization with ggformula",
       "<span class='chapter-number'>16</span>  <span class='chapter-title'>ggformula and Formulas</span>"
@@ -1144,7 +1144,7 @@
     "href": "graphics-code-plots.html#boxplots",
     "title": "18  Code Examples",
     "section": "18.3 Boxplots",
-    "text": "18.3 Boxplots\nBoxplots are most often used to allow a quick comparison of the distribution of a quantitative variable in different groups, as shown here.\n\n\n\n\n\n\n\n\n\nWhat happens if you swap the “x” and the “y” in the formula for a boxplot? (Try it and see before answering.)\n\n An error. The quantitative variable must always be “y”, after the ~. The coordinates flip (whichever variable is “y” in the formula ends up on the y-axis). Nothing. The plot looks the same.\n\n\n\n\nClick for explanations of solution above.\n\nFor graphs where one variable is shown on the x axis and one on the y axis, swapping the order of the variables in the formula usually flips the coordinates.",
+    "text": "18.3 Boxplots\nBoxplots are most often used to allow a quick comparison of the distribution of a quantitative variable in different groups, as shown here.\n\n\n\n\n\n\n\n\n\nWhat happens if you swap the “x” and the “y” in the formula for a boxplot? (Try it and see before answering.)\n\n An error. The quantitative variable must always be “y”, after the ~. Nothing. The plot looks the same. The coordinates flip (whichever variable is “y” in the formula ends up on the y-axis).\n\n\n\n\nClick for explanations of solution above.\n\nFor graphs where one variable is shown on the x axis and one on the y axis, swapping the order of the variables in the formula usually flips the coordinates.",
     "crumbs": [
       "Data Visualization with ggformula",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>Code Examples</span>"
@@ -1287,7 +1287,7 @@
     "href": "graphics-code-plots.html#best-fit-line",
     "title": "18  Code Examples",
     "section": "18.16 Best fit line?",
-    "text": "18.16 Best fit line?\nWe could add a (simple) linear regression line to a scatter plot using the function gf_lm(), or a smooth using gf_smooth().\n\nBUT PLEASE DON’T. JUST NO. ALMOST NEVER A GOOD PLAN.\nIt looks so nice! Why is it a bad idea?\n\n\n\n\n\n\n\n\nSo why am I not allowed to use gf_lm() and gf_smooth()?\n\n My prof is just mean and opinionated. It is usually misleading and will contradict other parts of the data analysis I present. Who even cares? The function has too many bugs and causes trouble.\n\n\n\nUmm…so why is it misleading?\n\nIn most cases, our response (y) variable is expected to be associated with not just one predictor. But unless ALL the variables whose relationships you’re interested in quantifying are ALL shown in the graph, the line gf_lm() draws won’t match up with the statistical analysis you’ll do with the same data.\nIn other words, you will be showing one thing and later saying (and maybe also showing) another contradictory thing. Not ideal!\nIn the case of the smooth, it gets even more complicated. If you are modeling a relationship as linear, then showing a curve contradicts your later analysis (just like the problem with gf_lm()). If you are fitting a GLM or a GAM (where the model might estimate a nonlinear relationship), it will still almost certainly be a different one from the one that gf_smooth() will draw.\nSO adding these lines usually makes you a liar: one part of your report ends up contradicting another.",
+    "text": "18.16 Best fit line?\nWe could add a (simple) linear regression line to a scatter plot using the function gf_lm(), or a smooth using gf_smooth().\n\nBUT PLEASE DON’T. JUST NO. ALMOST NEVER A GOOD PLAN.\nIt looks so nice! Why is it a bad idea?\n\n\n\n\n\n\n\n\nSo why am I not allowed to use gf_lm() and gf_smooth()?\n\n The function has too many bugs and causes trouble. Who even cares? It is usually misleading and will contradict other parts of the data analysis I present. My prof is just mean and opinionated.\n\n\n\nUmm…so why is it misleading?\n\nIn most cases, our response (y) variable is expected to be associated with not just one predictor. But unless ALL the variables whose relationships you’re interested in quantifying are ALL shown in the graph, the line gf_lm() draws won’t match up with the statistical analysis you’ll do with the same data.\nIn other words, you will be showing one thing and later saying (and maybe also showing) another contradictory thing. Not ideal!\nIn the case of the smooth, it gets even more complicated. If you are modeling a relationship as linear, then showing a curve contradicts your later analysis (just like the problem with gf_lm()). If you are fitting a GLM or a GAM (where the model might estimate a nonlinear relationship), it will still almost certainly be a different one from the one that gf_smooth() will draw.\nSO adding these lines usually makes you a liar: one part of your report ends up contradicting another.",
     "crumbs": [
       "Data Visualization with ggformula",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>Code Examples</span>"
@@ -1309,7 +1309,7 @@
     "href": "graphics-code-plots.html#stacked-bar-graphs",
     "title": "18  Code Examples",
     "section": "18.18 Stacked bar graphs",
-    "text": "18.18 Stacked bar graphs\nWhat if, instead of one figure panel per group, you want to see a stacked bar graph for the same data? Here’s an example. You use the input:\nfill= ~ variable_name\nto specify the name of the variable that defines the groups (here, Marijuana).\nTry to see what happens if you use gf_props() or gf_percents().\n\n\n\n\n\n\n\n\n\nWhen showing a stacked bar graph with proportions, what is the default DENOMINATOR used to computing the proportions? Use the graph you just made to figure it out.\n\n The total number of observations in the dataset (so all the parts of all the bars together sum to 1) The number of observations in the “fill” variable group (so all bar-parts of the same color sum to 1) The number of observations in the stack (so the parts of one bar together sum to 1)\n\n\nArgh! That’s not usually what you want…",
+    "text": "18.18 Stacked bar graphs\nWhat if, instead of one figure panel per group, you want to see a stacked bar graph for the same data? Here’s an example. You use the input:\nfill= ~ variable_name\nto specify the name of the variable that defines the groups (here, Marijuana).\nTry to see what happens if you use gf_props() or gf_percents().\n\n\n\n\n\n\n\n\n\nWhen showing a stacked bar graph with proportions, what is the default DENOMINATOR used to computing the proportions? Use the graph you just made to figure it out.\n\n The total number of observations in the dataset (so all the parts of all the bars together sum to 1) The number of observations in the stack (so the parts of one bar together sum to 1) The number of observations in the “fill” variable group (so all bar-parts of the same color sum to 1)\n\n\nArgh! That’s not usually what you want…",
     "crumbs": [
       "Data Visualization with ggformula",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>Code Examples</span>"
@@ -1441,7 +1441,7 @@
     "href": "graphics-code-plots.html#color-by-variable-values",
     "title": "18  Code Examples",
     "section": "18.30 Color: by variable values",
-    "text": "18.30 Color: by variable values\nOften, rather than manually setting all elements to be one color, we want to map color to some variable (so that each value of that variable corresponds to a distinct color).\nTo do it, we provide the input color = ~variable to our plotting function. * color = ~wday maps color to the day of the week wday.\nFor example, to map color to wday in a time-series plot of 1978 births:\n\n\n\n\n\n\n\n\nThis works for continuous variables, too, but the color scale used will be continuous instead of distinct discrete colors that are easy to tell apart. Try mapping color to day_of_year in the same time-series plot as above.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\ngf_point(births ~ date, data = Births1978, ...)\n\n\n\n\n\n\n\n\n\n\n\nHint 2\n\n\n\n\n\ngf_point(births ~ date, data = Births1978, color = _______)\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\ngf_point(births ~ date, data = Births1978, color = ~day_of_year)\n\n\n\n\n\nDoes it appear that the number of births is different on weekends and weekdays?\n\n no more data would be needed to be able to answer yes\n\nWhat actually happens if you omit the ~ before ~ wday? (Try it and see.)\n\n There is an error message: 'wday' not found. All the dots are the same color. It works just the same. The tilde is not required.\n\n\nEarlier, we saw how to change the fill color in density plots:\n\n\n\n\n\n\n\n\nIf you wanted to change the color of the lines in a gf_dens() plot, you would use color instead of fill:\n\n\n\n\n\n\n\n\nWe saw something similar in stacked bar graphs. So, you can color lines or fill shapes by a variable in many graph types - experiment!",
+    "text": "18.30 Color: by variable values\nOften, rather than manually setting all elements to be one color, we want to map color to some variable (so that each value of that variable corresponds to a distinct color).\nTo do it, we provide the input color = ~variable to our plotting function. * color = ~wday maps color to the day of the week wday.\nFor example, to map color to wday in a time-series plot of 1978 births:\n\n\n\n\n\n\n\n\nThis works for continuous variables, too, but the color scale used will be continuous instead of distinct discrete colors that are easy to tell apart. Try mapping color to day_of_year in the same time-series plot as above.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\ngf_point(births ~ date, data = Births1978, ...)\n\n\n\n\n\n\n\n\n\n\n\nHint 2\n\n\n\n\n\ngf_point(births ~ date, data = Births1978, color = _______)\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\ngf_point(births ~ date, data = Births1978, color = ~day_of_year)\n\n\n\n\n\nDoes it appear that the number of births is different on weekends and weekdays?\n\n yes no more data would be needed to be able to answer\n\nWhat actually happens if you omit the ~ before ~ wday? (Try it and see.)\n\n All the dots are the same color. There is an error message: 'wday' not found. It works just the same. The tilde is not required.\n\n\nEarlier, we saw how to change the fill color in density plots:\n\n\n\n\n\n\n\n\nIf you wanted to change the color of the lines in a gf_dens() plot, you would use color instead of fill:\n\n\n\n\n\n\n\n\nWe saw something similar in stacked bar graphs. So, you can color lines or fill shapes by a variable in many graph types - experiment!",
     "crumbs": [
       "Data Visualization with ggformula",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>Code Examples</span>"
@@ -1544,6 +1544,1057 @@
     "crumbs": [
       "Data Visualization with ggformula",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>Code Examples</span>"
+    ]
+  },
+  {
+    "objectID": "design-intro.html",
+    "href": "design-intro.html",
+    "title": "Study Design & Model Planning",
+    "section": "",
+    "text": "Preface: What’s a Model?\nWe will spend most of this course learning to fit different kinds of regression models. What are they?\nWe will learn as we go. But as a starting point…\nEssentially, we are looking to quantify relationships between our response and predictor(s) – accompanied by appropriate measures of the uncertainty of our estimates.",
+    "crumbs": [
+      "Study Design & Model Planning"
+    ]
+  },
+  {
+    "objectID": "design-intro.html#preface-whats-a-model",
+    "href": "design-intro.html#preface-whats-a-model",
+    "title": "Study Design & Model Planning",
+    "section": "",
+    "text": "In a regression model, we have one main response or outcome variable of interest\nWe want to assess whether our response variable is or isn’t associated with (some of) a suite of possible predictor variables (also sometimes known as covariates but we’ll avoid the word “covariates” because it sometimes means slightly different things in different disciplines).",
+    "crumbs": [
+      "Study Design & Model Planning"
+    ]
+  },
+  {
+    "objectID": "design-intro.html#section-learning-outcomes",
+    "href": "design-intro.html#section-learning-outcomes",
+    "title": "Study Design & Model Planning",
+    "section": "Section Learning Outcomes",
+    "text": "Section Learning Outcomes\nThis section, we will learn strategies for planning a regression model - how many variables, and which ones, should be included as predictors? How does an analyst decide? What principles underlie these decisions?\nBy the end of the section you will:\n\nDefine a causal diagram, and the variable types that can be depicted in one\nUse a causal diagram to determine which variables to include as predictors in a regression model\nApply the n/15 rule-of-thumb in model planning, to determine how many coefficients can be reliably estimated with a given dataset\nCombine a causal diagram, the n/15 rule, and a modeling goal to articulate a well-reasoned plan for a multiple linear regression model\n\nAlong the way, we will also review some introductory stat material on study design and types of experiments, to make sure we are all have the same vocabulary in place. You won’t be directly assessed on this material and so it is marked as optional.\n\n\n\n\n\n\n\n\n\nComic from xkcd",
+    "crumbs": [
+      "Study Design & Model Planning"
+    ]
+  },
+  {
+    "objectID": "design-intro.html#text-reference",
+    "href": "design-intro.html#text-reference",
+    "title": "Study Design & Model Planning",
+    "section": "Text Reference",
+    "text": "Text Reference\nRecommended reading for the materials covered in this tutorial can be found in:\n\nBeyond Multiple Linear Regression Ch. 1.4-1.6\nEcological Models & Data in R Ch. 9\nCourse Notes Chapter 1\nStatistical Modeling: A Fresh Approach Chapter 18\nSee also: A biologist’s guide to causal inference\n\nIt’s suggested that you read these chapters after reviewing this section, with particular focus on the topics you found most challenging.",
+    "crumbs": [
+      "Study Design & Model Planning"
+    ]
+  },
+  {
+    "objectID": "design.html",
+    "href": "design.html",
+    "title": "19  Sample and Study Design",
+    "section": "",
+    "text": "19.1 Sampling Strategies\nBefore you can start modeling, you need data.\nIn our course, we focus on analyzing data (not collecting it), and we use datasets that have already been collected by others.\nBut to do analysis well, you need to consider the metadata – for example, who collected your data, and why? How was it obtained exactly? To know how these things might influence our analysis and conclusions, we might need a quick review of sampling strategies and study design.\nAlmost every dataset contains information on a sample of cases from a larger population.\nAnd if the sample is biased – that is, not representative of the full population in important ways – then we won’t be able to make any valid inferences from it. So the process used to choose a sample is crucial to the validity of all results! What are ways to choose a sample?",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Sample and Study Design</span>"
+    ]
+  },
+  {
+    "objectID": "design.html#sampling-infographic",
+    "href": "design.html#sampling-infographic",
+    "title": "19  Sample and Study Design",
+    "section": "19.2 Sampling Infographic",
+    "text": "19.2 Sampling Infographic\nHere’s an infographic version of the main ideas here, in infographic form. This infographic includes a couple additional sampling approaches that are used in human health studies, and also introduces one more bit of terminology: probability vs. non-probability sampling. In probability methods, there is some element of random selection that is used; in non-probability samping, there is not.\nYou can also view the infographic on the web.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Sample and Study Design</span>"
+    ]
+  },
+  {
+    "objectID": "design.html#study-design",
+    "href": "design.html#study-design",
+    "title": "19  Sample and Study Design",
+    "section": "19.3 Study Design",
+    "text": "19.3 Study Design\nA crucial distinction is between two broad classes of research studies: observational studies and experimental studies.\nSide note: many students in the sciences find that the statistical definition of an “experimental study” doesn’t mesh perfectly with the definition of an “experiment” that they learn in science courses. If it helps, you can think of “experiment” keeping the colloquial meaning it has in your field, and think of “experimental study” as a technical statistical descriptor of a study (as we will learn it today).\nYou probably have prior knowledge or a good intuitive guess as to the difference between studies that are observational and experimental. We’ll review key concepts more later on, but to start, take a chance to assess your existing hunches. Study the infographic below with this distinction in mind: Does the infographic confirm, modify, or add nuance to your initial idea of how “observational” and “experimental” studies differ? As a bonus, the image also details a few kinds of studies within each broad class, and orders them in terms of the strength of evidence they can provide.\n\n\n\n\n\n\n\n\n\n\nAn Alternative\nYou may spend less time with this one - but here’s an alternative infographic covering much of the same information. It’s organized differently, but consistent - dive in if you’d like to review again!\n\n\n\n\n\n\n\n\n\nOne thing to notice in this version is the emphasis on randomized experimental studies like clinical trials as a source of possible causal conclusions – the NIH notes that a randomized experiment has the best chance of allowing researchers to conclude that one thing causes another, while that is difficult to impossible in observational work. Why?\n\n\nWhy Randomization?\nRandomization is a key tactic for ensuring the results of an experimental study are reliable, and providing a strong basis for concluding that a particular treatment or intervention causes a certain outcome or result.\nRandomization means participants are assigned randomly to different “treatments;” they are randomly chosen to receive different assigned values of the key variable(s) that researchers are controlling or manipulating. If this procedure is not followed, then the different treatment groups may differ systematically in some important feature (like gender, motivation, initial health status - anything that might influence the outcome). Here’s one more video that explains the issue quite clearly, in the context of human randomized controlled trials:\n\n\nYou can also watch it outside the tutorial.\n\n\nRandom SAMPLE vs RANDOMIZATION\nCareful! Many students confuse random sampling with randomization, or use one term when they mean the other. Check your understanding: which is which?\n\n\nWhat is the difference between random sampling and randomization?\n\n Random sampling has to do with how cases to study are randomly chosen from the population, while randomization has to do with how already-chosen participants are randomly assigned to experimental treatment groups. It depends on the context; they are very similar Randomization has to do with how cases to study are randomly chosen from the population, while random sampling has to do with how already-chosen participants are randomly assigned to experimental treatment groups.\n\n\n\n\n\nClick for explanations of solution above.\n\nThe words seem similar, but are distinct technical terms!\nRandomization has to do with how values of a “treatment” variable of special interest are assigned: randomly!\nRandom sampling means that the individuals (whether they are people, places, or things…) in the study were selected from the population at random.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Sample and Study Design</span>"
+    ]
+  },
+  {
+    "objectID": "design.html#observational-vs-experimental-studies",
+    "href": "design.html#observational-vs-experimental-studies",
+    "title": "19  Sample and Study Design",
+    "section": "19.4 Observational vs Experimental Studies",
+    "text": "19.4 Observational vs Experimental Studies\nWe mentioned earlier that the key distinction for us will be between observational and experimental studies. Hopefully you’ve already started to form a mental map of the differences. Here’s one of the most clear, concise, complete statements of the main ideas I’ve ever heard:\n\n\nYou can also watch outside this tutorial.\nAnd now, a one-minute review of the basics:\n\n\nYou can also watch outside this tutorial.\nBy now, you should be able to provide a short definition of each study type and note key differences between observational and experimental studies.\n\nEven more\nIf you would like to know more about some of the other study types featured in the infographics but not discussed in detail so far, you can check out the optional video below:\n\n\nYou can also watch outside this tutorial.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Sample and Study Design</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html",
+    "href": "plan.html",
+    "title": "20  Model Planning for Inference",
+    "section": "",
+    "text": "20.1 Motivation\nJust as we imagine before we start coding to create graphics, we ought to think before we start fitting models.\nTraditional ways of interpreting statistical results are premised on the idea that you made a plan, got some data, fitted the model you planned, and want to draw conclusions.\nIf, instead, you got data, scrutinized the data, fitted lots of different models, and now want to report results from the one that fitted best…well, generally things tend to go wrong. This is especially true if you use the data to lead you from a more complex to a simpler model. As Harrell (2015) points out in section 4.3, the problems are huge:\nHow can we avoid these problems? Some more insight will come when we consider model assessment and selection in future sections. For now, we need to remember:\nAnd remember, this is al if inference is the goal of modeling - things are quite different if you are doing predictive modeling.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#motivation",
+    "href": "plan.html#motivation",
+    "title": "20  Model Planning for Inference",
+    "section": "",
+    "text": "Uncertainty underestimated (overconfidence: standard errors and confidence intervals too small, \\(R^2\\) too big, unfounded confidence that associations are real when they may not be).\nSpurious relationships look important and slope estimates are biased high\nIf testing hypotheses, p-values too small\n\n\n\nFitting and interpreting one well-considered, sensible model is prefereable to trying many things and then trying to choose among them later.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#response-and-predictors",
+    "href": "plan.html#response-and-predictors",
+    "title": "20  Model Planning for Inference",
+    "section": "20.2 Response and Predictors",
+    "text": "20.2 Response and Predictors\nA regression model is our attempt to quantify how a response variable of interest changes when a set of predictor variables change.\nSo, to begin, we need to identify our (one) response variable – the thing we are most interested in measuring or predicting or describing or understanding.\nThen, we need to identify a set of predictor variables that we expect to be associated with changes in the response. (If we are planning an experiment, they should be variables we can collect data on; if working with data already collected, they must be in or derived from the data available.)\nHow do we choose which predictors to include, and how many?",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#expertise",
+    "href": "plan.html#expertise",
+    "title": "20  Model Planning for Inference",
+    "section": "20.3 Expertise",
+    "text": "20.3 Expertise\nFirst, rely on experts and previous experience. If you know the context of the problem well, you have a good sense of the predictors that will be of interest. If you don’t, then you should consult experts (or published work on the topic).\nThere are also practical limits on the number of predictors you can reasonably consider, given a dataset.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#dataset-size-n15-rule",
+    "href": "plan.html#dataset-size-n15-rule",
+    "title": "20  Model Planning for Inference",
+    "section": "20.4 Dataset Size (n/15 rule)",
+    "text": "20.4 Dataset Size (n/15 rule)\nOne important consideration, when planning a regression model, is: How many predictors can I reasonably include?\nIt depends on the size of the dataset: it takes several observations to get a good estimate of any statistics, so it makes sense that fitting a model with lots of predictors will require a bigger dataset. Each additional observation may add a little bit more capacity for fitting a more complex model.\nAnd if you try to fit too many, the chances of overfitting increase. Overfitting is when you model noise as well as signal, capturing in your model apparent relationships that actually exist only in the current dataset, not in reality.\nFor linear regression, Harrell (2015, Chapter 4.6) offers a rule of thumb: the number of parameters being estimated, \\(p\\), should be less than \\(\\frac{n}{10}\\) or \\(\\frac{n}{20}\\). To give just one standard rule of thumb, we should aim for \\(p &lt; \\frac{n}{15}\\). \\(n\\) is the sample size (number of rows in the dataset).\nThis “n/15 rule” is a very rough rule of thumb - sometimes it seems you can get away with estimating a few more parameters than it says, and sometimes fewer (particularly in the case of categorical predictors where the observations are not evenly distributed across combinations of categories). But it gives us a reality check and a starting point for planning.\nRemember, n/15 is a ceiling – and upper limit on the number of parameters you could estimate. It’s not a goal! You may have less.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#causation-revisited",
+    "href": "plan.html#causation-revisited",
+    "title": "20  Model Planning for Inference",
+    "section": "20.5 Causation Revisited",
+    "text": "20.5 Causation Revisited\nIn most intro stat courses, students learn to repeat statements like: “Correlation doesn’t imply causation, and only randomized experimental studies can draw causal conclusions.”\nWell…kind of.\nIn data science, big observational datasets (collected in the absense of a structured study design) are really common. There are also many scenarios of interest where randomized experiments are just not possible on practical and ethical grounds.\nSome blatant examples: experiments in which people were randomly assigned to dislocate their shoulders to investigate factors influencing recovery, or start smoking to see if they get cancer, or expose themselves to someone with a contagious disease to see if they become ill. In many situations, observational work is the only real option. What’s a researcher to do?\nIn recent decades the field of causal inference has made great strides in thinking intelligently about how best to make the most reliable conclusions possible about cause and effect, when observational data is all you have. To begin to understand, we have to define a few terms: direct causation vs. indirect causation, and three alternative situations: confounders, mediators, and colliders. This field is new and technical, but the next video is about the most concise and clear primer I know of (with concrete examples).\n\n\nYou may also watch it outside this tutorial.\n\nMediators, Moderators, Precision Covariates\nOK, wait a sec. The video didn’t cover mediators! A mediator is another term for what the video called an “indirect cause” – a link in the middle of a causal chain. The mediator explains or is part of the process by which an upstream cause leads to an effect.\nThere are two other variable types it may be useful to name, too:\n\nPrecision covariates affect the response variable of interest, without having any causal links at all to the “main” predictor of interest. We include them in models when we can, to get more precise estimates.\nModerators interact with the main predictor of interest. The cause-effect relationship between the main predictor and the response varies depending on the value of the moderator variable. (Moderators might additionally affect the predictor and/or the response directly, so they may share some features with precision covariates and confounders.)",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#whats-a-causal-diagram",
+    "href": "plan.html#whats-a-causal-diagram",
+    "title": "20  Model Planning for Inference",
+    "section": "20.6 What’s a Causal Diagram?",
+    "text": "20.6 What’s a Causal Diagram?\nA causal diagram is a picture mapping the causal relationships between key variables. They are used when researchers are interested in quantifying causal relationships between variables – not just, “is X associated with a change in Y?” but “does X cause a change in Y?”\nTo make causal conclusions with confidence outside the context of a randomized, controlled experimental study is a big challenge, and mapping out starting assumptions about relationships between variables is just the first part.\nEven if we are not necessarily trying to make causal conclusions (we won’t be here, with observational data), when you model relationships of several variables, a causal diagram helps you make smart, thoughtful choices about the ones you include in your model and the ones you leave out.\nThe diagram surfaces your starting assumptions about relationships between variables. It makes your assumptions transparent (to others and to you!) and guides choices about what to include/exclude from a model.\nPeople also call causal diagrams DAGs (for Directed Acyclic Graphs) since they are a specific application of that [broader] type of mathematical graph. So, every causal diagram is a DAG, but in math there can be DAGs that are not statistical causal diagrams.\nIn a causal diagram each box is a variable, and arrows connect causes to effects (with the arrowhead pointing from the cause to the effect).",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#diagrams-in-r",
+    "href": "plan.html#diagrams-in-r",
+    "title": "20  Model Planning for Inference",
+    "section": "20.7 Diagrams in R?",
+    "text": "20.7 Diagrams in R?\nA short note about drawing causal diagrams in R. The tools to do this are rapidly evolving, and for now, many of them can be a bit frustrating and idiosyncratic.\nTo keep things simple, an option is to just draw your diagrams by hand, and take a photo of them (if on paper) or save the image file (if electronic). If using a server, you’ll need to upload the image, but then you can pretty easily include your image in a Quarto file.\nIf you’d like to create your diagrams in R, you might want to consider using mermaid or graphviz diagrams, which Quarto supports.\nAnother somewhat popular option is the R package dagitty, although take care (its diagrams are not quite as pretty or customizable, and it sometimes throws inscrutable errors because of buried conflicts with other packages we use).\nYou are welcome to explore these options if you’re motivated, but hand-drawn diagrams are fine for our course – for us, the point is not making camera-ready diagrams, but using diagrams to plan our models well.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#variable-types",
+    "href": "plan.html#variable-types",
+    "title": "20  Model Planning for Inference",
+    "section": "20.8 Variable Types",
+    "text": "20.8 Variable Types\nIn a multi-variable analysis, there is often one key variable of interest (measuring “response” or “outcome” or “effect”) and another one which may influence it, and is the focus of greatest research interest (a key “predictor” or “cause”).\nBut there are generally other variables in the mix that are somehow relevant to understanding the predictor – response relationship. How can we classify (and diagram) them?\nIn all examples below, X is the predictor of greatest interest and Y is the response. (A is the other variable.) The definitions below all depend on a specific X and Y having been chosen: the other variable types are defined relative to the X-Y relationship.\n\nPrecision Covariate\nHere’s an example of A acting as a precision covariate. Precision covariates are also known as competing exposures.\n\n\n\n\n\n\n\n\n\nBased on the diagram, can you explain in words what a precision covariate is?\n\n\nClick for one definition…\n\nA precision covariate affects only the response variable.\n\nBest practice is to include precision covariates in a model trying to measure the size of the effect of X on Y, to get the most precise estimates possible…but if you don’t, it won’t bias your estimate of the size of X’s influence on Y. Can you explain why?\n\n\nMediator\nHere are two (slightly different) examples of A acting as a mediator. Based on the diagram (and the code), explain in words what a mediator is.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBased on the diagrams, can you explain in words what a mediator is?\n\n\nClick for one definition…\n\nA mediator is part of a chain of causes and effects, between the main predictor of interest and the response.\n(You may also see mediation chains elsewhere in a diagram/scenario…for example, a chain of three causes/effects that together act as a precision covariate.)\n\nHow is this different from a precision covariate?\n\n\nHmm, not sure – show me how it’s different!\n\nA mediator is part of a chain of causes and effects, between the main predictor of interest and the response.\nIt affects the response, but unlike a precision covariate, it’s also affected by the predictor of interest.\n\nIf you have a situation like the first picture above, where there are no branches/only one single path from your predictor to the response, include only your predictor and that’s it.\nBUT if there are mediator(s) and if there are branches in the path(s), like the second picture above that’s when you have options.\nIf you want to estimate the total effect of the upstream predictor of interest, exclude the mediator(s). If you want to distinguish and quantify effects along several pathways (via the mediator in question, and another way), then include one variable along each branch whose influence you want to measure.\nBoth can be valid. Researchers have to choose which they want to do.\n\n\nConfounder\nBelow is another causal diagram, in which A is a confounder.\n\n\n\n\n\n\n\n\n\nCan you define “confounder” in words?\n\n\nClick for one definition…\n\nA confounder affects both the predictor and the response.\n\nIf there is a confounder present and you do not include it in your model, then you may wrongly conclude X causes Y.\nSo best practice is to include all confounders in a model.\n\n\nCollider\nCollider bias caused by collider variable A looks like:\n\n\n\n\n\n\n\n\n\nA collider is affected by both the predictor and response. (Their influence arrows “collide” at the collider…)\nIncluding a collider in a model designed to measure association between X and Y can induce association where there is actually none so best practice is to make sure you do not include colliders in models.\n\n\nModerator\nA variable that moderates (increases or decreases the size of) the causal link between two other variables is a Moderator.\n(If you have studied interactions before in the context of regression models, a cause and a moderator interact to influence the effect.)\nUnfortunately in our diagrams there is not really an adequate way to draw moderators – for good reasons – but here’s a diagram (from Yoon 2020) to help get a sense of the situation:\n\n\n\n\n\n\n\n\n\nIf you think you have a moderator variable, best practice is to include it in your model interacting with X. (We will return to interactions in much more detail later on.)\n\n\nMore\nThere are more details and more complicated scenarios, of course. This is all you need to master to start with. If you want to explore more, check out https://cran.r-project.org/web/packages/ggdag/vignettes/bias-structures.html",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#more-reference-drill",
+    "href": "plan.html#more-reference-drill",
+    "title": "20  Model Planning for Inference",
+    "section": "20.9 More Reference & Drill",
+    "text": "20.9 More Reference & Drill\nCheck out the materials and interactive questions at: http://dagitty.net/learn/graphs/roles.html",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "plan.html#summary-causal-diagrams",
+    "href": "plan.html#summary-causal-diagrams",
+    "title": "20  Model Planning for Inference",
+    "section": "20.10 Summary: Causal Diagrams",
+    "text": "20.10 Summary: Causal Diagrams\nSoooo….what? How will this affect our work? Well, we will often be interested in the association or relationship between two key variables, a potential cause or “predictor” x and a potential effect or “response” y. Unless we have data from a randomized experimental study, we need to be clever about which other variables to include in our analysis to get the best, most accurate estimate of the x - y relationship:\n\nIf there are any confounders we should include them in our models and analysis. This is often called controlling for the confounders’ effects.\nIf there is a mediator, you may have a choice.\n\nIf there are no branches/only one single path from your predictor to the response, include only your predictor and that’s it.\nIf there are branches in the path, that’s when you have options. If you want to estimate the total effect of the upstream predictor of interest, exclude the mediator(s). If you want to distinguish and quantify effects along several pathways (via the mediator in question, and another way), then include one variable along each branch whose influence you want to measure.\n\nIf there are any colliders they should not be included in our models and analysis - including them would actually reduce the accuracy of our assessment of the x - y relationship\n\nSeems simple enough, right? There’s a catch. To decide whether something might be a collider or a confounder, you have to rely on your knowledge or belief about what causes what. Even experts don’t always agree. There is not usually a definite right answer that is easy to agree on. This is one thing that makes causal inference with observational data so hard, and contentious!\nBut closing your eyes to the issue and skipping the step of making a causal diagram doesn’t solve anything at all. Whatever model you fit is consistent with some causal diagrams, and not others. So by drawing the diagram as best you can, and designing your model accordingly, you are being transparent and explicit about your assumptions instead of keeping yourself and your audience ignorant that those assumptions exist, and have consequences.\nMy personal advice is: if in doubt, and if the data allow it, control for all the potentially important variables you can. The exception, of course, if is you are sure or quite sure the variable is a collider - in that case you definitely MUST exclude it.",
+    "crumbs": [
+      "Study Design & Model Planning",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Model Planning for Inference</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html",
+    "href": "lm-fit.html",
+    "title": "21  Fitting Linear Models in R",
+    "section": "",
+    "text": "21.1 Learning Outcomes\nThis section, we’ve already considered strategies for planning a regression model - how many variables, and which ones, should be included as predictors? How does an analyst decide?\nNow, here, we will also learn to fit the models in R and examine the results.\nBy the end of the section you will:",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#learning-outcomes",
+    "href": "lm-fit.html#learning-outcomes",
+    "title": "21  Fitting Linear Models in R",
+    "section": "",
+    "text": "Fit a multiple linear regression to a dataset in R, using multiple quantitative and/or categorical predictors\nState the equation of a linear regression model, based on a model description or an R model summary",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#text-reference",
+    "href": "lm-fit.html#text-reference",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.2 Text Reference",
+    "text": "21.2 Text Reference\nRecommended reading for the materials covered in this tutorial can be found in:\n\nBeyond Multiple Linear Regression Chapter 1.4-1.6\nCourse Notes Chapter 1\nIntro to Modern Statistics Chapter 3*\nEcological Models & Data in R Chapter 9\nStatistical Modeling: A Fresh Approach Chapters 6-8",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#quick-review-of-lines",
+    "href": "lm-fit.html#quick-review-of-lines",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.3 Quick review of lines",
+    "text": "21.3 Quick review of lines\nConsider the line below.\n\n\n\n\n\n\n\n\n\nYou may remember that lines have equations that look like\n\\[y = mx + b\\]\nwhere \\(m\\) is the slope and \\(b\\) is the \\(y\\)-intercept (the value of \\(y\\) when \\(x = 0\\)). So we can read off an equation for our line by figuring out the slope and the intercept.\n\nIntercept and Slope\nWhen \\(x = 0\\) on the line we just looked at, \\(y = 2\\), so the intercept is \\(2\\). It’s indicated by the red dot below:\n\n\n\n\n\n\n\n\n\nThe slope is computed as “rise over run”. We can compute this by comparing the red and blue dots and doing a little arithmetic.\n\n\n\n\n\n\n\n\nAny two points on the line give the same slope. Chose two different points on the line and recompute the rise and the run. You should get the same slope.\nSo the equation for our line is\n\\[y = 4x + 2\\]\nStatisticians like to write this a different way (with the intercept first and with different letters):\n\\[ y = \\beta_0 + \\beta_1 x\\]\n\\[y = 2 + 4x\\]\nSo \\(\\beta_0\\) (read “beta zero”) is the intercept and \\(\\beta_1\\) (read “beta one”) is the slope.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#simple-linear-regression-equation",
+    "href": "lm-fit.html#simple-linear-regression-equation",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.4 Simple Linear Regression Equation",
+    "text": "21.4 Simple Linear Regression Equation\nIn your intro stat course (whenever that was!) you likely learned to fit simple linear regression models, and hopefully also to check the conditions that must hold for such models to give reliable results. (If you didn’t learn that condition-checking, known as model assessment, don’t worry - stay tuned for next week!) Some of the material early in our course may be review for some, but we will build on it rapidly too.\nHere, we start with a reminder of the form of the linear regression equation, which is a small elaboration of the equation of a line we just saw:\n\\[ y = \\beta_0 + \\beta_1 x + \\epsilon, \\epsilon \\sim \\text{Norm}(0, \\sigma)\\]\n\n\\(y\\) is the response variable\n\\(x\\) is the predictor (or explanatory) variable\n\\(\\beta_0\\) is the intercept. To fit the model to a specific dataset, we have to estimate the numeric value of this parameter.\n\\(\\beta_1\\) is the slope. To fit the model to a specific dataset, we have to estimate the numeric value of this parameter.\n\\(\\epsilon\\) are the residuals (or errors).\n\nThey measure the vertical distance between an observed data point (\\(y_i\\) is the \\(i\\)th one) and the predicted (or fitted) value on the line for the same predictor variable value (\\(\\hat{y}_i\\)). Much more about residuals later one!\nResiduals have a normal distribution with mean 0 and standard deviation \\(\\sigma\\) (some value that we can estimate once we have the slope and intercept: we compute the fitted values \\(\\beta_0 + \\beta_1x\\) and subtract from the observed response variable values to get the residuals, then estimate their standard deviation \\(\\sigma\\).)",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#multiple-predictors",
+    "href": "lm-fit.html#multiple-predictors",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.5 Multiple Predictors",
+    "text": "21.5 Multiple Predictors\nOften, statisticians consider more than one \\(x\\) variable. Why? Well, most response variables we are interested are associated with not just one but many different variables – in the language we just learned, many variables could be potential causes, confounders, mediators, or moderators (but not colliders…because we would not put those in the model).\nWith multiple predictors, the linear regression equation looks more like\n\\[ Y = \\beta_0 + \\beta_1 x_1 + \\beta_2 x_2 + \\dots \\beta_p x_p + \\varepsilon\\] \\[\\varepsilon \\sim \\text{Norm}(0, \\sigma)\\]\nwhere\n\n\\(\\mathbf{Y}\\) is the response variable value,\nthe \\(\\beta_0\\) is the intercept,\n\\(\\beta_1, \\dots \\beta_p\\) are the \\(p\\) “slopes”,\n\\(x\\)s are the \\(p\\) predictor variable values, and\n\\(\\varepsilon\\) are the “errors” (since real data doesn’t all fall exactly on a line).\n\nWhen we use data to estimate the \\(\\beta_i\\)’s, we may write it this way:\n\\[ \\hat Y = \\hat{\\beta}_0 + \\hat{\\beta}_1 x_1 + \\hat{\\beta}_2 x_2 + \\dots \\hat{\\beta}_p x_p\\]\n\nThe hats on top of the the \\(\\beta\\)s and \\(Y\\) indicate that they are being estimated from data (they are statistics or estimates rather than parameters now!)\nNote that the error term is gone now: we know exactly what our estimate \\(\\hat Y\\) is, with no error.\n\nBut \\(\\hat Y\\) isn’t (usually) identical to \\(Y\\). The difference is our friend the residual:\n\n\\[\n\\begin{align*}\n\\mbox{residual} = \\hat\\varepsilon & = Y - \\hat Y \\\\\n& = \\mbox{observed reponse} - \\mbox{model response}\n\\end{align*}\n\\]\nAgain, the hats indicate that we are making estimates using data (hats basically always mean this in statistics). Those “beta hat” and “Y hat” values come from our fitted model. The \\(\\hat \\beta\\)s are called the coefficients (or, more precisely, the estimated coefficients) or the “beta hats”.\n\nYou will sometimes encounter slightly different notation for linear models. Two common things are:\n\nThe use of \\(b_0, b_1, \\dots, b_p\\) instead of \\(\\hat \\beta_0, \\hat \\beta_1, \\dots \\hat \\beta_p\\).\nDropping of hats. In particular, the hat is often left off of the response variable when the model is presented with the numerical coefficient estimates plugged in.\n\nAnd the models themselves go by different names: regression model, least squares model, least squares regression model, etc.\nDon’t let these little differences distract you. If you focus on the important concepts, you should be able to navigate the notation, whichever way someone does it.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#toy-dataset-pigeons",
+    "href": "lm-fit.html#toy-dataset-pigeons",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.6 Toy Dataset: Pigeons",
+    "text": "21.6 Toy Dataset: Pigeons\nFor the next few examples, we’ll consider a very small dataset on racing pigeons from Michigan. Their unirate scores measure their racing performance (smaller is better).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUnirate\nOwnerName\nSex\nAge\n\n\n\n\n2.864\nKENNIER PALMIRA\nH\n1.9\n\n\n2.965\nTOM RICHARDS\nH\n1.5\n\n\n4.304\nKENNIER PALMIRA\nH\n2.3\n\n\n5.027\nTOM RICHARDS\nC\n2.2\n\n\n9.189\nTOM KUIPER\nC\n2.8",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#fitting-a-normal-distribution",
+    "href": "lm-fit.html#fitting-a-normal-distribution",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.7 Fitting a normal distribution",
+    "text": "21.7 Fitting a normal distribution\nLet’s try to reformulate a familiar exercise – fitting a normal distribution to a dataset – as a linear regression problem.\nWe might want to consider a model where the pigeon Unirate scores are \\(iid\\) (independent, identically distributed) samples from a \\(N(\\mu, \\sigma)\\) distribution.\n\n\nHow could we reformulate that model as a linear regression?\n\n Two 4 x 46 One 4 x 47 None\n\n\n\n\n\nClick for explanations of solution above.\n\nWhat predictor(s) does the unirate score depend on in this model? Well…none, in fact!\n\n\nA no-predictor model\nIt can make sense to think of the residuals \\(\\mathbf{\\epsilon}\\) of a linear regression having a \\(N(0, \\sigma)\\) distribution – they are normally distributed, and the model is right on average, but not spot on for every data observation. This gives us the “intercept-only” regression model:\n\\[ \\mathbf{Y} = \\mu \\mathbf{1} + \\epsilon,\\]\n\\[\\epsilon \\stackrel{iid}{\\sim} N(0, \\sigma)\\]\nHere \\(\\mathbf{X}\\) is just a column vector of ones, since there are no predictors, and the intercept \\(\\beta_0\\) is \\(\\mu\\), the mean Unirate score.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#one-predictor",
+    "href": "lm-fit.html#one-predictor",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.8 One Predictor",
+    "text": "21.8 One Predictor\nOf course, we can also fit models with one or more predictor variables.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#finding-the-betas",
+    "href": "lm-fit.html#finding-the-betas",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.9 Finding the Betas",
+    "text": "21.9 Finding the Betas\nOK, but how do we go from a model plan and dataset to an actual fitted model? In other words, how do we estimate the \\(\\beta\\)s and find the best-fitting regression model?\nTo find the “best-fitting” regression model for a dataset, we need to first define a metric to measure how “well” a line fits, and then find the \\(\\beta\\)s (intercept and slope(s)) that maximize it. (Actually, we’ll come up with a way to measure the mismatch between a line and the data, and find the \\(\\beta\\)s that minimize it - but it’s the same idea.)\nIn other words, our goal at the moment is to figure out how to estimate the \\(\\beta\\)s.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#least-squares-visually",
+    "href": "lm-fit.html#least-squares-visually",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.10 Least Squares (visually)",
+    "text": "21.10 Least Squares (visually)\nOne idea is to choose the “best-fit” line as the one that minimizes the sum of squared residuals.\nThis method is often called Least Squares Estimation (or Ordinary Least Squares).\nFirst, check out Ordinary Least Squares Estimation (explained visually). Be sure to take advantage of the interactive elements to play around!)",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#least-squares-practically",
+    "href": "lm-fit.html#least-squares-practically",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.11 Least Squares (practically)",
+    "text": "21.11 Least Squares (practically)\nNext, try your hand at off-the-cuff least squares estimation. Visit the PhET interactive simulator and:\n\nPick an example from the central upper pull-down menu (or create your own dataset) and:\n\nChoose your best-guess slope and intercept (menu on the right)\nCompare your result with the best-fit line (menu on the left). How close were you? Why/how do you think you went wrong?\nView the residuals, and the squared residuals, for the best-fit line.\nVerify that you understand exactly what the residuals and the SSE = RSE = sum of squared residuals are measuring. In what sense does the minimal-SSE line come “closest” to the data points?\n\nRepeat the exercise for at least one more example.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#least-squares-explained",
+    "href": "lm-fit.html#least-squares-explained",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.12 Least Squares (explained)",
+    "text": "21.12 Least Squares (explained)\nOptionally, if you would like one more presentation of the idea of least squares fitting, watch the (slightly boring but very clear) StatQuest video explanation:\n\n\n(You can also watch directly on YouTube if you prefer.)",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#in-r-lm",
+    "href": "lm-fit.html#in-r-lm",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.13 In R: lm()",
+    "text": "21.13 In R: lm()\nSo, now we understand the principle of least squares estimation. But we certainly won’t employ it via guess-and-check to actually fit models to real data!\nIn fact, either via calculus or linear algebra, it’s possible to obtain formulas for the slope and intercept that minimize the SSE for a given dataset. (And, of course, software knows how to use them.)\nThe function we’ll use to fit a linear regression model in R is lm().\nThe first input to lm() (and basically all other R functions that fit regression models) is a model formula of the form:\n \n\n\nlm ( &yy ~ &xx , data = mydata )\n\n\n \nHow do we fill in the empty boxes?\n\nModel Formula: Left Hand Side\nThe left hand side of the formula is simplest: we just need to provide the name of the response variable that we want to model.\n \n\n\nlm (  Y  ~ &xx , data = mydata )\n\n\n \nFor example, if we use dataset MI_lead and our response variable is ELL2012, the skeleton of our formula would look like:\n\nmy_model &lt;- lm( ELL2012 ~ _______, data = MI_lead)\n\nDataset note: The MI_lead dataset stores CDC-provided data on Michigan kids’ blood lead levels, by county, from 2005 and 2012. The dataset is at https://sldr.netlify.app/data/MI_lead.csv and also provides:\n\nCounty name\nProportion kids with elevated blood lead levels, ELL in years 2005 and 2012\nthe Difference in proportion kids with high lead levels between the two years (2012-2005)\nThe proportion of houses in the county that were built before 1950 (and thus more likely have lead paint), PropPre1950\nWhich Peninsula of MI the county is in\n\n\n\nModel Formula: Right Hand Side\nOn the other side of the formula (after the tilde symbol \\(\\sim\\)), we need to specify the name of the predictor variable(s).\nWhile this initial example is a simple linear regression (“simple” means just one predictor), it’s possible to have multiple ones, separated by +.\n\nmy_model &lt;- lm(ELL2012 ~ ELL2005 + Peninsula, \n               data = MI_lead)\nsummary(my_model)\n\n\nCall:\nlm(formula = ELL2012 ~ ELL2005 + Peninsula, data = MI_lead)\n\nResiduals:\n       Min         1Q     Median         3Q        Max \n-0.0048244 -0.0013235 -0.0006547  0.0012533  0.0072038 \n\nCoefficients:\n                 Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)     0.0012767  0.0003786   3.372  0.00116 ** \nELL2005         0.1576778  0.0311305   5.065 2.67e-06 ***\nPeninsulaUpper -0.0006220  0.0008028  -0.775  0.44083    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.002407 on 78 degrees of freedom\n  (2 observations deleted due to missingness)\nMultiple R-squared:  0.2758,    Adjusted R-squared:  0.2573 \nF-statistic: 14.86 on 2 and 78 DF,  p-value: 3.417e-06\n\n\n\n\nPractice\nYour turn: fit a few linear regression models of your own. You can use the MI_lead data, or use one of the other suggested datasets (already read in for you here):\n\nelephantSurvey\ngapminder_clean\nHaDiveParameters\n\nEach time, consider:\n\nHow do you choose a response and a predictor variable?\n\nUsually the response is the main variable of interest, that you would like to predict or understand.\nThe predictor might cause, or be associated with, changes in the response; it might be easier to measure. Or, we might want to test whether it is associated with changes in the response or not.\n\nSee if you can express a scientific question which can be answered by your linear regression model.\n\nFor example, a model with formula ELL2012 ~ ELL2005 would answer, “Does the proportion of kids with elevated lead levels in a county in 2005 predict the proportion in 2012? (Do the same locations have high/low levels in the two years?)”\n\nDon’t forget to consider your understanding of causal relationships between variables of interest in planning your model - consdier drawing a causal diagram to help you decide which predictors should be included.\n\n\n\n\n\n\n\n\n\n\n\nIntercepts\nA (potentially non-zero) intercept is always included in all lm() models, by default.\nIf you wish, you can specifically tell R to include it (which doesn’t change the default behavior, but just makes it explicit). You do this by using a right-hand-side formula like 1 + predictor:\n\nmy_model &lt;- lm(ELL2012 ~ 1 + ELL2005, data = MI_lead)\n\n\n\nOmitting the Intercept\nYou can omit estimation of an intercept by replacing that 1 with a 0 or a -1. This will force the intercept to be 0 (line goes through the origin).\nThe 0 makes sense to me, because it’s like you’re forcing the first column of the model matrix to contain zeros instead of ones, multiplying the intercept by 0 to force it to be 0.\n(I’m not sure of the logic of the -1.)\nFor example,\n\nmy_model &lt;- lm(ELL2012 ~ 0 + ELL2005 + Peninsula,\n               data = MI_lead)\n\nBut usually, we want to estimate an intercept and we don’t need this code.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#interpreting-summarylm...",
+    "href": "lm-fit.html#interpreting-summarylm...",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.14 Interpreting summary(lm(...))",
+    "text": "21.14 Interpreting summary(lm(...))\nOnce you’ve fitted an lm() in R, how can you view and interpret the results? You may have already noticed the use above of the R function summary(). Let’s consider in more detail…\n\n\n(You can also watch directly on YouTube if you prefer.)",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#model-equation-practice",
+    "href": "lm-fit.html#model-equation-practice",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.15 Model Equation Practice",
+    "text": "21.15 Model Equation Practice\nYou should be able to use lm() to fit a linear model, and then use summary() output to fill in numerical parameter estimates \\(\\hat{\\beta}_0\\), \\(\\hat{\\beta}_1\\), \\(\\hat{\\beta}_2\\), \\(\\hat{\\beta}_3\\), \\(\\hat{\\beta}_n\\), and \\(\\hat{\\sigma}\\) in the regression equation:\n\\[ y_i = \\beta_0 + \\beta_1x_i + \\epsilon, \\epsilon \\sim \\text{Norm}(0, \\sigma)\\]\n\nAn example model\nTo practice, let’s fit a simple linear regression model in R. For data, let’s consider a dataset containing scores of 542 people who chose to take an online nerdiness quiz. Higher scores mean more nerdiness. The participants also provided their ages. Variables in the data include score and age. Does someone’s age predict their nerdiness score?\nPlot the data and use lm() to fit a simple linear regression model (just one predictor) to explore this question. The code to read in the dataset is provided for you.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\nnerds &lt;- read.csv('https://sldr.netlify.app/data/nerds.csv')\ngf_point(_____ ~ _____, data = ______)\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nnerds &lt;- read.csv('https://sldr.netlify.app/data/nerds.csv')\ngf_point(score ~ age, data = nerds)\nnerd_model &lt;- lm(score ~ age, data = nerds)\nsummary(nerd_model)\n\n\n\n\n\n\nWhat is beta0 for the model you just fitted?\n\n 0.00092 -0.061 0.22 15.81 95.8\n\nWhat is beta1 for the model you just fitted?\n\n 15.81 -0.061 95.8 0.00092 0.22\n\nWhat is sigma, the standard deviation of the residuals, for the model you just fitted?\n\n 95.8 0.00092 -0.061 0.22 15.81",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-fit.html#linear-regression-conditions",
+    "href": "lm-fit.html#linear-regression-conditions",
+    "title": "21  Fitting Linear Models in R",
+    "section": "21.16 Linear Regression Conditions",
+    "text": "21.16 Linear Regression Conditions\nWhat’s next? Before we interpret the results of a model, we have to be confident that we trust the model is appropriate enough for the data, and fits well enough, to produce results that will be reliable.\nSo, next module, we’ll learn to do model assessment (checking that conditions are met to verify that a model is appropriate for a particular dataset).\nWe will also go into much more detail about how to interpret our fitted model!",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Fitting Linear Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html",
+    "href": "lm-assess.html",
+    "title": "22  Assessment for Linear Models",
+    "section": "",
+    "text": "22.1 Section Learning Outcomes\nKnowing how to plan and fit a model isn’t the end of the process (at all). What’s next? This time, we explore how to assess whether a model really is appropriate for a particular dataset, and thus reliable. This section focuses very specifically on that important task.\n(After this, with the question of model assessment settled favorably, we can finally turn to model interpretation - what do the results mean, and how can we communicate the insights the model provides via words and visualizations?)\nBy the end of this section you will:",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#section-learning-outcomes",
+    "href": "lm-assess.html#section-learning-outcomes",
+    "title": "22  Assessment for Linear Models",
+    "section": "",
+    "text": "List conditions under which linear regression is appropriate, and check whether they hold for a specific dataset and model",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#text-reference",
+    "href": "lm-assess.html#text-reference",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.2 Text Reference",
+    "text": "22.2 Text Reference\nRecommended reading for the materials covered in this tutorial can be found in:\n\nBeyond Multiple Linear Regression Chapter 1.3\nRegression Modeling Strategies Chapter 2.7\nCourse Notes Chapter 2",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#linear-regression-conditions",
+    "href": "lm-assess.html#linear-regression-conditions",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.3 Linear Regression Conditions",
+    "text": "22.3 Linear Regression Conditions\nBefore making any statistical inferences with our regression model, we should verify that all necessary conditions for its use are met. Otherwise, we risk presenting and interpreting inaccurate estimates and un-trustworthy conclusions!\nIn this case, there are 5 conditions:\n\nRepresentative sample: the sample data must be representative of the population of interest (as for any statistical inference).\n\n4 more conditions are more specific to linear regression:\n\nLinearity of the predictor-response relationship: there is not a clear non-linear trend in a scatter plot of the response vs. the predictor.\nIndependence of residuals: Knowing the value of one residual doesn’t help you predict the others; there are no lurking variables that affect the accuracy of the model predictions.\nNormality of residuals: The residuals should follow a normal distribution with mean 0.\nError variance is constant: The variance (spread) of the residuals does not change with predictor variable value, or with fitted (on-the-line) value. Other words for this are constant variance of residuals, or homoscedasticity.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#example-model",
+    "href": "lm-assess.html#example-model",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.4 Example Model",
+    "text": "22.4 Example Model\nLet’s review and practice in the context of a specific example with a particular dataset and model.\nTo begin, we need to fit a linear regression model in R, using the function lm(). We’ll use the lead dataset from https://sldr.netlify.app/data/FlintWaterTestJanMar2016.csv.\nThis dataset contains water quality test results from a sample of households in Flint, Michigan. Water samples were collected between Jan. 30, 2016 - May 6, 2016. More details about the data collection can be found on the US EPA website.\nHere are the first few rows of the dataset:\n\n\n\n\n\n\nThe first input to lm is a formula of the form \\(y \\sim x_1 + x_2 + ...\\), where y is the name of the response variable, and \\(x_1\\), \\(x_2\\), … \\(x_n\\) are the predictor or explanatory variables. The second input to lm is data, the name of your dataset.\nAs an example, we’ll fit a model with response variable Lead and predictors Fluoride, Water_Filter, and Month. Correct the code below accordingly:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nlead_model &lt;- lm(Lead ~ Fluoride + Water_Filter + Month, data = lead)\n\n\n\n\nThe R code above fits a linear regression model of the form:\n\\[ y = \\beta_0 + \\beta_1*x_1 + \\beta_2*x_2 + \\epsilon,\\] where \\(\\epsilon \\sim N(0, \\sigma)\\). (The residuals \\(\\epsilon\\) follow a normal distribution with mean 0 and some standard deviation \\(\\sigma\\).)",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#model-summary-and-coefficients",
+    "href": "lm-assess.html#model-summary-and-coefficients",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.5 Model Summary and Coefficients",
+    "text": "22.5 Model Summary and Coefficients\nTo extract just the coefficient or parameter values (the “\\(\\beta\\)s”) from the fitted model object lead_model, we can use coef():\n\n\n\n\n\n\n\n\nTo get a full summary, use summary():\n\n\n\n\n\n\n\n\nNotes (Reminders!) about the summary:\n\nThe fitted model parameters are in the “Estimate” column of the coefficient table.\nThe last column of the coefficient table contains p-values. The first row is the p-value for a test of the null hypothesis that the true intercept, \\(\\beta_0\\), is 0 (this is not usually of much interest). The second row is the p-value for a test of the hypothesis that \\(\\beta_1\\), the slope for the first predictor variable, is 0. This is usually of interest, because it tells us whether there is a “real” linear relationship between the two variables.\n\\(\\hat{\\sigma}\\) (an estimate of the standard deviation of the residuals from the data) is near the bottom of the output, called “Residual standard error.”",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#regression-conditions-again",
+    "href": "lm-assess.html#regression-conditions-again",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.6 Regression conditions (again)",
+    "text": "22.6 Regression conditions (again)\nFor a linear regression model to be appropriate for a dataset, the conditions that must be met are:\n\nThe data are a representative sample of the population of interest.\nLinear relationship between each predictor and the response variable (or at least no apparent non-linear relationship).\nIndependence of residuals\nNormality of residuals\nError (residuals) variance is constant\n\nBut what do each of those (pretty technical) statements mean, and how can we check them?",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#checking-linearity",
+    "href": "lm-assess.html#checking-linearity",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.7 Checking linearity",
+    "text": "22.7 Checking linearity\nTo verify that the relationship between our predictor variable(s) and our response variable is linear, we can examine a few plots.\nDATA SCATTER PLOT(S)\nFirst, we can make scatter plots of the data - specifically, the response variable as a function of each predictor variable. We want to verify that there are no apparent non-linear trends in the plot.\n\n\n\n\n\n\n\n\nRESIDUALS VS. FITTED PLOT\nNext, we can plot the residuals from the fitted model as functions of:\n\nThe fitted values (predicted values \\(\\hat{y}\\) for each data point in the dataset)\n(Optionally) Each predictor\n\nIn these plots, we should see no trends – linear or nonlinear. They should look like relatively random scatter.\nWe can use the R function resid() to get the residuals from the fitted model object, and fitted() to get the predictions.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#checking-independence",
+    "href": "lm-assess.html#checking-independence",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.8 Checking Independence",
+    "text": "22.8 Checking Independence\nIndependence of residuals means that knowing the value of one residual does not help you to predict the value of the next residual.\nWhen data are collected over time and space, sometimes the residuals are not independent over time (or space) – for example, maybe series of positive residuals tend to occur together, or series of negative residuals together. How can we detect this kind of non-independence?\nFirst, make sure that your dataset is sorted in order of time (if you are worried about non-independence over time) or space (if you are worried about possible non-independence over space). (The lead dataset is already sorted in temporal order - you can verify this by looking at the variable Decimal_Date.)\nThe autocorrelation function will help us.\nThis function computes a value akin to a correlation coefficient for the dataset, indicating how much it is correlated with itself at different “lags”. What does this mean?\nLag 0 is the correlation of the data with itself.\n\n\n\n\n\n\n\n\n\nOf course the correlation at lag 0 is ALWAYS 1: the dataset is identical with itself.\nWhat about larger lags?\nTo compute the ACF at lag 1, we slide one copy of the dataset forward one observation, and compute the correlation again:\n\n\n\n\n\n\n\n\n\nThis tells us how well we can predict one observation in the data, based on the preceding observation.\nLag 2 scoots the data one more position:\n\n\n\n\n\n\n\n\n\n…And so on.\nOutside this website, you can plot the ACF for many lags using the function s245::gf_acf(~fitted_model). (Here we have used acf(), but it will make a non-ggplot/non-ggformula type plot that is a little less pretty.)\n\n\n\n\n\n\n\n\nThe horizontal dotted lines are approximate 95% confidence boundaries for how large the ACF values (for lags greater than 0) should be, if the data are really independent.\nIn general, to verify the independence condition of linear regression, we want to confirm that not many of the ACF values for lags greater than 0 exceed those horizontal “fences” by very much. (One or two ACF values that just barely “poke above the fence” is not a major violation, especially as it is known that the method used to determine the “fences” is known to be a bit too conservative – even independent data will have ACF values that pass them more than 5% of the time.)\nIn the plot above, all the “spikes” are within the “fences”, so there is no indication of non-independence in the residuals (given the current sort order of the data).",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#checking-normality-of-residuals",
+    "href": "lm-assess.html#checking-normality-of-residuals",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.9 Checking Normality of Residuals",
+    "text": "22.9 Checking Normality of Residuals\nTo check whether the residuals look like a sample from a normal distribution, look at a histogram:\n\n\n\n\n\n\n\n\nNote: The distribution doesn’t have to look perfectly normal – it has to look like it might reasonably be a sample from a normal distribution. A consequence of that is that as sample size gets smaller, even less-normal-looking residual distributions are quite commonly observed, and we can be even more generous in judging this condition.\nWhatever the sample size, look for very notable skew and/or outliers in the residual distribution. If the residual distribution is unimodal and reasonably symmetric, it is probably okay.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#checking-error-variance",
+    "href": "lm-assess.html#checking-error-variance",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.10 Checking Error Variance",
+    "text": "22.10 Checking Error Variance\nFor linear regression to be appropriate for data, there should be homoscedasticity, or constant variance of the residuals. This means that the spread of the data points around the best-fit line should be constant - the width of the point cloud around the line should not be less in some places, and more in others.\nOr, alternatively (and easier to see visually), the spread of the residuals around a horizontal line at y = 0 on a residuals vs fitted plot should be constant.\n\n\n\n\n\n\n\n\nIf this condition does not hold, the most common pattern to see is a “trumpet” shape like the one above, where the residuals become more spread out for larger fitted values. However, any non-constant spread is a cause for concern.\n\nVariable by Variable\nIt is also a good idea to plot residuals as a function of each predictor. Constant variance should hold here just as it does when plotting as a function of fitted value.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-assess.html#model-assessment-checking-conditions",
+    "href": "lm-assess.html#model-assessment-checking-conditions",
+    "title": "22  Assessment for Linear Models",
+    "section": "22.11 Model Assessment: Checking Conditions",
+    "text": "22.11 Model Assessment: Checking Conditions\n\nTo review and practice, consider these more detailed explanations of each condition, accompanied by details about which plots to use to check each one and how to interpret them:\n\n\n(You can also watch directly on YouTube if you prefer.)",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Assessment for Linear Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp.html",
+    "href": "lm-interp.html",
+    "title": "23  Interpretation and Inference for Regression Models",
+    "section": "",
+    "text": "23.1 Section Learning Outcomes\nKnowing how to plan and fit a model isn’t the end of the process (at all). What’s next? This section we’ve explored how to assess whether a model really is appropriate for a particular dataset, and thus reliable.\nRemember that if a model doesn’t pass assessment - if any of the conditions go unmet - then the model can’t be trusted to provide reliable results at all.\nBut if a model does pass assessment, we can finally turn to model interpretation - what do the results mean, and how can we communicate the insights the model provides via words and visualizations?\nAlso part of this topic is something commonly called model selection. That term is a bit confusing given the approach taught in our course, as we won’t actually select certain variables to include/exclude from a model at this stage.\nRather, we are deciding whether and in what way each candidate predictor relates to the response variable. So for us, “model selection” is all about interpreting and understanding the model results, including using inferential statistics.\nBy the end of the section you will:",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Interpretation and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp.html#section-learning-outcomes",
+    "href": "lm-interp.html#section-learning-outcomes",
+    "title": "23  Interpretation and Inference for Regression Models",
+    "section": "",
+    "text": "Create and interpret prediction plots for multiple linear regression models\nInterpret confidence intervals for linear regression coefficients and in prediction plots\nArticulate how different modeling goals (prediction vs inference) influence how an analyst engages in the modeling process\nInterpret p-values or information criteria to do model selection for linear regression models",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Interpretation and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp.html#text-reference",
+    "href": "lm-interp.html#text-reference",
+    "title": "23  Interpretation and Inference for Regression Models",
+    "section": "23.2 Text Reference",
+    "text": "23.2 Text Reference\nRecommended reading for the materials covered in this section can be found in:\n\nBeyond Multiple Linear Regression Chapter 1.6\nRegression Modeling Strategies Chapters 2.3, 4, and 5.1\nCourse Notes Chapter 1.8-1.11 and Chapter 3",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Interpretation and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp.html#prediction-plots",
+    "href": "lm-interp.html#prediction-plots",
+    "title": "23  Interpretation and Inference for Regression Models",
+    "section": "23.3 Prediction Plots",
+    "text": "23.3 Prediction Plots\nOnce we have fitted a regression model and it passes assessment checks, how can we use it to draw conclusions?\nOne of the most useful tools we can have is a picture of what the model tells us about the relationships between our response and predictor(s).\nNote: in the video, it’ll suggest you use the function ggpredict() (which still works) but it’s been superseded - now the preferred function to use is predict_response(). It has the same inputs.\nHow can we get one?",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Interpretation and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp.html#prediction-vs-inference",
+    "href": "lm-interp.html#prediction-vs-inference",
+    "title": "23  Interpretation and Inference for Regression Models",
+    "section": "23.4 Prediction vs Inference",
+    "text": "23.4 Prediction vs Inference\nIn this course we will focus on modeling for statistical inference, rather than for the purpose of making predictions for new scenarios based on our fitted model. Why? And why does the distinction matter? Before we dive into how to do inference, let’s discuss.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Interpretation and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp.html#inference-tldr",
+    "href": "lm-interp.html#inference-tldr",
+    "title": "23  Interpretation and Inference for Regression Models",
+    "section": "23.5 Inference, TL;DR",
+    "text": "23.5 Inference, TL;DR\n\n\n\nOoh, Slow down…\nMuch of the rest of this section fills in a lot of details that were skimmed over in the very brief overview in that video. Focus first on understanding and applying what was in that video - the rest is elaboration.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Interpretation and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp.html#inference",
+    "href": "lm-interp.html#inference",
+    "title": "23  Interpretation and Inference for Regression Models",
+    "section": "23.6 Inference",
+    "text": "23.6 Inference\n\nOur goal: establish a method to generate confidence intervals and carry out tests for linear models, especially \\(\\beta_0\\) and \\(\\beta_i\\), the intercept and slope(s). In fact, we focus almost entirely on the slopes, but the exact same methods work for the intercept too (it’s just that the slope is almost always of much more practical interest than the intercept).\nWe want to be able to test:\n\\[H_0: \\beta_1 = 0\\]\n\\[H_A: \\beta_1 \\neq 0\\]\nIf the null hypothesis above is true, that means there is no linear association between the predictor and response variables – informally, it means the predictor is useless at predicting the response.\nIf we reject the null, that suggests there is a real association between the two variables (and the predictor is “worthwhile” statistically to help predict the response).\nBefore we carry out any tests, let’s establish an example model.\n\nExample\nWe will use the bonobos dataset as an example. You may recall the dataset from earlier examples. Briefly, the dataset is from a 2019 paper by J.S. Martin and colleagues on bonobo face measurements. The authors worked with 117 bonobos in European zoos and recorded data including their Sex, Age in years, weight, and some measurements about their face:\n\n\n\n\n\n\n\n\n\nFinally, they also measured each bonobo’s assertiveness score (AssR) and dominance score (normDS).\nThe dataset is at https://sldr.netlify.app/data/bonobo_faces.csv and so you could read the dataset in to R by running:\n\nbonobos &lt;- readr::read_csv('http://sldr.netlify.app/data/bonobo_faces.csv')\n\n\n\nPractice\nWe might wonder whether size (as measured by weight) is a good predictor of the dominance score, normDS. Graphically:\n\ngf_point(normDS ~ weight, data = bonobos)\n\n\n\n\n\n\n\n\nFit the corresponding regression model in R and view its summary(). Note, the dataset bonobos is already read in for you here:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nFill in the blanks with the right formula, dataset name, and fitted model object name!\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nbonobo_lm &lt;- lm(normDS ~ weight, data = bonobos)\nsummary(bonobo_lm)\n\n\n\n\n\n\nWhat is the intercept estimate for the model you just fitted?\n\n 2.008 0.011 1.031 0.926 0.023\n\nWhat is the slope for the model you just fitted?\n\n 0.023 0.926 2.008 1.031 0.011\n\nWhat is sigma, the standard deviation of the residuals, for the model you just fitted?\n\n 0.011 0.023 1.031 0.926 2.008\n\n\n\n\n\nSE of Sampling Distributions\n\nAs you may have noticed, the summary() of an lm() (or glmmTMB()) regression model fit includes not only estimates of the parameters \\(\\beta_0\\) and \\(\\beta_1\\), but also the standard errors of the corresponding sampling distributions! (Hooray.) These measure the standard deviation we’d expect to see in our parameter estimates from sample to sample, if we were somehow able to collect data many many times. They can be used to calibrate our uncertainty in our estimates of the \\(\\beta\\)s, and they are found in the coefficient table, labelled \"Std. Error\".\n\nnormDS_model &lt;- lm(normDS ~ weight, data = bonobos)\nsummary(normDS_model)\n\n\nCall:\nlm(formula = normDS ~ weight, data = bonobos)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-1.3794 -0.8138 -0.2354  0.6043  2.0207 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)  \n(Intercept)  2.00774    0.92555   2.169   0.0337 *\nweight       0.01122    0.02334   0.481   0.6322  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.031 on 66 degrees of freedom\nMultiple R-squared:  0.003491,  Adjusted R-squared:  -0.01161 \nF-statistic: 0.2312 on 1 and 66 DF,  p-value: 0.6322\n\n\n\n\nWhat is the SE for the slope, for the regression to predict normDS as a function of weight for our bonobo dataset?\n\n 0.926 0.011 0.023 1.031 2.008\n\n\n\n\n\nCI for the slope\n\nAlthough we won’t derive the reasons why in detail, the sampling distribution for the slope has a t distribution with \\(n - 2\\) degrees of freedom (where \\(n\\) is the number of rows in the dataset).\nSo, after all that, we could find a CI for a regression slope according to:\n\\[ \\hat{\\beta}_1 \\pm t_*SE(\\hat{\\beta}_1)\\] Where \\(t_*\\) is a critical value from a \\(t(n-2)\\) distribution, and SE(\\(\\hat{\\beta}_1\\)) is the standard error of the slope from the coefficient table in the model summary().\nAs an example, find a 95% CI for the slope of our bonobo regression model.\nWe can do this somewhat manually:\n\nbm &lt;- lm(normDS ~ weight, data= bonobos)\nsummary(bm)\n\n\nCall:\nlm(formula = normDS ~ weight, data = bonobos)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-1.3794 -0.8138 -0.2354  0.6043  2.0207 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)  \n(Intercept)  2.00774    0.92555   2.169   0.0337 *\nweight       0.01122    0.02334   0.481   0.6322  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.031 on 66 degrees of freedom\nMultiple R-squared:  0.003491,  Adjusted R-squared:  -0.01161 \nF-statistic: 0.2312 on 1 and 66 DF,  p-value: 0.6322\n\nCI95 &lt;- -0.14278 + c(-1,1) * \n  qt(0.975, df = nrow(bonobos) - 2) * 0.06668\nCI95\n\n[1] -0.275910915 -0.009649085\n\n\nOr… we will generally take advantage of the fact that there’s a function for that:\n\n\n\n\n\n\n\n\nNotice the shortcut – the R function confint() returns CIs (with a default confidence level of 95%).\nWe can also omit specifying which predictor(s) we want CIs for and confint() will return them all…\n\n\n\n\n\n\n\n\n\n\nTest for a slope\n\nWe can also test the null hypothesis \\(H_0: \\beta_1 = \\beta_{1\\text{null}}\\) (where \\(\\beta_{1\\text{null}}\\) is some hypothetical slope value of interest) using the standardized test statistic\n\\[ t = \\frac{\\hat{\\beta}_1 - \\beta_{1\\text{null}}}{SE(\\hat{\\beta}_1)}\\]\nThe most common value for \\(\\beta_{1\\text{null}}\\) is \\(0\\), because if \\(\\beta_1 = 0\\) that means that there is no relationship between the predictor and response and the predictor is useless as a predictor. If we can reject that null hypothesis, we can conclude that the predictor does have some utility.\nTo practice, you could carry out a two-sided test of \\(H_0: \\beta_1 = 0\\) for the bonobo regression as shown in the hints below (if you learned R in your intro stat course and remember your intro stat pretty well).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nnormDS_model &lt;- lm(normDS ~ weight, data= bonobos)\nsummary(normDS_model)\nt_stat &lt;- (-0.14278 - 0) / (0.06668)\np_val &lt;- 2 * pt(t_stat, df = nrow(bonobos) - 2, lower.tail = TRUE)\np_val\n\n\n\n\nORRRR…A shortcut (which you can take!): Notice that this p-value is already in the model summary (in the last column of the coefficient table, labelled “Pr(\\(&gt;\\vert\\)t\\(\\vert\\))“).\n\n#shortcut: just use model summary\nnormDS_model &lt;- lm(normDS ~ weight, data= bonobos)\nsummary(normDS_model)\n\n\nCall:\nlm(formula = normDS ~ weight, data = bonobos)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-1.3794 -0.8138 -0.2354  0.6043  2.0207 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)  \n(Intercept)  2.00774    0.92555   2.169   0.0337 *\nweight       0.01122    0.02334   0.481   0.6322  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.031 on 66 degrees of freedom\nMultiple R-squared:  0.003491,  Adjusted R-squared:  -0.01161 \nF-statistic: 0.2312 on 1 and 66 DF,  p-value: 0.6322\n\n\nWhat does it all mean? The p-value of this test measures the strength of evidence in our data against the null hypothesis of no association. Smaller p-values can be considered stronger evidence (and ones bigger than ~0.05-0.1 give weak to no evidence against the null).\nHere, the p-values is really, really big (about 0.6), so we have no evidence against the null hypothesis of no association between a bonobo’s weight and normDS score.\nBut that doesn’t mean we can’t conclude anything!\nConcluding “we have no evidence, based on this data, of any association between weight and dominance score” is an answer to the question of whether they are associated. The answer just seems to be…no.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Interpretation and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp.html#whats-next",
+    "href": "lm-interp.html#whats-next",
+    "title": "23  Interpretation and Inference for Regression Models",
+    "section": "23.7 What’s next?",
+    "text": "23.7 What’s next?\nWell, we have explored some ways of using linear regression model results to make inferences about whether or not a quantitative predictor is associated with a response variable. The ones we’ve seen have, hopefully, helped you to understand the models a bit better, too!\nBut we don’t have enough tools in our tool-box yet.\nConsider, for example: what if you have a categorical predictor with multiple possible values? We don’t yet have a tool that lets us address whether such a predictor is associated with the response, nor to compare multiple candidate models.\nContinue forward to learn approaches that can take us further!",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Interpretation and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html",
+    "href": "lm-interp-more.html",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "",
+    "text": "24.1 Section Learning Outcomes\nEarlier, we started but didn’t finish talking about model selection, and making inferences based on linear regression models.\nWhat if we had a model with several predictors, or a categorical predictor, rather than just one quantitative predictor?\nThis tutorial will give a short overview of a few common model selection tools.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html#section-learning-outcomes",
+    "href": "lm-interp-more.html#section-learning-outcomes",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "",
+    "text": "ANOVA??\nNote that for simple one-predictor linear regression, the p-value reported at the very end of the model summary is the same as the one for the slope in the coefficient table.\nThis is only the case when there’s only one, quantitative predictor, since the test at the bottom is testing \\(H_0: \\text{all the slopes in the model are 0 for all predictors}\\). But…it’s reported along with an F-statistic – which reminds us of the one-way ANOVA possibly encountered in a previous stats course. As you later fit models with more than just one predictor, ANOVA does come up as one approach for testing hypotheses about predictor-response associations!",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html#case-study-gratitude",
+    "href": "lm-interp-more.html#case-study-gratitude",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "24.2 Case Study: Gratitude",
+    "text": "24.2 Case Study: Gratitude\nA growing body of research has documented the effects that practicing gratitude can have on people – providing not just spiritual and mental-health benefits, but even improving physical health.\n\n\n\nDataset\nWe will dive further into this topic – learning about ANOVA and some other tests along the way – via a case study where researchers tried to collect data to answer:\n“How does gratitude affect peoples’ mental and physical well-being?”\nThe data are simulated based on the results of a paper published in 2003:\n\n\n\nCan We Induce Gratitude?\nTo understand whether gratitude can cause improvements in mental and physical health and practices, the researchers needed to do a randomized study, in which they somehow controlled peoples’ gratitude levels. How did they do that?\nFirst, they recruited nearly 200 college students to participate in their study.\nThey asked participants to complete a weekly journal, writing lists of things that they were grateful for. 1/3 of study participants were randomly assigned to this group - the gratitude group.\nOther participants were asked to write about things that annoyed them instead – this was the hassles group.\nFinally, a control group – the events group – just wrote about events in the past week that had affected them (could be either positive or negative).\nBefore delving into any other questions, the researchers had to verify that the gratitude group actually felt more grateful than the other groups…\n\n\nMore Design Details\nIn addition to the journals, all the students had to complete weekly surveys about their behavior and state of mind.\nFor example, they had to state how often (on a scale of 1 to 5) they experienced each of a set of feelings over the preceding week:\n\n\n\n\n\n\n\n\n\n\n\nPulling out Gratitude\nThe researchers combined scores from the words thankful, appreciative, and grateful to assess participants’ gratitude. In our dataset, this value is called gratitude_score.\n\n\n\n\n\n\n\n\n\n\n\nThe Data\nHow do the data actually look?\n\n\n\n\n\n\n\n\n\nIt seems like perhaps the gratitude_score is higher for the gratitude group and lower for the others, but we really need statistical inference to have more confidence in our judgment of whether the difference is real or if the differences between groups could just be the result of random sampling variation.\n\n\nOur Questions\nAs Emmons and McCullough did, our first job will be to test whether the mean gratitude_score is the same for the different groups in the study – the gratitude group, the hassles group, and the events group.\nTo build up to the question we want to answer (comparing all three groups), we will consider a simplified case with only two groups: the gratitude and hassles groups. This is only for learning purposes and not something we’d do in a real analysis!\nWe also have other potential quantitative predictors in the dataset we could include in our models. We will take advantage of that to review CIs and tests for a quantitative predictor, too.\n\n\nReview: Quantitative Predictors\nFor example, we could consider a model to predict gratitude_score as a function of life_rating (a score measuring positivity about one’s life as a whole).\n\n\n\n\n\n\n\n\n\n\nlife_model &lt;- lm(gratitude_score ~ life_rating, \n                 data = grateful)\nsummary(life_model)\n\n\nCall:\nlm(formula = gratitude_score ~ life_rating, data = grateful)\n\nResiduals:\n   Min     1Q Median     3Q    Max \n-4.891 -1.466 -0.098  1.219  5.899 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   7.2008     0.8828   8.157 4.22e-14 ***\nlife_rating   0.5295     0.1806   2.932  0.00377 ** \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.98 on 194 degrees of freedom\nMultiple R-squared:  0.04243,   Adjusted R-squared:  0.03749 \nF-statistic: 8.596 on 1 and 194 DF,  p-value: 0.003775\n\n\n\n\nReview: CI for Slope\nFind a 95% confidence interval for the slope coefficient of the life_model.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nlife_model &lt;- lm(gratitude_score ~ life_rating, \n                 data = grateful)\nconfint(life_model)\n\n\n\n\n\n\nReview: Test for Slope\n\n\nYou test the hypothesis that the slope of the life_model is zero. What is the p-value of the test?\n\n 0.0424 4.22e-14 Something else 0.00377\n\n\n\n\n\nCategorical?\n\nIf we consider a categorical variable with only two categories, everything is exactly the same (except the interpretation of the slope coefficient, which now gives the difference in means between the two categories).\nFor example, we can reduce the dataset to exclude the third events group, and then model gratitude_score as a function of group to see if the gratitude and hassles groups have different average gratitude scores.\nOf course we would never normally do this! But right now, for learning purposes, we could use a categorical variable with 2 categories…and ours has three. So don’t try this filtering/subsetting at home!\n\ngrateful2 &lt;- grateful |&gt;\n  filter(group != 'events') |&gt;\n  mutate(group = factor(group))\ngf_boxplot(gratitude_score ~ group, data = grateful2)\n\n\n\n\n\n\n\n\n\n\nPractice\nFit the model and, just as in the previous example, find a 95% CI for \\(\\beta_1\\) and test \\(H_0: \\beta_1 = 0\\).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\ntwo_group_model &lt;- lm(gratitude_score ~ group, \n                      data = grateful2)\nsummary(two_group_model)\n# if you wanted to pull out just the p-value (advanced move)\ncoefficients(summary(two_group_model))['grouphassles', 'Pr(&gt;|t|)']\n\n\n\n\nEasy peasy! As we mentioned before, the only real difference between this model and the one with a quantitative predictor is that we end up with an indicator variable instead of one with many different numeric values, so the interpretation of the slope coefficient \\(\\beta_1\\) is different.\n\n\nIn our model to compare the gratitude and hassles groups, the grouphassles coefficient estimate is about -1.54. What does this mean?\n\n The mean gratitude_score is 1.54 units lower in the hassles group than in the gratitude group. When the amount of 'hassles' increases by one unit, the gratitude_score goes down by 1.54 units. The mean gratitude_score for people in the hassles group is -1.54. Something else The mean gratitude score is 1.54 units higher in the hassles group than in the gratitude group.\n\n\n\nBut what if we have a categorical predictor with MORE THAN TWO categories? We need a test that incorporates differences between all the categories at once, so the tools we have so far aren’t enough.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html#hypotheses-for-anova",
+    "href": "lm-interp-more.html#hypotheses-for-anova",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "24.3 Hypotheses for ANOVA",
+    "text": "24.3 Hypotheses for ANOVA\nWe want to test:\n\\[H_0: \\mu_{gratitude} = \\mu_{events} = \\mu_{hassles}\\]\nIn other words, our null hypothesis is that the means of all groups are the same. (The \\(\\mu\\)s are the true population means for each of the groups.)\nThe alternate hypothesis is that at least one pair of groups has different means.\nHow do we translate this set-up into a linear regression model? We’re considering the model in which we predict gratitude_score with group:\n\ngrat_by_group &lt;- lm(gratitude_score ~ group, data = grateful)\nsummary(grat_by_group)\n\n\nCall:\nlm(formula = gratitude_score ~ group, data = grateful)\n\nResiduals:\n   Min     1Q Median     3Q    Max \n-4.527 -1.208 -0.128  1.160  7.016 \n\nCoefficients:\n               Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      9.5317     0.2383  40.006  &lt; 2e-16 ***\ngroupgratitude   1.1096     0.3369   3.293  0.00118 ** \ngrouphassles    -0.4280     0.3357  -1.275  0.20382    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.921 on 193 degrees of freedom\nMultiple R-squared:  0.1036,    Adjusted R-squared:  0.0943 \nF-statistic: 11.15 on 2 and 193 DF,  p-value: 2.612e-05\n\n\nThere are a few equivalent ways of setting this up (depending on which group is included in the intercept), but in R the code above will yield a model like:\n\\[ y_i = \\beta_0 + \\beta_1 x_1 + \\beta_2 x_2 + \\epsilon\\]\nwhere \\(x_1\\) and \\(x_2\\) are indicator variables for the gratitude and hassles groups:\n\\[ x_1 = \\begin{cases} 1 \\text{,  if group is gratitude}\\\\ 0 \\text{,  otherwise} \\end{cases}\\]\n\\[ x_2 = \\begin{cases} 1 \\text{,  if group is hassles}\\\\ 0 \\text{,  otherwise} \\end{cases}\\]\nIn this framework, \\(\\beta_0\\) is the mean for the events group. \\(\\beta_1\\) and \\(\\beta_2\\) are the differences in means between groups (gratitude and events, and hassles and events). So our intention with this ANOVA is to test \\(H_0: \\beta_1 = \\beta_2 = 0\\). If this is true, then the intercept \\(\\beta_0\\) will be the overall mean gratitude_score.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html#test-stat-for-anova-f-ratio",
+    "href": "lm-interp-more.html#test-stat-for-anova-f-ratio",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "24.4 Test Stat for ANOVA: F-ratio",
+    "text": "24.4 Test Stat for ANOVA: F-ratio\nThe big challenge here is to come up with a test statistic – one number that measures evidence against the null hypothesis that all the group means are the same.\nHow can we define a good test statistic to measure how different more than two numbers are?\nThe optional video below will walk through a derivation of the F-ratio statistic.\n\nPart 1: What we need to measure\nNote: in this video, \\(x\\) is used for the variable whose mean is being estimated; for us it would make more sense to use \\(y\\) but I’m trusting you to make the translation…\n\n(You can also watch directly on YouTube if you prefer.)\n\n\nPart 2: How we measure it\nNote: again in this video, \\(x\\) is used for the variable whose mean is being estimated; for us it would make more sense to use \\(y\\) but I’m trusting you to make the translation…\n\n(You can also watch directly on YouTube if you prefer.)\n\n\nSampling Distribution of F, Simulated\nAll right, we can compute the F-ratio now. And we know that the bigger it is, the stronger the evidence we have against the idea that the categorical predictor is not associated with the response.\nBut…how big will it be, even if there is no association?\n\n\nIf the null hypothesis is true, what will the value of the F-ratio be?\n\n Close to 1 Very Large It depends… Close to 0\n\nIf the population group means are actually very different, with little variation within groups, what will the value of the F-ratio be?\n\n Very Large It depends… Close to 0 Close to 1\n\n\n\n\n\nClick for more explanations…\n\nIf \\(H_0\\) is true, then SSG may be ‘close to 0’ because the group means will be very close to the overall mean. So, MSG and the whole F-ratio will also be near 0 - but since it MSG is not exactly zero, it matters a lot what the corresponding value of MSE is…\nF will be close to 1 if the null is true and the sample sizes in the groups are equal. MSE and MSG will BOTH depend on the overall variance of the data. In terms of intuition about the F ratio, though, it can be more useful to think about what happens to MSG when \\(H_0\\) is true (it gets smaller, and so so does F…). Bigger F is more evidence against \\(H_0\\).\nIf \\(H_0\\) is very wrong, then SSG will be relatively large because the group means will be quite different from the overall mean. And SSE will be relatively small, if there is little within-group variation. So the ratio will be (big / small) = VERY BIG, providing strong evidence against the null hypothesis and allowing us to conclude that the group means are NOT the same.\n\nAgain, we know that a large value of F will let us reject the null. But how big is “large”?\nWe’d need to know the sampling distribution of F (when \\(H_0\\) is true) in order to judge.\n\n\nLetting R do all the work\n\nWe won’t go into the details of the calculation here; we’ll just note that there’s an R function to automate it all.\n\n\nAnova Table (Type II tests)\n\nResponse: gratitude_score\n          Sum Sq  Df F value    Pr(&gt;F)    \ngroup      82.30   2  11.152 2.612e-05 ***\nResiduals 712.15 193                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\nBut notice – all the quantities that we used in our derivation of the F-statistic are right there in the ANOVA output table!\n\nThe “group” row gives the SSG and its df (and the F stat and p-value)\nThe “Residuals” row gives the SSE and its df. (Residuals is another statistical term for errors.)\nThe “Sum Sq” column corresponds to “SS” terms (“MS” terms are not in the table, but can be computed from SSX and df from the table)\nThe “F value” is the F-ratio (test statistic)\nThe “Pr(&gt;F)” is the p-value of the test\n\n(A classic intro-stat textbook ANOVA problem is to give you a partially-filled-in ANOVA results table, and ask you to fill in the missing values.)\n\nR Note: Anova(), not anova()!\nBe careful not to use anova() to carry out tests related to predictors in a regression model.\nanova() does “sequential” tests; for example, if you fit a model y ~ pred1 + pred2 + pred3, for pred1 anova() will compare the intercept-only model to the one with pred1 in it, but for pred2 it will compare the model with pred1 and pred2 in it to the one with only pred2, and for pred3 it will compare the model with all three predictors to the one without pred3. ACK!\nIn other words, with anova(), the order in which predictors are listed greatly affects the hypotheses tested, and the test results. THIS IS (ALMOST ALWAYS) NONSENSE. You want Anova() which is in the package car.\n\n\nModel Comparisons\nIn other cases, if we want to compare two particular models with the same response variable but different predictors, we can just fit them both and then compare them with the syntax below.\n\nanova(model1, model2)\n\n(Yes, little-a anova() is what you want this time.)\nWhy might we want to do this? Maybe, for example, you have two different predictors that measure a similar quantity in different ways and you want to know which one works better as a predictor?\nThis anova(model1, model2) approach also works for any of the above cases (removing parameters), if you manually fit the two models.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html#akaikes-information-criterion",
+    "href": "lm-interp-more.html#akaikes-information-criterion",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "24.5 Akaike’s Information Criterion",
+    "text": "24.5 Akaike’s Information Criterion\nInformation theory has influenced many fields, including statistics. In 1974, Japanese statistician Hirotugu Akaike\n\nused information theory to derive a new criterion, now known as Akaike’s Information Criterion (AIC), to allow comparison of a set of statistical models fitted to a dataset.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html#aic-definition",
+    "href": "lm-interp-more.html#aic-definition",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "24.6 AIC Definition",
+    "text": "24.6 AIC Definition\nAIC is defined as:\n\\[ \\text{AIC} = 2k - 2(\\hat{\\ell})\\]\nWhere \\(k\\) is the size of the model (number of parameters being estimated), and \\(\\hat{\\ell}\\) is the maximum value of the (base \\(e\\)) log-likelihood fuction.\n\nThe first term, \\(2k\\), inflates the AIC value, causing larger models to have worse AIC values. This is often thought of as a “penalty” on model size.\nThe second term, \\(-2\\hat{\\ell}\\), means that (better-fitting) models with higher log-likelihoods have better AIC values.\n\nR function AIC() computes the AIC for fitted lm() models.",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html#aic-practice",
+    "href": "lm-interp-more.html#aic-practice",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "24.7 AIC Practice",
+    "text": "24.7 AIC Practice\nWe can use AIC to choose the “best” of a pair (or a larger group) of models.\nFor example, before we used ANOVA to decide whether group (“gratitude”, “hassles”, and “events”) is a good predictor of gratitude score:\n\n\nAnova Table (Type II tests)\n\nResponse: gratitude_score\n          Sum Sq  Df F value    Pr(&gt;F)    \ngroup      82.30   2  11.152 2.612e-05 ***\nResiduals 712.15 193                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\nWe can make the same comparison with AIC.\nFirst, we find the AIC for the full model with the group predictor:\n\n\n[1] 817.0972\n\n\nHmmm…this number means nothing in isolation. The only way to get meaning from it is to compare it to the AIC for another model fitted to the same exact dataset and see which is better (smaller).\nDo the rest of the comparison: what is the AIC of the intercept-only model, and which model is better according to AIC?\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHints…\n\n\n\n\n\nNote: working on your own dataset in a qmd file, you’d probably fit each model, give the fitted model object a name, and then use AIC(model_name)…\nAIC(lm(gratitude_score ~ 1, data = grateful))\nAIC(lm(gratitude_score ~ group, data = grateful))\n\nAIC(lm(gratitude_score ~ 1, data = grateful)) -\nAIC(lm(gratitude_score ~ group, data = grateful))\n\n\n\n\n\n\nWhat is the difference in AIC between the two gratitude models you just fitted?\n\n 17.4; the intercept-only model has lower AIC 834.5; the model with the group predictor has lower AIC. The AIC values for the two models are about the same 17.4; the model with the group predictor has lower AIC.\n\nWhich model is better, according to AIC?\n\n Model with group predictor Intercept-only model They are both about the same\n\n\n\nRemember – smaller AIC is better!",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "lm-interp-more.html#ic-how-big-a-difference",
+    "href": "lm-interp-more.html#ic-how-big-a-difference",
+    "title": "24  Selection and Inference for Regression Models",
+    "section": "24.8 IC, How big a difference?",
+    "text": "24.8 IC, How big a difference?\nStrictly and simply using AIC, we can say that a model with lower AIC is better (regardless of how small the difference between the AIC values is).\nIn practice, if using AIC to choose between two models, analysts often require some minimal AIC improvement to justify adding an additional parameter/predictor to a model. (Common thresholds are 2, 3, or maybe 6). So, one might not prefer a larger model unless it reduces AIC by at least 2-3 units.\nSo, if we are comparing two models (say, with and without a key predictor of interest), if the model with the predictor is better by well over 2-3 AIC units, we consider that pretty convincing evidence of an association between that predictor and the response.\nFor a lot more excellent information about practical use of AIC, the interested reader can check out the classic book by Burnham and Anderson:",
+    "crumbs": [
+      "Multiple Linear Models",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Selection and Inference for Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html",
+    "href": "interactions.html",
+    "title": "25  Interactions in Regression Models",
+    "section": "",
+    "text": "25.1 Module Learning Outcomes\nWe’ve already seen how to include multiple predictors - both categorical and quantitative - in a regression model. We know how to deal with confounders, mediators, and even colliders in terms of model planning. But what about moderators? Two variables have an interaction - or, one moderates the effect of the other - when the size or direction of the first predictor variable’s effect on the response changes depending on the value of the second predictor. Interactions are a bit tricky to understand and interpret, so we’ll spend some time with them (which will also allow us time to hone our model planning, fitting, assessment, and interpretation skills).\nBy the end of the module you will:\nThis module is a little bit lighter in content load than the last few…in part to leave room for the complicated concept of interaction to sink in, and in part to give you some time to catch your breath and catch up if needed!",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#module-learning-outcomes",
+    "href": "interactions.html#module-learning-outcomes",
+    "title": "25  Interactions in Regression Models",
+    "section": "",
+    "text": "Define interactions in the context of a regression model\nGain facility at using causal diagrams to identify variables as mediators, moderators, confounders, colliders\nPractice choosing which to include in a regression model\nUse appropriate notation to fit models with interactions\nInterpret output of a fitted model with interactions, making appropriate use of prediction plots and other model selection tools\nPractice and gain confidence at the regression modeling process, including planning, fitting, assessment, and interpretation/selection phases",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#text-reference",
+    "href": "interactions.html#text-reference",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.2 Text Reference",
+    "text": "25.2 Text Reference\nRecommended reading for the materials covered in this tutorial can be found in:\n\nBeyond Multiple Linear Regression Chapter 1.6.6\nCourse Notes Chapter 8\nRegression Modeling Strategies Chapters 2.3.2, 2.7.2\n\nIt’s suggested that you consider consulting these chapters after doing this tutorial, with particular focus on any topics you found most challenging.",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#interactions-defined",
+    "href": "interactions.html#interactions-defined",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.3 Interactions Defined",
+    "text": "25.3 Interactions Defined\nTwo predictors interact when you need to know values of both in order to make an accurate prediction of the response variable value.\nPredictors can interact in any type of regression model (so this chapter could really be placed almost anywhere in our course).",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#interactions-what-are-they",
+    "href": "interactions.html#interactions-what-are-they",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.4 Interactions: what are they?",
+    "text": "25.4 Interactions: what are they?\nOk, so we just saw a definition of interactions. We also learned before about moderation, which is another term for interaction. But it’s a tricky concept to fully understand, so let’s see some more explanations.\nHere’s a pretty energetically-delivered video (not specifically made for our course this time, but useful) that explains what interactions are, with some helpful examples.\nChallenge: Watch for a graph in the video where the data shown doesn’t match the verbal interpretation! (I think this is probably because of a labeling mistake or a data-simulation mistake rather than dishonesty or anything…)\n\n\n\nAnother (optional) interaction video\nStill scratching your head and wondering exactly what an interaction is?\nIt’s a challenging concept for almost everyone, so I want you to hear definitions straight from me, plus have access to our texts, plus hear definitions from several other people…below is another video option. I think it’s a bit more boring than the previous one, but if you want another brief review, it’s worth the 5-minute watch…",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#set-examples",
+    "href": "interactions.html#set-examples",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.5 SET Examples",
+    "text": "25.5 SET Examples\nWe need to see some more examples of this. To do so, let’s consider a dataset called teach_beauty, on course evaluation scores (eval) for a lot of university professors. You can find a copy of the dataset at: https://sldr.netlify.app/data/ProfEvaltnsBeautyPublic.csv.\nThese data are included in a textbook by Andrew Gelman of Columbia University, and they might be real course evaluations from Columbia (or they might be simulated; we’re not sure).\nSome additional information is given about each faculty member, including\n\nwhether their native language is English or something else: native_language\na ranking of their beauty (somehow, we don’t know how)\ntheir age\nwhether they tended to dress in a formal way\nwhether or not they are female\nwhether or not they are White/Caucasian (race_eth)\n\nA bunch of research has suggested that scores from student evaluations of teaching (SETs) don’t really measure teaching skill well (for example, Spooren et al. 2013, Hornstein 2017, and Kreitzer & Sweet-Cushman 2022). So, it could be interesting to consider what they do actually measure…and a number of studies have found discrepancies in which faculty who are younger, female, and more tend to get lower scores.\nHere, we will not dive into a full model plan and causal diagram, but just play with and explore a few example model to help deepen our understanding of how interactions work.\nSince we’re doing “night science” and not focused on later inference, we can take a peek at the data. Feel free to make some additional graphs if you like!\n\n\n\n\n\n\n\n\n\nCategorical-Quantitative Interaction\nThat graph you just saw might show evidence of an interaction…\n\n\n\n\n\n\n\n\nEval may go up as beauty increases, but the slope of the relationship seems like it might be different for the female group.\nThis would be an interaction between beauty and female.\n\n\nCategorical-Categorical Interaction\nWe just saw an interaction between categorical and quantitative variables. What about a categorical variable modulating the effect of another categorical variable?\n\n\n\n\n\n\n\n\nPerhaps Informal Dress affects eval scores, but really only if the teacher is not female – for females, formal dress doesn’t make a difference either way.\nThe effect of formal dress is different depending on the value of female. This is an interaction between formal and female.\n\n\nQuant-Quant interactions?\nYes, these are possible, but very hard to visualize and conceptualize.\nBasically, it would mean that the slope of the line for one predictor changes gradually as the value of a second variable changes.\nIn other words, the response variable depends not only on each of the two predictors, but also on their product.\nYou’ll see one example later on, but generally I recommend you initially avoid interactions of two quantitative variables unless you are pretty sure you need one and have confidence in your ability to interpret the result.\n\n\nR code\nIf you want to include an interaction term in a model in R, in the model forumla, use a * rather than a + between the predictors that (may) interact. For example, consistent with our exploration above, we might try:\n\n\n\n\n\n\n\n\nNotice the additional indicator variables in the coefficient table/model equation. These function to adjust the effects of the beauty predictor depending on the values of formal and female, which interact with it. (More details on that equation-y stuff later.)\nWe could use IC-based model selection to determine whether including these interactions in a model is important or not.\n\n\n\n\n\n\n\n\nIn the case of the particular model we fitted, the “best” model starting from this full model is actually one without interactions. If you want to explore the dataset further, you will find that actually a model where age, beauty AND female interact fits much better…I encourage you to give that a try!\n\n\n\n\n\n\n\n\n\n\nCautionary note\nIf you include an interaction in a regression model, you must also include the corresponding “fixed effects” – this means if you have an indicator variable/slope term for an interaction in your model, you must also have the indicator variables/slopes corresponding to the individual predictors. Our fitting functions (lm(), glm(), glmmTMB(), etc.) are smart enough to ensure this for you. So is dredge(). (It would take effort to mess this up in R.)",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#bee-examples",
+    "href": "interactions.html#bee-examples",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.6 Bee Examples",
+    "text": "25.6 Bee Examples\nIt’s nearly impossible to have too many examples when introducing the idea of interactions. So let’s see some more…\nWe will use data from a 2019 paper by Adam Dolezal and colleagues, entitled Interacting stressors matter: diet quality and virus infection in honeybee health (https://doi.org/10.1098/rsos.181803). Its abstract reads:\n\n\nHoneybee population declines have been linked to multiple stressors, including reduced diet diversity and increased exposure to understudied viruses. Despite interest in these factors, few experimental studies have explored the interaction between diet diversity and viral infection in honeybees… In laboratory experiments, we found that high-quality diets have the potential to reduce mortality in the face of infection with Israeli acute paralysis virus (IAPV).\n\n\nYou can find a copy of the dataset at: https://sldr.netlify.app/data/bee-virus.csv. Here, we could read in and prepare the data like so:\n\nbees &lt;- readr::read_csv('data/bee-virus.csv', show_col_types = FALSE) |&gt;\n  rename(Cage_id = `Cage Number`,\n         Virus = `Virus Treatment`,\n         Food = `Pollen Treatment`,\n         Experiment_id = `Experimental replicate code`,\n         Mortality = `72 hpi proportion mortality`) |&gt;\n  drop_na(Virus, Food, Mortality)\n\n\n\n\n\nCategorical-Quantitative Interaction\nWhat would it mean for the effect of Virus and the effect of Food to interact?\nHere’s a graphical exploration:\n\n\n\n\n\n\n\n\nIf food is “None” that is low-quality food with no pollen added (the other kinds have pollen, with “Poly” being the highest quality).\nSome cages were infected with a virus, and some were not.\nDo bees on different diets take a different survival hit when infected with the virus? We’d need to fit some models to find out!\nBefore we go further…\n\n\nWhat would it mean for the bees’ diet to modulate the effect of the virus on the bees? (If you’re struggling, refer to the data graph shown earlier, which may help you to understand…)\n\n An interaction between diet and virus means that diet and virus affect one another, that is, they are associated with each other Diet and virus interact if the effect of the virus on bee mortality rates is BIGGER for some diet(s) than others. None of the above Both diet AND virus infection have effects on the number of bees that die\n\n\n\n\n\nClick for explanations of solution above.\n\nAn interaction means that the proportion of bees killed by virus infection depends on the diet they are eating.\nHere, we might think that bees eating the best food are better able to survive infection, while those with the lowest quality of the food die more once infected.\nAll bees die more with virus than without, but the jump (proportion of extra death when the virus infection is present) is much bigger when the food is bad.\nIt’s not correct to say that “interaction means diet and virus are associated with each other…” Yikes! Sorry, no. This is a very common misconception. Two predictors ARE sometimes associated with each other. But whether they are or not, that is NOT an interaction. An interaction is when the value of one predictor ALTERS the relationship between the other predictor and the response variable.\nIt’s also not complete to say that there’s interaction if “both diet AND virus infection have effects on the number of bees that die.” This answer answer doesn’t describe an interaction – this could just describe an additive model, where diet and virus both affect mortality.\n\nOK! Let’s go ahead and fit that model:\n\n\n\n\n\n\n\n\nEek. What does it all mean?\n\n\nSelection: ANOVA\nYou’ll see some examples of how to write and understand the model equation a bit later. But for this example, let’s think about how we would make inferences – for example, how could we test whether Virus and Food really interact?\nOne approach would use ANOVA; see if you can code it…\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint\n\n\n\n\n\nbee_int_model &lt;- lm(Mortality ~ ____ * ____, data = bees)\ncar::Anova(...)\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nbee_int_model &lt;- lm(Mortality ~ Virus * Food, data = bees)\ncar::Anova(bee_int_model)\n\n\n\n\nBased on the ANOVA results, do we have evidence that Virus and Food interact?\nWait…before you answer that…",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#selection-note-about-p-values",
+    "href": "interactions.html#selection-note-about-p-values",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.7 Selection: Note about p-values",
+    "text": "25.7 Selection: Note about p-values\nWe have not spent much time reviewing how to interpret p-values; for one thing, we often use information criteria to compare models, and for another, interpreting p-values was hopefully covered in the intro stat course you once took. But, perhaps that was long, long ago. Or, perhaps you took a more traditional course with a different approach to interpreting p-values.\nFor this course, I strongly request that you:\n\nReport the exact p-value of any hypothesis test you carry out (not just “&lt; 0.05” or “&lt; 0.01” etc. – I crossed those out for emphasis!)\nBased on the size of the p-value you obtain, make a judgment call about the strength of evidence it gives you against the null hypothesis. (Remember, for regression models, the null is usually “there is no association between \\(X\\) and \\(Y\\),” or maybe today, “there is no interaction between \\(X\\) and \\(Z\\).”)\n\nThe smaller the p-value, the stronger the evidence; and p-values above about 0.05-0.1 are essentially no evidence against the null hypothesis.\n\n\nFor different practitioners, and in different contexts, different scales for strength-of-evidence provided by p-values have been suggested.\nIn A reckless guide to p-values Michael Lew discusses the history and practical application of p-values at length and suggests that “Strength of evidence against the null hypothesis scales semi-geometrically with the smallness of the P-value” as shown in his Figure 3:\n\n\n\n\n\n\n\n\n\nAlternately, in In defense of p-values, Paul Murtaugh suggests:\n\n\n\n\n\n\n\n\n\nThese should give you an idea of how to interpret p-values and draw conclusion from them, but a key point is to avoid memorizing some algorithm or rule to decide whether or not you have a “significant” result, and to avoid summarizing results with that single word – so, we do not simply say a conclusion is “significant” if it is based on a p-value below 0.05 (again, the words are crossed out for emphasis!) There are lots of reasons – see the articles linked above by Murtaugh and Lew if you want to read more.\nSo what do we say, if we are avoiding the fraught shorthand of calling it “significant”?\nA key best practice is to accompany all hypothesis testing results with a discussion of the “effect size” – for example, how big is the slope, or the difference between groups? Try to consider whether the size of the estimated difference is big enough to be of practical importance.\nNow, back to our question:\n\n\n\n\n\n\n\n\n\n\nBased on the ANOVA results, do we have evidence that Virus and Food interact?\n\n Nope, most definitely NOT Yes, I'm basically sure Some; with a p-value of about 0.02, the evidence is moderate but not completely compelling There is significant evidence (p &lt; 0.05)\n\n\n\n\n\nClick for explanations of solution above.\n\nThe p-value for the interaction term is 0.024. How strong or convincing is that as evidence against the null hypothesis that there’s no association?\nIf you said you were “basically sure” or that there was “definitely NOT” evidence, maybe reconsider your phrasing and level of certainty? We rarely want to sound that sure. Also, consider the exact p-value and the strength of evidence it provides…\nAlso remember that in our course, we avoid the word ‘significant’ like it’s contaminated! Because…it kind of is, by decades of dubious stats teaching and practice reinforcing the idea that hypothesis testing yield ironclad yes-or-no results. Try the strength-of-evidence way outlined above, instead…",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#selection-ic",
+    "href": "interactions.html#selection-ic",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.8 Selection: IC",
+    "text": "25.8 Selection: IC\nWhat if we wanted to make the same comparison – of models with and without the interaction – but using information criteria instead of hypothesis testing?\nGive it a try…\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint 1\n\n\n\n\n\nbee_int_model &lt;- lm(Mortality ~ Virus * Food, data = bees)\nbee_no_int_model &lt;- ...\nAIC(...)\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nbee_int_model &lt;- lm(Mortality ~ Virus * Food, data = bees)\nbee_no_int_model &lt;- lm(Mortality ~ Virus + Food, data = bees)\nAIC(bee_int_model, bee_no_int_model)\n\n\n\n\n\n\nBased on your results (using AIC), what do you conclude?\n\n There's most definitely an interaction The AIC is about 4 units lower for the model with the interaction, so the model with the interaction fits a fair amount better and according to this analysis, there probably is an interaction Nope, most definitely NOT an interaction there! Since the AIC score is negative (-154) for the model with the interaction and also for the one without, we have some doubts about the validity of the model overall. The AIC is about 4 units lower for the model with the interaction, so the model with the interaction doesn't fit as well, and according to this analysis, there probably is NOT an interaction\n\n\n\n\n\nClick for explanations of solution above.\n\nThe difference in AIC between the models is about 4, which is getting big enough that we think one model really does fit noticeably better than the other.\nSome points to remember:\n\nCarefully choose your level of certainty in presenting your results.\nLower AIC scores are better.\nThe answer focusing on the sign of the AIC value is basically nonsense in a sentence. Remember, for information criteria, it’s the relative value that matters - that is, the difference in IC values between models under comparison. The absolute AIC number for one model tells you…not much! Positive, negative, big, small…it’s only differences in IC values between models being compared that are informative for inference.\n\n\nAre the results the same with BIC? (not that you would normally do both – but just for practice, alter the code above to use BIC instead and then answer this question!) Since BIC enacts a different definition of “goodness” of model quality, the two will not necessarily always agree.\n\nCategorical-Quantitative Interaction\nWe can also interact a categorical and a quantitative variable. Then, what we essentially want is a different slope for the quantitative variable for each category.\nWe don’t have a quantitative variable in our dataset. I am adding a fake one ONLY to show how the code would work to fit a C-Q interaction model. You don’t need to be able to do this, of course…and in a real analysis it would be a TERRIBLE and dishonest idea! However, here for practice purposes only, we will do it.\n\n\n\nNow, fit a model with and effect of Virus and also a different slope for fake_qvar for each level of virus: one slope if there was no virus infection, and a different slope if there was viral infection.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nbee_model &lt;- lm(Mortality ~ Virus * fake_qvar, data = bees)\n\n\n\n\nNow, since I made that fake_qvar data up totally at random, we expect that it shouldn’t really be associated with Mortality or interacting with Virus.\nCan you confirm that using either ANOVA or information criteria?\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution(s):\n\n\n\n\n\n# you would likely do one of these three:\ncar::Anova(bee_model)\nbee_model_noint &lt;- lm(Mortality ~ Virus + fake_qvar, data = bees)\nAIC(bee_model, bee_model_noint)\nBIC(bee_model, bee_model_noint)\n\n\n\n\n\n\nQuant-Quant Interaction\nOne more time, I’ll say:\nProbably just don’t go there. It’s quite hard to make sense of.\nA quantitative-quantitative interaction means that the slope for one predictor variable changes continuously as the value of the other predictor changes…in other words, the response depends on both predictors plus it depends on their product. Keep going for one example of this later on, though.\n\n\nGoing Further\nAny other models or comparisons you want to try?\nFeel free to experiment a bit if so…",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#prediction-plots",
+    "href": "interactions.html#prediction-plots",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.9 Prediction Plots",
+    "text": "25.9 Prediction Plots\nWhat about prediction plots for a model with interaction(s)? Certainly, we’d want to be able to show them…\n\n\nThe key thing to remember is that if predictors interact in a model, you shouldn’t show a prediction plot with any of them unless it shows all of them.\n\n\nLuckily, that’s easy to do with predict_response() – just make sure your terms input contains the names of both variables.\nFor example, with our bee model:\n\n\n\n\n\n\n\n\nIf you want to customize the plot a lot, you can omit the |&gt; plot() and make your own graph of the results table returned by predict_response().\nBut there’s one thing you may often want to try…see what happens if you change the order of the predictors in the terms list.\nWhich graph is easier to interpret, in your opinion?\nOften one way tells the story a lot better than the other, so it pays to consider carefully which to show (or try both, and then choose).",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#car-examples",
+    "href": "interactions.html#car-examples",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.10 Car Examples",
+    "text": "25.10 Car Examples\nHow does the model equation work when you have an interaction? For each pair of interacting variables, you get an additional term in the model that is the product of the interacting variables.\nIf one or more of them are categorical, then there will be a new product term for every pair of indicator variables possible between the two variables! (So interactions between categorical variables with many groups can quickly lead to a need to estimate a LOT of parameters…)\nWe focus more on understanding what interactions are and when to include them in our models, but let’s spend just a bit of time considering the model equation with interactions.\nLet’s go!\nFor these examples, we’ll consider a toy example in which we want to model the price of a car as a function of its mileage, color, and age.",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#model-equations",
+    "href": "interactions.html#model-equations",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.11 Model Equations?",
+    "text": "25.11 Model Equations?\n\nOne Quantitative Predictor\nThis one should be all review…no interactions yet.\n\n\n\n\nTwo Quantitative Predictors\nAgain, this is review - still no interactions\n\n\n\n\nInteracting Quantitative Predictors\nHere is the one example I promised you of two quantitative predictors interacting!\n\n\n\n\nCategorical-Quantitative Interaction\nFinally, what about a categorical variable interacting with a quantitative predictor?",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#interactions-what-are-they-again",
+    "href": "interactions.html#interactions-what-are-they-again",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.12 Interactions: what are they, again?",
+    "text": "25.12 Interactions: what are they, again?\nThis might be a good time to watch that initial video one more time, to review and maybe pick up something you missed the first time through:",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "interactions.html#more-practice",
+    "href": "interactions.html#more-practice",
+    "title": "25  Interactions in Regression Models",
+    "section": "25.13 More Practice",
+    "text": "25.13 More Practice\nIt can be really challenging to understand what an interaction means and gain skills at using and interpreting them.\nHere is one way to see some additional examples, and collaborate with me and students from your class and even beyond! Check out the instructions and examples in our shared Google slide deck.",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Interactions in Regression Models</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html",
+    "href": "mle.html",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "",
+    "text": "26.1 Module Learning Outcomes\nSo far, we have gotten quite a bit of practice with the practicalities of the regression modeling process. We have spent less time considering how our statistical software is actually doing the model fitting for us, or examining the mathematics used to do that fitting.\nNow is our chance to do both of those things! In addition to deepening our understanding of multiple linear regression, this week’s material will prepare us to understand and fit other types of models in coming modules.\nBy the end of the module you will:",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#module-learning-outcomes",
+    "href": "mle.html#module-learning-outcomes",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "",
+    "text": "Define “Likelihood”\nUnderstand and explain how maximum likelihood estimation is used to fit regression models\nRecognize several common PDFs and PMFs beyond the Normal, stating their support, parameters, and possible shapes",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#text-reference",
+    "href": "mle.html#text-reference",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.2 Text Reference",
+    "text": "26.2 Text Reference\nRecommended reading for the materials covered in this tutorial can be found in:\n\nBeyond Multiple Linear Regression Chapter 2 and Chapter 3\nCourse Notes Chapter 4 and Chapter 5\nEcological Models & Data in R Chapter 4, Chapter 6\n\nIt’s suggested that you consider consulting these chapters after doing this tutorial, with particular focus on any topics you found most challenging.",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#likelihood-to-compare",
+    "href": "mle.html#likelihood-to-compare",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.3 Likelihood to Compare",
+    "text": "26.3 Likelihood to Compare\nWhat’s “likelihood,” and how can we use it to compare models? Let’s find out…with seals.\n\n\nAs you move through the video, you may want to visit\n\nAn online normal distribution calculator\nOur class spreadsheet with likelihoods",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#recap",
+    "href": "mle.html#recap",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.4 Recap",
+    "text": "26.4 Recap\nSo far, we have seen that the likelihood of a dataset given a particular model…\n\nCan be used to measure model-data match\n(…and then as ingredient to AIC/BIC)\nCan be used to fit one model: which parameter estimates are “best”?",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#cheese-data",
+    "href": "mle.html#cheese-data",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.5 Cheese Data",
+    "text": "26.5 Cheese Data\nNext, this tutorial will guide you through an exercise designed to deepen your understanding of likelihood and maximum-likelihood estimation of linear regression models.\nWe will use a small dataset to try to answer: What makes cheese tasty? …while learning about Maximum Likelihood Estimation.\nThe dataset, called cheddar (and available in package faraway) has data on expert cheese tastiness ratings, as well as several chemical properties of each cheese.\n(Unfortunately, we don’t have a lot of detail about the units of measure or method of determining these properties – it is obvious that Dr. Faraway, who provided the data, is a statistician and not a chemist.)\nTo use this dataset, all you have to do is load the package faraway with library() and then you can start using the cheddar dataset immediately.\n\n\nRows: 30\nColumns: 4\n$ taste  &lt;dbl&gt; 12.3, 20.9, 39.0, 47.9, 5.6, 25.9, 37.3, 21.9, 18.1, 21.0, 34.9…\n$ Acetic &lt;dbl&gt; 4.543, 5.159, 5.366, 5.759, 4.663, 5.697, 5.892, 6.078, 4.898, …\n$ H2S    &lt;dbl&gt; 3.135, 5.043, 5.438, 7.496, 3.807, 7.601, 8.726, 7.966, 3.850, …\n$ Lactic &lt;dbl&gt; 0.86, 1.53, 1.57, 1.81, 0.99, 1.09, 1.29, 1.78, 1.29, 1.58, 1.6…\n\n\nBefore you continue, make 1-2 quick exploratory data plots to see whether you note any trends in taste depending on the H2S, Acetic acid, or Lactic acid content of the cheeses in the dataset.",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#cheese-model",
+    "href": "mle.html#cheese-model",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.6 Cheese Model",
+    "text": "26.6 Cheese Model\nThere are just 30 data points, so we’d be best off considering a model with 1-2 predictors (at most!) and not all 3 that are present in the dataset.\nFor this exercise, let’s do just one predictor; we will choose one: H2S. (This is “night science” – fun and exploration – so we won’t worry about the fact that that choice may have been based on the data plots you just made!)\nAdjust the code below to fit a one-predictor linear regression model with our chosen predictor, and view its summary().",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#mle",
+    "href": "mle.html#mle",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.7 MLE",
+    "text": "26.7 MLE\nEarlier we used likelihood to compare two models fitted to the seal data (one with the ice_cover predictor, and one without).\nThat’s part of how AIC and BIC work.\nBut we can use likelihood another way, too: to “fit” a single model to data, figuring out which exact slope and intercept values are BEST for a given dataset and model.\nHow can we use likelihood to find these “best” slope and intercept parameter estimates, ourselves?\n\nCaveats\nWhat you’ll do next isn’t exactly what R does to fit an lm(). For the linear regression case, smart folks have used calculus and linear algebra to derive analytical solutions for the parameter estimates \\(\\hat{\\beta}\\) of a multiple linear regression model, in terms of the dataset - that’s why lm() can return results super fast.\nAnd in cases where R does need to maximize a likelihood to fit a model, it uses smarter methods than what we are about to do! We will just try a huge range of reasonable possibilities for slope and intercept, getting the likelihood of the data for every slope/intercept guess, and finally choosing the best among them. What are are about to do (it’s called a grid search) is a great illustration of the idea of maximum-likelihood estimation, but it is not the fastest algorithm to carry it out. (Stay tuned for an optimization course to learn smarter and more efficient algorithms.)\nYou don’t have to be able to replicate the R code in the following sections (up through the interactive plot). But do your best to UNDERSTAND what each code chunk is doing. I suggest adding making your own notes file with additional explanation or code comments as needed.",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#guess-the-parameters",
+    "href": "mle.html#guess-the-parameters",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.8 Guess the parameters",
+    "text": "26.8 Guess the parameters\nBased on what you have seen in the scatter plots, you can probably give reasonable upper and lower boundaries on the intercept and slope for your regression line.\nDon’t use the estimates from the lm() summary to give unreasonably precise guesses - the point here is to give a wider range of somewhat-reasonable slope values that you can then “search” for the best parameter values.\nIn the code below, do you think a range of reasonable intercepts and slopes is covered? The function seq() takes inputs from (the minimum value to try), to (the maximum), and the amount to increment by. Due to the way the tutorial interface works, you can’t really change the values here, but if you run all the code on your own in your own Quarto document, you can try other options if you wish!\n\n\n\n\n\n\n\n\nEach row of MLE_grid give one set of guesses of a possible slope and intercept for our regression model.\nNow, we want to compute the likelihood of the dataset given each of those sets of parameters. We can compare the likelihoods to see which estimates are best!",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#compute-fitted-values",
+    "href": "mle.html#compute-fitted-values",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.9 Compute fitted values",
+    "text": "26.9 Compute fitted values\nHow will we compute the likelihood of the dataset, given a particular slope and intercept guess? Well, first we need to get the model residuals (since we compare those to a normal distribution in order to get the likelihood).\nAnd to get the residuals, we need to subtract the model-predicted values \\(\\hat{y}\\) from the observed values of the response \\(y\\).\nWe already have the response variable values \\(y\\), in the dataset. But we need the predicted values \\(\\hat{y}\\)! We have to compute them by hand, since we are not using lm() – we can’t use predict() without the fitted model object that comes from lm()!\nBut no problem, we can do this.\nOur model is:\n\\[y = \\beta_0 + \\beta_1x + \\epsilon\\]\nAnd according to this model, the predicted value of \\(y\\) (on average) is \\(\\beta_0 + \\beta_1x\\).\nWell, \\(x\\) is the predictor – we have data on that. We also have candidate values of \\(\\beta_0\\) (the intercepts) and \\(\\beta_1\\) (the slopes).\nWe will make our own function to compute fitted values, given a dataset and candidate slope and intercept. Change this to make sure it uses “your” predictor! Running this chunk will create a FUNCTION you can use later – so there will be no output yet.\n\n\n\n\n\n\n\n\nNow we can add a column to our MLE_grid with the fitted values for slope/intercept guess.\nThis will take a while to run.\nWhen it’s done, look what has happened: each row of the dataset (corresponding to one guessed slope and intercept) contains a list of all 30 fitted values! (Cool.)",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#compute-the-residuals",
+    "href": "mle.html#compute-the-residuals",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.10 Compute the Residuals",
+    "text": "26.10 Compute the Residuals\nOK. Shoot. We didn’t actually need the fitted values themselves: we need the residuals. We can compute them in a similar way, though. We just need to subtract the fitted values from the observed response variable values!\nHere is some code we can use to create a function to make this calculation for us:\nNow we can add a column to our MLE_grid with the residuals for each row (change the code below to use the predictor variable for your model). This will take a while to run. When it’s done, look what has happened: each row of the dataset contains a list of 30 residuals! (Still totally cool.)\n\n\n\n\n\n\n\n\n\n\nEstimate the residual standard error\nTo be able to get the likelihood from the residuals, we need to first estimate the residual standard error \\(\\sigma\\). The code below takes each list of 30 residuals and computes its standard deviation (sd).\n\n\n\n\n\n\n\n\n\n\nCompute the actual likelihood\nFinally, we are ready to compute the natural log of the likelihood of the dataset, given each proposed model (each “proposed model” is one set of candidate \\(\\beta_0\\), \\(\\beta_1\\), and \\(\\sigma\\)).\nFor each row, we need to compute the natural logarithm of the product of the likelihoods of all the residuals, in a normal distribution with mean 0 and sd \\(\\sigma\\). We will do the mathematical equivalent: find the sum of the natural logarithms of the normal likelihoods of each residual value.\nAnother explanation (add your own additional detail if needed):\n\nFor each single residual, we find its likelihood by finding the density of a normal (mean = 0, standard deviation = \\(\\sigma\\)) distribution for x = “our residual”\nWe take the natural log of each residual’s likelihood (working on a log scale reduces calculation problems for the computer)\nFor each row of MLE_grid – that is, for each proposed slope/intercept combination – we add up all the residual log-likelihoods to get one joint log-likelihood for the whole dataset\n\nBe patient, this will take a minute:",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#best-model",
+    "href": "mle.html#best-model",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.11 Best Model?",
+    "text": "26.11 Best Model?\nThe BEST model (according to maximum likelihood estimation) is the one with the BIGGEST log-likelihood. Which one is that?\nYes, we could just sort the data table by likelihood values. We could also…\nUse a plot to figure it out!\n\n\n\n\n\n\n\n\nWhy all the dots? Well, the intercept helps determine the likelihood, too…color by the models candidate intercept value to better see what I mean:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\ngf_point(log_likelihood ~ slope, data = MLE_grid,\n         color = ~intercept)\n\n\n\n\nOK, kind of helpful – we can start to see where the highest values are…\nMaking it interactive might help!\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHint:\n\n\n\n\n\nlibrary(plotly)\ngf_point(...) |&gt;\n  ggplotly()\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\nlibrary(plotly)\ngf_point(log_likelihood ~ slope, data = MLE_grid,\n         color = ~intercept) |&gt;\n  ggplotly()\n\n\n\n\nIn the interactive plot, we can mouse over to find the exact slopes and intercepts that seem to have the highest likelihood.\nTo find the absolute top ones, we can also arrange() the dataset in order of descending likelihood and check out the top entries:",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#comparison",
+    "href": "mle.html#comparison",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.12 Comparison",
+    "text": "26.12 Comparison\nHow do the slope and intercept that you just found compare with the one from summary() and lm()?\n(If we did everything right, they should be quite close! We only estimated to one decimal place, though.)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSolution:\n\n\n\n\n\ncheese_model &lt;- lm(taste ~ H2S, data = cheddar)\nsummary(cheese_model)",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#mle-the-mathy-recap",
+    "href": "mle.html#mle-the-mathy-recap",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.13 MLE, the Mathy Recap",
+    "text": "26.13 MLE, the Mathy Recap\nThis section is more or less option, but provides a bit more mathematical explanation and presentation for those interested.\n\nThe Likelihood Function\nWell, if we want to find the \\(\\beta\\)s that maximize the likelihood, we’re going to need a likelihood function!\nThey often involve PDFs, and the only one of those that is involved in the linear regression equation is the normal distribution that we assume the residuals to follow.\nWe said that\n\\[ y = \\beta_0 + \\beta_1x + \\epsilon\\]\nwith\n\\[\\epsilon \\sim N(0,\\sigma)\\] Remember, the Normal probability density function is\n\\[f(x) = \\frac{1}{\\sigma \\sqrt{2\\pi}} e^{\\frac{- (x - \\mu)^2}{2 \\sigma^2}}\\] In our case, the random variable \\(x\\) being modeled is the residuals, whose mean \\(\\mu\\) is 0.\nAnd so the \\(i\\)th residual is\n\\[e_i = y_i - \\beta_0 - \\beta_1x_i\\]\nThe likelihood of the \\(i\\)th residual \\(e_i\\) is the normal density from the normal PDF with mean 0, and standard deviation \\(\\sigma\\). So it turns out that in order to estimate the \\(\\beta\\)s this way, we will also have to estimate \\(\\sigma\\), the residual standard error.\nThe joint likelihood of the whole dataset is just the product of the likelihoods of all the individual residuals (i.e., all the individual datapoints); so we have\n\\[L(\\beta_0, \\beta_1, \\sigma; \\mathbf{x}, \\mathbf{y}) = \\prod_{i = 1}^n \\frac{1}{\\sigma \\sqrt{2\\pi}} e^{\\frac{- (e_i - 0)^2}{2 \\sigma^2}} = \\prod_{i = 1}^n \\frac{1}{\\sigma \\sqrt{2\\pi}} e^{\\frac{- (y_i - \\beta_0 - \\beta_1x_i)^2}{2 \\sigma^2}}\\]\nYour turn: take the natural logarithm of the expression above to get the log-likelihood. We’ll compare notes in the next section.\n\n\nLog-Likelihood Function\nThe log-likelihood function for simple linear regression (with just one predictor) is:\n\\[ \\ell(\\beta_0, \\beta_1, \\sigma; \\mathbf{x}, \\mathbf{y}) = \\sum_{i = 1}^{n} -log(\\sigma) - \\frac{1}{2} log(2\\pi) - \\frac{(y_i - \\beta_0 - \\beta_1x_i)^2}{2\\sigma^2}\\]\nIt is left as an exercise for you - if you are interested - to maximize the above expression using methods from calculus (find partial derivatives with respect to \\(beta_0\\) and \\(\\beta_1\\), set equal to 0, and solve for the parameters). Or, it can also be done using linear algebra. You should find that the estimates are identical to the ones you would get using least squares estimation, and/or using lm().\n\nAn estimate for the residual standard error\nYou can also use calculus to find an estimate of \\(\\sigma\\) using the log-likelihood. First, try differentiating the full log-likelihood with respect to \\(\\sigma\\) – again we’ll compare notes in the next section.\n\n\nWhat’s your derivative?\n\\[ \\frac{\\partial{\\ell}}{\\partial{\\sigma}} = \\frac{-n}{\\sigma} + \\frac{1}{\\sigma^3} \\sum_{i = 1}^{n} (y_i - \\beta_0 - \\beta_1x_i)^2  \\]\n\\[ = \\frac{-1}{\\sigma^3} \\bigg{(} n\\sigma^2 - \\sum_{i=1}^{n} (y_i - \\beta_0 - \\beta_1x_i)^2 \\bigg{)} = \\frac{-1}{\\sigma^3} \\bigg{(} n\\sigma^2 - \\sum_{i=1}^{n} e_i^2\\bigg{)}\\]\nSetting this equal to 0, we immediately know that the \\(\\frac{-1}{\\sigma^3}\\) can not be 0, giving\n\\[0 = n\\sigma^2 - \\sum_{i=1}^{n} e_i^2\\]\n\\[ \\sigma^2 = \\frac{\\sum e_i^2}{n}\\]\nWhich seems very sensible – the mean of the sum of squared residuals estimates the variance.\nUnfortunately (as so often happens) this estimator is biased; an unbiased version that is more often used is:\n\\[ \\hat{\\sigma}^2 = \\frac{\\sum e_i^2}{(n - 2)}\\]",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#probability-distributions",
+    "href": "mle.html#probability-distributions",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.14 Probability Distributions",
+    "text": "26.14 Probability Distributions\nThis may be a review, or it may be new to you.\nSo far, we’ve seen the Normal distribution in our course (and you likely saw a lot of that in your intro stat course, as well).\nThere are A LOT MORE options out there! Really, click the link to check out an overwhelming schematic.\nEach probability distribution is a function that matches possible values of a variable (usually depicted on the x-axis) with a measure of how often they occur (usually shown on the y-axis).\n\nDiscrete & Continuous Distributions\nWe can classify probability distributions into the categories of discrete and continuous distributions.\n\nDiscrete distributions model variable that can take on a discrete set of values (for example, the number of successes in n trials, or the number of birds spotted in the forest). For these, the function values are a set of probabilities that sum to 1.\nContinuous distributions model variables that can take on any numeric value within a specified range (for example, proportion between 0 and 1, or height of people in cm). For these, the function values are in “density” or “likelihood” units – they are scaled such that the total area under the functions’ curve is 1.\n\n\n\nSupport\nThe support of a distribution describes the range of values a variable can have (it might be 0-1, 0-\\(\\infty\\), \\(-\\infty\\) - \\(\\infty\\), or (for the Uniform!) values between some specified minimum and maximum).\nKnowing all this, you can choose a distribution that is a good fit for a variable by matching its type and support.",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#many-pdfs",
+    "href": "mle.html#many-pdfs",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.15 Many PDFs",
+    "text": "26.15 Many PDFs\nHere are some flow charts that try to illustrate the variety of probability distributions that are out there, organized by their shape (symmetry/skew, number of modes…) and support:\n\n\n\n\n\nFigure 6A.15 from Damodaran’s ‘Probabilistic approaches to risk’, republished in Fong Chun Chan’s Blog\n\n\n\n\n(You can also view the image online.)\n\n\n\n\n\nFrom Ghanegolmohammadi et al. 2022, BMC Biology\n\n\n\n\n(You can also view the image online.)",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#distributions-in-r",
+    "href": "mle.html#distributions-in-r",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.16 Distributions in R",
+    "text": "26.16 Distributions in R\nIn R, each distribution has 2 functions we may use often. (Fill in the ___ with the (often shortened) name of the distribution.)\n\nd____() returns the value(s) of the function corresponding to given variable value(s). The result are in Likelihood units: either probability for discrete distributions, or density for continuous ones. The first input is x, the variable value(s). Examples: dnorm() for Normal, dpois() for Poisson, dbinom() for Binomial, dgamma() for Gamma, dbeta() for Beta…\nr____() returns random sample(s) drawn from the specified distribution. The first input is n, the number of samples to draw.\n\nTo get information about parameter/input names for a specific function, ask R for help…for example,",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#yikes",
+    "href": "mle.html#yikes",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.17 Yikes",
+    "text": "26.17 Yikes\nDon’t get overwhelmed. We know there are lots of distributions out there. But we will ease into it.",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#normal-gaussian",
+    "href": "mle.html#normal-gaussian",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.18 Normal (Gaussian)",
+    "text": "26.18 Normal (Gaussian)\nThe main distribution we’ll really use for the moment is the Normal or Gaussian distribution, which you should have seen before. It has parameters \\(\\mu\\), the mean or center; and \\(\\sigma\\), the sd (standard deviation) or spread.\nWhy the Normal?? The very short answer is that is comes up, and proves useful, often…both mathematically and with real-world data.\n\nQuestion: Drawing on previous knowledge (and maybe the charts above), is the Normal distribution discrete or continuous? What is its support?\n\n\nChallenge: Try to explain in words what the R code, and output, below mean.\n\n\n\n\n\n\n\n\nHint: remember you can also use gf_dist('dist_name', parameter_name = value, parameter2_name = value) to draw a probability distribution if it helps you visualize!",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "mle.html#not-normal",
+    "href": "mle.html#not-normal",
+    "title": "26  Maximum Likelihood Estimation",
+    "section": "26.19 Not Normal",
+    "text": "26.19 Not Normal\nIn upcoming modules, we will start to learn about additional kinds of regression models that are appropriate when…\n\nThe response variable is count data\nThe response variable is binary data\nThe response variable is bounded between 0 and 1\n(maybe if we’re lucky) The response variable is continuous and quantitative, but only takes on non-negative values and often has a right-skewed distribution\n\nFor each of these, go back to the flow charts we just saw. Which probability distribution(s) will come in handy in each case? We’ll return to them soon!\nFor now, take the PDF/PMF Treasure Hunt sheet, consult the graphics from before with various probability distributions, and see if you can complete all the treasure hunt…this will be very useful later in the course as we build models for different response variable types!",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
     ]
   },
   {

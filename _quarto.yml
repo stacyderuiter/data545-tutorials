@@ -32,6 +32,18 @@ book:
     - graphics-code-ggformula.qmd
     - graphics-code-data.qmd
     - graphics-code-plots.qmd
+  - part: design-intro.qmd
+    chapters:
+    - design.qmd
+    - plan.qmd
+  - part: "Multiple Linear Models"
+    chapters:
+    - lm-fit.qmd
+    - lm-assess.qmd
+    - lm-interp.qmd
+    - lm-interp-more.qmd
+  - interactions.qmd
+  - mle.qmd
   - references.qmd
   page-footer:
     center:

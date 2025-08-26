@@ -1,0 +1,12 @@
+---
+title: "webr Notes"
+---
+
+- Cannot use `read_csv()` to read data
+- Cannot read data from a URL
+- Must include `resources: data` in the YAML header if reading in datasets from data folder
+- It seems ok to read images from an images folder without naming it as a "resource" though
+- Controlling where "page breaks" happen is a problem
+  - Currently only at chapter ends, so you *can* use [sections (aka "parts")](https://quarto.org/docs/books/book-structure.html#overview) and chapters to get some page breaks, but then you have a truckload of chapters...
+  - There may be a JavaScript/CSS solution to this but not trying until can get a first version working! See: <https://jmclawson.net/posts/quarto-live/>, specifically <https://jmclawson.net/posts/quarto-live/#framing-the-view>
+
