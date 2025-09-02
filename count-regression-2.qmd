@@ -1,0 +1,361 @@
+---
+format: live-html
+resources:
+  - data
+webr:
+  packages:
+    - tidyverse
+    - ggformula
+    - ggeffects
+    - glmmTMB
+    - car
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Interpreting Count Regression
+
+```{r setup, include=FALSE}
+library(webexercises)
+library(tidyverse)
+library(ggformula)
+library(glmmTMB)
+library(ggeffects)
+library(car)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+
+wash_data <- read_csv('https://sldr.netlify.app/data/ebola-WASH.csv',
+                      show_col_types = FALSE) |>
+  drop_na(N95Used, MedStaffHRZ, Occupancy)
+```
+
+```{webr}
+#| setup: true
+#| exercise:
+#|   - wash-glms
+#|   - wash-ic
+#|   - wash-preds
+#|   - log-offset
+#|   - wash-offset
+
+library(tidyverse)
+library(ggformula)
+library(glmmTMB)
+library(ggeffects)
+library(car)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+wash_data <- read.csv("data/ebola-WASH.csv") |>
+  drop_na(N95Used, MedStaffHRZ, Occupancy)
+```
+
+## Module Learning Outcomes
+
+This module we continue working with regression models for count data, delving further into model assessment and interpretation and practicing. First, we need more practice identifying when to use a count model; but even more, we need practice carrying out the full modeling process with this new data type.
+
+By the end of the module you will:
+
+1) Gain additional confidence and experience doing regression with count data
+2) Interpret the results of count regression models using model summaries and prediction plots
+3) Incorporate results of model selection for count regression models into overall model interpretation
+4) Define an *offset* in the context of a count regression model, make informed decisions about when and when not to include one, and fit models with offsets in R.
+
+## Text Reference
+Recommended reading for the materials covered in this tutorial can be found in:
+
+- [*Beyond Multiple Linear Regression* Chapters 4-5](https://bookdown.org/roback/bookdown-BeyondMLR/ch-poissonreg.html){target="_blank"}
+- Course Notes [Chapter 6](https://stacyderuiter.github.io/regression/count-data-regression.html){target="_blank"}
+- *Ecological Models & Data in R* Chapter 9.4
+
+It's suggested that you consider consulting these chapters *after* doing this tutorial, with particular focus on any topics you found most challenging.
+
+## Selection for Count Models
+The selection procedure is essentially the same for negative binomial (or Poisson) models as for the linear models we've seen before.
+
+### Hypothesis Tests for Count Models
+
+This process is much the same as it was for multiple linear regression models - from the `car::Anova()` function we use to carry out the tests all the way to the interpretation.
+
+Here's an example...Remember our Ebola WASH data and model from last module? Add your own code below to do ANOVA-based model selection
+
+```{webr}
+#| exercise: wash-glms
+#| envir: wash-glms
+wash_model <- glmmTMB(N95Used ~ MedStaffHRZ + Occupancy, 
+              data = wash_data)
+```
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: wash-anova-interp
+
+opts1 <- sample(c(answer = "There is very strong evidence that the number of N95 masks used is associated with the number of medical staff entering the high-risk zone",
+                  answer = "There is very strong evidence that the patient occupancy is associated with the number of N95 masks used",
+                  "There is very strong evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone",
+                  "According to these results, there is no evidence of any of the predictors being associated with the response.",
+                  "There is not enough data to draw any conclusions based on this analysis, and further study is required.")
+)
+
+cat("What do you learn from the ANOVA results? Select all correct answers.",
+    longmcq(opts1))
+```
+:::
+
+
+## Model selection with AIC, BIC
+Normally, we'd choose *one* model selection approach (not do several and then have to compare them and choose between them).
+
+But here, just for practice, let's also try selection using AIC. Add the code you need to check whether `Occupancy` is associated with the number of `N95Used` in your `wash_model`.
+
+**First** we have to make sure there are no missing datapoints in any variables being used!
+
+```{webr}
+#| exercise: wash-ic
+#| envir: wash-glms
+
+wash_data <- wash_data |>
+  drop_na(N95Used, MedStaffHRZ, Occupancy)
+
+wash_model <- glmmTMB(N95Used ~ MedStaffHRZ + Occupancy, 
+              data = wash_data)
+```
+
+:::: {.hint exercise="wash-ic"}
+::: {.callout-note collapse="true"}
+
+#### Hint
+
+``` r
+wash_model2 <- glmmTMB(N95Used ~ ..., 
+              data = wash_data,
+              family = nbinom2(link = 'log'))
+```
+
+:::
+::::
+
+:::: {.solution exercise="wash-ic"}
+::: {.callout-note collapse="true"}
+
+#### Solution:
+
+``` r
+wash_model2 <- glmmTMB(N95Used ~ MedStaffHRZ, 
+              data = wash_data,
+              family = nbinom2(link = 'log'))
+AIC(wash_model, wash_model2)
+```
+
+:::
+::::
+
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: wash-ic-interp
+
+opts1 <- sample(c(answer = "AIC can only be compared for models fitted to the exact same rows of data.",
+                  "It isn't really necessary - we only do that in order to be able to add model predictions to the dataset during assessment",
+                  "AIC cannot deal with missing data, although BIC can.",
+                  "AIC can only be compared for models with the exact same response variable (no transformations etc.!)")
+)
+
+cat("Why does the model selection code for AIC-based selection (and not ANOVA) require us to first select only the variables used in the model and then drop all rows with missing values?",
+    longmcq(opts1))
+
+opts2 <- sample(c(answer = "There is very strong evidence that the patient occupancy is associated with the number of N95 masks used",
+                  "There is very strong evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone",
+                  answer = "There is moderate evidence that the patient occupancy is associated with the number of N95 masks used",
+                  "There is weak to no evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone",
+                  "According to these results, there is no evidence of any of the predictors being associated with the response.")
+)
+
+cat("What do you learn from the AIC results? Select all correct answers.",
+    longmcq(opts2))
+```
+:::
+
+`r hide("Click for some notes about solutions above.")`
+
+The fact that AIC can only be compared for models with the exact same response variable is true, but not relevant here.
+
+We *do* remove missing values for this reason, but we *also* need to do it for IC-based selection...which of the correct answers explains why?
+
+`r unhide()`
+
+## Prediction Plots
+Once you have fitted a count regression model, how do you interpret it? 
+
+When we went to great lengths to make prediction plots for a linear regression model so we could "see" the slope of the predicted relationship, you may have wondered: *why bother?* I can just look at the slope estimate and get the same insight from that one number, since I know that if the predictor increases by one unit, then the expected response value changes by *slope* units...
+
+Now, with a more complicated model equation with a link function, it's not so easy *at all* to interpret the model summary or model equation directly. In this situtation, we will really appreciate those prediction plots...
+
+The easiest way to understand the effects of different predictors of a count regression is to look at plots of model predictions. 
+
+However, as always we don't want to overlay model predictions on a predictor-vs-response data scatterplot; in a model with more than one predictor, since predictors other than the one we are interested in will influence the predictions, introducing extra variation. Instead, we will make *prediction plots* again -- we'll construct a new (fake) dataset to make predictions for, in which all predictors but the one we are interested in are held constant. 
+
+We can use the `predict_response()` function to produce prediction plots as usual. Below is one for the WASH model and `Occupancy`; run it to see the prediction plot!
+
+```{webr}
+#| exercise: wash-preds
+#| envir: wash-glms
+
+predict_response(wash_model,
+          terms = 'Occupancy') |>
+  plot() |>
+  gf_labs(title = '',
+          y = 'Predicted N95 Masks Used')
+```
+
+This picture also confirms what we learn from the model selection: The expected number of N95s used *does* clearly seem to depend on patient occupancy. (Remember, the shaded area tells us a plausible zone where the true line might fall, and the shaded zone in the Occupancy prediction plot definitely could not accommodate a line with 0 slope!) But it also tells us clearly, visually, how `Occupancy` and N95s used are associated: it would be hard to do the same with just the model summary table, but with this plot we see right away that if the occupancy goes up from 4 to 12 patients the number of masks expected to be used goes up from about 27 to about 37. So, these plots help us *show* what the model is telling us and provide a nice complement to (but not a replacement for!) visualizations of the actual data.
+
+Now...go back above and alter the code to make another prediction plot for `MedStaffHRZ`, please. What do you learn from that one?
+
+## Offsets: Why?
+
+In our model, the response variable was the number of N95 masks that were used, and we included `MedStaffHRZ` (number of medical personnel entering the high-risk zone) as one of the predictors.  
+
+But there's another way to think about it...what if instead of modeling the number of masks used *per health center, per day* we wanted to model the number of masks used *per medical staff member entering the HRZ*?
+
+There are many cases where we might want to make this adjustment for "effort" -- consider, for example:
+
+- **Dolphin surveys.** We might want to know how many animals were seen per hour or per km the survey boat travelled...seeing 100 animals per day (if you worked for one hour of the day) is very different from seeing 100 per day (if you worked 12.5 hours)!
+- **Bird counts.** Similar rational as for the dolphins.
+- **School survey on crime example from last module.** We previously thought to include the school size as a regular predictor of the number of thefts occurring in the school per year. But we *could* also think of modeling the number of thefts per school year, per school, *per enrolled student.*
+
+In this case, it would be natural to adjust for "effort" because rows of the dataset contain counts *per...something* and the quantity of the *something* varies row to row. 
+
+## Offsets: The Math
+An intuitive way to model such a situation would be to use counts per unit effort as the response variable:
+
+$$ log(\frac{\lambda_i}{effort}) = \beta_0 + \dots $$
+
+But notice that this is mathematically equivalent to including $log(effort)$ as an "offset" on the right hand side of the regression equation:
+
+By the laws of logarithms, 
+
+$$ log(\frac{\lambda_i}{\text{effort}}) = log(\lambda_i) - log(\text{effort})$$
+
+So adding $\log(\text{effort})$ to both sides of the model equation, we get:
+
+$$ log(\lambda_i) = \beta_0 + \dots + log(\text{effort})$$
+
+This helps to explain why, in R code, offsets appear on the right-hand side of the model formula...
+
+## Offsets: in R
+This is how we specify models with *offsets* in R:
+
+```{r, echo=TRUE, eval=FALSE}
+offset_mod <- glmmTMB((counts ~ predictor1 + predictor2 +
+                    offset(log(effort)), 
+                    family = negbinom2(link = 'log'))
+```
+
+The `log()` is important -- don't forget it! You do have to add it yourself (or add a new variable to your dataset that is the natural logarithm of the offset variable, and then use that). R doesn't automatically take the log for you so *you* have to ensure it.
+
+With our data, we could do this like:
+
+```{webr}
+#| exercise: log-offset
+#| envir: wash-glms
+wash_data <- wash_data |>
+  mutate(log_MedStaffHRZ = log(MedStaffHRZ))
+```
+
+Try now to fit an alternative model to the WASH dataset, where rather than modeling the number of N95 masks used, you model the number of masks used *per* Medical Staff person entering the HRZ, with `Occupancy` still as a regular predictor.
+
+```{webr}
+#| exercise: wash-offset
+#| envir: wash-glms
+wash_offset_model <- glmmTMB(...)
+```
+
+:::: {.hint exercise="wash-offset"}
+::: {.callout-note collapse="true"}
+
+#### Hint
+
+``` r
+wash_offset_model <- glmmTMB(N95Used ~ Occupancy + offset(), 
+              data = wash_data,
+              family = nbinom2(link = 'log'))
+```
+
+:::
+::::
+
+
+:::: {.solution exercise="wash-offset"}
+::: {.callout-note collapse="true"}
+
+#### Solution:
+
+``` r
+wash_offset_model <- glmmTMB(N95Used ~ Occupancy + offset(log_MedStaffHRZ), 
+              data = wash_data,
+              family = nbinom2(link = 'log'))
+```
+
+:::
+::::
+
+
+Go back and run model selection for the `Occupancy` variable now. What do you learn?
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: wash-offset-interp
+
+opts1 <- sample(c(answer = "Unlike the model without the offset, there is basically no evidence of an association in this case.",
+                  "As we found earlier in the model without the offset, there is strong evidence of an association",
+                  "Because of the offset in the model, selection is not possible in this case and an answer cannot be obtained.")
+)
+
+cat("What does the model with the offset say about the relationship between Occupancy and the number of masks used per medical person entering the HRZ?",
+    longmcq(opts1))
+```
+:::
+
+## To Offset or Not...
+A model *with* and offset **is not comparable to** one *without* an offset, because they effectively have different response variables!
+
+This means that **no, you cannot** fit models with and without an offset and then somehow compare them to see which is "better". Instead, you have to choose which response variable you really want to model -- is it the total count (no offset), or the count-per-something (with offset)?
+
+### Dredge side-note
+
+**Note: We mostly don't use `dredge()`! But...if you use `dredge()` with a model with an offset, be sure to specify the offset as a "fixed" term, i.e. a term that must be included in *all* models:**
+
+```{r, echo=TRUE, eval=FALSE}
+dredge(offset_mod, fixed = 'offset(log(effort))')
+```
+
+### How Do I Decide?
+
+You have to decide whether the response variable that you most want to model is the original counts, or the counts *per...something*, that is, adjusted for the amount of effort (in some sense) expended to obtain those counts.
+
+Sometimes it's not really clear: would it make more sense to model the number of N95 masks used per med-staff person in the HRZ using an offset, or to use `MedStaffHRZ` as a "regular" predictor? Using `MedStaffHRZ` as a "regular" predictor rather than an offset allows for the possibility that the response (number of masks used) depends on `MedStaffHRZ`, but doesn't specify exactly what slope (on the link scale) this relationship must have. With an offset, you are effectively requiring a very specific mathematical relationship between the offset variable and the response, in which you are literally modeling the counts *divided by the offset variable value.* This assumes that if the offset variable goes up by a certain amount, the count will go up proportionally.
+
+So in some cases, you *clearly, definitely* need an offset. For example, the dolphin survey example from earlier -- you definitely want to model the number of dolphins seen per distance and time searched, *not* the number seen per boat trip regardless of how much area was searched or how long the excursion was.
+
+In other cases, you will have to make a judgment call, in which case the "regular predictor" option might allow for more flexibility in the proposed relationship between the response and the offset variable.
+
+
+
+
+
+

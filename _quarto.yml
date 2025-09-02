@@ -36,14 +36,25 @@ book:
     chapters:
     - design.qmd
     - plan.qmd
-  - part: "Multiple Linear Models"
+  - part: "Multiple Linear Regression"
     chapters:
     - lm-fit.qmd
     - lm-assess.qmd
     - lm-interp.qmd
     - lm-interp-more.qmd
-  - interactions.qmd
-  - mle.qmd
+  - part: "Interactions"
+    chapters:
+    - interactions.qmd
+  - part: "Likelihood"
+    chapters:
+    - mle.qmd
+  - part: "Count Regression"
+    chapters:
+    - count-regression-1.qmd
+    - count-regression-2.qmd
+  - part: "Binary Regression"
+    chapters:
+    - binary-regression-1.qmd
   - references.qmd
   page-footer:
     center:
