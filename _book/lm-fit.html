@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -21,8 +21,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -66,15 +67,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <link href="./lm-assess.html" rel="next">
 <link href="./plan.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-b7c2d8834e08b04a63bb76a724ffbcac.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e22fbe6e69edb8577f7b7bd0719516f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -140,7 +142,7 @@ window.Quarto = {
 <link rel="stylesheet" href="_include/webex.css">
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -491,17 +493,29 @@ window.Quarto = {
   </ul></li>
   <li><a href="#simple-linear-regression-equation" id="toc-simple-linear-regression-equation" class="nav-link" data-scroll-target="#simple-linear-regression-equation"><span class="header-section-number">21.4</span> Simple Linear Regression Equation</a></li>
   <li><a href="#multiple-predictors" id="toc-multiple-predictors" class="nav-link" data-scroll-target="#multiple-predictors"><span class="header-section-number">21.5</span> Multiple Predictors</a></li>
-  <li><a href="#toy-dataset-pigeons" id="toc-toy-dataset-pigeons" class="nav-link" data-scroll-target="#toy-dataset-pigeons"><span class="header-section-number">21.6</span> Toy Dataset: Pigeons</a></li>
-  <li><a href="#fitting-a-normal-distribution" id="toc-fitting-a-normal-distribution" class="nav-link" data-scroll-target="#fitting-a-normal-distribution"><span class="header-section-number">21.7</span> Fitting a normal distribution</a>
+  <li><a href="#matrix-formulation" id="toc-matrix-formulation" class="nav-link" data-scroll-target="#matrix-formulation"><span class="header-section-number">21.6</span> Matrix Formulation</a>
+  <ul class="collapse">
+  <li><a href="#a-problem" id="toc-a-problem" class="nav-link" data-scroll-target="#a-problem">A problem</a></li>
+  <li><a href="#a-solution" id="toc-a-solution" class="nav-link" data-scroll-target="#a-solution">A solution</a></li>
+  <li><a href="#comprehension-check-model-matrix-size" id="toc-comprehension-check-model-matrix-size" class="nav-link" data-scroll-target="#comprehension-check-model-matrix-size">Comprehension Check: Model Matrix Size</a></li>
+  </ul></li>
+  <li><a href="#toy-dataset-pigeons" id="toc-toy-dataset-pigeons" class="nav-link" data-scroll-target="#toy-dataset-pigeons"><span class="header-section-number">21.7</span> Toy Dataset: Pigeons</a></li>
+  <li><a href="#fitting-a-normal-distribution" id="toc-fitting-a-normal-distribution" class="nav-link" data-scroll-target="#fitting-a-normal-distribution"><span class="header-section-number">21.8</span> Fitting a normal distribution</a>
   <ul class="collapse">
   <li><a href="#a-no-predictor-model" id="toc-a-no-predictor-model" class="nav-link" data-scroll-target="#a-no-predictor-model">A no-predictor model</a></li>
   </ul></li>
-  <li><a href="#one-predictor" id="toc-one-predictor" class="nav-link" data-scroll-target="#one-predictor"><span class="header-section-number">21.8</span> One Predictor</a></li>
-  <li><a href="#finding-the-betas" id="toc-finding-the-betas" class="nav-link" data-scroll-target="#finding-the-betas"><span class="header-section-number">21.9</span> Finding the Betas</a></li>
-  <li><a href="#least-squares-visually" id="toc-least-squares-visually" class="nav-link" data-scroll-target="#least-squares-visually"><span class="header-section-number">21.10</span> Least Squares (visually)</a></li>
-  <li><a href="#least-squares-practically" id="toc-least-squares-practically" class="nav-link" data-scroll-target="#least-squares-practically"><span class="header-section-number">21.11</span> Least Squares (practically)</a></li>
-  <li><a href="#least-squares-explained" id="toc-least-squares-explained" class="nav-link" data-scroll-target="#least-squares-explained"><span class="header-section-number">21.12</span> Least Squares (explained)</a></li>
-  <li><a href="#in-r-lm" id="toc-in-r-lm" class="nav-link" data-scroll-target="#in-r-lm"><span class="header-section-number">21.13</span> In R: <code>lm()</code></a>
+  <li><a href="#one-predictor" id="toc-one-predictor" class="nav-link" data-scroll-target="#one-predictor"><span class="header-section-number">21.9</span> One Predictor</a></li>
+  <li><a href="#categorical-predictors-2-categories" id="toc-categorical-predictors-2-categories" class="nav-link" data-scroll-target="#categorical-predictors-2-categories"><span class="header-section-number">21.10</span> Categorical Predictors (2 categories)</a>
+  <ul class="collapse">
+  <li><a href="#another-hint" id="toc-another-hint" class="nav-link" data-scroll-target="#another-hint">Another hint</a></li>
+  <li><a href="#the-solution" id="toc-the-solution" class="nav-link" data-scroll-target="#the-solution">The solution</a></li>
+  </ul></li>
+  <li><a href="#categorical-predictors-with-more-categories" id="toc-categorical-predictors-with-more-categories" class="nav-link" data-scroll-target="#categorical-predictors-with-more-categories"><span class="header-section-number">21.11</span> Categorical Predictors with More Categories</a></li>
+  <li><a href="#finding-the-betas" id="toc-finding-the-betas" class="nav-link" data-scroll-target="#finding-the-betas"><span class="header-section-number">21.12</span> Finding the Betas</a></li>
+  <li><a href="#least-squares-visually" id="toc-least-squares-visually" class="nav-link" data-scroll-target="#least-squares-visually"><span class="header-section-number">21.13</span> Least Squares (visually)</a></li>
+  <li><a href="#least-squares-practically" id="toc-least-squares-practically" class="nav-link" data-scroll-target="#least-squares-practically"><span class="header-section-number">21.14</span> Least Squares (practically)</a></li>
+  <li><a href="#least-squares-explained" id="toc-least-squares-explained" class="nav-link" data-scroll-target="#least-squares-explained"><span class="header-section-number">21.15</span> Least Squares (explained)</a></li>
+  <li><a href="#in-r-lm" id="toc-in-r-lm" class="nav-link" data-scroll-target="#in-r-lm"><span class="header-section-number">21.16</span> In R: <code>lm()</code></a>
   <ul class="collapse">
   <li><a href="#model-formula-left-hand-side" id="toc-model-formula-left-hand-side" class="nav-link" data-scroll-target="#model-formula-left-hand-side">Model Formula: Left Hand Side</a></li>
   <li><a href="#model-formula-right-hand-side" id="toc-model-formula-right-hand-side" class="nav-link" data-scroll-target="#model-formula-right-hand-side">Model Formula: Right Hand Side</a></li>
@@ -509,12 +523,12 @@ window.Quarto = {
   <li><a href="#intercepts" id="toc-intercepts" class="nav-link" data-scroll-target="#intercepts">Intercepts</a></li>
   <li><a href="#omitting-the-intercept" id="toc-omitting-the-intercept" class="nav-link" data-scroll-target="#omitting-the-intercept">Omitting the Intercept</a></li>
   </ul></li>
-  <li><a href="#interpreting-summarylm..." id="toc-interpreting-summarylm..." class="nav-link" data-scroll-target="#interpreting-summarylm..."><span class="header-section-number">21.14</span> Interpreting <code>summary(lm(...))</code></a></li>
-  <li><a href="#model-equation-practice" id="toc-model-equation-practice" class="nav-link" data-scroll-target="#model-equation-practice"><span class="header-section-number">21.15</span> Model Equation Practice</a>
+  <li><a href="#interpreting-summarylm..." id="toc-interpreting-summarylm..." class="nav-link" data-scroll-target="#interpreting-summarylm..."><span class="header-section-number">21.17</span> Interpreting <code>summary(lm(...))</code></a></li>
+  <li><a href="#model-equation-practice" id="toc-model-equation-practice" class="nav-link" data-scroll-target="#model-equation-practice"><span class="header-section-number">21.18</span> Model Equation Practice</a>
   <ul class="collapse">
   <li><a href="#an-example-model" id="toc-an-example-model" class="nav-link" data-scroll-target="#an-example-model">An example model</a></li>
   </ul></li>
-  <li><a href="#linear-regression-conditions" id="toc-linear-regression-conditions" class="nav-link" data-scroll-target="#linear-regression-conditions"><span class="header-section-number">21.16</span> Linear Regression Conditions</a></li>
+  <li><a href="#linear-regression-conditions" id="toc-linear-regression-conditions" class="nav-link" data-scroll-target="#linear-regression-conditions"><span class="header-section-number">21.19</span> Linear Regression Conditions</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/lm-fit.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -686,48 +700,52 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>And the models themselves go by different names: regression model, least squares model, least squares regression model, etc.</p>
 <p>Don’t let these little differences distract you. If you focus on the important concepts, you should be able to navigate the notation, whichever way someone does it.</p>
 </div>
-<!-- ## Matrix Formulation -->
-<!-- The form we just saw for the simple linear regression equation can be pretty simply and intuitively extended to the case of **more than one predictor:** -->
-<!-- $$ Y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots \beta_p x_p + \epsilon$$ -->
-<!-- where $\mathbf{Y}$ are the response variable values, the $\beta$s are the $p + 1$ intercept and slopes, $x$s are the $p$ predictor variable values, and $\epsilon$ are the errors or *residuals*. -->
-<!-- ### A problem -->
-<!-- But...this form of the regression equation doesn't keep track of the individual data points. The $\mathbf{Y}$ up there (capitalized because it's a random variable) is a *vector*, not a scalar -- it's a list of $n$ response variable values. Same for the data. So maybe we could say something like: -->
-<!-- $$\mathbf{Y}_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots \beta_p x_{ip} + e_i $$ -->
-<!-- but...*OH*, those double subscripts are already getting cumbersome! -->
-<!-- ### A solution -->
-<!-- We can fix that by writing our regression equation as a matrix equation. Let $\mathbf{i} = <1, 2, 3, \dots n>$ be the indices identifying each observation in the data, and $\mathbf{j} = <0, 1, 2, 3, \dots p>$ the indices identifying the different (intercept and) slope values. -->
-<!-- Now let $\mathbf{Y}$ be a length $n$ column vector of response variable values, and $\mathbf{\beta}$ a length $p$ column vector of parameter values. -->
-<!-- $\mathbf{X}$ is a $n$ by $(p+1)$ matrix, whose first column is a length $n$ vector of ones, and whose other columns are length $n$ vectors of values of the $jth$ predictor variable. $\mathbf{X}$ is often called the **model matrix**. -->
-<!-- We then have the equation: -->
-<!-- $$ \mathbf{Y} = \mathbf{X} \mathbf{\beta} + \mathbf{\epsilon}$$ -->
-<!-- (the same as before, but using vectors and a matrix to avoid all those pesky subscripts). -->
-<!-- ### Comprehension Check: Model Matrix Size -->
-<!-- ::: {.webex-check .webex-box} -->
-<!-- ```{r results = 'asis'} -->
-<!-- #| label: matrix-size -->
-<!-- opts <- sample(c(answer = "46 x 5", -->
-<!--         "46 x 4", -->
-<!--         "46 x 3", -->
-<!--         "4 x 46", -->
-<!--         "4 x 47" -->
-<!--         )) -->
-<!-- cat("Consider a regression model with 4 predictor variables being fitted to a dataset with 46 observations. What will be the size of the model matrix X?", -->
-<!--     longmcq(opts)) -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- 
-<div class='webex-solution'><button>Click for explanations of solution above.</button>
- -->
-<!-- If you said... -->
-<!-- -   46 x 3, Think about what each column represents. -->
-<!-- -   46 x 4, Do not forget the intercept! -->
-<!-- -   4 x 46 or 4 x 47, It is one row per datapoint and one column per beta... -->
-<!-- 
-</div>
- -->
 </section>
-<section id="toy-dataset-pigeons" class="level2" data-number="21.6">
-<h2 data-number="21.6" class="anchored" data-anchor-id="toy-dataset-pigeons"><span class="header-section-number">21.6</span> Toy Dataset: Pigeons</h2>
+<section id="matrix-formulation" class="level2" data-number="21.6">
+<h2 data-number="21.6" class="anchored" data-anchor-id="matrix-formulation"><span class="header-section-number">21.6</span> Matrix Formulation</h2>
+<p>The form we just saw for the simple linear regression equation can be pretty simply and intuitively extended to the case of <strong>more than one predictor:</strong></p>
+<p><span class="math display">\[ Y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots \beta_p x_p + \epsilon\]</span></p>
+<p>where <span class="math inline">\(\mathbf{Y}\)</span> are the response variable values, the <span class="math inline">\(\beta\)</span>s are the <span class="math inline">\(p + 1\)</span> intercept and slopes, <span class="math inline">\(x\)</span>s are the <span class="math inline">\(p\)</span> predictor variable values, and <span class="math inline">\(\epsilon\)</span> are the errors or <em>residuals</em>.</p>
+<section id="a-problem" class="level3">
+<h3 class="anchored" data-anchor-id="a-problem">A problem</h3>
+<p>But…this form of the regression equation doesn’t keep track of the individual data points. The <span class="math inline">\(\mathbf{Y}\)</span> up there (capitalized because it’s a random variable) is a <em>vector</em>, not a scalar – it’s a list of <span class="math inline">\(n\)</span> response variable values. Same for the data. So maybe we could say something like:</p>
+<p><span class="math display">\[\mathbf{Y}_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots \beta_p x_{ip} + e_i \]</span></p>
+<p>but…<em>OH</em>, those double subscripts are already getting cumbersome!</p>
+</section>
+<section id="a-solution" class="level3">
+<h3 class="anchored" data-anchor-id="a-solution">A solution</h3>
+<p>We can fix that by writing our regression equation as a matrix equation. Let <span class="math inline">\(\mathbf{i} = &lt;1, 2, 3, \dots n&gt;\)</span> be the indices identifying each observation in the data, and <span class="math inline">\(\mathbf{j} = &lt;0, 1, 2, 3, \dots p&gt;\)</span> the indices identifying the different (intercept and) slope values.</p>
+<p>Now let <span class="math inline">\(\mathbf{Y}\)</span> be a length <span class="math inline">\(n\)</span> column vector of response variable values, and <span class="math inline">\(\mathbf{\beta}\)</span> a length <span class="math inline">\(p\)</span> column vector of parameter values.</p>
+<p><span class="math inline">\(\mathbf{X}\)</span> is a <span class="math inline">\(n\)</span> by <span class="math inline">\((p+1)\)</span> matrix, whose first column is a length <span class="math inline">\(n\)</span> vector of ones, and whose other columns are length <span class="math inline">\(n\)</span> vectors of values of the <span class="math inline">\(jth\)</span> predictor variable. <span class="math inline">\(\mathbf{X}\)</span> is often called the <strong>model matrix</strong>.</p>
+<p>We then have the equation:</p>
+<p><span class="math display">\[ \mathbf{Y} = \mathbf{X} \mathbf{\beta} + \mathbf{\epsilon}\]</span></p>
+<p>(the same as before, but using vectors and a matrix to avoid all those pesky subscripts).</p>
+</section>
+<section id="comprehension-check-model-matrix-size" class="level3">
+<h3 class="anchored" data-anchor-id="comprehension-check-model-matrix-size">Comprehension Check: Model Matrix Size</h3>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+Consider a regression model with 4 predictor variables being fitted to a dataset with 46 observations. What will be the size of the model matrix X?
+<div id="radio_NWBWCRVFAQ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_NWBWCRVFAQ" value=""> <span>46 x 4</span></label><label><input type="radio" autocomplete="off" name="radio_NWBWCRVFAQ" value="answer"> <span>46 x 5</span></label><label><input type="radio" autocomplete="off" name="radio_NWBWCRVFAQ" value=""> <span>46 x 3</span></label><label><input type="radio" autocomplete="off" name="radio_NWBWCRVFAQ" value=""> <span>4 x 47</span></label><label><input type="radio" autocomplete="off" name="radio_NWBWCRVFAQ" value=""> <span>4 x 46</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for explanations of solution above.
+</button>
+<p>If you said…</p>
+<ul>
+<li>46 x 3, Think about what each column represents.</li>
+<li>46 x 4, Do not forget the intercept!</li>
+<li>4 x 46 or 4 x 47, It is one row per datapoint and one column per beta…</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="toy-dataset-pigeons" class="level2" data-number="21.7">
+<h2 data-number="21.7" class="anchored" data-anchor-id="toy-dataset-pigeons"><span class="header-section-number">21.7</span> Toy Dataset: Pigeons</h2>
 <p>For the next few examples, we’ll consider a very small dataset on <a href="https://www.independent.co.uk/news/world/europe/armando-racing-pigeon-auction-sell-record-pipa-a8829101.html">racing pigeons</a> from Michigan. Their <code>unirate</code> scores measure their racing performance (smaller is better).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -791,13 +809,13 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </div>
 </div>
 </section>
-<section id="fitting-a-normal-distribution" class="level2" data-number="21.7">
-<h2 data-number="21.7" class="anchored" data-anchor-id="fitting-a-normal-distribution"><span class="header-section-number">21.7</span> Fitting a normal distribution</h2>
+<section id="fitting-a-normal-distribution" class="level2" data-number="21.8">
+<h2 data-number="21.8" class="anchored" data-anchor-id="fitting-a-normal-distribution"><span class="header-section-number">21.8</span> Fitting a normal distribution</h2>
 <p>Let’s try to reformulate a familiar exercise – fitting a normal distribution to a dataset – as a linear regression problem.</p>
 <p>We might want to consider a model where the pigeon <code>Unirate</code> scores are <span class="math inline">\(iid\)</span> (independent, identically distributed) samples from a <span class="math inline">\(N(\mu, \sigma)\)</span> distribution.</p>
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
-How could we reformulate that model <em>as a linear regression</em>?
+How many predictors will our pigeon normal-distribution model have?
 <div id="radio_BXATKCMPPE" class="webex-radiogroup">
 <label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value=""> <span>Two</span></label><label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value=""> <span>4 x 46</span></label><label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value=""> <span>One</span></label><label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value=""> <span>4 x 47</span></label><label><input type="radio" autocomplete="off" name="radio_BXATKCMPPE" value="answer"> <span>None</span></label>
 </div>
@@ -817,113 +835,243 @@ Click for explanations of solution above.
 <p>Here <span class="math inline">\(\mathbf{X}\)</span> is just a column vector of ones, since there are no predictors, and the intercept <span class="math inline">\(\beta_0\)</span> is <span class="math inline">\(\mu\)</span>, the mean <code>Unirate</code> score.</p>
 </section>
 </section>
-<section id="one-predictor" class="level2" data-number="21.8">
-<h2 data-number="21.8" class="anchored" data-anchor-id="one-predictor"><span class="header-section-number">21.8</span> One Predictor</h2>
+<section id="one-predictor" class="level2" data-number="21.9">
+<h2 data-number="21.9" class="anchored" data-anchor-id="one-predictor"><span class="header-section-number">21.9</span> One Predictor</h2>
 <p>Of course, we can also fit models <em>with</em> one or more predictor variables.</p>
-<!-- A model matrix is shown below. -->
-<!-- \begin{bmatrix} -->
-<!-- 1 & 1.9 \\ -->
-<!-- 1 & 1.5 \\ -->
-<!-- 1 & 2.3 \\ -->
-<!-- 1 & 2.2 \\ -->
-<!-- 1 & 2.8 \\ -->
-<!-- \end{bmatrix} -->
-<!-- for the pigeon data: -->
-<!-- ```{r} -->
-<!-- pander::pander(pigeons) -->
-<!-- ``` -->
-<!-- ::: {.webex-check .webex-box} -->
-<!-- ```{r results = 'asis'} -->
-<!-- #| label: less-tiny-lm -->
-<!-- opts <- sample(c(answer = "A regression in which age predicts unirate score", -->
-<!--         "A different model with no predictors, but Gamma distributed errors", -->
-<!--         "A regression where the response variable is the pigeon age instead of unirate score" -->
-<!--         )) -->
-<!-- cat("What is the regression model corresponding to the model matrix above?", -->
-<!--     longmcq(opts)) -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- 
-<div class='webex-solution'><button>Click for a hint...</button>
- -->
-<!-- Think: which variable(s) are represented in the model matrix? -->
-<!-- 
+<p>One model we could fit might have the equation:</p>
+<p><span class="math display">\[
+\text{Unirate} = -5.4 + 4.8\text{Age},
+\]</span></p>
+<p><span class="math display">\[
+\epsilon \sim N(0, 1.3)
+\]</span></p>
+<p>A model matrix for this model is shown below.</p>
+<span class="math display">\[\begin{bmatrix}
+1 &amp; 1.9 \\
+1 &amp; 1.5 \\
+1 &amp; 2.3 \\
+1 &amp; 2.2 \\
+1 &amp; 2.8 \\
+\end{bmatrix}\]</span>
+<p>for the pigeon data:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 25%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Unirate</th>
+<th style="text-align: center;">OwnerName</th>
+<th style="text-align: center;">Sex</th>
+<th style="text-align: center;">Age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">2.864</td>
+<td style="text-align: center;">KENNIER PALMIRA</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">1.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2.965</td>
+<td style="text-align: center;">TOM RICHARDS</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">1.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4.304</td>
+<td style="text-align: center;">KENNIER PALMIRA</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">2.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5.027</td>
+<td style="text-align: center;">TOM RICHARDS</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">2.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">9.189</td>
+<td style="text-align: center;">TOM KUIPER</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">2.8</td>
+</tr>
+</tbody>
+</table>
 </div>
- -->
-<!-- ## Categorical Predictors (2 categories) -->
-<!-- Let's consider another model: one where both `Age` *and* `Sex` ("H" for hen and "C" for cock) predict `Unirate` score. -->
-<!-- How can we formulate a model matrix *now*? -->
-<!-- Take a moment to brainstorm before you reveal the answer. A hint (especially for data science or computer science types): some people call this trick "one hot encoding." -->
-<!-- ### Another hint -->
-<!-- Another hint, if you haven't gotten it yet: Think of a way to encode the information from the `Sex` variable numerically by changing it from a categorical variable to a logical one. -->
-<!-- ### The solution -->
-<!-- The idea is to convert our categorical variable into an **indicator variable** that is 1 if an observation fits in a certain category, and 0 otherwise (i.e., 0 if the observation is in the other category). -->
-<!-- ```{r} -->
-<!-- pander::pander(pigeons) -->
-<!-- ``` -->
-<!-- Our model for `Unirate` score as a function of `Age` and `Sex` would have the model matrix: -->
-<!-- \begin{bmatrix} -->
-<!-- 1 & 1.9 & 1 \\ -->
-<!-- 1 & 1.5 & 1\\ -->
-<!-- 1 & 2.3 & 1\\ -->
-<!-- 1 & 2.2 & 0\\ -->
-<!-- 1 & 2.8 & 0\\ -->
-<!-- \end{bmatrix} -->
-<!-- ::: {.webex-check .webex-box} -->
-<!-- ```{r results = 'asis'} -->
-<!-- #| label: sex-quiz -->
-<!-- opts <- sample(c(answer = "Hen", -->
-<!--                  "Cock" -->
-<!--         )) -->
-<!-- cat("What would be the best name for this new numeric variable indicating sex?", -->
-<!--     longmcq(opts)) -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- 
-<div class='webex-solution'><button>Click for an explanation of the answer above.</button>
- -->
-<!-- Since "H" is encoded as 1, that would be a better name. -->
-<!-- Cocks are encoded as 0s, which usually corresponds to "FALSE." Best to name the variable after the value that 1 (or TRUE) stands for. -->
-<!-- 
 </div>
- -->
-<!-- ## Categorical Predictors with More Categories -->
-<!-- What if we have a categorical predictor with more than two categories? -->
-<!-- No problem -- we just need *more than one* indicator variables! -->
-<!-- ::: {.webex-check .webex-box} -->
-<!-- ```{r results = 'asis'} -->
-<!-- #| label: cat-pred-5 -->
-<!-- opts <- sample(c(answer = "4", -->
-<!--                  "3", -->
-<!--                  "5" -->
-<!--         )) -->
-<!-- cat("How many indicator variables would be needed to construct the model matrix for a regression with one predictor, which is a categorical variable with 5 categories?", -->
-<!--     longmcq(opts)) -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- 
-<div class='webex-solution'><button>Click for an explanation of the answer above.</button>
- -->
-<!-- If we have indicator variables for 4 of the 5 categories and they are all 0, then the observation must be from the fifth category. Another way of saying this is that one of the categories is "included in the intercept". -->
-<!-- 
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+What is the a verbal description of regression model corresponding to the equation above?
+<div id="radio_OLEOVEPQVK" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_OLEOVEPQVK" value="answer"> <span>A regression in which age predicts unirate score</span></label><label><input type="radio" autocomplete="off" name="radio_OLEOVEPQVK" value=""> <span>A different model with no predictors, but Gamma distributed errors</span></label><label><input type="radio" autocomplete="off" name="radio_OLEOVEPQVK" value=""> <span>A regression where the response variable is the pigeon age instead of unirate score</span></label>
 </div>
- -->
-<!-- The category that is included in the intercept value is often called the "base" level. -->
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for a hint…
+</button>
+<p>Think: which variable(s) are included in the equation?</p>
+</div>
 </section>
-<section id="finding-the-betas" class="level2" data-number="21.9">
-<h2 data-number="21.9" class="anchored" data-anchor-id="finding-the-betas"><span class="header-section-number">21.9</span> Finding the Betas</h2>
+<section id="categorical-predictors-2-categories" class="level2" data-number="21.10">
+<h2 data-number="21.10" class="anchored" data-anchor-id="categorical-predictors-2-categories"><span class="header-section-number">21.10</span> Categorical Predictors (2 categories)</h2>
+<p>Let’s consider another model: one where both <code>Age</code> <em>and</em> <code>Sex</code> (“H” for hen and “C” for cock) predict <code>Unirate</code> score.</p>
+<p>How can we formulate a model matrix <em>now</em>?</p>
+<p>Take a moment to brainstorm before you reveal the answer. A hint (especially for data science or computer science types): some people call this trick “one hot encoding.”</p>
+<section id="another-hint" class="level3">
+<h3 class="anchored" data-anchor-id="another-hint">Another hint</h3>
+<p>Another hint, if you haven’t gotten it yet: Think of a way to encode the information from the <code>Sex</code> variable numerically by changing it from a <em>categorical</em> variable to a <em>logical</em> one (zeros and ones).</p>
+</section>
+<section id="the-solution" class="level3">
+<h3 class="anchored" data-anchor-id="the-solution">The solution</h3>
+<p>The idea is to convert our categorical variable into an <strong>indicator variable</strong> that is 1 if an observation fits in a certain category, and 0 otherwise (i.e., 0 if the observation is in the other category).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 25%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Unirate</th>
+<th style="text-align: center;">OwnerName</th>
+<th style="text-align: center;">Sex</th>
+<th style="text-align: center;">Age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">2.864</td>
+<td style="text-align: center;">KENNIER PALMIRA</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">1.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2.965</td>
+<td style="text-align: center;">TOM RICHARDS</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">1.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4.304</td>
+<td style="text-align: center;">KENNIER PALMIRA</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">2.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5.027</td>
+<td style="text-align: center;">TOM RICHARDS</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">2.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">9.189</td>
+<td style="text-align: center;">TOM KUIPER</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">2.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Our model for <code>Unirate</code> score as a function of <code>Age</code> and <code>Sex</code> would have the model matrix:</p>
+<span class="math display">\[\begin{bmatrix}
+1 &amp; 1.9 &amp; 1 \\
+1 &amp; 1.5 &amp; 1\\
+1 &amp; 2.3 &amp; 1\\
+1 &amp; 2.2 &amp; 0\\
+1 &amp; 2.8 &amp; 0\\
+\end{bmatrix}\]</span>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+What would be the best name for this new numeric variable indicating sex?
+<div id="radio_UTAPXVMTLE" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_UTAPXVMTLE" value=""> <span>Cock</span></label><label><input type="radio" autocomplete="off" name="radio_UTAPXVMTLE" value="answer"> <span>Hen</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for an explanation of the answer above.
+</button>
+<p>Since “H” is encoded as 1, that would be a better name.</p>
+<p>Cocks are encoded as 0s, which usually corresponds to “FALSE.” Best to name the variable after the value that 1 (or TRUE) stands for.</p>
+</div>
+<p>What will the model equation look like <em>now</em>? Well, to make the equation work, we are representing the categorical <code>Sex</code> variable using a logical indicator variable that is 1 if an observation is in one chosen category, and 0 if it’s the other.</p>
+<p>So <code>Sex</code> should not appear in our equation!</p>
+<p>Instead, we will use <span class="math inline">\(I_{H}\)</span> (or we could call it <span class="math inline">\(I_{hen}\)</span>), with the capital-I-with-a-subscript being a common way to notate indicator variables. For completeness and clarity, we will also make <em>sure</em> to define that notation as part of our statement of the equation! So we have:</p>
+<p><span class="math display">\[\text{Unirate} = -1.8 + 3.6 \text{Age} - 1.5 I_{H},\]</span> <span class="math display">\[
+\text{where } \epsilon \sim N(0, 1.3) \text{ and}
+\]</span></p>
+<p>where <span class="math inline">\(I_{H}\)</span> is an indicator variable that is 1 if the pigeon is a hen, and 0 if it is a cock.</p>
+</section>
+</section>
+<section id="categorical-predictors-with-more-categories" class="level2" data-number="21.11">
+<h2 data-number="21.11" class="anchored" data-anchor-id="categorical-predictors-with-more-categories"><span class="header-section-number">21.11</span> Categorical Predictors with More Categories</h2>
+<p>What if we have a categorical predictor with more than two categories?</p>
+<p>No problem – we just need <em>more than one</em> indicator variables!</p>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+How many indicator variables would be needed to construct the model matrix for a regression with one predictor, which is a categorical variable with 5 categories?
+<div id="radio_TNPHJBZKVK" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_TNPHJBZKVK" value="answer"> <span>4</span></label><label><input type="radio" autocomplete="off" name="radio_TNPHJBZKVK" value=""> <span>3</span></label><label><input type="radio" autocomplete="off" name="radio_TNPHJBZKVK" value=""> <span>5</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for an explanation of the answer above.
+</button>
+<p>If we have indicator variables for 4 of the 5 categories and they are all 0, then the observation must be from the fifth category. Another way of saying this is that one of the categories is “included in the intercept”.</p>
+</div>
+<p>The category that is included in the intercept value is often called the “base” level.</p>
+<p>What would this look like for our pigeons? What if the trainer affected the pigeon’s performance, and we had data on pigeons from three owners with initials “KP”, “TR”, and “TK”?</p>
+<p>Below are the model parameter estimates (the “<span class="math inline">\(\beta\)</span>s”). How would you write the model equation?</p>
+<ul>
+<li>Intercept <span class="math inline">\(\hat{\beta_0} = -4.4\)</span></li>
+<li>Age: <span class="math inline">\(\hat{\beta_1} = 3.6\)</span></li>
+<li>Sex: <span class="math inline">\(\hat{\beta_2} = 0.46\)</span></li>
+<li>Owner: for “TK”, <span class="math inline">\(\hat{\beta_3} = 3.5\)</span> and for “TR”, <span class="math inline">\(\hat{\beta_4} = 1.5\)</span></li>
+<li>residual standard deviation: 1.2</li>
+</ul>
+<div class="webex-solution">
+<button>
+After you’ve made an attempt, click for the solution…
+</button>
+<p><span class="math display">\[\text{Unirate} = -4.4 + 3.6 \text{Age} - 0.46 I_{H} + 3.5 I_{TK} + 1.5 I_{TR},\]</span> <span class="math display">\[
+\text{where } \epsilon \sim N(0, 1.2) \text{ and}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(I_{H}\)</span> is an indicator variable that is 1 if the pigeon is a hen, and 0 if it is a cock.</li>
+<li><span class="math inline">\(I_{TK}\)</span> is an indicator variable that is 1 if the pigeon is owned by TK, and 0 otherwise. and <span class="math inline">\(I_{TR}\)</span> is an indicator variable that is 1 if the pigeon is owned by TR, and 0 otherwise. (So a pigeon owned by “KP” would have <em>both</em> <span class="math inline">\(I_{TK}\)</span> and <span class="math inline">\(I_{TR}\)</span> = 0…that’s how we can notate <em>three</em> categories with 3-1 = 2 indicator variables!)</li>
+</ul>
+</div>
+</section>
+<section id="finding-the-betas" class="level2" data-number="21.12">
+<h2 data-number="21.12" class="anchored" data-anchor-id="finding-the-betas"><span class="header-section-number">21.12</span> Finding the Betas</h2>
 <p>OK, but how do we go from a model plan and dataset to an actual fitted model? In other words, how do we estimate the <span class="math inline">\(\beta\)</span>s and find the best-fitting regression model?</p>
 <p>To find the “best-fitting” regression model for a dataset, we need to first define a metric to measure how “well” a line fits, and then find the <span class="math inline">\(\beta\)</span>s (intercept and slope(s)) that maximize it. (Actually, we’ll come up with a way to measure the mismatch between a line and the data, and find the <span class="math inline">\(\beta\)</span>s that minimize it - but it’s the same idea.)</p>
 <p>In other words, our goal at the moment is to figure out <strong>how to estimate the</strong> <span class="math inline">\(\beta\)</span>s.</p>
 </section>
-<section id="least-squares-visually" class="level2" data-number="21.10">
-<h2 data-number="21.10" class="anchored" data-anchor-id="least-squares-visually"><span class="header-section-number">21.10</span> Least Squares (visually)</h2>
+<section id="least-squares-visually" class="level2" data-number="21.13">
+<h2 data-number="21.13" class="anchored" data-anchor-id="least-squares-visually"><span class="header-section-number">21.13</span> Least Squares (visually)</h2>
 <p>One idea is to choose the “best-fit” line as the one that <em>minimizes the sum of squared residuals</em>.</p>
 <p>This method is often called <strong>Least Squares Estimation</strong> (or <em>Ordinary Least Squares</em>).</p>
 <p>First, check out <a href="https://setosa.io/ev/ordinary-least-squares-regression/">Ordinary Least Squares Estimation (explained visually)</a>. <em>Be sure to take advantage of the interactive elements to play around!)</em></p>
 </section>
-<section id="least-squares-practically" class="level2" data-number="21.11">
-<h2 data-number="21.11" class="anchored" data-anchor-id="least-squares-practically"><span class="header-section-number">21.11</span> Least Squares (practically)</h2>
+<section id="least-squares-practically" class="level2" data-number="21.14">
+<h2 data-number="21.14" class="anchored" data-anchor-id="least-squares-practically"><span class="header-section-number">21.14</span> Least Squares (practically)</h2>
 <p>Next, try your hand at off-the-cuff least squares estimation. Visit <a href="https://phet.colorado.edu/sims/html/least-squares-regression/latest/least-squares-regression_en.html">the PhET interactive simulator</a> and:</p>
 <ul>
 <li>Pick an example from the central upper pull-down menu (or create your own dataset) and:
@@ -936,15 +1084,15 @@ Click for explanations of solution above.
 <li>Repeat the exercise for at least one more example.</li>
 </ul>
 </section>
-<section id="least-squares-explained" class="level2" data-number="21.12">
-<h2 data-number="21.12" class="anchored" data-anchor-id="least-squares-explained"><span class="header-section-number">21.12</span> Least Squares (explained)</h2>
+<section id="least-squares-explained" class="level2" data-number="21.15">
+<h2 data-number="21.15" class="anchored" data-anchor-id="least-squares-explained"><span class="header-section-number">21.15</span> Least Squares (explained)</h2>
 <p>Optionally, if you would like one more presentation of the idea of least squares fitting, watch the (slightly boring but very clear) StatQuest video explanation:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/PaFPbb66DxQ?si=Jiz0AUhNLVJ6UTG9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
 </iframe>
 <p>(You can also <a href="https://www.youtube.com/watch?v=PaFPbb66DxQ">watch directly on YouTube</a> if you prefer.)</p>
 </section>
-<section id="in-r-lm" class="level2" data-number="21.13">
-<h2 data-number="21.13" class="anchored" data-anchor-id="in-r-lm"><span class="header-section-number">21.13</span> In R: <code>lm()</code></h2>
+<section id="in-r-lm" class="level2" data-number="21.16">
+<h2 data-number="21.16" class="anchored" data-anchor-id="in-r-lm"><span class="header-section-number">21.16</span> In R: <code>lm()</code></h2>
 <p>So, now we understand the principle of least squares estimation. But we certainly won’t employ it via guess-and-check to actually fit models to real data!</p>
 <p>In fact, either via calculus or linear algebra, it’s possible to obtain formulas for the slope and intercept that minimize the SSE for a given dataset. (And, of course, software knows how to use them.)</p>
 <p>The function we’ll use to fit a linear regression model in R is <code>lm()</code>.</p>
@@ -1073,15 +1221,15 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <!-- ``` -->
 </section>
 </section>
-<section id="interpreting-summarylm..." class="level2" data-number="21.14">
-<h2 data-number="21.14" class="anchored" data-anchor-id="interpreting-summarylm..."><span class="header-section-number">21.14</span> Interpreting <code>summary(lm(...))</code></h2>
+<section id="interpreting-summarylm..." class="level2" data-number="21.17">
+<h2 data-number="21.17" class="anchored" data-anchor-id="interpreting-summarylm..."><span class="header-section-number">21.17</span> Interpreting <code>summary(lm(...))</code></h2>
 <p>Once you’ve fitted an <code>lm()</code> in R, how can you view and interpret the results? You may have already noticed the use above of the R function <code>summary()</code>. Let’s consider in more detail…</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/x0nsEBuLm0M?si=Qom-oa7UMGlzusw5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
 </iframe>
 <p>(You can also <a href="https://youtu.be/x0nsEBuLm0M">watch directly on YouTube</a> if you prefer.)</p>
 </section>
-<section id="model-equation-practice" class="level2" data-number="21.15">
-<h2 data-number="21.15" class="anchored" data-anchor-id="model-equation-practice"><span class="header-section-number">21.15</span> Model Equation Practice</h2>
+<section id="model-equation-practice" class="level2" data-number="21.18">
+<h2 data-number="21.18" class="anchored" data-anchor-id="model-equation-practice"><span class="header-section-number">21.18</span> Model Equation Practice</h2>
 <p><strong>You should be able to use <code>lm()</code> to fit a linear model, and then use <code>summary()</code> output to fill in numerical parameter estimates</strong> <span class="math inline">\(\hat{\beta}_0\)</span>, <span class="math inline">\(\hat{\beta}_1\)</span>, <span class="math inline">\(\hat{\beta}_2\)</span>, <span class="math inline">\(\hat{\beta}_3\)</span>, <span class="math inline">\(\hat{\beta}_n\)</span>, and <span class="math inline">\(\hat{\sigma}\)</span> in the regression equation:</p>
 <p><span class="math display">\[ y_i = \beta_0 + \beta_1x_i + \epsilon, \epsilon \sim \text{Norm}(0, \sigma)\]</span></p>
 <section id="an-example-model" class="level3">
@@ -1141,16 +1289,16 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What is beta0 for the model you just fitted?
-<div id="radio_OVEPQVKPNU" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value=""> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value=""> <span>0.22</span></label><label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value=""> <span>15.81</span></label><label><input type="radio" autocomplete="off" name="radio_OVEPQVKPNU" value="answer"> <span>95.8</span></label>
+<div id="radio_DBTCQWWUXE" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_DBTCQWWUXE" value=""> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_DBTCQWWUXE" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_DBTCQWWUXE" value="answer"> <span>95.8</span></label><label><input type="radio" autocomplete="off" name="radio_DBTCQWWUXE" value=""> <span>0.22</span></label><label><input type="radio" autocomplete="off" name="radio_DBTCQWWUXE" value=""> <span>15.81</span></label>
 </div>
 What is beta1 for the model you just fitted?
-<div id="radio_MTLEIRJTNP" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value=""> <span>15.81</span></label><label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value="answer"> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value=""> <span>95.8</span></label><label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_MTLEIRJTNP" value=""> <span>0.22</span></label>
+<div id="radio_PTOALNDTMR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_PTOALNDTMR" value=""> <span>15.81</span></label><label><input type="radio" autocomplete="off" name="radio_PTOALNDTMR" value=""> <span>95.8</span></label><label><input type="radio" autocomplete="off" name="radio_PTOALNDTMR" value="answer"> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_PTOALNDTMR" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_PTOALNDTMR" value=""> <span>0.22</span></label>
 </div>
 What is sigma, the standard deviation of the residuals, for the model you just fitted?
-<div id="radio_VKZVMQDBTC" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value=""> <span>95.8</span></label><label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value=""> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value=""> <span>0.22</span></label><label><input type="radio" autocomplete="off" name="radio_VKZVMQDBTC" value="answer"> <span>15.81</span></label>
+<div id="radio_LREAGNABQM" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_LREAGNABQM" value=""> <span>0.00092</span></label><label><input type="radio" autocomplete="off" name="radio_LREAGNABQM" value="answer"> <span>15.81</span></label><label><input type="radio" autocomplete="off" name="radio_LREAGNABQM" value=""> <span>95.8</span></label><label><input type="radio" autocomplete="off" name="radio_LREAGNABQM" value=""> <span>-0.061</span></label><label><input type="radio" autocomplete="off" name="radio_LREAGNABQM" value=""> <span>0.22</span></label>
 </div>
 </div>
 </div>
@@ -1159,8 +1307,8 @@ What is sigma, the standard deviation of the residuals, for the model you just f
 <!-- </iframe> -->
 </section>
 </section>
-<section id="linear-regression-conditions" class="level2" data-number="21.16">
-<h2 data-number="21.16" class="anchored" data-anchor-id="linear-regression-conditions"><span class="header-section-number">21.16</span> Linear Regression Conditions</h2>
+<section id="linear-regression-conditions" class="level2" data-number="21.19">
+<h2 data-number="21.19" class="anchored" data-anchor-id="linear-regression-conditions"><span class="header-section-number">21.19</span> Linear Regression Conditions</h2>
 <p>What’s next? Before we interpret the results of a model, we have to be confident that we trust the model is appropriate enough for the data, and fits well enough, to produce results that will be reliable.</p>
 <p>So, next module, we’ll learn to do model assessment (checking that conditions are met to verify that a model is appropriate for a particular dataset).</p>
 <p>We will also go into <em>much</em> more detail about how to interpret our fitted model!</p>
@@ -1404,236 +1552,242 @@ window._ojs.selfContained = false;
 window._ojs.runtime.interpretFromScriptTags();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
-      }
-    }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
         }
       }
+      return false;
     }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
         }
-        return container.innerHTML
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -1641,185 +1795,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./plan.html" class="pagination-link" aria-label="Model Planning for Inference">

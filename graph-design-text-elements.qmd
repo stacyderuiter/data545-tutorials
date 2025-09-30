@@ -69,7 +69,8 @@ Sometimes a title or axis label is too long and runs off the edge of the figure.
 
 ```{r, bad-labels, fig.width = 4}
 theme_set(theme_minimal(base_size = 20))
-gf_boxplot(NEnrollment ~ Location, data = crime) |>
+gf_boxplot(NEnrollment ~ Location, data = crime,
+           orientation = "x") |>
   gf_labs(title = 'NOT GREAT LABELS') |>
   gf_theme(title = element_text(color = 'darkred'),
            axis.title = element_text(color = 'black'))
@@ -77,7 +78,8 @@ gf_boxplot(NEnrollment ~ Location, data = crime) |>
 
 ```{r, also-better-labels, fig.width = 6}
 
-gf_boxplot(NEnrollment/1000 ~ Location, data = crime) |>
+gf_boxplot(NEnrollment/1000 ~ Location, data = crime,
+           orientation = "x") |>
   gf_labs(title = 'BETTER',
           y = 'Enrollment (1000s)', x= '') |>
   gf_refine(coord_flip()) |>
@@ -87,7 +89,8 @@ gf_boxplot(NEnrollment/1000 ~ Location, data = crime) |>
 
 ```{r, better-labels, fig.width = 4, fig.height = 3.5}
 
-gf_boxplot(NEnrollment/1000 ~ Location, data = crime) |>
+gf_boxplot(NEnrollment/1000 ~ Location, data = crime,
+           orientation = "x") |>
   gf_labs(title = 'ALSO\nBETTER',
           y = 'Enrollment\n (1000s)', x= '') |>
   gf_refine(coord_flip()) |>
@@ -110,7 +113,8 @@ If you do want to use a title, make *sure* it provides information or details th
 
 ```{r, bad-title, fig.width = 6.5, fig.height = 3.5}
 
-gf_boxplot(NEnrollment/1000 ~ Location, data = crime) |>
+gf_boxplot(NEnrollment/1000 ~ Location, data = crime,
+           orientation = "x") |>
   gf_labs(title = 'Enrollment by Location',
           subtitle = "AVOID titles like the one above\nthat repeat axis labels!",
           y = 'Enrollment (1000s)', x= '') |>
@@ -134,7 +138,8 @@ So what might an "informative" title look like?
 ```{r, ok-title, fig.width = 10, fig.height = 3.5}
 
 gf_boxplot(NEnrollment/1000 ~ fct_reorder(Location, NEnrollment),
-           data = crime) |>
+           data = crime,
+           orientation = "x") |>
   gf_labs(title = 'Small Schools Dominate in More-Rural Areas',
           y = 'Enrollment (1000s)', x= '') |>
   gf_refine(coord_flip()) |>

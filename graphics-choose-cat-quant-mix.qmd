@@ -24,12 +24,12 @@ There are several plots designed specifically to look at the distribution of a q
 ### Boxplots
 
 ```{r, boxplot, fig.alt = 'a boxplot (generic and unlabelled, serving as an icon)' }
-gf_boxplot(NEnrollment ~ Location, data = crime) |>
+gf_boxplot(NEnrollment ~ Location, data = crime, orientation = "x") |>
   gf_labs(title = "BOXPLOTS")
 ```
 
 ```{r, boxplot-horiz, fig.alt = 'a horizontally-oriented boxplot (generic and unlabelled, serving as an icon)' }
-gf_boxplot(NEnrollment ~ Location, data = crime) |>
+gf_boxplot(NEnrollment ~ Location, data = crime, orientation = "x") |>
   gf_refine(coord_flip()) |>
   gf_labs(title = "BOXPLOTS (HORIZONTAL)")
 ```
@@ -82,7 +82,7 @@ You can also consider making multi-panel plots with one histogram, density plot,
 Multi-facet plots can show one panel per group, for *any* kind of plot seen so far: a bar graph for each group, a stacked bar for each group, a scatterplot for each group, a set of boxplots for each group, etc. etc.
 
 ```{r, facetted-box, fig.alt = 'a sina plot (generic and unlabelled, serving as an icon)' }
-gf_boxplot(TrainingHours ~ Enrollment, data = crime |>
+gf_boxplot(TrainingHours ~ Enrollment, , orientation = "x", data = crime |>
              mutate(Location = as.numeric(factor(Location)),
                     Location = paste("GROUP", Location))) |>
   gf_facet_wrap(~Location) |>

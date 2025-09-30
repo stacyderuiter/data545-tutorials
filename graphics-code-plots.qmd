@@ -243,8 +243,11 @@ Boxplots are most often used to allow a quick comparison of the distribution of 
 ```{webr}
 #| exercise: boxplot-groups
 
-gf_boxplot(TVHrsDay ~ BPSysAve, data = NHANES)
+gf_boxplot(TVHrsDay ~ BPSysAve, data = NHANES,
+           orientation = "y")
 ```
+
+The `orientation` input states whether it's the "x" or "y" axis variable that defines the groupings. This *should* not be necessary - it should be determined automatically according to which variable is categorical - but there's a bug (?) as of Sept. 2025 such that the `gf_boxplot()` function won't run without it.
 
 ::: {.webex-check .webex-box}
 ```{r results = 'asis'}
@@ -362,7 +365,8 @@ Try running the example code, then adjust the jitter plot as you think is needed
 #| exercise: boxplot-no-outliers
 
 gf_boxplot(faculty_type ~ percentage, 
-           data = university_teachers, 
+           data = university_teachers,
+           orientation = "y",
            outlier.shape = NA) |>
   gf_jitter()
 ```
@@ -394,7 +398,9 @@ More often, you should order by median (or mean) value, or by some intrinsic ord
 Take the boxplots from the last example:
 
 ```{r, echo = FALSE}
-gf_boxplot(faculty_type ~ percentage, data = university_teachers)
+gf_boxplot(faculty_type ~ percentage, 
+           data = university_teachers,
+           orientation = "y")
 ```
 
 The alphabetical order is nonsense. We can sort the categories by median `percentage` using the function `fct_reorder()` from the `forcats` package.
@@ -404,7 +410,8 @@ The alphabetical order is nonsense. We can sort the categories by median `percen
 
 
 gf_boxplot(fct_reorder(faculty_type, percentage) ~ percentage, 
-           data = university_teachers)
+           data = university_teachers,
+           orientation = "y")
 ```
 
 The first input to `fct_reorder()` is the categorical variable containing the groups; the second is the quantitative variable whose median you want to order by.
@@ -417,7 +424,8 @@ If you want to use some other function of the second variable, say the `mean()` 
 
 gf_boxplot(fct_reorder(faculty_type, percentage) ~ percentage, 
            .fun = mean,
-           data = university_teachers)
+           data = university_teachers,
+           orientation = "y")
 ```
 
 (Which ends up looking about the same, in this particular case.)
@@ -447,7 +455,8 @@ university_teachers <- university_teachers |>
   )
 
  gf_boxplot(faculty_type ~  percentage, 
-           data = university_teachers)
+           data = university_teachers,
+           orientation = "y")
 ```
 
 :::: {.solution exercise="manual-order-boxplots"}
@@ -464,7 +473,8 @@ university_teachers <- university_teachers |>
                                     "Full-Time Tenured Faculty")
          )
  gf_boxplot(faculty_type ~  percentage, 
-           data = university_teachers)
+           data = university_teachers,
+           orientation = "y")
 ```
 :::
 ::::
@@ -1225,7 +1235,9 @@ gf_line(births ~ date, data = Births1978) |>
 #| exercise: axis-limits2
 
 
-gf_boxplot(faculty_type ~ percentage, data = university_teachers) |>
+gf_boxplot(faculty_type ~ percentage, 
+           data = university_teachers,
+           orientation = "y") |>
   gf_lims(x = c(0, 50))
 ```
 

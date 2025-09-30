@@ -147,7 +147,10 @@ wordcloud::wordcloud(emotions, min.freq = 1, scale = c(4, 0.5), random.color = T
 How do the data actually look?
 
 ```{r}
-gf_boxplot(gratitude_score ~ group, data = grateful, color = ~group)
+gf_boxplot(gratitude_score ~ group, 
+           data = grateful, 
+           color = ~group,
+           orientation = "x")
 ```
 
 It seems like perhaps the `gratitude_score` is higher for the `gratitude` group and lower for the others, but we really need statistical inference to have more confidence in our judgment of whether the difference is real or if the differences between groups could just be the result of random sampling variation.
@@ -231,7 +234,9 @@ For example, we can reduce the dataset to exclude the third `events` group, and 
 grateful2 <- grateful |>
   filter(group != 'events') |>
   mutate(group = factor(group))
-gf_boxplot(gratitude_score ~ group, data = grateful2)
+gf_boxplot(gratitude_score ~ group, 
+           data = grateful2,
+           orientation = "x")
 ```
 
 ### Practice

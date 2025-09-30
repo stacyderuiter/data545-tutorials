@@ -224,63 +224,63 @@ And the models themselves go by different names: regression model, least squares
 Don't let these little differences distract you. If you focus on the important concepts, you should be able to navigate the notation, whichever way someone does it.
 :::
 
-<!-- ## Matrix Formulation -->
+## Matrix Formulation
 
-<!-- The form we just saw for the simple linear regression equation can be pretty simply and intuitively extended to the case of **more than one predictor:** -->
+The form we just saw for the simple linear regression equation can be pretty simply and intuitively extended to the case of **more than one predictor:**
 
-<!-- $$ Y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots \beta_p x_p + \epsilon$$ -->
+$$ Y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots \beta_p x_p + \epsilon$$
 
-<!-- where $\mathbf{Y}$ are the response variable values, the $\beta$s are the $p + 1$ intercept and slopes, $x$s are the $p$ predictor variable values, and $\epsilon$ are the errors or *residuals*. -->
+where $\mathbf{Y}$ are the response variable values, the $\beta$s are the $p + 1$ intercept and slopes, $x$s are the $p$ predictor variable values, and $\epsilon$ are the errors or *residuals*.
 
-<!-- ### A problem -->
+### A problem
 
-<!-- But...this form of the regression equation doesn't keep track of the individual data points. The $\mathbf{Y}$ up there (capitalized because it's a random variable) is a *vector*, not a scalar -- it's a list of $n$ response variable values. Same for the data. So maybe we could say something like: -->
+But...this form of the regression equation doesn't keep track of the individual data points. The $\mathbf{Y}$ up there (capitalized because it's a random variable) is a *vector*, not a scalar -- it's a list of $n$ response variable values. Same for the data. So maybe we could say something like:
 
-<!-- $$\mathbf{Y}_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots \beta_p x_{ip} + e_i $$ -->
+$$\mathbf{Y}_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots \beta_p x_{ip} + e_i $$
 
-<!-- but...*OH*, those double subscripts are already getting cumbersome! -->
+but...*OH*, those double subscripts are already getting cumbersome!
 
-<!-- ### A solution -->
+### A solution
 
-<!-- We can fix that by writing our regression equation as a matrix equation. Let $\mathbf{i} = <1, 2, 3, \dots n>$ be the indices identifying each observation in the data, and $\mathbf{j} = <0, 1, 2, 3, \dots p>$ the indices identifying the different (intercept and) slope values. -->
+We can fix that by writing our regression equation as a matrix equation. Let $\mathbf{i} = <1, 2, 3, \dots n>$ be the indices identifying each observation in the data, and $\mathbf{j} = <0, 1, 2, 3, \dots p>$ the indices identifying the different (intercept and) slope values.
 
-<!-- Now let $\mathbf{Y}$ be a length $n$ column vector of response variable values, and $\mathbf{\beta}$ a length $p$ column vector of parameter values. -->
+Now let $\mathbf{Y}$ be a length $n$ column vector of response variable values, and $\mathbf{\beta}$ a length $p$ column vector of parameter values.
 
-<!-- $\mathbf{X}$ is a $n$ by $(p+1)$ matrix, whose first column is a length $n$ vector of ones, and whose other columns are length $n$ vectors of values of the $jth$ predictor variable. $\mathbf{X}$ is often called the **model matrix**. -->
+$\mathbf{X}$ is a $n$ by $(p+1)$ matrix, whose first column is a length $n$ vector of ones, and whose other columns are length $n$ vectors of values of the $jth$ predictor variable. $\mathbf{X}$ is often called the **model matrix**.
 
-<!-- We then have the equation: -->
+We then have the equation:
 
-<!-- $$ \mathbf{Y} = \mathbf{X} \mathbf{\beta} + \mathbf{\epsilon}$$ -->
+$$ \mathbf{Y} = \mathbf{X} \mathbf{\beta} + \mathbf{\epsilon}$$
 
-<!-- (the same as before, but using vectors and a matrix to avoid all those pesky subscripts). -->
+(the same as before, but using vectors and a matrix to avoid all those pesky subscripts).
 
-<!-- ### Comprehension Check: Model Matrix Size -->
+### Comprehension Check: Model Matrix Size
 
-<!-- ::: {.webex-check .webex-box} -->
-<!-- ```{r results = 'asis'} -->
-<!-- #| label: matrix-size -->
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: matrix-size
 
-<!-- opts <- sample(c(answer = "46 x 5", -->
-<!--         "46 x 4", -->
-<!--         "46 x 3", -->
-<!--         "4 x 46", -->
-<!--         "4 x 47" -->
-<!--         )) -->
+opts <- sample(c(answer = "46 x 5",
+        "46 x 4",
+        "46 x 3",
+        "4 x 46",
+        "4 x 47"
+        ))
 
-<!-- cat("Consider a regression model with 4 predictor variables being fitted to a dataset with 46 observations. What will be the size of the model matrix X?", -->
-<!--     longmcq(opts)) -->
-<!-- ``` -->
-<!-- ::: -->
+cat("Consider a regression model with 4 predictor variables being fitted to a dataset with 46 observations. What will be the size of the model matrix X?",
+    longmcq(opts)) 
+```
+:::
 
-<!-- `r hide("Click for explanations of solution above.")` -->
+`r hide("Click for explanations of solution above.")`
 
-<!-- If you said... -->
+If you said...
 
-<!-- -   46 x 3, Think about what each column represents. -->
-<!-- -   46 x 4, Do not forget the intercept! -->
-<!-- -   4 x 46 or 4 x 47, It is one row per datapoint and one column per beta... -->
+-   46 x 3, Think about what each column represents.
+-   46 x 4, Do not forget the intercept!
+-   4 x 46 or 4 x 47, It is one row per datapoint and one column per beta...
 
-<!-- `r unhide()` -->
+`r unhide()`
 
 ## Toy Dataset: Pigeons
 
@@ -316,7 +316,7 @@ opts <- sample(c(answer = "None",
         "4 x 47"
         ))
 
-cat("How could we reformulate that model *as a linear regression*?",
+cat("How many predictors will our pigeon normal-distribution model have?",
     longmcq(opts))
 ```
 :::
@@ -341,120 +341,166 @@ Here $\mathbf{X}$ is just a column vector of ones, since there are no predictors
 
 Of course, we can also fit models *with* one or more predictor variables.
 
-<!-- A model matrix is shown below. -->
+One model we could fit might have the equation:
 
-<!-- \begin{bmatrix} -->
-<!-- 1 & 1.9 \\ -->
-<!-- 1 & 1.5 \\ -->
-<!-- 1 & 2.3 \\ -->
-<!-- 1 & 2.2 \\ -->
-<!-- 1 & 2.8 \\ -->
-<!-- \end{bmatrix} -->
+$$
+\text{Unirate} = -5.4 + 4.8\text{Age},
+$$
 
-<!-- for the pigeon data: -->
+$$
+\epsilon \sim N(0, 1.3)
+$$
 
-<!-- ```{r} -->
-<!-- pander::pander(pigeons) -->
-<!-- ``` -->
+A model matrix for this model is shown below.
 
-<!-- ::: {.webex-check .webex-box} -->
-<!-- ```{r results = 'asis'} -->
-<!-- #| label: less-tiny-lm -->
+\begin{bmatrix}
+1 & 1.9 \\
+1 & 1.5 \\
+1 & 2.3 \\
+1 & 2.2 \\
+1 & 2.8 \\
+\end{bmatrix}
 
-<!-- opts <- sample(c(answer = "A regression in which age predicts unirate score", -->
-<!--         "A different model with no predictors, but Gamma distributed errors", -->
-<!--         "A regression where the response variable is the pigeon age instead of unirate score" -->
-<!--         )) -->
+for the pigeon data:
 
-<!-- cat("What is the regression model corresponding to the model matrix above?", -->
-<!--     longmcq(opts)) -->
-<!-- ``` -->
-<!-- ::: -->
+```{r}
+pander::pander(pigeons)
+```
 
-<!-- `r hide("Click for a hint...")` -->
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: less-tiny-lm
 
-<!-- Think: which variable(s) are represented in the model matrix? -->
+opts <- sample(c(answer = "A regression in which age predicts unirate score",
+        "A different model with no predictors, but Gamma distributed errors",
+        "A regression where the response variable is the pigeon age instead of unirate score"
+        ))
 
-<!-- `r unhide()` -->
+cat("What is the a verbal description of regression model corresponding to the equation above?",
+    longmcq(opts))
+```
+:::
 
-<!-- ## Categorical Predictors (2 categories) -->
+`r hide("Click for a hint...")`
 
-<!-- Let's consider another model: one where both `Age` *and* `Sex` ("H" for hen and "C" for cock) predict `Unirate` score. -->
+Think: which variable(s) are included in the equation?
 
-<!-- How can we formulate a model matrix *now*? -->
+`r unhide()`
 
-<!-- Take a moment to brainstorm before you reveal the answer. A hint (especially for data science or computer science types): some people call this trick "one hot encoding." -->
+## Categorical Predictors (2 categories)
 
-<!-- ### Another hint -->
+Let's consider another model: one where both `Age` *and* `Sex` ("H" for hen and "C" for cock) predict `Unirate` score.
 
-<!-- Another hint, if you haven't gotten it yet: Think of a way to encode the information from the `Sex` variable numerically by changing it from a categorical variable to a logical one. -->
+How can we formulate a model matrix *now*?
 
-<!-- ### The solution -->
+Take a moment to brainstorm before you reveal the answer. A hint (especially for data science or computer science types): some people call this trick "one hot encoding."
 
-<!-- The idea is to convert our categorical variable into an **indicator variable** that is 1 if an observation fits in a certain category, and 0 otherwise (i.e., 0 if the observation is in the other category). -->
+### Another hint
 
-<!-- ```{r} -->
-<!-- pander::pander(pigeons) -->
-<!-- ``` -->
+Another hint, if you haven't gotten it yet: Think of a way to encode the information from the `Sex` variable numerically by changing it from a *categorical* variable to a *logical* one (zeros and ones).
 
-<!-- Our model for `Unirate` score as a function of `Age` and `Sex` would have the model matrix: -->
+### The solution
 
-<!-- \begin{bmatrix} -->
-<!-- 1 & 1.9 & 1 \\ -->
-<!-- 1 & 1.5 & 1\\ -->
-<!-- 1 & 2.3 & 1\\ -->
-<!-- 1 & 2.2 & 0\\ -->
-<!-- 1 & 2.8 & 0\\ -->
-<!-- \end{bmatrix} -->
+The idea is to convert our categorical variable into an **indicator variable** that is 1 if an observation fits in a certain category, and 0 otherwise (i.e., 0 if the observation is in the other category).
 
-<!-- ::: {.webex-check .webex-box} -->
-<!-- ```{r results = 'asis'} -->
-<!-- #| label: sex-quiz -->
+```{r}
+pander::pander(pigeons)
+```
 
-<!-- opts <- sample(c(answer = "Hen", -->
-<!--                  "Cock" -->
-<!--         )) -->
+If we did that, our model for `Unirate` score as a function of `Age` and `Sex` would have the model matrix:
 
-<!-- cat("What would be the best name for this new numeric variable indicating sex?", -->
-<!--     longmcq(opts)) -->
-<!-- ``` -->
-<!-- ::: -->
+\begin{bmatrix}
+1 & 1.9 & 1 \\
+1 & 1.5 & 1\\
+1 & 2.3 & 1\\
+1 & 2.2 & 0\\
+1 & 2.8 & 0\\
+\end{bmatrix}
 
-<!-- `r hide("Click for an explanation of the answer above.")` -->
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: sex-quiz
 
-<!-- Since "H" is encoded as 1, that would be a better name. -->
+opts <- sample(c(answer = "Hen",
+                 "Cock"
+        ))
 
-<!-- Cocks are encoded as 0s, which usually corresponds to "FALSE." Best to name the variable after the value that 1 (or TRUE) stands for. -->
+cat("What would be the best name for this new numeric variable indicating sex?",
+    longmcq(opts))
+```
+:::
 
-<!-- `r unhide()` -->
+`r hide("Click for an explanation of the answer above.")`
 
-<!-- ## Categorical Predictors with More Categories -->
+Since "H" is encoded as 1, that would be a better name.
 
-<!-- What if we have a categorical predictor with more than two categories? -->
+Cocks are encoded as 0s, which usually corresponds to "FALSE." Best to name the variable after the value that 1 (or TRUE) stands for.
 
-<!-- No problem -- we just need *more than one* indicator variables! -->
+`r unhide()`
 
-<!-- ::: {.webex-check .webex-box} -->
-<!-- ```{r results = 'asis'} -->
-<!-- #| label: cat-pred-5 -->
+What will the model equation look like *now*? Well, to make the equation work, we are representing the categorical `Sex` variable using a logical indicator variable that is 1 if an observation is in one chosen category, and 0 if it's the other. 
 
-<!-- opts <- sample(c(answer = "4", -->
-<!--                  "3", -->
-<!--                  "5" -->
-<!--         )) -->
+So `Sex` should not appear in our equation! 
 
-<!-- cat("How many indicator variables would be needed to construct the model matrix for a regression with one predictor, which is a categorical variable with 5 categories?", -->
-<!--     longmcq(opts)) -->
-<!-- ``` -->
-<!-- ::: -->
+Instead, we will use $I_{H}$ (or we could call it $I_{hen}$), with the capital-I-with-a-subscript being a common way to notate indicator variables. For completeness and clarity, we will also make *sure* to define that notation as part of our statement of the equation! So we have:
 
-<!-- `r hide("Click for an explanation of the answer above.")` -->
+$$\text{Unirate} = -1.8 + 3.6 \text{Age} - 1.5 I_{H},$$
+$$
+\text{where } \epsilon \sim N(0, 1.3) \text{ and}
+$$
 
-<!-- If we have indicator variables for 4 of the 5 categories and they are all 0, then the observation must be from the fifth category. Another way of saying this is that one of the categories is "included in the intercept". -->
+where $I_{H}$ is an indicator variable that is 1 if the pigeon is a hen, and 0 if it is a cock.
 
-<!-- `r unhide()` -->
+## Categorical Predictors with More Categories
 
-<!-- The category that is included in the intercept value is often called the "base" level. -->
+What if we have a categorical predictor with more than two categories?
+
+No problem -- we just need *more than one* indicator variables!
+
+::: {.webex-check .webex-box}
+```{r results = 'asis'}
+#| label: cat-pred-5
+
+opts <- sample(c(answer = "4",
+                 "3",
+                 "5"
+        ))
+
+cat("How many indicator variables would be needed to construct the model matrix for a regression with one predictor, which is a categorical variable with 5 categories?",
+    longmcq(opts))
+```
+:::
+
+`r hide("Click for an explanation of the answer above.")`
+
+If we have indicator variables for 4 of the 5 categories and they are all 0, then the observation must be from the fifth category. Another way of saying this is that one of the categories is "included in the intercept".
+
+`r unhide()`
+
+The category that is included in the intercept value is often called the "base" level.
+
+What would this look like for our pigeons? What if the trainer affected the pigeon's performance, and we had data on pigeons from three owners with initials "KP", "TR", and "TK"?
+
+Below are the model parameter estimates (the "$\beta$s"). How would you write the model equation?
+
+- Intercept $\hat{\beta_0} = -4.4$
+- Age: $\hat{\beta_1} = 3.6$
+- Sex: $\hat{\beta_2} = 0.46$
+- Owner: for "TK", $\hat{\beta_3} = 3.5$ and for "TR", $\hat{\beta_4} = 1.5$
+- residual standard deviation: 1.2
+
+`r hide("After you've made an attempt, click for the solution...")`
+
+$$\text{Unirate} = -4.4 + 3.6 \text{Age} - 0.46 I_{H} + 3.5 I_{TK} + 1.5 I_{TR},$$
+$$
+\text{where } \epsilon \sim N(0, 1.2) \text{ and}
+$$
+
+- $I_{H}$ is an indicator variable that is 1 if the pigeon is a hen, and 0 if it is a cock.
+- $I_{TK}$ is an indicator variable that is 1 if the pigeon is owned by TK, and 0 otherwise. and $I_{TR}$ is an indicator variable that is 1 if the pigeon is owned by TR, and 0 otherwise. (So a pigeon owned by "KP" would have *both* $I_{TK}$ and $I_{TR}$ = 0...that's how we can notate *three* categories with 3-1 = 2 indicator variables!)
+
+`r unhide()`
+
 
 ## Finding the Betas
 
