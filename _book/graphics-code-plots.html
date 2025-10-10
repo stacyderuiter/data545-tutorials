@@ -448,6 +448,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses: Formulation</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -807,8 +813,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>The <code>orientation</code> input states whether it’s the “x” or “y” axis variable that defines the groupings. This <em>should</em> not be necessary - it should be determined automatically according to which variable is categorical - but there’s a bug (?) as of Sept.&nbsp;2025 such that the <code>gf_boxplot()</code> function won’t run without it.</p>
 <div class="webex-check webex-box">
 What happens if you swap the “x” and the “y” in the formula for a boxplot? (Try it and see before answering.)
-<div id="radio_WTOZRXGCZG" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_WTOZRXGCZG" value=""> <span>Nothing. The plot looks the same.</span></label><label><input type="radio" autocomplete="off" name="radio_WTOZRXGCZG" value="answer"> <span>The coordinates flip (whichever variable is “y” in the formula ends up on the y-axis).</span></label><label><input type="radio" autocomplete="off" name="radio_WTOZRXGCZG" value=""> <span>An error. The quantitative variable must always be “y”, after the ~.</span></label>
+<div id="radio_KPXXAHKOEO" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_KPXXAHKOEO" value=""> <span>Nothing. The plot looks the same.</span></label><label><input type="radio" autocomplete="off" name="radio_KPXXAHKOEO" value=""> <span>An error. The quantitative variable must always be “y”, after the ~.</span></label><label><input type="radio" autocomplete="off" name="radio_KPXXAHKOEO" value="answer"> <span>The coordinates flip (whichever variable is “y” in the formula ends up on the y-axis).</span></label>
 </div>
 </div>
 <div class="webex-solution">
@@ -1190,8 +1196,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </div>
 </div>
 So why am I not allowed to use gf_lm() and gf_smooth()?
-<div id="radio_CWAQEGVOAT" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_CWAQEGVOAT" value=""> <span>My prof is just mean and opinionated.</span></label><label><input type="radio" autocomplete="off" name="radio_CWAQEGVOAT" value=""> <span>The function has too many bugs and causes trouble.</span></label><label><input type="radio" autocomplete="off" name="radio_CWAQEGVOAT" value="answer"> <span>It is usually misleading and will contradict other parts of the data analysis I present.</span></label><label><input type="radio" autocomplete="off" name="radio_CWAQEGVOAT" value=""> <span>Who even cares?</span></label>
+<div id="radio_KUQQXUAWAC" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_KUQQXUAWAC" value="answer"> <span>It is usually misleading and will contradict other parts of the data analysis I present.</span></label><label><input type="radio" autocomplete="off" name="radio_KUQQXUAWAC" value=""> <span>My prof is just mean and opinionated.</span></label><label><input type="radio" autocomplete="off" name="radio_KUQQXUAWAC" value=""> <span>Who even cares?</span></label><label><input type="radio" autocomplete="off" name="radio_KUQQXUAWAC" value=""> <span>The function has too many bugs and causes trouble.</span></label>
 </div>
 <div class="webex-solution">
 <button>
@@ -1273,8 +1279,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 </div>
 <div class="webex-check webex-box">
 When showing a stacked bar graph with proportions, what is the default DENOMINATOR used to computing the proportions? Use the graph you just made to figure it out.
-<div id="radio_PAMROUVKDE" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_PAMROUVKDE" value=""> <span>The number of observations in the stack (so the parts of one bar together sum to 1)</span></label><label><input type="radio" autocomplete="off" name="radio_PAMROUVKDE" value=""> <span>The number of observations in the “fill” variable group (so all bar-parts of the same color sum to 1)</span></label><label><input type="radio" autocomplete="off" name="radio_PAMROUVKDE" value="answer"> <span>The total number of observations in the dataset (so all the parts of all the bars together sum to 1)</span></label>
+<div id="radio_BVVFHMUEYI" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BVVFHMUEYI" value=""> <span>The number of observations in the stack (so the parts of one bar together sum to 1)</span></label><label><input type="radio" autocomplete="off" name="radio_BVVFHMUEYI" value="answer"> <span>The total number of observations in the dataset (so all the parts of all the bars together sum to 1)</span></label><label><input type="radio" autocomplete="off" name="radio_BVVFHMUEYI" value=""> <span>The number of observations in the “fill” variable group (so all bar-parts of the same color sum to 1)</span></label>
 </div>
 </div>
 <p>Argh! That’s not usually what you want…</p>
@@ -1381,8 +1387,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(university_teachers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-87e7be7f1354a52adae9" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-87e7be7f1354a52adae9">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55"],["Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees"],[1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011,1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011,1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011,1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011,1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011],[29,27.6,25,24.8,21.8,20.3,19.3,17.8,17.2,16.8,16.7,16.1,11.4,10.2,9.6,8.9,9.199999999999999,8.800000000000001,8.199999999999999,8,7.6,7.4,10.3,14.1,13.6,13.6,15.2,15.5,15,14.8,14.9,15.1,15.4,24,30.4,33.1,33.2,35.5,36,37,39.3,40.5,41.1,41.3,20.5,16.5,18.1,18.8,18.7,19,20,19.9,19.5,19.4,19.3]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>faculty_type<\/th>\n      <th>year<\/th>\n      <th>percentage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"faculty_type","targets":1},{"name":"year","targets":2},{"name":"percentage","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-e6d39772d47f773bd561" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-e6d39772d47f773bd561">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55"],["Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenured Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Full-Time Non-Tenure-Track Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Part-Time Faculty","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees","Graduate Student Employees"],[1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011,1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011,1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011,1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011,1975,1989,1993,1995,1999,2001,2003,2005,2007,2009,2011],[29,27.6,25,24.8,21.8,20.3,19.3,17.8,17.2,16.8,16.7,16.1,11.4,10.2,9.6,8.9,9.199999999999999,8.800000000000001,8.199999999999999,8,7.6,7.4,10.3,14.1,13.6,13.6,15.2,15.5,15,14.8,14.9,15.1,15.4,24,30.4,33.1,33.2,35.5,36,37,39.3,40.5,41.1,41.3,20.5,16.5,18.1,18.8,18.7,19,20,19.9,19.5,19.4,19.3]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>faculty_type<\/th>\n      <th>year<\/th>\n      <th>percentage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"faculty_type","targets":1},{"name":"year","targets":2},{"name":"percentage","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>We can use the function <code>gf_col</code> to make a bar graph of pre-tabulated data. This function always expects the counts (or proportions or percentages) as the <code>y</code> part of the formula, and the group names as <code>x</code> (after the tilde).</p>
@@ -1780,12 +1786,12 @@ Solution:
 </div>
 <div class="webex-check webex-box">
 Does it appear that the number of births is different on weekends and weekdays?
-<div id="radio_UFKJYNDQAW" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_UFKJYNDQAW" value=""> <span>more data would be needed to be able to answer</span></label><label><input type="radio" autocomplete="off" name="radio_UFKJYNDQAW" value=""> <span>no</span></label><label><input type="radio" autocomplete="off" name="radio_UFKJYNDQAW" value="answer"> <span>yes</span></label>
+<div id="radio_SUXVBEEBKA" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_SUXVBEEBKA" value=""> <span>more data would be needed to be able to answer</span></label><label><input type="radio" autocomplete="off" name="radio_SUXVBEEBKA" value=""> <span>no</span></label><label><input type="radio" autocomplete="off" name="radio_SUXVBEEBKA" value="answer"> <span>yes</span></label>
 </div>
 What actually happens if you omit the <code>~</code> before <code>~ wday</code>? (Try it and see.)
-<div id="radio_ZFRTQCOGBD" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_ZFRTQCOGBD" value=""> <span>It works just the same. The tilde is not required.</span></label><label><input type="radio" autocomplete="off" name="radio_ZFRTQCOGBD" value=""> <span>All the dots are the same color.</span></label><label><input type="radio" autocomplete="off" name="radio_ZFRTQCOGBD" value="answer"> <span>There is an error message: 'wday' not found.</span></label>
+<div id="radio_IURBFEBWDS" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_IURBFEBWDS" value=""> <span>All the dots are the same color.</span></label><label><input type="radio" autocomplete="off" name="radio_IURBFEBWDS" value=""> <span>It works just the same. The tilde is not required.</span></label><label><input type="radio" autocomplete="off" name="radio_IURBFEBWDS" value="answer"> <span>There is an error message: 'wday' not found.</span></label>
 </div>
 </div>
 <p>Earlier, we saw how to change the fill color in density plots:</p>
@@ -2027,7 +2033,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC01MyIsImlubGluZSI6ZmFsc2UsIm1l
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvdW5pdmVyc2l0eV90ZWFjaGVycy5jc3YiLCJkYXRhL0hhRGl2ZVBhcmFtZXRlcnMuY3N2IiwiZGF0YS9GbGludFdhdGVyVGVzdEphbk1hcjIwMTYuY3N2IiwiZGF0YS9Qcm9mRXZhbHRuc0JlYXV0eVB1YmxpYy5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvdW5pdmVyc2l0eV90ZWFjaGVycy5jc3YiLCJkYXRhL0hhRGl2ZVBhcmFtZXRlcnMuY3N2IiwiZGF0YS9GbGludFdhdGVyVGVzdEphbk1hcjIwMTYuY3N2IiwiZGF0YS9Qcm9mRXZhbHRuc0JlYXV0eVB1YmxpYy5jc3YiLCJkYXRhL0VJQXByb3BkYXRhLmNzdiIsImRhdGEvZ2FwbWluZGVyX2NsZWFuLmNzdiIsImRhdGEvZnJvZy1hYm5vcm1hbGl0aWVzLmNzdiIsImRhdGEvYm9ub2JvX2ZhY2VzLmNzdiIsImRhdGEvYmVlLXZpcnVzLmNzdiJd
 </script>
 </section>
 

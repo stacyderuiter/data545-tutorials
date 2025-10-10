@@ -467,6 +467,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses: Formulation</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -687,16 +693,16 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What is the intercept estimate for the model you just fitted?
-<div id="radio_UKRUMJNHUH" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_UKRUMJNHUH" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_UKRUMJNHUH" value=""> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_UKRUMJNHUH" value="answer"> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_UKRUMJNHUH" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_UKRUMJNHUH" value=""> <span>1.031</span></label>
+<div id="radio_CPFDLMDATL" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_CPFDLMDATL" value=""> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_CPFDLMDATL" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_CPFDLMDATL" value="answer"> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_CPFDLMDATL" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_CPFDLMDATL" value=""> <span>1.031</span></label>
 </div>
 What is the slope for the model you just fitted?
-<div id="radio_GBZJPTLGJJ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_GBZJPTLGJJ" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_GBZJPTLGJJ" value="answer"> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_GBZJPTLGJJ" value=""> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_GBZJPTLGJJ" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_GBZJPTLGJJ" value=""> <span>1.031</span></label>
+<div id="radio_BGEDXHBALX" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BGEDXHBALX" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_BGEDXHBALX" value=""> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_BGEDXHBALX" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_BGEDXHBALX" value="answer"> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_BGEDXHBALX" value=""> <span>1.031</span></label>
 </div>
 What is sigma, the standard deviation of the residuals, for the model you just fitted?
-<div id="radio_URYRRKDDBX" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_URYRRKDDBX" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_URYRRKDDBX" value="answer"> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_URYRRKDDBX" value=""> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_URYRRKDDBX" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_URYRRKDDBX" value=""> <span>0.011</span></label>
+<div id="radio_RQWOLZGSHR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_RQWOLZGSHR" value="answer"> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_RQWOLZGSHR" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_RQWOLZGSHR" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_RQWOLZGSHR" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_RQWOLZGSHR" value=""> <span>0.023</span></label>
 </div>
 </div>
 </div>
@@ -732,8 +738,8 @@ F-statistic: 0.2312 on 1 and 66 DF,  p-value: 0.6322</code></pre>
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What is the SE for the slope, for the regression to predict normDS as a function of weight for our bonobo dataset?
-<div id="radio_HOYCAUGQXG" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_HOYCAUGQXG" value="answer"> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_HOYCAUGQXG" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_HOYCAUGQXG" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_HOYCAUGQXG" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_HOYCAUGQXG" value=""> <span>1.031</span></label>
+<div id="radio_YUAZJIZMYW" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_YUAZJIZMYW" value=""> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_YUAZJIZMYW" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_YUAZJIZMYW" value="answer"> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_YUAZJIZMYW" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_YUAZJIZMYW" value=""> <span>0.011</span></label>
 </div>
 </div>
 </div>

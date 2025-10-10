@@ -21,7 +21,7 @@ webr:
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-# Regression for Binary Responses: Formulation
+# Regression for Binary Responses (one trial per row)
 
 ```{r setup, include=FALSE}
 library(webexercises)
@@ -52,7 +52,7 @@ knitr::opts_chunk$set(
   fig.align = "center",
   fig.width = 6, fig.height = 2.5)
 
-frogs <- read.csv('data/https://sldr.netlify.app/data/frog-abnormalities.csv')
+frogs <- read.csv('data/frog-abnormalities.csv')
 ```
 
 ## Module Learning Outcomes

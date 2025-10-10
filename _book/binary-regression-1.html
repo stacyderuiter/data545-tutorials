@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./binary-regression-2.html" rel="next">
 <link href="./count-regression-2.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -467,6 +467,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses: Formulation</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -544,7 +550,7 @@ window.Quarto = {
 
 <div class="cell" data-layout-align="center" data-setup="true" data-exercise="log-odds-pred">
 <script type="exercise-setup-log-odds-pred-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImxvZy1vZGRzLXByZWQiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5mcm9ncyA8LSByZWFkLmNzdignZGF0YS9odHRwczovL3NsZHIubmV0bGlmeS5hcHAvZGF0YS9mcm9nLWFibm9ybWFsaXRpZXMuY3N2JykifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImxvZy1vZGRzLXByZWQiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5mcm9ncyA8LSByZWFkLmNzdignZGF0YS9mcm9nLWFibm9ybWFsaXRpZXMuY3N2JykifQ==
 </script>
 </div>
 <section id="module-learning-outcomes" class="level2" data-number="29.1">
@@ -1031,7 +1037,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yIiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvdW5pdmVyc2l0eV90ZWFjaGVycy5jc3YiLCJkYXRhL0hhRGl2ZVBhcmFtZXRlcnMuY3N2IiwiZGF0YS9GbGludFdhdGVyVGVzdEphbk1hcjIwMTYuY3N2IiwiZGF0YS9Qcm9mRXZhbHRuc0JlYXV0eVB1YmxpYy5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvdW5pdmVyc2l0eV90ZWFjaGVycy5jc3YiLCJkYXRhL0hhRGl2ZVBhcmFtZXRlcnMuY3N2IiwiZGF0YS9GbGludFdhdGVyVGVzdEphbk1hcjIwMTYuY3N2IiwiZGF0YS9Qcm9mRXZhbHRuc0JlYXV0eVB1YmxpYy5jc3YiLCJkYXRhL0VJQXByb3BkYXRhLmNzdiIsImRhdGEvZ2FwbWluZGVyX2NsZWFuLmNzdiIsImRhdGEvZnJvZy1hYm5vcm1hbGl0aWVzLmNzdiIsImRhdGEvYm9ub2JvX2ZhY2VzLmNzdiIsImRhdGEvYmVlLXZpcnVzLmNzdiJd
 </script>
 </section>
 
@@ -1659,8 +1665,8 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./binary-regression-2.html" class="pagination-link" aria-label="Binary Regression *Another Way*: Multiple Trials Per Row">
+        <span class="nav-page-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

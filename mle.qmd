@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 
 ```{webr}
 #| setup: true
-#| exercises:
+#| exercise:
 #|   - cheesey-plots
 #|   - cheese-model
 #|   - mle-grid
@@ -46,6 +46,8 @@ knitr::opts_chunk$set(
 #|   - mle-grid-plot-interact
 #|   - mle-grid-sort
 #|   - lm-check
+#|   - pdf-practice
+#|   - gf-dist
 #|   
 set.seed(9)
 harp_seals <- data.frame(ice_cover = runif(18, min = 10, max = 80)) |>

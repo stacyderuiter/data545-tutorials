@@ -55,6 +55,7 @@ book:
   - part: "Binary Regression"
     chapters:
     - binary-regression-1.qmd
+    - binary-regression-2.qmd
   - references.qmd
   page-footer:
     center:
