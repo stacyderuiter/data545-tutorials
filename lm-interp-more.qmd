@@ -13,6 +13,7 @@ webr:
     - wordcloud
     - RColorBrewer
     - car
+    - ggeffects
   cell-options:
     autorun: false
 ---
@@ -32,6 +33,7 @@ library(wordcloud)
 library(RColorBrewer)
 library(car)
 library(mosaic)
+library(ggeffects)
 
 theme_set(theme_bw(base_size=16))
 
@@ -59,6 +61,15 @@ bonobos <- read.csv('data/bonobo_faces.csv') |> na.omit()
 #|   - bonobo-test
 #|   - life-model-CI
 #|   - two-group-lm
+
+library(webexercises)
+library(tidyverse)
+library(ggformula)
+library(wordcloud)
+library(RColorBrewer)
+library(car)
+library(mosaic)
+library(ggeffects)
 
 theme_set(theme_bw(base_size=16))
 
@@ -402,6 +413,63 @@ But **notice** -- all the quantities that we used in our derivation of the F-sta
 
 (A classic intro-stat textbook ANOVA problem is to give you a partially-filled-in ANOVA results table, and ask you to fill in the missing values.)
 
+#### Practical Process
+
+So...how do we interpret the results we get from `anova()` then? 
+
+In the gratitude example, we could safely assume there were no confounders since it was a controlled experiment, so it was valid to fit a model with only the one predictor `group` -- any other variables could only be mediators or precision covariates, so it would not bias our results to omit them.
+
+But it would probably also be fair to argue that `life_rating` and `illness_score` and `exercise_hours` might all be precision covariates, also affecting gratitude scores (but not `group` of course). So we *could* fit a model including them. Then our ANOVA table would look like:
+
+```{r}
+bigger_model <- lm(gratitude_score ~ group + life_rating + 
+                illness_score + exercise_hours,
+              data = grateful)
+car::Anova(bigger_model)
+```
+
+So how would we interpret *that*?
+
+Our key predictor of interest was `group`. With a p-value of about 0.0004, we have *very* strong evidence that group is associated with gratitude score. (To present that result well, we'd want to also say which group had higher or lower scores and by how much -- for that, we could use a prediction plot or the model equation.)
+
+We also have moderately strong evidence that life_rating is associated with gratitude score. Again, to know in what direction and how much, we could use the equation or a prediction plot...give it a try!
+
+```{webr}
+#| exercise: life-pred
+
+```
+
+:::: {.solution exercise="life-pred"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+bigger_model <- lm(gratitude_score ~ group + life_rating + 
+                illness_score + exercise_hours,
+              data = grateful)
+summary(bigger_model)
+predict_response(bigger_model, terms = "life_rating") |> plot()
+```
+
+We see that gratitude scores go up by about 0.5 units for every one-unit increase in life rating. That corresponds to the slope of 0.43.
+:::
+::::
+
+The p-values for the other predictors (illness and exercise) are very large, so we actually have no evidence that those predictors are actually associated with gratitude scores.
+
+Wait...does that mean we should stop and fit a new "reduced" model *without* those two predictors because it would be "better" somehow, and report those results instead of the full model?
+
+**NOPE, please don't!**
+
+If your model plan includes certain predictors, that's because you thought at the outset they were or should be or could be associated with the response and wanted to measure or account for their effect. If you later remove them to get a "better" model, your final model will underestimate uncertainty and be biased toward p-values and CIs that are too small, for the predictors that are retained. Remember, our process is to plan well, then fit and interpret ONE MODEL. Don't put things in and out later on based on what you find, if at all possible.
+
+Don't believe me; or, want to read more about this? Optionally, consider checking out:
+
+- <https://doi.org/10.1002/ecy.3336>
+- <https://doi.org/10.3390/e26060506>
+- Book: [*Model Selection and Multimodel Inference* by Burnham & Anderson](https://www.google.com/books/edition/Model_Selection_and_Multimodel_Inference/fT1Iu-h6E-oC?hl=en&gbpv=1&printsec=frontcover#v=onepage&q&f=false)
+- Another perspective that suggests similar principles probably hold in Bayesian models and *maybe* some predictive models: <https://mc-stan.org/loo/articles/online-only/faq.html#modelselection>
+
 
 #### R Note: `Anova()`, not `anova()`!
 
@@ -411,7 +479,7 @@ Be careful not to use `anova()` to carry out tests related to predictors in a re
 
 In other words, with `anova()`, the order in which predictors are listed greatly affects the hypotheses tested, and the test results. *THIS IS (ALMOST ALWAYS) NONSENSE.* You want `Anova()` which is in the package `car`.
 
-#### Model Comparisons
+#### Other Model Comparisons
 
 In other cases, if we want to compare two particular models with *the same response variable* but different predictors, we can just *fit them both* and then compare them with the syntax below.
 

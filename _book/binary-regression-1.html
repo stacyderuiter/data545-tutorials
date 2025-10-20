@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>29&nbsp; Regression for Binary Responses: Formulation – DATA 545 Tutorial</title>
+<title>29&nbsp; Regression for Binary Responses (one trial per row) – DATA 545 Tutorial</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -151,7 +151,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binary-regression-1.html">Binary Regression</a></li><li class="breadcrumb-item"><a href="./binary-regression-1.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses: Formulation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binary-regression-1.html">Binary Regression</a></li><li class="breadcrumb-item"><a href="./binary-regression-1.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses (one trial per row)</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -464,13 +464,30 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./binary-regression-1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses: Formulation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses (one trial per row)</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./binary-regression-2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Zero Inflation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zi-od.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Zero Inflation for Overdispersed Counts</span></span></a>
   </div>
 </li>
       </ul>
@@ -529,9 +546,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binary-regression-1.html">Binary Regression</a></li><li class="breadcrumb-item"><a href="./binary-regression-1.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses: Formulation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binary-regression-1.html">Binary Regression</a></li><li class="breadcrumb-item"><a href="./binary-regression-1.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses (one trial per row)</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses: Formulation</span></h1>
+<h1 class="title"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses (one trial per row)</span></h1>
 </div>
 
 
@@ -1037,7 +1054,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yIiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvdW5pdmVyc2l0eV90ZWFjaGVycy5jc3YiLCJkYXRhL0hhRGl2ZVBhcmFtZXRlcnMuY3N2IiwiZGF0YS9GbGludFdhdGVyVGVzdEphbk1hcjIwMTYuY3N2IiwiZGF0YS9Qcm9mRXZhbHRuc0JlYXV0eVB1YmxpYy5jc3YiLCJkYXRhL0VJQXByb3BkYXRhLmNzdiIsImRhdGEvZ2FwbWluZGVyX2NsZWFuLmNzdiIsImRhdGEvZnJvZy1hYm5vcm1hbGl0aWVzLmNzdiIsImRhdGEvYm9ub2JvX2ZhY2VzLmNzdiIsImRhdGEvYmVlLXZpcnVzLmNzdiJd
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
 </script>
 </section>
 

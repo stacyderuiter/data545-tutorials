@@ -1,0 +1,568 @@
+---
+live-html:
+resources:
+  - data
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - readr
+    - stringr
+    - ggplot2
+    - ggformula
+    - mosaic
+    - car
+    - DHARMa
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+```{r setup, include=FALSE}
+library(webexercises)
+library(tidyverse)
+library(glmmTMB)
+library(ggformula)
+library(ggeffects)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+fishing_data <- read.csv("data/fish.csv")
+
+fishing_data <- fishing_data |> mutate(
+  nofish = factor(nofish),
+  livebait=factor(livebait),
+  livebait = ifelse(livebait == 0, 'No', 'Yes'),
+  camper=factor(camper),
+  camper = ifelse(camper == 0, 'No', 'Yes'),
+  child_cat = factor(child))
+
+ZIP <- glmmTMB(count ~ child + camper + persons,
+               ziformula = ~1,
+               data = fishing_data,
+                family = poisson(link = 'log'))
+
+ZIT <- glmmTMB(count ~ child + camper + persons, 
+               data = fishing_data, 
+               family = tweedie(link = 'log'))
+
+ZINB1 <- glmmTMB(count ~ child + camper + persons, 
+                 ziformula = ~1, 
+                 data = fishing_data, 
+                 family=nbinom1(link = 'log'))
+
+ZINB2 <- glmmTMB(count ~ child + camper + persons, 
+                 ziformula = ~1, 
+                 data = fishing_data, 
+                 family=nbinom2(link = 'log'))
+
+```
+
+```{webr}
+#| setup: true
+#| include: false
+#| exercise:
+#|   - eda
+#|   - poisson
+#|   - zip
+#|   - zip-summary
+#|   - zinb
+#|   - zit
+#|   - assess
+#|   - comparison
+#|   - compare-all
+#|   - pred-plot-prep
+#|   - pred-plot
+#|   - pred-plot-zi
+
+
+library(tidyverse)
+library(glmmTMB)
+library(ggformula)
+library(ggeffects)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+fishing_data <- read.csv("data/fish.csv")
+
+fishing_data <- fishing_data |> mutate(
+  nofish = factor(nofish),
+  livebait=factor(livebait),
+  livebait = ifelse(livebait == 0, 'No', 'Yes'),
+  camper=factor(camper),
+  camper = ifelse(camper == 0, 'No', 'Yes'),
+  child_cat = factor(child))
+
+ZIP <- glmmTMB(count ~ child + camper + persons,
+               ziformula = ~1,
+               data = fishing_data,
+                family = poisson(link = 'log'))
+
+ZIT <- glmmTMB(count ~ child + camper + persons, 
+               data = fishing_data, 
+               family = tweedie(link = 'log'))
+
+ZINB1 <- glmmTMB(count ~ child + camper + persons, 
+                 ziformula = ~1, 
+                 data = fishing_data, 
+                 family=nbinom1(link = 'log'))
+
+ZINB2 <- glmmTMB(count ~ child + camper + persons, 
+                 ziformula = ~1, 
+                 data = fishing_data, 
+                 family=nbinom2(link = 'log'))
+```
+
+# Zero Inflation for Overdispersed Counts
+
+## Module Learning Outcomes
+
+This module, we will define zero inflation and briefly explore zero-inflated models, which combine binary and count regression together. We'll consider how zero inflation relates to overdispersion, as well.
+
+By the end of the module you will:
+
+1) Fit and interpret zero-inflated negative binomial regression in R
+2) Explain when a zero-inflated model may be useful
+
+## Text Reference
+Recommended reading for the materials covered in this tutorial can be found in:
+
+- *Beyond Multiple Linear Regression* [Chapter 4](https://bookdown.org/roback/bookdown-BeyondMLR/ch-poissonreg.html){target="_blank"}
+- Course Notes [Chapter 12](https://stacyderuiter.github.io/regression/zero-inflation.html){target="_blank"}
+
+
+It's suggested that you consider consulting these chapters *after* doing this tutorial, with particular focus on any topics you found most challenging.
+
+## Zero-Inflation
+Zero-inflated data are count data that:
+
+- Have a lot of zeros; **and**
+- It may not be appropriate to explain the extra zeros via a model for count data with overdispersion (NB or quasi-Poisson) because:
+    - There is too much overdispersion to account for this way *and / or*
+    - The zeros in the data are of two classes: *true* zeros (definite absence) and *other* zeros (might have been a positive count but just happened to be a 0 this time).  
+
+## Reference material
+On the topic of zero-inflated data (as on many other topics), your book is ...terse! I have several copies of \url[Mixed models and extensions for ecology in R](https://highstat.com/index.php/mixed-effects-models-and-extensions-in-ecology-with-r) if you want to borrow -- You may want to check out Chapter 11 in that book for a more detailed treatment of the topic.
+
+## Data for Example
+
+Some state wildlife biologists want to model how many fish are being caught by people fishing at a state park. Visitors are asked how long they stayed, how many people were in the group, were there children in the group and how many fish were caught. Some visitors do not fish, but there is (alas) no data on whether a person fished or not. Some visitors who did fish did not catch any fish. There are a lot of zero counts of "fish caught" in the data because of both the people that did not fish, and those who failed to catch anything.
+
+We have data on 250 groups that went to a park. Each group was questioned about how many fish they caught (`count`), how many children were in the group (`child`), how many people were in the group (`persons`), and whether or not they brought a camper to the park (`camper`). There are also variables `xb` and `zg` which are an utter mystery (I have no idea what they are measuring and no access to further documentation... sorry!).
+
+In addition to predicting the number of fish caught, there is interest in predicting the existence of excess zeros, i.e., the probability that a group caught zero fish. We will use the variables `child`, `persons`, and `camper` in our model. 
+
+Let's look at the data and do a little bit of wrangling to make categorical variables clearly categorical (instead of coded numerically) and to make categorical versions of some count variables (like the number of children).
+
+```{r}
+fishing_data <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
+glimpse(fishing_data)
+
+fishing_data <- fishing_data |> mutate(
+  nofish = factor(nofish),
+  livebait=factor(livebait),
+  livebait = ifelse(livebait == 0, 'No', 'Yes'),
+  camper=factor(camper),
+  camper = ifelse(camper == 0, 'No', 'Yes'),
+  child_cat = factor(child))
+glimpse(fishing_data)
+```
+
+## Data Exploration
+
+Since we're using this example to learn about zero-inflated models rather than to make formal inferences, some initial exploration to get a sense of what the data look like is OK even in the absence of a formal model plan.
+
+Consider these ideas, and try some of your own to improve on them...
+
+```{webr}
+#| exercise: eda
+
+gf_histogram(~count, data = fishing_data) |>
+  gf_labs(y='Number of Observations', x = 'Fish Caught')
+
+gf_boxplot(count ~  child_cat, data = fishing_data, orientation = "x")
+gf_boxplot(log(count) ~ livebait, data = fishing_data, orientation = "x")
+gf_boxplot(log(count) ~ camper, data = fishing_data, orientation = "x")
+```
+
+
+Another idea would be to plot scatter plots of `log(response)` as a function of possible predictors, to look for possible associations and pre-check the linearity conditions of the parts of the model. 
+
+This could be a good idea, but on the other hand we don't have any candidate predictors that are unequivocally numerical. (If we had one, we could plot `log(count)` as a function of the predictor.)
+
+## Overall Goal
+
+What's the point of these new models?
+
+We envision a scenario where we have a count response, but with *lots* of zero counts. You might even say an *inflated* number of zeroes present in the response variable...
+
+And (the way we'll conceptualize it), it's not *just* that there are "a lot" of zeros. 
+
+It's also that there is a certain class of cases (here: the people who came to the park *not* to fish) that are "true zeros," that is, by definition and for sure they will have a count of 0 (fish caught, or whatever it is you are counting).
+
+Here are some other examples of "true zeros" in count data...can you think of more? (If you have a fun one, email it to your prof for a touch of extra credit!)
+
+- Number of cigarettes smoked per day; people who never smoke are true zeros (similarly, number of cups of coffee drunk per day, etc.)
+- Number of babies birthed; people who don't have a uterus are true zeros
+- Number of courses taken per semester; people not enrolled in a school are true zeros
+
+(For each of these, you might ask: *Why use a fancy model to separate true zeros like this?* Why not just collect data on whether a person is a true zero by, for example, asking a survey question like "Do you ever smoke?" Before asking "How many per day?"  That's a very smart question. If you can simply collect the data on which are true zeros...MUCH BETTER, do it!)
+
+## Fitting models
+
+### Poisson
+
+A Poisson model is not likely to work well - so much so that when modeling count data, we often just begin with a negative binomial model instead, anticipating that overdispersion will be present and it will be worth estimating that one extra parameter to account for it!
+
+Same will be true here.
+
+But we can still fit the Poisson model as an exercise, to see *how much* better the *other* options will be in comparison!
+
+```{webr}
+#| exercise: poisson
+P <- glmmTMB(count ~ child + camper + persons,
+              data = fishing_data,
+              family = poisson(link = 'log'))
+```
+
+### Zero-inflated Poisson
+
+We can also now fit a Poisson regression model *plus* zero inflation. 
+
+We saw earlier, though, that real count data is often overdispersed and poorly modeled by a Poisson distribution; today we'll see that is kind of still the case *even if* we add zero-inflation to the model.
+
+Note that the change/addition to the `glmmTMB()` call is the input `ziformula`, where we give a second model formula indicating predictors that affect the probability of a count *being a true zero.*
+
+
+```{webr}
+#| exercise: zip
+#| envir: poisson
+ZIP <- glmmTMB(count ~ child + camper + persons,
+               ziformula = ~1,
+               data = fishing_data,
+                family = poisson(link = 'log'))
+```
+
+The main model formula models the counts of fish caught for the "non-true-zero" cases, while the zero-inflation part of the model models the probability of being a true zero.  
+
+Each of these parts can have predictors (and they can be the same, or different ones!)
+
+In the model above, what are we saying?
+
+::: {.webex-check .webex-box}
+```{r, echo = FALSE, results = 'asis'}
+#| label: pois-zi-formula-interp
+
+opts <- sample(c(answer = "The number of fish caught by those at the park to fish depends on the number of children in their group, whether they are camping, and the number of people in the group. There is some probability (that we will estimate) that any particular group is actually NOT there to fish, but it doesn't depend on any predictors.",
+                 "The number of fish caught by those at the park to fish depends on the number of children in their group, whether they are camping, and the number of people in the group. The probability that any particular group is actually NOT there to fish also depends on the same three predictors.",
+                 "The probability that any particular group is actually NOT there to fish depends on the number of children in their group, whether they are camping, and the number of people in the group. There is also some expected number of fish caught by each group that is at the park to fish, but it doesn't depend on any predictors.",
+                 "The number of fish caught by those at the park to fish depends on the number of children in their group, whether they are camping, and the number of people in the group. The probability that any particular group is actually there to fish is defined to be 1 in this model (so there is not actually any zero inflation)."
+        ))
+
+cat("What do the formulas (the main formula and the ziformula) of the zero-inflated Poisson model we fitted imply?",
+    longmcq(opts))
+```
+:::
+
+`r hide("Click for an explanation of the answer above.")`
+
+The main model formula includes several predictors.
+
+The `ziformula` -- the zero-inflation formula -- is just `~1`, meaning there is an intercept (there is some overall probability of "being a true zero"). But, the zero-inflation formula doesn't include any predictors.
+
+`r unhide()`
+
+
+
+## ZI Model Summary
+
+What does the model summary look like for this kind of model?
+
+```{webr}
+#| exercise: zip-summary
+#| envir: poisson
+summary(ZIP)
+```
+
+Notice there are **two coefficient tables** for this model!
+
+The *first one* is for the count part of the model (the "regular" formula), which models the fish caught by groups there to fish (non-true-zeros; the count model is conditional on / given that the group is "there to fish" and thus *not* a true zero = not there to fish at all and thus guaranteed to catch nothing).
+
+The *second one* is for the zero-inflation part of the model (the `ziformula` part), which models the probability of being a true zero (using a logistic regression -- here, with no predictors, so only an intercept...but we could add predictors if we wanted; we'd have a formula like `ziformula = ~ predictor1 + predictor2 +...` instead of `ziformula = ~1`.)
+
+So we have a count regression AND a binary regression all rolled up together into one model! Cool.
+
+*You might ask if it would make sense to fit the two models separately. There is a class of models that does this - they are called "hurdle models." First, they model the probability of being "not zero" with a binary model. But then, the resulting count model has to use a special version of the Poisson or NB distribution that is zero-truncated (because the zero counts are already excluded). A nice bit about doing it the zero-inflation way is that it's possible to estimate which (or at least which proportion) of the data zero counts are "true" zeros vs. observed zeros.*
+
+## Zero-inflated negative binomial
+
+We've often found that accounting for overdispersion by using a NB rather than Poisson distribution often leads to model conditions being better met (and thus also models better fitting real data). 
+
+Can we still use negative binomial models and add zero inflation? 
+
+**Sure, we can!** 
+
+The code is just like we saw for the ZIP model, but with a different `family`...
+
+```{webr}
+#| exercise: zinb
+#| envir: poisson
+
+ZINB1 <- glmmTMB(count ~ child + camper + persons, 
+                 ziformula = ~1, 
+                 data = fishing_data, 
+                 family = nbinom1(link = 'log'))
+summary(ZINB1)
+
+ZINB2 <- glmmTMB(count ~ child + camper + persons, 
+                 ziformula = ~1, 
+                 data = fishing_data, 
+                 family = nbinom2(link = 'log'))
+
+summary(ZINB2)
+```
+
+Note again that `glmmTMB` uses a separate input, `ziformula`, to add zero inflation to a `glmmTMB()` model.  (The default is no zero inflation, if you do not include a `ziformula`). The zero-inflation model always uses a logit link.
+
+Here, as in the first ZIP model, we haven't included any predictors in the ZI model; it's intercept-only. 
+
+If you like, you *can* include predictors though (feel free to give it a try above); they can be the same ones or different ones than the main count model. To decide, you have to make a model plan to answer the question: "What predictors would influence the chances of a group being a 'true zero' and being at the park *not* to fish?"
+
+The main count model, on the other hand, should include predictors that would influence the number of fish that would be caught *by groups who had come to to park to fish.*
+
+### Tweedie Model
+
+This is a fun side note...
+
+Another option for this type of data might be to try a Tweedie model, because it also allows for a probability mass at 0 (in other words, allows for zero inflation). 
+
+The Tweedie distributions we are considering are not exactly perfect for count data since the positive part of the distribution is like a gamma distribution (continuous, not counts), but the shape and support of the distribution are pretty close to our data. 
+
+Let's try:
+
+```{webr}
+#| exercise: zit
+#| envir: poisson
+
+ZIT <- glmmTMB(count ~ child + camper + persons, 
+               data = fishing_data, 
+               family = tweedie(link = 'log'))
+summary(ZIT)
+```
+
+## Model Assessment
+We can do model assessment "like" we do for other count data models, more or less.
+
+We can check (log) linearity just as we did for count data and binary data.
+
+We can check the mean-variance condition (and also, to some extent, (log) linearity) using a scaled residuals plot. Interpretation is the same as for count and binary models.
+
+Finally, we can check for residual independence using an ACF like always.
+
+There's no condition related to the distribution the residuals must follow, and no new additional conditions to check.
+
+It's suggested you practice assessment here. Choose one model to asses (maybe one we just saw, or you can fit your own and change up the suite of predictors used in each part of the model), then think...What plots are needed? Does the model pass?
+
+```{webr}
+#| exercise: assess
+#| envir: poisson
+
+```
+
+:::: {.hint exercise="assess"}
+::: {.callout-tip collapse="true"}
+## Hint:
+
+This is a count (+ binary) model, so we will need to check conditions:
+
+- Linearity (on log scale for counts, or logit scale for P(true zero))
+- Independence of residuals
+- Mean-variance relationship
+
+``` r
+gf_point(...) # some sort of linearity check if quant predictors?
+acf(...) # residual ACF
+plotResiduals(simulateResiduals(...)) # scaled residual plot
+```
+
+Think:
+
+- How will I fill in the ...?
+- Which *condition* does each plot check?
+- What am I looking for, for the condition to be met?
+- What do I see, and so what do I conclude about the condition being met?
+
+:::
+::::
+
+
+## Model Selection
+One thing to understand is: is the ZIP model a better fit to the data than just a Poisson model?  We can think of ZI as a different way of modelling overdispersion, an alternative to NB or quasi-Poisson models when we know there are true zeros in the data set.
+
+To be able to run the `AIC()` code below, you will need to fit 3 new models: `POIS`, `NB1`, and `NB2`, which are the same as your `ZIP`, `ZINB1`, and `ZINB2` *except* that the don't have any zero-inflation...
+
+```{webr}
+#| exercise: comparison
+#| envir: poisson
+
+AIC(ZIP, POIS, NB1, NB2)
+```
+
+:::: {.solution exercise="comparison"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+Just remove the `ziformula` input from the models we fit earlier in this tutorial.
+
+``` r
+POIS <- glmmTMB(count ~ camper + child + persons, 
+                data = fishing_data,
+                family = poisson(link = 'log'))
+NB1 <- glmmTMB(count ~ camper + child + persons, 
+               data = fishing_data,
+              family = nbinom1(link = 'log'))
+NB2 <- glmmTMB(count ~ camper + child + persons, 
+               data = fishing_data,
+              family = nbinom2(link = 'log'))
+AIC(ZIP, POIS, NB1, NB2)
+```
+:::
+::::
+
+Well, yes, the ZIP model is much better than the Poisson! But, the NB1 and NB2 models are *much* better than both.
+
+Among *all* the different families and types of models that we have learned and tried, which seems to be best for this data set?
+
+```{webr}
+#| exercise: compare-all
+#| envir: poisson
+
+# choose your own information criterion: AIC or BIC...
+_IC(POIS, ZIP, NB1, NB2, ZINB1, ZINB2, ZIT)
+```
+
+For these data, the zero-inflated models are very similar to the other NB models, in terms of the AIC.  
+
+If we used BIC instead, the non-zero inflated models would even look quite a bit *better*! (Go ahead and try it above...)
+
+**The improvement in goodness of fit with the zero-inflation is not really enough to make us prefer these ZI models to simpler models that also allow overdispersion, like the NB models. This is common in real data, in my experience.**
+
+## NB vs ZI?
+
+The NB models and the ZI models (with whatever "family" you choose) are two *different* ways of dealing with overdispersion caused by an abundance of zeros in the data. I'd recommend choosing ZI models *only* if:
+
+- There are *true zeros* and *other zeros* in your data, and you want to model this explicitly; or if
+- The ZI models fit the data much better than a simpler non-ZI NB (or perhaps Tweedie) model.
+
+For our dataset, the zero-inflated negative binomial models seem to be best, among the ZI models. 
+However, there is still a lot more work and thinking that could be done here!  That is part of the reason this is a supplemental topic -- the model planning and interpretation can get very complex and thinking through the context of your problem with expert help is pretty crucial since there are so many options in play. For example...
+
+
+### Zero inflation covariates
+What if the Logistic regression part of the model *also* depends on covariates? That seems reasonable -- maybe the number of people present, whether they are camping, and the number of kids present would help you to predict whether a group was going to go fishing at all.  
+
+To check that, we would need to change the `ziformula`.  It is possible this change **might** make the ZI models competitive with, or better than, the non-ZI NB models in IC terms.
+
+But then, we'd need to check some version of the $\frac{m}{15}$ rule to make sure we have enough data to estimate all the needed parameters...and that's not totally straightforward, since we are not sure which are true zeros.
+
+### Interaction terms
+For this dataset, it may also make sense to consider some more predictors, and interaction terms. For example, maybe live bait use is a good predictor, and maybe the relationship between live bait use and number of fish caught changes depending on the number of children present.
+
+For example, we might try something like:
+
+```{r}
+ZINB1b <- glmmTMB(count ~ camper + child*livebait + persons, 
+                  ziformula= ~1, 
+                  data = fishing_data, family = nbinom1(link = 'log'))
+summary(ZINB1b)
+AIC(ZINB1, ZINB1b)
+```
+
+Hmmm...it looks like we made an improvement. But do you think the improvement is because of the interaction term?
+
+Looking at the p-values, we might suspect that while `livebait` helps predict fish caught, there isn't a clear interaction between effects of live bait use and the number of kids present.
+
+In this case, it is hard to fathom all the model selection options because there can be predictors (and interactions) in *both parts* of the model. 
+
+**Starting with a causal diagram with separate 'bubbles' for** *true zeroes* **as well as for** *expected counts for non-true-zeros* **will help organize your thinking**!  Consider also the size of the dataset - combining the count-data (n/15) and binary data (m/15) rules of thumb.
+
+### Interaction Note!
+
+However you plan your model (and do selection on it), one thing to remember is: You can **never** include an interaction term in a model without also including the corresponding "main effect" term. For example, you *can not* have an interaction between `child` and `livebait` without also having both `child` and `livebait` as individual predictors in the model. (In fact, I have intentionally not taught you how to fit the "wrong" model...as long as you use the `*` to specify an interaction in your model formula, you should be fine! *Do not use `:` in your R model formulas or you may run into trouble!*)
+
+
+## Prediction Plots
+We can also use prediction plots as usual for ZI models. Here, they will help us clarify what "success" is in the logistic regression part of the model -- according to the help file for the `zeroinfl()` function, and for `glmmTMB()` too, we should be able to see that a "success" is to be a "true zero".
+
+Let's try an example - making prediction plots for our ZINB2 model for different numbers of persons in the group. (This wasn't the *best* fitting option but was the best of the ZI models we tried...)
+
+Before showing the plot, we can omit the `|> plot()` part to figure out at what values the "other predictors not shown" have been held fixed. That's important to state in your interpretation of any prediction plot...
+
+```{webr}
+#| exercise: pred-plot-prep
+#| envir: poisson
+predict_response(ZINB2, 'persons')
+```
+
+So here, predictions are "adjusted for" (aka "holding constant at") 0 children and "Yes" camper.
+
+Now, the graph:
+
+
+```{webr}
+#| exercise: pred-plot
+#| envir: poisson
+predict_response(ZINB2, 'persons') |>
+  plot() |>
+  gf_labs(x = "People in Group", 
+          y = "Expected Fish Caught", 
+          title = '')
+```
+
+The number of fish caught goes *up* as the number of people in the group goes up.  
+
+But how is the plot above dealing with the zero-inflation part of the model?  
+
+In fact...it's not. This is *just* showing the "count" part of the model. That's the default.
+
+But we *can* add the input `type = 'zi_prob` to instead "see" the zero-inflation part of the model.
+
+```{webr}
+#| exercise: pred-plot-zi
+#| envir: poisson
+predict_response(ZINB2, 'persons',
+          type = 'zi_prob') |>
+  plot() |>
+  gf_labs(x = "People in Group", y = "Expected Fish Caught", title = '')
+```
+
+Does this make sense?!? Looks strange...
+
+But, yes, it does. This is a prediction plot to show how the probability of being-at-the-park-to-NOT-fish depends on group size (`persons`). 
+
+But in our model, the ZI part of the model had *no* predictors, so we said that probability *didn't* actually depend at all on `persons`! So, the flat line makes sense.
+
+The model is further telling us that (despite VERY high uncertainty) our best guess is that the probability of a true zero is very small.
+
+## Beta?
+
+We have seen a *lot* of cases where the NB models outperform Poisson ones because of overdispersion, that is, problems with the mean-variance condition for Poisson models because the variance of the data is larger than the model expects. That's for count data.
+
+But what about overdispersion in binary regression models, too? Does it ever happen, and if so how do we deal with *that*? 
+
+The answer is that it's a lot more rare...I've only really found one clear example. But still - please stay tuned for a later module on Beta regression as an approach to deal with that (rare) issue, as well as a useful tool for modeling proportion data!
+
+## Acknowledgements
+Many thanks to: <https://stats.oarc.ucla.edu/other/dae/>, a source of the data set and some resources used in preparing these notes.
+

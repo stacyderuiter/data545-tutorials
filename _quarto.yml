@@ -56,6 +56,9 @@ book:
     chapters:
     - binary-regression-1.qmd
     - binary-regression-2.qmd
+  - part: "Zero Inflation"
+    chapters:
+    - zi-od.qmd
   - references.qmd
   page-footer:
     center:

@@ -434,9 +434,28 @@ Also remember that in our course, we avoid the word 'significant' like it's cont
 
 `r unhide()`
 
+
+### Practical Procedure
+
+OK, so the example above suggests by example that if your key predictor is interacting with another predictor in a model, and you are using ANOVA to help make inferences, the first thing to do is to look at the p-value for the *interaction term*.
+
+Yes, that's correct: *first* we look at the *interaction* p-value, which is at the BOTTOM of the ANOVA table!
+
+That tells us whether there is evidence of an interaction or not. If yes, we are *done:* we can conclude the two interacting predictors interact, and thus they are both associated with the response. Ta-da!
+
+If the p-value for the interaction term is *large* though, and we don't have evidence of an interaction, *then* we can look also at the main effect p-value for our key predictor alone. That will tell us the answer to: *OK, we don't have evidence of an interaction, but is there an overall association of our key predictor with the response?*
+
+So for a model with interactions, to interpret ANOVA:
+
+1. First, check and interpret the p-value for the *interaction term.*
+2. If there is evidence of an interaction, you're done! That means you'll conclude *both interacting predictors are associated with the response* (and they interact).
+3. If there is *not* evidence of an interaction, *then* look at the main effect p-value for your predictor of interest to determine if there's evidence it has an overall effect (though you already know there's no evidence of the interaction, it might still have an overall consistent effect on the response).
+
 ## Selection: IC
 
 What if we wanted to make the same comparison -- of models *with* and *without* the interaction -- but using information criteria instead of hypothesis testing?
+
+We'd use the same conceptual process as above: first compare the full model (with both predictors in, and interacting) with one where they are both included, but they don't interact (replace the * with a + in the model formula). Then, if there is *not* evidence of interaction, we could also compare models with and without the key predictor to check for an overall effect. But now, instead of one `Anova(full_model)` call, we will need to fit each model and use `AIC()` to compare them.
 
 Give it a try...
 

@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>31&nbsp; Zero Inflation for Overdispersed Counts – DATA 545 Tutorial</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./binary-regression-2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e22fbe6e69edb8577f7b7bd0719516f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="_include/webex.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./zi-od.html">Zero Inflation</a></li><li class="breadcrumb-item"><a href="./zi-od.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Zero Inflation for Overdispersed Counts</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">DATA 545 Tutorial</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/stacyderuiter/data545-tutorials/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./install-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how-to-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R Results in Quarto Text</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math-notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Math Notation in Quarto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Designing Effective Visualizations</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-no-junk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">What is <em>Necessary</em>?</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-color.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Color</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-text-elements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Text Elements</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-choose.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Choose a Graph Type</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-var-types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Variable Types</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Gallery: One Categorical Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gallery: One Quantitative Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gallery: 2-3 Categorical Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Gallery: Multiple Quantitative Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-cat-quant-mix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Gallery: Mixed Quantitative + Categorical</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization with ggformula</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-ggformula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ggformula and Formulas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Datasets Used</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Code Examples</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./design-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study Design &amp; Model Planning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Sample and Study Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./plan.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Model Planning for Inference</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Multiple Linear Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-fit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Fitting Linear Models in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-assess.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Assessment for Linear Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interpretation and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Selection and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Interactions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Interactions in Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Likelihood</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Maximum Likelihood Estimation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Count Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./count-regression-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regression for Count Responses: Formulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./count-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Interpreting Count Regression</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Binary Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses (one trial per row)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
+ <span class="menu-text">Zero Inflation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zi-od.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Zero Inflation for Overdispersed Counts</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#module-learning-outcomes" id="toc-module-learning-outcomes" class="nav-link active" data-scroll-target="#module-learning-outcomes"><span class="header-section-number">31.1</span> Module Learning Outcomes</a></li>
+  <li><a href="#text-reference" id="toc-text-reference" class="nav-link" data-scroll-target="#text-reference"><span class="header-section-number">31.2</span> Text Reference</a></li>
+  <li><a href="#zero-inflation" id="toc-zero-inflation" class="nav-link" data-scroll-target="#zero-inflation"><span class="header-section-number">31.3</span> Zero-Inflation</a></li>
+  <li><a href="#reference-material" id="toc-reference-material" class="nav-link" data-scroll-target="#reference-material"><span class="header-section-number">31.4</span> Reference material</a></li>
+  <li><a href="#data-for-example" id="toc-data-for-example" class="nav-link" data-scroll-target="#data-for-example"><span class="header-section-number">31.5</span> Data for Example</a></li>
+  <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link" data-scroll-target="#data-exploration"><span class="header-section-number">31.6</span> Data Exploration</a></li>
+  <li><a href="#overall-goal" id="toc-overall-goal" class="nav-link" data-scroll-target="#overall-goal"><span class="header-section-number">31.7</span> Overall Goal</a></li>
+  <li><a href="#fitting-models" id="toc-fitting-models" class="nav-link" data-scroll-target="#fitting-models"><span class="header-section-number">31.8</span> Fitting models</a>
+  <ul class="collapse">
+  <li><a href="#poisson" id="toc-poisson" class="nav-link" data-scroll-target="#poisson">Poisson</a></li>
+  <li><a href="#zero-inflated-poisson" id="toc-zero-inflated-poisson" class="nav-link" data-scroll-target="#zero-inflated-poisson">Zero-inflated Poisson</a></li>
+  </ul></li>
+  <li><a href="#zi-model-summary" id="toc-zi-model-summary" class="nav-link" data-scroll-target="#zi-model-summary"><span class="header-section-number">31.9</span> ZI Model Summary</a></li>
+  <li><a href="#zero-inflated-negative-binomial" id="toc-zero-inflated-negative-binomial" class="nav-link" data-scroll-target="#zero-inflated-negative-binomial"><span class="header-section-number">31.10</span> Zero-inflated negative binomial</a>
+  <ul class="collapse">
+  <li><a href="#tweedie-model" id="toc-tweedie-model" class="nav-link" data-scroll-target="#tweedie-model">Tweedie Model</a></li>
+  </ul></li>
+  <li><a href="#model-assessment" id="toc-model-assessment" class="nav-link" data-scroll-target="#model-assessment"><span class="header-section-number">31.11</span> Model Assessment</a></li>
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection"><span class="header-section-number">31.12</span> Model Selection</a></li>
+  <li><a href="#nb-vs-zi" id="toc-nb-vs-zi" class="nav-link" data-scroll-target="#nb-vs-zi"><span class="header-section-number">31.13</span> NB vs ZI?</a>
+  <ul class="collapse">
+  <li><a href="#zero-inflation-covariates" id="toc-zero-inflation-covariates" class="nav-link" data-scroll-target="#zero-inflation-covariates">Zero inflation covariates</a></li>
+  <li><a href="#interaction-terms" id="toc-interaction-terms" class="nav-link" data-scroll-target="#interaction-terms">Interaction terms</a></li>
+  <li><a href="#interaction-note" id="toc-interaction-note" class="nav-link" data-scroll-target="#interaction-note">Interaction Note!</a></li>
+  </ul></li>
+  <li><a href="#prediction-plots" id="toc-prediction-plots" class="nav-link" data-scroll-target="#prediction-plots"><span class="header-section-number">31.14</span> Prediction Plots</a></li>
+  <li><a href="#beta" id="toc-beta" class="nav-link" data-scroll-target="#beta"><span class="header-section-number">31.15</span> Beta?</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">31.16</span> Acknowledgements</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/zi-od.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./zi-od.html">Zero Inflation</a></li><li class="breadcrumb-item"><a href="./zi-od.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Zero Inflation for Overdispersed Counts</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Zero Inflation for Overdispersed Counts</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell" data-layout-align="center" data-setup="true" data-exercise="[&quot;eda&quot;,&quot;poisson&quot;,&quot;zip&quot;,&quot;zip-summary&quot;,&quot;zinb&quot;,&quot;zit&quot;,&quot;assess&quot;,&quot;comparison&quot;,&quot;compare-all&quot;,&quot;pred-plot-prep&quot;,&quot;pred-plot&quot;,&quot;pred-plot-zi&quot;]">
+<script type="exercise-setup-eda-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-poisson-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-zip-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-zip-summary-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-zinb-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-zit-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-assess-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-comparison-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-compare-all-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-pred-plot-prep-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-pred-plot-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+<script type="exercise-setup-pred-plot-zi-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImVkYSIsInBvaXNzb24iLCJ6aXAiLCJ6aXAtc3VtbWFyeSIsInppbmIiLCJ6aXQiLCJhc3Nlc3MiLCJjb21wYXJpc29uIiwiY29tcGFyZS1hbGwiLCJwcmVkLXBsb3QtcHJlcCIsInByZWQtcGxvdCIsInByZWQtcGxvdC16aSJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5maXNoaW5nX2RhdGEgPC0gcmVhZC5jc3YoXCJkYXRhL2Zpc2guY3N2XCIpXG5cbmZpc2hpbmdfZGF0YSA8LSBmaXNoaW5nX2RhdGEgfD4gbXV0YXRlKFxuICBub2Zpc2ggPSBmYWN0b3Iobm9maXNoKSxcbiAgbGl2ZWJhaXQ9ZmFjdG9yKGxpdmViYWl0KSxcbiAgbGl2ZWJhaXQgPSBpZmVsc2UobGl2ZWJhaXQgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjYW1wZXI9ZmFjdG9yKGNhbXBlciksXG4gIGNhbXBlciA9IGlmZWxzZShjYW1wZXIgPT0gMCwgJ05vJywgJ1llcycpLFxuICBjaGlsZF9jYXQgPSBmYWN0b3IoY2hpbGQpKVxuXG5aSVAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLFxuICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgICBmYW1pbHkgPSBwb2lzc29uKGxpbmsgPSAnbG9nJykpXG5cblpJVCA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgZmFtaWx5ID0gdHdlZWRpZShsaW5rID0gJ2xvZycpKVxuXG5aSU5CMSA8LSBnbG1tVE1CKGNvdW50IH4gY2hpbGQgKyBjYW1wZXIgKyBwZXJzb25zLCBcbiAgICAgICAgICAgICAgICAgemlmb3JtdWxhID0gfjEsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgICAgZmFtaWx5PW5iaW5vbTEobGluayA9ICdsb2cnKSlcblxuWklOQjIgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseT1uYmlub20yKGxpbmsgPSAnbG9nJykpIn0=
+</script>
+</div>
+<section id="module-learning-outcomes" class="level2" data-number="31.1">
+<h2 data-number="31.1" class="anchored" data-anchor-id="module-learning-outcomes"><span class="header-section-number">31.1</span> Module Learning Outcomes</h2>
+<p>This module, we will define zero inflation and briefly explore zero-inflated models, which combine binary and count regression together. We’ll consider how zero inflation relates to overdispersion, as well.</p>
+<p>By the end of the module you will:</p>
+<ol type="1">
+<li>Fit and interpret zero-inflated negative binomial regression in R</li>
+<li>Explain when a zero-inflated model may be useful</li>
+</ol>
+</section>
+<section id="text-reference" class="level2" data-number="31.2">
+<h2 data-number="31.2" class="anchored" data-anchor-id="text-reference"><span class="header-section-number">31.2</span> Text Reference</h2>
+<p>Recommended reading for the materials covered in this tutorial can be found in:</p>
+<ul>
+<li><em>Beyond Multiple Linear Regression</em> <a href="https://bookdown.org/roback/bookdown-BeyondMLR/ch-poissonreg.html" target="_blank">Chapter 4</a></li>
+<li>Course Notes <a href="https://stacyderuiter.github.io/regression/zero-inflation.html" target="_blank">Chapter 12</a></li>
+</ul>
+<p>It’s suggested that you consider consulting these chapters <em>after</em> doing this tutorial, with particular focus on any topics you found most challenging.</p>
+</section>
+<section id="zero-inflation" class="level2" data-number="31.3">
+<h2 data-number="31.3" class="anchored" data-anchor-id="zero-inflation"><span class="header-section-number">31.3</span> Zero-Inflation</h2>
+<p>Zero-inflated data are count data that:</p>
+<ul>
+<li>Have a lot of zeros; <strong>and</strong></li>
+<li>It may not be appropriate to explain the extra zeros via a model for count data with overdispersion (NB or quasi-Poisson) because:
+<ul>
+<li>There is too much overdispersion to account for this way <em>and / or</em></li>
+<li>The zeros in the data are of two classes: <em>true</em> zeros (definite absence) and <em>other</em> zeros (might have been a positive count but just happened to be a 0 this time).</li>
+</ul></li>
+</ul>
+</section>
+<section id="reference-material" class="level2" data-number="31.4">
+<h2 data-number="31.4" class="anchored" data-anchor-id="reference-material"><span class="header-section-number">31.4</span> Reference material</h2>
+<p>On the topic of zero-inflated data (as on many other topics), your book is …terse! I have several copies of \url<a href="https://highstat.com/index.php/mixed-effects-models-and-extensions-in-ecology-with-r">Mixed models and extensions for ecology in R</a> if you want to borrow – You may want to check out Chapter 11 in that book for a more detailed treatment of the topic.</p>
+</section>
+<section id="data-for-example" class="level2" data-number="31.5">
+<h2 data-number="31.5" class="anchored" data-anchor-id="data-for-example"><span class="header-section-number">31.5</span> Data for Example</h2>
+<p>Some state wildlife biologists want to model how many fish are being caught by people fishing at a state park. Visitors are asked how long they stayed, how many people were in the group, were there children in the group and how many fish were caught. Some visitors do not fish, but there is (alas) no data on whether a person fished or not. Some visitors who did fish did not catch any fish. There are a lot of zero counts of “fish caught” in the data because of both the people that did not fish, and those who failed to catch anything.</p>
+<p>We have data on 250 groups that went to a park. Each group was questioned about how many fish they caught (<code>count</code>), how many children were in the group (<code>child</code>), how many people were in the group (<code>persons</code>), and whether or not they brought a camper to the park (<code>camper</code>). There are also variables <code>xb</code> and <code>zg</code> which are an utter mystery (I have no idea what they are measuring and no access to further documentation… sorry!).</p>
+<p>In addition to predicting the number of fish caught, there is interest in predicting the existence of excess zeros, i.e., the probability that a group caught zero fish. We will use the variables <code>child</code>, <code>persons</code>, and <code>camper</code> in our model.</p>
+<p>Let’s look at the data and do a little bit of wrangling to make categorical variables clearly categorical (instead of coded numerically) and to make categorical versions of some count variables (like the number of children).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fishing_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://stats.idre.ucla.edu/stat/data/fish.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(fishing_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 250
+Columns: 8
+$ nofish   &lt;int&gt; 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0…
+$ livebait &lt;int&gt; 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1…
+$ camper   &lt;int&gt; 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0…
+$ persons  &lt;int&gt; 1, 1, 1, 2, 1, 4, 3, 4, 3, 1, 4, 3, 3, 3, 1, 1, 4, 3, 2, 3, 4…
+$ child    &lt;int&gt; 0, 0, 0, 1, 0, 2, 1, 3, 2, 0, 1, 2, 0, 0, 0, 0, 1, 2, 1, 1, 1…
+$ xb       &lt;dbl&gt; -0.89631456, -0.55834496, -0.40173101, -0.95629811, 0.4368909…
+$ zg       &lt;dbl&gt; 3.050404787, 1.746148944, 0.279938877, -0.601525664, 0.527709…
+$ count    &lt;int&gt; 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 2, 0, 1, 0, 0, 1, 0, 1…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fishing_data <span class="ot">&lt;-</span> fishing_data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">nofish =</span> <span class="fu">factor</span>(nofish),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">livebait=</span><span class="fu">factor</span>(livebait),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">livebait =</span> <span class="fu">ifelse</span>(livebait <span class="sc">==</span> <span class="dv">0</span>, <span class="st">'No'</span>, <span class="st">'Yes'</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">camper=</span><span class="fu">factor</span>(camper),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">camper =</span> <span class="fu">ifelse</span>(camper <span class="sc">==</span> <span class="dv">0</span>, <span class="st">'No'</span>, <span class="st">'Yes'</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">child_cat =</span> <span class="fu">factor</span>(child))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(fishing_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 250
+Columns: 9
+$ nofish    &lt;fct&gt; 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, …
+$ livebait  &lt;chr&gt; "No", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "No",…
+$ camper    &lt;chr&gt; "No", "Yes", "No", "Yes", "No", "Yes", "No", "No", "Yes", "Y…
+$ persons   &lt;int&gt; 1, 1, 1, 2, 1, 4, 3, 4, 3, 1, 4, 3, 3, 3, 1, 1, 4, 3, 2, 3, …
+$ child     &lt;int&gt; 0, 0, 0, 1, 0, 2, 1, 3, 2, 0, 1, 2, 0, 0, 0, 0, 1, 2, 1, 1, …
+$ xb        &lt;dbl&gt; -0.89631456, -0.55834496, -0.40173101, -0.95629811, 0.436890…
+$ zg        &lt;dbl&gt; 3.050404787, 1.746148944, 0.279938877, -0.601525664, 0.52770…
+$ count     &lt;int&gt; 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 2, 0, 1, 0, 0, 1, 0, …
+$ child_cat &lt;fct&gt; 0, 0, 0, 1, 0, 2, 1, 3, 2, 0, 1, 2, 0, 0, 0, 0, 1, 2, 1, 1, …</code></pre>
+</div>
+</div>
+</section>
+<section id="data-exploration" class="level2" data-number="31.6">
+<h2 data-number="31.6" class="anchored" data-anchor-id="data-exploration"><span class="header-section-number">31.6</span> Data Exploration</h2>
+<p>Since we’re using this example to learn about zero-inflated models rather than to make formal inferences, some initial exploration to get a sense of what the data look like is OK even in the absence of a formal model plan.</p>
+<p>Consider these ideas, and try some of your own to improve on them…</p>
+<div class="cell" data-layout-align="center" data-exercise="eda">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImVkYSJ9LCJjb2RlIjoiXG5nZl9oaXN0b2dyYW0ofmNvdW50LCBkYXRhID0gZmlzaGluZ19kYXRhKSB8PlxuICBnZl9sYWJzKHk9J051bWJlciBvZiBPYnNlcnZhdGlvbnMnLCB4ID0gJ0Zpc2ggQ2F1Z2h0JylcblxuZ2ZfYm94cGxvdChjb3VudCB+ICBjaGlsZF9jYXQsIGRhdGEgPSBmaXNoaW5nX2RhdGEsIG9yaWVudGF0aW9uID0gXCJ4XCIpXG5nZl9ib3hwbG90KGxvZyhjb3VudCkgfiBsaXZlYmFpdCwgZGF0YSA9IGZpc2hpbmdfZGF0YSwgb3JpZW50YXRpb24gPSBcInhcIilcbmdmX2JveHBsb3QobG9nKGNvdW50KSB+IGNhbXBlciwgZGF0YSA9IGZpc2hpbmdfZGF0YSwgb3JpZW50YXRpb24gPSBcInhcIikifQ==
+</script>
+</div>
+</div>
+<p>Another idea would be to plot scatter plots of <code>log(response)</code> as a function of possible predictors, to look for possible associations and pre-check the linearity conditions of the parts of the model.</p>
+<p>This could be a good idea, but on the other hand we don’t have any candidate predictors that are unequivocally numerical. (If we had one, we could plot <code>log(count)</code> as a function of the predictor.)</p>
+</section>
+<section id="overall-goal" class="level2" data-number="31.7">
+<h2 data-number="31.7" class="anchored" data-anchor-id="overall-goal"><span class="header-section-number">31.7</span> Overall Goal</h2>
+<p>What’s the point of these new models?</p>
+<p>We envision a scenario where we have a count response, but with <em>lots</em> of zero counts. You might even say an <em>inflated</em> number of zeroes present in the response variable…</p>
+<p>And (the way we’ll conceptualize it), it’s not <em>just</em> that there are “a lot” of zeros.</p>
+<p>It’s also that there is a certain class of cases (here: the people who came to the park <em>not</em> to fish) that are “true zeros,” that is, by definition and for sure they will have a count of 0 (fish caught, or whatever it is you are counting).</p>
+<p>Here are some other examples of “true zeros” in count data…can you think of more? (If you have a fun one, email it to your prof for a touch of extra credit!)</p>
+<ul>
+<li>Number of cigarettes smoked per day; people who never smoke are true zeros (similarly, number of cups of coffee drunk per day, etc.)</li>
+<li>Number of babies birthed; people who don’t have a uterus are true zeros</li>
+<li>Number of courses taken per semester; people not enrolled in a school are true zeros</li>
+</ul>
+<p>(For each of these, you might ask: <em>Why use a fancy model to separate true zeros like this?</em> Why not just collect data on whether a person is a true zero by, for example, asking a survey question like “Do you ever smoke?” Before asking “How many per day?” That’s a very smart question. If you can simply collect the data on which are true zeros…MUCH BETTER, do it!)</p>
+</section>
+<section id="fitting-models" class="level2" data-number="31.8">
+<h2 data-number="31.8" class="anchored" data-anchor-id="fitting-models"><span class="header-section-number">31.8</span> Fitting models</h2>
+<section id="poisson" class="level3">
+<h3 class="anchored" data-anchor-id="poisson">Poisson</h3>
+<p>A Poisson model is not likely to work well - so much so that when modeling count data, we often just begin with a negative binomial model instead, anticipating that overdispersion will be present and it will be worth estimating that one extra parameter to account for it!</p>
+<p>Same will be true here.</p>
+<p>But we can still fit the Poisson model as an exercise, to see <em>how much</em> better the <em>other</em> options will be in comparison!</p>
+<div class="cell" data-layout-align="center" data-exercise="poisson">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InBvaXNzb24ifSwiY29kZSI6IlAgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucyxcbiAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSxcbiAgICAgICAgICAgICAgZmFtaWx5ID0gcG9pc3NvbihsaW5rID0gJ2xvZycpKSJ9
+</script>
+</div>
+</div>
+</section>
+<section id="zero-inflated-poisson" class="level3">
+<h3 class="anchored" data-anchor-id="zero-inflated-poisson">Zero-inflated Poisson</h3>
+<p>We can also now fit a Poisson regression model <em>plus</em> zero inflation.</p>
+<p>We saw earlier, though, that real count data is often overdispersed and poorly modeled by a Poisson distribution; today we’ll see that is kind of still the case <em>even if</em> we add zero-inflation to the model.</p>
+<p>Note that the change/addition to the <code>glmmTMB()</code> call is the input <code>ziformula</code>, where we give a second model formula indicating predictors that affect the probability of a count <em>being a true zero.</em></p>
+<div class="cell" data-layout-align="center" data-exercise="zip" data-envir="poisson">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InppcCJ9LCJjb2RlIjoiWklQIDwtIGdsbW1UTUIoY291bnQgfiBjaGlsZCArIGNhbXBlciArIHBlcnNvbnMsXG4gICAgICAgICAgICAgICB6aWZvcm11bGEgPSB+MSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsXG4gICAgICAgICAgICAgICAgZmFtaWx5ID0gcG9pc3NvbihsaW5rID0gJ2xvZycpKSJ9
+</script>
+</div>
+</div>
+<p>The main model formula models the counts of fish caught for the “non-true-zero” cases, while the zero-inflation part of the model models the probability of being a true zero.</p>
+<p>Each of these parts can have predictors (and they can be the same, or different ones!)</p>
+<p>In the model above, what are we saying?</p>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+What do the formulas (the main formula and the ziformula) of the zero-inflated Poisson model we fitted imply?
+<div id="radio_BDQXOAKNHU" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BDQXOAKNHU" value=""> <span>The number of fish caught by those at the park to fish depends on the number of children in their group, whether they are camping, and the number of people in the group. The probability that any particular group is actually NOT there to fish also depends on the same three predictors.</span></label><label><input type="radio" autocomplete="off" name="radio_BDQXOAKNHU" value=""> <span>The number of fish caught by those at the park to fish depends on the number of children in their group, whether they are camping, and the number of people in the group. The probability that any particular group is actually there to fish is defined to be 1 in this model (so there is not actually any zero inflation).</span></label><label><input type="radio" autocomplete="off" name="radio_BDQXOAKNHU" value=""> <span>The probability that any particular group is actually NOT there to fish depends on the number of children in their group, whether they are camping, and the number of people in the group. There is also some expected number of fish caught by each group that is at the park to fish, but it doesn't depend on any predictors.</span></label><label><input type="radio" autocomplete="off" name="radio_BDQXOAKNHU" value="answer"> <span>The number of fish caught by those at the park to fish depends on the number of children in their group, whether they are camping, and the number of people in the group. There is some probability (that we will estimate) that any particular group is actually NOT there to fish, but it doesn't depend on any predictors.</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for an explanation of the answer above.
+</button>
+<p>The main model formula includes several predictors.</p>
+<p>The <code>ziformula</code> – the zero-inflation formula – is just <code>~1</code>, meaning there is an intercept (there is some overall probability of “being a true zero”). But, the zero-inflation formula doesn’t include any predictors.</p>
+</div>
+</section>
+</section>
+<section id="zi-model-summary" class="level2" data-number="31.9">
+<h2 data-number="31.9" class="anchored" data-anchor-id="zi-model-summary"><span class="header-section-number">31.9</span> ZI Model Summary</h2>
+<p>What does the model summary look like for this kind of model?</p>
+<div class="cell" data-layout-align="center" data-exercise="zip-summary" data-envir="poisson">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InppcC1zdW1tYXJ5In0sImNvZGUiOiJzdW1tYXJ5KFpJUCkifQ==
+</script>
+</div>
+</div>
+<p>Notice there are <strong>two coefficient tables</strong> for this model!</p>
+<p>The <em>first one</em> is for the count part of the model (the “regular” formula), which models the fish caught by groups there to fish (non-true-zeros; the count model is conditional on / given that the group is “there to fish” and thus <em>not</em> a true zero = not there to fish at all and thus guaranteed to catch nothing).</p>
+<p>The <em>second one</em> is for the zero-inflation part of the model (the <code>ziformula</code> part), which models the probability of being a true zero (using a logistic regression – here, with no predictors, so only an intercept…but we could add predictors if we wanted; we’d have a formula like <code>ziformula = ~ predictor1 + predictor2 +...</code> instead of <code>ziformula = ~1</code>.)</p>
+<p>So we have a count regression AND a binary regression all rolled up together into one model! Cool.</p>
+<p><em>You might ask if it would make sense to fit the two models separately. There is a class of models that does this - they are called “hurdle models.” First, they model the probability of being “not zero” with a binary model. But then, the resulting count model has to use a special version of the Poisson or NB distribution that is zero-truncated (because the zero counts are already excluded). A nice bit about doing it the zero-inflation way is that it’s possible to estimate which (or at least which proportion) of the data zero counts are “true” zeros vs.&nbsp;observed zeros.</em></p>
+</section>
+<section id="zero-inflated-negative-binomial" class="level2" data-number="31.10">
+<h2 data-number="31.10" class="anchored" data-anchor-id="zero-inflated-negative-binomial"><span class="header-section-number">31.10</span> Zero-inflated negative binomial</h2>
+<p>We’ve often found that accounting for overdispersion by using a NB rather than Poisson distribution often leads to model conditions being better met (and thus also models better fitting real data).</p>
+<p>Can we still use negative binomial models and add zero inflation?</p>
+<p><strong>Sure, we can!</strong></p>
+<p>The code is just like we saw for the ZIP model, but with a different <code>family</code>…</p>
+<div class="cell" data-layout-align="center" data-exercise="zinb" data-envir="poisson">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InppbmIifSwiY29kZSI6IlxuWklOQjEgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICAgIHppZm9ybXVsYSA9IH4xLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IGZpc2hpbmdfZGF0YSwgXG4gICAgICAgICAgICAgICAgIGZhbWlseSA9IG5iaW5vbTEobGluayA9ICdsb2cnKSlcbnN1bW1hcnkoWklOQjEpXG5cblpJTkIyIDwtIGdsbW1UTUIoY291bnQgfiBjaGlsZCArIGNhbXBlciArIHBlcnNvbnMsIFxuICAgICAgICAgICAgICAgICB6aWZvcm11bGEgPSB+MSwgXG4gICAgICAgICAgICAgICAgIGRhdGEgPSBmaXNoaW5nX2RhdGEsIFxuICAgICAgICAgICAgICAgICBmYW1pbHkgPSBuYmlub20yKGxpbmsgPSAnbG9nJykpXG5cbnN1bW1hcnkoWklOQjIpIn0=
+</script>
+</div>
+</div>
+<p>Note again that <code>glmmTMB</code> uses a separate input, <code>ziformula</code>, to add zero inflation to a <code>glmmTMB()</code> model. (The default is no zero inflation, if you do not include a <code>ziformula</code>). The zero-inflation model always uses a logit link.</p>
+<p>Here, as in the first ZIP model, we haven’t included any predictors in the ZI model; it’s intercept-only.</p>
+<p>If you like, you <em>can</em> include predictors though (feel free to give it a try above); they can be the same ones or different ones than the main count model. To decide, you have to make a model plan to answer the question: “What predictors would influence the chances of a group being a ‘true zero’ and being at the park <em>not</em> to fish?”</p>
+<p>The main count model, on the other hand, should include predictors that would influence the number of fish that would be caught <em>by groups who had come to to park to fish.</em></p>
+<section id="tweedie-model" class="level3">
+<h3 class="anchored" data-anchor-id="tweedie-model">Tweedie Model</h3>
+<p>This is a fun side note…</p>
+<p>Another option for this type of data might be to try a Tweedie model, because it also allows for a probability mass at 0 (in other words, allows for zero inflation).</p>
+<p>The Tweedie distributions we are considering are not exactly perfect for count data since the positive part of the distribution is like a gamma distribution (continuous, not counts), but the shape and support of the distribution are pretty close to our data.</p>
+<p>Let’s try:</p>
+<div class="cell" data-layout-align="center" data-exercise="zit" data-envir="poisson">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InppdCJ9LCJjb2RlIjoiXG5aSVQgPC0gZ2xtbVRNQihjb3VudCB+IGNoaWxkICsgY2FtcGVyICsgcGVyc29ucywgXG4gICAgICAgICAgICAgICBkYXRhID0gZmlzaGluZ19kYXRhLCBcbiAgICAgICAgICAgICAgIGZhbWlseSA9IHR3ZWVkaWUobGluayA9ICdsb2cnKSlcbnN1bW1hcnkoWklUKSJ9
+</script>
+</div>
+</div>
+</section>
+</section>
+<section id="model-assessment" class="level2" data-number="31.11">
+<h2 data-number="31.11" class="anchored" data-anchor-id="model-assessment"><span class="header-section-number">31.11</span> Model Assessment</h2>
+<p>We can do model assessment “like” we do for other count data models, more or less.</p>
+<p>We can check (log) linearity just as we did for count data and binary data.</p>
+<p>We can check the mean-variance condition (and also, to some extent, (log) linearity) using a scaled residuals plot. Interpretation is the same as for count and binary models.</p>
+<p>Finally, we can check for residual independence using an ACF like always.</p>
+<p>There’s no condition related to the distribution the residuals must follow, and no new additional conditions to check.</p>
+<p>It’s suggested you practice assessment here. Choose one model to asses (maybe one we just saw, or you can fit your own and change up the suite of predictors used in each part of the model), then think…What plots are needed? Does the model pass?</p>
+<div class="cell" data-layout-align="center" data-exercise="assess" data-envir="poisson">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImFzc2VzcyJ9LCJjb2RlIjoiIn0=
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="assess">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This is a count (+ binary) model, so we will need to check conditions:</p>
+<ul>
+<li>Linearity (on log scale for counts, or logit scale for P(true zero))</li>
+<li>Independence of residuals</li>
+<li>Mean-variance relationship</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(...) <span class="co"># some sort of linearity check if quant predictors?</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(...) <span class="co"># residual ACF</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plotResiduals</span>(<span class="fu">simulateResiduals</span>(...)) <span class="co"># scaled residual plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Think:</p>
+<ul>
+<li>How will I fill in the …?</li>
+<li>Which <em>condition</em> does each plot check?</li>
+<li>What am I looking for, for the condition to be met?</li>
+<li>What do I see, and so what do I conclude about the condition being met?</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-selection" class="level2" data-number="31.12">
+<h2 data-number="31.12" class="anchored" data-anchor-id="model-selection"><span class="header-section-number">31.12</span> Model Selection</h2>
+<p>One thing to understand is: is the ZIP model a better fit to the data than just a Poisson model? We can think of ZI as a different way of modelling overdispersion, an alternative to NB or quasi-Poisson models when we know there are true zeros in the data set.</p>
+<p>To be able to run the <code>AIC()</code> code below, you will need to fit 3 new models: <code>POIS</code>, <code>NB1</code>, and <code>NB2</code>, which are the same as your <code>ZIP</code>, <code>ZINB1</code>, and <code>ZINB2</code> <em>except</em> that the don’t have any zero-inflation…</p>
+<div class="cell" data-layout-align="center" data-exercise="comparison" data-envir="poisson">
+<div>
+<div id="webr-9" class="exercise-cell">
+
+</div>
+<script type="webr-9-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImNvbXBhcmlzb24ifSwiY29kZSI6IlxuQUlDKFpJUCwgUE9JUywgTkIxLCBOQjIpIn0=
+</script>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="comparison">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Just remove the <code>ziformula</code> input from the models we fit earlier in this tutorial.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>POIS <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(count <span class="sc">~</span> camper <span class="sc">+</span> child <span class="sc">+</span> persons, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> fishing_data,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="fu">poisson</span>(<span class="at">link =</span> <span class="st">'log'</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>NB1 <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(count <span class="sc">~</span> camper <span class="sc">+</span> child <span class="sc">+</span> persons, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> fishing_data,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> <span class="fu">nbinom1</span>(<span class="at">link =</span> <span class="st">'log'</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>NB2 <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(count <span class="sc">~</span> camper <span class="sc">+</span> child <span class="sc">+</span> persons, </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> fishing_data,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> <span class="fu">nbinom2</span>(<span class="at">link =</span> <span class="st">'log'</span>))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(ZIP, POIS, NB1, NB2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Well, yes, the ZIP model is much better than the Poisson! But, the NB1 and NB2 models are <em>much</em> better than both.</p>
+<p>Among <em>all</em> the different families and types of models that we have learned and tried, which seems to be best for this data set?</p>
+<div class="cell" data-layout-align="center" data-exercise="compare-all" data-envir="poisson">
+<div>
+<div id="webr-10" class="exercise-cell">
+
+</div>
+<script type="webr-10-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImNvbXBhcmUtYWxsIn0sImNvZGUiOiJcbiMgY2hvb3NlIHlvdXIgb3duIGluZm9ybWF0aW9uIGNyaXRlcmlvbjogQUlDIG9yIEJJQy4uLlxuX0lDKFBPSVMsIFpJUCwgTkIxLCBOQjIsIFpJTkIxLCBaSU5CMiwgWklUKSJ9
+</script>
+</div>
+</div>
+<p>For these data, the zero-inflated models are very similar to the other NB models, in terms of the AIC.</p>
+<p>If we used BIC instead, the non-zero inflated models would even look quite a bit <em>better</em>! (Go ahead and try it above…)</p>
+<p><strong>The improvement in goodness of fit with the zero-inflation is not really enough to make us prefer these ZI models to simpler models that also allow overdispersion, like the NB models. This is common in real data, in my experience.</strong></p>
+</section>
+<section id="nb-vs-zi" class="level2" data-number="31.13">
+<h2 data-number="31.13" class="anchored" data-anchor-id="nb-vs-zi"><span class="header-section-number">31.13</span> NB vs ZI?</h2>
+<p>The NB models and the ZI models (with whatever “family” you choose) are two <em>different</em> ways of dealing with overdispersion caused by an abundance of zeros in the data. I’d recommend choosing ZI models <em>only</em> if:</p>
+<ul>
+<li>There are <em>true zeros</em> and <em>other zeros</em> in your data, and you want to model this explicitly; or if</li>
+<li>The ZI models fit the data much better than a simpler non-ZI NB (or perhaps Tweedie) model.</li>
+</ul>
+<p>For our dataset, the zero-inflated negative binomial models seem to be best, among the ZI models. However, there is still a lot more work and thinking that could be done here! That is part of the reason this is a supplemental topic – the model planning and interpretation can get very complex and thinking through the context of your problem with expert help is pretty crucial since there are so many options in play. For example…</p>
+<section id="zero-inflation-covariates" class="level3">
+<h3 class="anchored" data-anchor-id="zero-inflation-covariates">Zero inflation covariates</h3>
+<p>What if the Logistic regression part of the model <em>also</em> depends on covariates? That seems reasonable – maybe the number of people present, whether they are camping, and the number of kids present would help you to predict whether a group was going to go fishing at all.</p>
+<p>To check that, we would need to change the <code>ziformula</code>. It is possible this change <strong>might</strong> make the ZI models competitive with, or better than, the non-ZI NB models in IC terms.</p>
+<p>But then, we’d need to check some version of the <span class="math inline">\(\frac{m}{15}\)</span> rule to make sure we have enough data to estimate all the needed parameters…and that’s not totally straightforward, since we are not sure which are true zeros.</p>
+</section>
+<section id="interaction-terms" class="level3">
+<h3 class="anchored" data-anchor-id="interaction-terms">Interaction terms</h3>
+<p>For this dataset, it may also make sense to consider some more predictors, and interaction terms. For example, maybe live bait use is a good predictor, and maybe the relationship between live bait use and number of fish caught changes depending on the number of children present.</p>
+<p>For example, we might try something like:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ZINB1b <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(count <span class="sc">~</span> camper <span class="sc">+</span> child<span class="sc">*</span>livebait <span class="sc">+</span> persons, </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ziformula=</span> <span class="sc">~</span><span class="dv">1</span>, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> fishing_data, <span class="at">family =</span> <span class="fu">nbinom1</span>(<span class="at">link =</span> <span class="st">'log'</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ZINB1b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: nbinom1  ( log )
+Formula:          count ~ camper + child * livebait + persons
+Zero inflation:         ~1
+Data: fishing_data
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+    818.0     846.2    -401.0     802.0       242 
+
+
+Dispersion parameter for nbinom1 family (): 8.47 
+
+Conditional model:
+                   Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)       -1.648964   0.457499  -3.604 0.000313 ***
+camperYes          0.649637   0.191185   3.398 0.000679 ***
+child             -1.469266   0.643409  -2.284 0.022397 *  
+livebaitYes        0.900232   0.352927   2.551 0.010749 *  
+persons            0.790689   0.082140   9.626  &lt; 2e-16 ***
+child:livebaitYes -0.008494   0.663504  -0.013 0.989786    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Zero-inflation model:
+            Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept)   -19.73    4306.92  -0.005    0.996</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(ZINB1, ZINB1b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       df      AIC
+ZINB1   6 823.6926
+ZINB1b  8 817.9976</code></pre>
+</div>
+</div>
+<p>Hmmm…it looks like we made an improvement. But do you think the improvement is because of the interaction term?</p>
+<p>Looking at the p-values, we might suspect that while <code>livebait</code> helps predict fish caught, there isn’t a clear interaction between effects of live bait use and the number of kids present.</p>
+<p>In this case, it is hard to fathom all the model selection options because there can be predictors (and interactions) in <em>both parts</em> of the model.</p>
+<p><strong>Starting with a causal diagram with separate ‘bubbles’ for</strong> <em>true zeroes</em> <strong>as well as for</strong> <em>expected counts for non-true-zeros</em> <strong>will help organize your thinking</strong>! Consider also the size of the dataset - combining the count-data (n/15) and binary data (m/15) rules of thumb.</p>
+</section>
+<section id="interaction-note" class="level3">
+<h3 class="anchored" data-anchor-id="interaction-note">Interaction Note!</h3>
+<p>However you plan your model (and do selection on it), one thing to remember is: You can <strong>never</strong> include an interaction term in a model without also including the corresponding “main effect” term. For example, you <em>can not</em> have an interaction between <code>child</code> and <code>livebait</code> without also having both <code>child</code> and <code>livebait</code> as individual predictors in the model. (In fact, I have intentionally not taught you how to fit the “wrong” model…as long as you use the <code>*</code> to specify an interaction in your model formula, you should be fine! <em>Do not use <code>:</code> in your R model formulas or you may run into trouble!</em>)</p>
+</section>
+</section>
+<section id="prediction-plots" class="level2" data-number="31.14">
+<h2 data-number="31.14" class="anchored" data-anchor-id="prediction-plots"><span class="header-section-number">31.14</span> Prediction Plots</h2>
+<p>We can also use prediction plots as usual for ZI models. Here, they will help us clarify what “success” is in the logistic regression part of the model – according to the help file for the <code>zeroinfl()</code> function, and for <code>glmmTMB()</code> too, we should be able to see that a “success” is to be a “true zero”.</p>
+<p>Let’s try an example - making prediction plots for our ZINB2 model for different numbers of persons in the group. (This wasn’t the <em>best</em> fitting option but was the best of the ZI models we tried…)</p>
+<p>Before showing the plot, we can omit the <code>|&gt; plot()</code> part to figure out at what values the “other predictors not shown” have been held fixed. That’s important to state in your interpretation of any prediction plot…</p>
+<div class="cell" data-layout-align="center" data-exercise="pred-plot-prep" data-envir="poisson">
+<div>
+<div id="webr-11" class="exercise-cell">
+
+</div>
+<script type="webr-11-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InByZWQtcGxvdC1wcmVwIn0sImNvZGUiOiJwcmVkaWN0X3Jlc3BvbnNlKFpJTkIyLCAncGVyc29ucycpIn0=
+</script>
+</div>
+</div>
+<p>So here, predictions are “adjusted for” (aka “holding constant at”) 0 children and “Yes” camper.</p>
+<p>Now, the graph:</p>
+<div class="cell" data-layout-align="center" data-exercise="pred-plot" data-envir="poisson">
+<div>
+<div id="webr-12" class="exercise-cell">
+
+</div>
+<script type="webr-12-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InByZWQtcGxvdCJ9LCJjb2RlIjoicHJlZGljdF9yZXNwb25zZShaSU5CMiwgJ3BlcnNvbnMnKSB8PlxuICBwbG90KCkgfD5cbiAgZ2ZfbGFicyh4ID0gXCJQZW9wbGUgaW4gR3JvdXBcIiwgXG4gICAgICAgICAgeSA9IFwiRXhwZWN0ZWQgRmlzaCBDYXVnaHRcIiwgXG4gICAgICAgICAgdGl0bGUgPSAnJykifQ==
+</script>
+</div>
+</div>
+<p>The number of fish caught goes <em>up</em> as the number of people in the group goes up.</p>
+<p>But how is the plot above dealing with the zero-inflation part of the model?</p>
+<p>In fact…it’s not. This is <em>just</em> showing the “count” part of the model. That’s the default.</p>
+<p>But we <em>can</em> add the input <code>type = 'zi_prob</code> to instead “see” the zero-inflation part of the model.</p>
+<div class="cell" data-layout-align="center" data-exercise="pred-plot-zi" data-envir="poisson">
+<div>
+<div id="webr-13" class="exercise-cell">
+
+</div>
+<script type="webr-13-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InBvaXNzb24iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InByZWQtcGxvdC16aSJ9LCJjb2RlIjoicHJlZGljdF9yZXNwb25zZShaSU5CMiwgJ3BlcnNvbnMnLFxuICAgICAgICAgIHR5cGUgPSAnemlfcHJvYicpIHw+XG4gIHBsb3QoKSB8PlxuICBnZl9sYWJzKHggPSBcIlBlb3BsZSBpbiBHcm91cFwiLCB5ID0gXCJFeHBlY3RlZCBGaXNoIENhdWdodFwiLCB0aXRsZSA9ICcnKSJ9
+</script>
+</div>
+</div>
+<p>Does this make sense?!? Looks strange…</p>
+<p>But, yes, it does. This is a prediction plot to show how the probability of being-at-the-park-to-NOT-fish depends on group size (<code>persons</code>).</p>
+<p>But in our model, the ZI part of the model had <em>no</em> predictors, so we said that probability <em>didn’t</em> actually depend at all on <code>persons</code>! So, the flat line makes sense.</p>
+<p>The model is further telling us that (despite VERY high uncertainty) our best guess is that the probability of a true zero is very small.</p>
+</section>
+<section id="beta" class="level2" data-number="31.15">
+<h2 data-number="31.15" class="anchored" data-anchor-id="beta"><span class="header-section-number">31.15</span> Beta?</h2>
+<p>We have seen a <em>lot</em> of cases where the NB models outperform Poisson ones because of overdispersion, that is, problems with the mean-variance condition for Poisson models because the variance of the data is larger than the model expects. That’s for count data.</p>
+<p>But what about overdispersion in binary regression models, too? Does it ever happen, and if so how do we deal with <em>that</em>?</p>
+<p>The answer is that it’s a lot more rare…I’ve only really found one clear example. But still - please stay tuned for a later module on Beta regression as an approach to deal with that (rare) issue, as well as a useful tool for modeling proportion data!</p>
+</section>
+<section id="acknowledgements" class="level2" data-number="31.16">
+<h2 data-number="31.16" class="anchored" data-anchor-id="acknowledgements"><span class="header-section-number">31.16</span> Acknowledgements</h2>
+<p>Many thanks to: <a href="https://stats.oarc.ucla.edu/other/dae/" class="uri">https://stats.oarc.ucla.edu/other/dae/</a>, a source of the data set and some resources used in preparing these notes.</p>
+
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImRwbHlyIiwidGlkeXIiLCJyZWFkciIsInN0cmluZ3IiLCJnZ3Bsb3QyIiwiZ2dmb3JtdWxhIiwibW9zYWljIiwiY2FyIiwiREhBUk1hIl0sInJlcG9zIjpbXX0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEzID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0xMy1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzEzID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMywge30pO1xuX3dlYnJfZmVlZGJhY2tfMTMgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzEzLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0xMi1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzEyID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMiwge30pO1xuX3dlYnJfZmVlZGJhY2tfMTIgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzEyLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzExID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0xMS1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzExID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMSwge30pO1xuX3dlYnJfZmVlZGJhY2tfMTEgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzExLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0xMC1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzEwID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMCwge30pO1xuX3dlYnJfZmVlZGJhY2tfMTAgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzEwLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC05IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV85O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzkgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici05LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItOS1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzkgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzksIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzkgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzkuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTgiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici04IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfOCA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici04LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfOCwge30pO1xuX3dlYnJfZmVlZGJhY2tfOCA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfOC5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNztcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTciLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl83ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTctY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV83ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl83LCB7fSk7XG5fd2Vicl9mZWVkYmFja183ID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV83LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItNi1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzYgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzYsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzYuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici01IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNSA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici01LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNSwge30pO1xuX3dlYnJfZmVlZGJhY2tfNSA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfNS5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTQiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl80ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTQtY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV80ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl80LCB7fSk7XG5fd2Vicl9mZWVkYmFja180ID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV80LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItMy1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzMgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzMsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzMuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMiA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0yLWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMiwge30pO1xuX3dlYnJfZmVlZGJhY2tfMiA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfMi5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici1wcmVsdWRlIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoid2ViUk9qcyA9IHtcbiAgY29uc3QgeyBXZWJSLCBDaGFubmVsVHlwZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZS5XZWJSO1xuICBjb25zdCB7XG4gICAgV2ViUkV2YWx1YXRvcixcbiAgICBXZWJSRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoXG4gIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHN0YXR1c0NvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1zdGF0dXNcIik7XG4gIGNvbnN0IGluZGljYXRvckNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGluZGljYXRvckNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKFwiZC1ub25lXCIpO1xuXG4gIGxldCBzdGF0dXNUZXh0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICBzdGF0dXNUZXh0LmNsYXNzTGlzdCA9IFwiZXhlcmNpc2UtbG9hZGluZy1kZXRhaWxzXCI7XG4gIHN0YXR1c1RleHQgPSBzdGF0dXNDb250YWluZXIuYXBwZW5kQ2hpbGQoc3RhdHVzVGV4dCk7XG4gIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5pdGlhbGlzZWA7XG5cbiAgLy8gSG9pc3QgaW5kaWNhdG9yIG91dCBmcm9tIGZpbmFsIHNsaWRlIHdoZW4gcnVubmluZyB1bmRlciByZXZlYWxcbiAgY29uc3QgcmV2ZWFsU3RhdHVzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgLmV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpZiAocmV2ZWFsU3RhdHVzKSB7XG4gICAgcmV2ZWFsU3RhdHVzLnJlbW92ZSgpO1xuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsID4gLnNsaWRlc1wiKS5hcHBlbmRDaGlsZChyZXZlYWxTdGF0dXMpO1xuICB9XG5cbiAgLy8gTWFrZSBhbnkgcmV2ZWFsIHNsaWRlcyB3aXRoIGxpdmUgY2VsbHMgc2Nyb2xsYWJsZVxuICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFwiLnJldmVhbCAuZXhlcmNpc2UtY2VsbFwiKS5mb3JFYWNoKChlbCkgPT4ge1xuICAgIGVsLmNsb3Nlc3QoJ3NlY3Rpb24uc2xpZGUnKS5jbGFzc0xpc3QuYWRkKFwic2Nyb2xsYWJsZVwiKTtcbiAgfSlcblxuICAvLyB3ZWJSIHN1cHBsZW1lbnRhbCBkYXRhIGFuZCBvcHRpb25zXG4gIGNvbnN0IGRhdGFDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItZGF0YVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwidmZzLWZpbGVcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBmaWxlcyA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGZpbGVzQ29udGVudCkpO1xuXG4gIC8vIFVzZSBQb3N0TWVzc2FnZSBjaGFubmVsIGZvciBhc3luYyBjb21tdW5pY2F0aW9uXG4gIC8vIFdlIGRvIG5vdCBleHBlY3QgdG8gdGFrZSBuZXN0ZWQgcHJvbXB0IGlucHV0IGluIFF1YXJ0byBMaXZlIGNlbGxzXG4gIGRhdGEub3B0aW9ucy5jaGFubmVsVHlwZSA9IENoYW5uZWxUeXBlLlBvc3RNZXNzYWdlO1xuXG4gIC8vIEluaXRpYWxpc2Ugd2ViUiBhbmQgc2V0dXAgZm9yIFIgY29kZSBldmFsdWF0aW9uXG4gIGxldCB3ZWJSUHJvbWlzZSA9IChhc3luYyAod2ViUikgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICAvLyBJbnN0YWxsIHByb3ZpZGVkIGxpc3Qgb2YgcGFja2FnZXNcbiAgICAvLyBFbnN1cmUgd2ViUiBkZWZhdWx0IHJlcG8gaXMgaW5jbHVkZWRcbiAgICBkYXRhLnBhY2thZ2VzLnJlcG9zLnB1c2goXCJodHRwczovL3JlcG8uci13YXNtLm9yZ1wiKVxuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBcbiAgICAgICAgd2Vicjo6aW5zdGFsbChwa2csIHJlcG9zID0gcmVwb3MpXG4gICAgICAgIGxpYnJhcnkocGtnLCBjaGFyYWN0ZXIub25seSA9IFRSVUUpXG4gICAgICBgLCB7IGVudjoge1xuICAgICAgICBwa2c6IHBrZyxcbiAgICAgICAgcmVwb3M6IGRhdGEucGFja2FnZXMucmVwb3MsXG4gICAgICB9fSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgY29uc3QgYW5hbHlzaXMgPSBhd2FpdCB3ZWJSLkZTLmFuYWx5emVQYXRoKHBhdGgpO1xuICAgICAgICBpZiAoIWFuYWx5c2lzLmV4aXN0cykge1xuICAgICAgICAgIHRyeSB7XG4gICAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvcjogXCIke2UubWVzc2FnZX1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9KShuZXcgV2ViUihkYXRhLm9wdGlvbnMpKTtcblxuICAvLyBLZWVwIHRyYWNrIG9mIGluaXRpYWwgT0pTIGJsb2NrIHJlbmRlclxuICBjb25zdCByZW5kZXJlZE9qcyA9IHt9O1xuXG4gIGNvbnN0IHByb2Nlc3MgPSBhc3luYyAoY29udGV4dCwgaW5wdXRzKSA9PiB7XG4gICAgY29uc3Qgd2ViUiA9IGF3YWl0IHdlYlJQcm9taXNlO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICB3ZWJSUHJvbWlzZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiJ9XX0=
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
+</script>
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./binary-regression-2.html" class="pagination-link" aria-label="Binary Regression *Another Way*: Multiple Trials Per Row">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="./cclicense.html">
+<p>License</p>
+</a>
+  </li>  
+</ul>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/zi-od.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
