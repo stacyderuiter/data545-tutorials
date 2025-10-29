@@ -1,0 +1,538 @@
+---
+live-html:
+resources:
+  - data
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - readr
+    - readxl
+    - stringr
+    - ggplot2
+    - ggformula
+    - mosaic
+    - car
+    - DHARMa
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Models for data bounded between 0 and 1
+
+```{r setup, include=FALSE}
+library(webexercises)
+library(tidyverse)
+library(glmmTMB)
+library(ggformula)
+library(ggeffects)
+library(readxl)
+library(DHARMa)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+hiv_memory_naive <- read_excel('data/1D-Memory Naive.xlsx') |>
+  mutate(InfRateProp = InfRates / 100,
+         InfRateProp = InfRateProp + 1e-10,
+         CellType = factor(CellType),
+         CellType = fct_relevel(CellType, 'Resting'))
+
+beta_model <- glmmTMB(InfRateProp ~ CellType + MorN + Donor ,
+               family = beta_family(link = 'logit'),
+               data = hiv_memory_naive)
+
+hiv_memory_naive2 <- hiv_memory_naive |>
+  group_by(Donor, CellType, MorN) |>
+  summarise(MeanInfRateProp = mean(InfRateProp), .groups = 'drop')
+
+beta_model2 <- glmmTMB(MeanInfRateProp ~ CellType + MorN + Donor ,
+               family = beta_family(link = 'logit'),
+               data = hiv_memory_naive2)
+
+bridges <- read.csv("data/bridges.csv")
+```
+
+```{webr}
+#| setup: true
+#| include: false
+#| exercise:
+#|   - figure-1d
+#|   - hiv-lm
+#|   - bridge-ex
+#|   - beta-model
+#|   - scaled-res
+#|   - beta-acf
+#|   - averaged-beta
+#|   - anova-prac
+
+
+library(tidyverse)
+library(glmmTMB)
+library(ggformula)
+library(ggeffects)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+hiv_memory_naive <- read_excel('data/1D-Memory Naive.xlsx') |>
+  mutate(InfRateProp = InfRates / 100,
+         InfRateProp = InfRateProp + 1e-10,
+         CellType = factor(CellType),
+         CellType = fct_relevel(CellType, 'Resting'))
+
+beta_model <- glmmTMB(InfRateProp ~ CellType + MorN + Donor ,
+               family = beta_family(link = 'logit'),
+               data = hiv_memory_naive)
+
+hiv_memory_naive2 <- hiv_memory_naive |>
+  group_by(Donor, CellType, MorN) |>
+  summarise(MeanInfRateProp = mean(InfRateProp), .groups = 'drop')
+
+beta_model2 <- glmmTMB(MeanInfRateProp ~ CellType + MorN + Donor ,
+               family = beta_family(link = 'logit'),
+               data = hiv_memory_naive2)
+
+bridges <- read.csv("data/bridges.csv")
+```
+
+## Section Learning Outcomes
+
+We've already considered a pretty diverse set of types of response variables, but there are still more out there! 
+
+This section, we will explore one of those: double-bounded data, which often arises when the measurement of interest is a proportion (which must be between 0-1) and it cannot - either conceptually or practically - be treated a binary. 
+
+Usually, that means that the number of "trials" is either undefined or unknown. 
+
+For this kind of response variable, we can consider a beta regression model. They are becoming more and more common in the literature recently, as both frequentist and Bayesian tools to fit them have become more available and user-friendly. 
+
+By the end of the module you will:
+
+1) Outline the mathematical adjustments needed to go from multiple linear regression to beta regression
+2) Compare and contrast binary regression (with and without overdispersion) and beta regression 
+3) Fit, assess, and interpret beta GLMs in R 
+
+## Text Reference
+Recommended reading for the materials covered in this tutorial can be found in:
+
+- [Geissinger *et al.* 2022](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.3940){target="_blank"}
+- [Douma & Weedon 2019](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13234){target="_blank"}
+
+It's suggested that you consider consulting these papers *after* doing this tutorial, with particular focus on any topics you found most challenging.
+
+## Data bounded 0-1
+
+We've already considered several response variable types:
+
+- Continuous, quantitative data
+- Count data
+- Binary data (one- or multiple-trials-per-row)
+
+What else is left?  Well, what about continuous data that are bounded between 0-1 (or alternatively, data that have both an upper and a lower bound on their possible values), but that *cannot* be considered to be measuring the proportion of successes in a set of binary trials?  That's our topic this module!
+
+### Examples
+
+Examples of data bounded between 0-1 are surprisingly common. Notice also that any continuous quantity that has both upper and lower bounds on its possible values *can* be transformed to be between 0-1 -- some examples of that are on the list below, too. 
+
+Here are a few examples:
+
+- Scores on an exam, measured as a proportion between 0-1
+- Batting averages of baseball players
+- Interest rates
+- Rank of individual contestants on *Survivor*, measured as a quantile (if you were best on your season, your rank would be 1, and if you were worst, then 0)
+- Hours of sleep per 24 hours, computed as $\frac{(\text{hours slept})}{24}$
+- Proportion of each hour during which dolphin sounds were audible on an underwater sound recording
+- [Bridge condition ratings](https://www.fhwa.dot.gov/bridge/mtguide.pdf), determined according to US government standards and ranging from 0-9 (so they can be converted to 0-1 bounded data by dividing by 9)
+- Proportion of time a mouse spent floating (rather than actively swimming) during a "[forced swim test](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3353513/)"
+
+So...this kind of data is more common than you might think!  Why is beta regression not as well known as, say, logistic regression, then? It's likely at least partly because it's only in the last handful of years that the software to easily fit beta regression models has been available.
+
+## HIV Data
+
+The data we'll consider as an example has been generously provided by Calvin professor Anding Shen, and (some of) the analysis we'll see has been published in a peer-reviewed paper ([Eddy et al. 2023](https://doi.org/10.1186/s12977-023-00621-y)). The description here is a very simplified one (so check out the paper if you want more detail).
+
+### Research Questions
+The work in the paper sought to understand how human cells become infected with HIV: when exposed to the virus, what conditions make cells more/less susceptible, and what types of cells are more/less likely to become infected?
+
+### Sample Collection
+The authors recruited healthy volunteers to donate blood samples, from which different types of cells were isolated and then grown in the lab.
+
+### Experiments
+The cells (in varying conditions) were exposed to modified versions of the HIV virus -- the parts of the virus that facilitate infection were intact, but **not the disease-causing parts**; and a GFP (green fluorescent protein) gene was added so that infected cells would glow.  Some exposed cells become infected, and some do not. What proportion get infected? Well, it depends on the conditions (and other things, such as the donor and more).
+
+To measure the rate of infection for each type of cell and condition, a device called a flow cytometer was used (which can detect the GFP-expressing glowing cells). 
+
+The resulting data includes the percent GFP-positive cells detected in each sample (but not the total number of cells that went through the machine).
+
+### The Actual Data
+
+Here's a `glimpse()` of the dataset, called `hiv_memory_naive`:
+
+```{r}
+glimpse(hiv_memory_naive)
+```
+
+Variables in the data include:
+
+- `Donor` ID of the person who provided the sample
+- `CellType`, which may be:
+  - "Resting," the cells were cultured alone, without human intestinal endothelial cells
+  - "IEC-," the cells were cultured along with human intestinal endothelial cells (IEC), but *without* interferon $\gamma$
+  - "IEC+," the cells were cultured along with IEC, *and also* with interferon $\gamma$
+- `MorN`, whether the cells were:
+  - "Memory" T cells, immune cells that are primed to respond more to certain infections
+  - "Naive" T cells, immune cells that help the body fight infect by new/unfamiliar infections
+- `InfRates`: The HIV infection rate (= GFP glow rate) as a percentage
+- `InfRateProp`: The HIV infection rate (= GFP glow rate) as a proportion
+
+We want to model the differences in HIV infection rate by cell type and memory vs naive cells, while controlling for differences between donors.
+
+How do the data look? (Feel free to make some more/other graphs too, if you like...)
+
+```{webr}
+#| exercise: figure-1d
+
+gf_boxplot(InfRates ~ CellType | MorN,
+            width = 0.5,
+           data = hiv_memory_naive,
+           orientation = "x") |>
+  gf_jitter(shape = ~Donor, width = 0.1,
+            outlier.color = 'white') |>
+  gf_labs(y = 'Infection (%GFP+)',
+          x = '') |>
+  gf_lims(y = c(0, 25)) |>
+  gf_theme(legend.position = "none",
+           strip.background = element_blank())
+```
+
+## Why not `lm()`?
+
+The response variable `InfRateProp` *is* a continuous numeric value. So why not try a linear model? What will go wrong?
+
+(If you guessed "model assessment," that's a pretty good guess...) 
+
+Let's try:
+
+```{webr}
+#| exercise: hiv-lm
+
+hiv_lm <- lm(InfRateProp ~ CellType + MorN + Donor,
+             data = hiv_memory_naive)
+
+gf_point(resid(hiv_lm) ~ fitted(hiv_lm))
+```
+
+Yikes! We have a strange trend, which we might call nonlinearity if we had any quantitative predictors, and *also* we have non-constant variance. 
+
+The non-constant variance problem, especially, is very common if you try to model proportion data with a normal linear model.
+
+Sometimes, you also see sharp, straight edges on the residuals vs fitted point cloud, like the example below (which is from another dataset entirely: one on US Highway bridge condition ratings):
+
+```{r, echo = TRUE, eval = FALSE}
+bridges <- read.csv('https://sldr.netlify.app/data/bridges.csv')
+```
+
+```{webr}
+#| exercise: bridge-ex
+
+bridge_model <- lm(Condition.Rating / 9 ~ Year.Built, data = bridges)
+gf_point(resid(bridge_model) ~ fitted(bridge_model))
+```
+
+So, if you notice any of these issues when fitting an `lm()`:
+
+- "trumpet" type non-constant variance, but the data isn't count data (or any kind of binary data)
+- Sharp straight boundaries on both the top and bottom of the point cloud in the residuals vs fitted plot
+
+...ask yourself if you might maybe have proportion data!
+
+## Which Probability Distribution?
+
+At this point, when we need to define a new type of regression model, we often ask ourselves:
+
+>> What probability distribution matches the *shape* and *support* of the response variable distribution?
+
+Here, we're looking for a distribution with support bounded between 0 and 1.
+
+#### Beta distribution to the rescue!  
+
+#### Wait...what *is* the beta distribution?
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Vybd22JERFE?si=As3cIUvlmdLwdzik" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+## Regression Equation
+
+So...how does this beta PDF fit into a regression model?
+
+The approach should be pretty familiar now -- we need to identify a parameter of the distribution that relates somehow to our actual response variable, and then use *that* (plus an appropriate link function, if needed) on the left-hand side of our regression equation.
+
+So we need to fill in:
+
+$$?? = \beta_0 + \beta_1(x_1) + \beta_2(x_2) + \beta_3(x_3) + ... \beta_k(x_k)$$
+Well, the beta distribution has those two shape parameters, $\alpha$ and $\beta$.  
+
+But...well, choosing and using just one of those isn't super intuitive, since neither of them alone measures the central value of the distribution. 
+
+There's also an alternative parameterization of the Beta distribution in terms of its mean (called $\mu$) and a spread parameter (which turns out to be $v = \alpha + \beta$). 
+
+Without worrying about the details, $\mu$ seems like exactly the kind of thing we'd like to have on the left-hand side of our equation, so we might suppose that in beta regression
+
+$$\text{response variable}_i \sim \text{Beta}(\mu_i, v)$$
+
+The mean $\mu_i$ must be bounded between 0 and 1, so to spread it out over the whole real line, a sensible choice of link function might be...well, what?
+
+Hint: remember, probabilities (like in binary regression) are also bounded between 0 and 1...
+
+::: {.webex-check .webex-box}
+```{r results = 'asis', echo = FALSE}
+#| label: which-link-q
+
+opts <- sample(c(answer = "logit",
+        "natural logarithm ('log')",
+        "base-10 logarithm",
+        "no link function is needed (use the 'identity' link)",
+        "inverse",
+        "square root"
+        ))
+
+cat("What link function would work well for beta regression?",
+    longmcq(opts))
+```
+:::
+
+So, we end up with:
+
+$$logit(\mu_i) = \beta_0 + \beta_1(x_{1,i}) + \beta_2(x_{2,i}) + \beta_3(x_{3,i}) + ... $$
+
+Or, in our specific example (leaving out the Donor terms to make it a bit shorter),
+
+$$logit(\mu_i) = \beta_0 + \beta_1(I_{Naive}) + \beta_2(I_{IEC-}) + \beta_3(I_{IEC+}) + ... $$
+Where
+
+- $\mu_i$ is the mean parameter of a Beta distribution, corresponding to the mean HIV infection rate
+- $I_{Naive}$ is an indicator variable that is 1 for Naive cells and 0 for Memory cells,
+- $I_{IEC-}$ is an indicator variable that is 1 for IEC- cells and 0 otherwise, and
+- $I+{IEC+}$ is an indicator variable that is 1 for IEC+ cells and 0 otherwise, and
+
+$$\text{InfRates} \sim \text{Beta}(\mu_i, v)$$
+$$\epsilon_i = \mu_i - \text{InfRates}_i$$
+
+## Beta model in R
+
+In R, we can fit this model if we just specify we want the `family = beta_family(link = 'logit')`. 
+
+So for our HIV infection data, change the code below to fit a beta GLM (remember, you'll need to use `glmmTMB()` instead of `lm()` now too).
+
+```{webr}
+#| exercise: beta-model
+beta_model <- lm(InfRateProp ~ CellType + MorN + Donor,
+             data = hiv_memory_naive)
+```
+
+:::: {.hint exercise="beta-model"}
+::: {.callout-tip collapse="true"}
+## Hint:
+
+
+``` r
+beta_model <- glmmTMB(InfRateProp ~ CellType + MorN + Donor ,
+               family = ...,
+               data = hiv_memory_naive)
+```
+
+:::
+::::
+
+:::: {.solution exercise="beta-model"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+
+``` r
+beta_model <- glmmTMB(InfRateProp ~ CellType + MorN + Donor ,
+               family = beta_family(link = 'logit'),
+               data = hiv_memory_naive)
+summary(beta_model)
+```
+
+:::
+::::
+
+## Conditions
+
+Just as for binary and count regression, the conditions we have to check are:
+
+1. logit-linearity
+2. Independence of residuals
+3. Mean-variance relationship
+
+## Assessment
+
+Again like before, we'll rely on the scaled residual plot to check linearity and the mean-variance relationship, and an ACF to check residual independence.
+
+```{webr}
+#| exercise: scaled-res
+#| envir: beta-model
+beta_sim <- simulateResiduals(beta_model)
+plotResiduals(beta_sim)
+```
+
+```{webr}
+#| exercise: beta-acf
+#| envir: beta-model
+acf(resid(beta_model), main = '')
+```
+
+(We could also plot `logit(InfRateProp)` as a function of any quantitative predictors (if we had any). But our predictors are all categorical...)
+
+::: {.webex-check .webex-box}
+```{r results = 'asis', echo = FALSE}
+#| label: which-condition
+
+opts <- sample(c(answer = "The scaled residuals aren't spread uniformly up-and-down so there's likely a problem with the mean-variance condition",
+        "Many ACF values are outside the confidence bounds, so there's clear evidence of a problem with residual dependence",
+        "The residual normality condition is violated",
+        "There might be a problem with logit-linearity",
+        "There are no issues at all -- this model passes assessment"
+        ))
+
+cat("What problem(s) do you see?",
+    longmcq(opts))
+```
+:::
+
+`r hide("Click for more explanation of the answers above...")`
+Maybe there is a trend seen in the scaled residual plot, I agree...but according to the researcher there were not any other uncontrolled variables known that we might be able to add, much less ones that are clearly quantitative.
+
+Remember that there IS no normality condition.
+`r unhide()`
+
+## Aside: fix
+
+In this case, the "fix" to the problem with the mean-variance condition was to average the values within each donor for each cell type prior to fitting the model. It reduces sample size, but also reduces noise. The code below prepares the dataset for this approach, fits the model, and re-makes a new scaled residual plot.
+
+```{webr}
+#| exercise: averaged-beta
+#| envir: beta-model
+
+hiv_memory_naive2 <- hiv_memory_naive |>
+  group_by(Donor, CellType, MorN) |>
+  summarise(MeanInfRateProp = mean(InfRateProp), .groups = 'drop')
+
+beta_model2 <- glmmTMB(MeanInfRateProp ~ CellType + MorN + Donor ,
+               family = beta_family(link = 'logit'),
+               data = hiv_memory_naive2)
+
+beta_sim2 <- simulateResiduals(beta_model2)
+plotResiduals(beta_sim2)
+```
+
+Looks pretty good now. (And for sure, WAY better than the `lm()` did.)
+
+## Selection
+
+Model selection for beta regression is coded and interpreted just as for other models we've worked with already. So, since Shen and colleagues chose to use a hypothesis testing approach, we might use ANOVA -- go ahead and code it!
+
+```{webr}
+#| exercise: anova-prac
+#| envir: beta-model
+
+```
+
+:::: {.solution exercise="anova-prac"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+
+``` r
+car::Anova(beta_model2)
+```
+
+:::
+::::
+
+In this case, we find there is very, very strong evidence of differences in HIV infection rates between cell types and between memory and naive cells. (We don't really care to *test* whether there are Donor effects or not; rather, we assume and suspect there are such effects, and want to control for them in our model.)
+
+## Prediction Plots
+
+Prediction plots for beta regression are also made just as they were for other GLMs, using `ggpredict()`.  Try making a prediction plot for `MorN` and `CellType` together!
+
+```{webr}
+#| exercise: beta-preds
+#| envir: beta-model
+
+```
+
+:::: {.hint exercise="beta-preds"}
+::: {.callout-tip collapse="true"}
+## Hint:
+
+``` r
+predict_response(beta_model2, ...) |>
+  plot()
+```
+
+:::
+::::
+
+:::: {.solution exercise="beta-preds"}
+::: {.callout-tip collapse="true"}
+## Solution:
+
+``` r
+predict_response(beta_model2, 
+          terms = c('MorN', 'CellType')) |>
+  plot()
+```
+
+:::
+::::
+
+What do we see? Memory cells have higher infection rates than Naive cells. Compared to lone "Resting" cells, those cultures along with IEC (intestinal endothelial cells) were infected much more, and adding interferon $\gamma$ (the "+" in IEC+) further increased infection rates.  
+
+Each of these "increases" happens in a proportional way (by a multiplicative factor); for example, since the Resting infection rate was higher for Memory cells, the increases in proportion infected were larger.
+
+### The math!
+
+We can see how this happens by checking out the equation (leaving out the donor terms to keep it shorter).
+
+$$logit(\mu_i) = log(\frac{\mu_i}{(1-\mu_i)}) = \beta_0 + \beta_1 I_{Naive} + \beta_2 I_{IEC-} + \beta_3 I_{IEC+} + ... $$
+
+(Here, each $I_{label}$ is an indicator variable if that cell type is true, and 0 otherwise. And also, $\frac{\mu_i}{(1-\mu_i)}$ is the *odds* of infection!)
+
+Exponentiating both sides, we get:
+
+$$\frac{\mu_i}{(1-\mu_i)} = e^{(\beta_0 + \beta_1(I_{Naive}) + \beta_2(I_{IEC-}) + \beta_3(I_{IEC+}) + ...)}$$
+
+Since $e^{(a + b)} = e^ae^b$, that is
+
+$$\frac{\mu_i}{(1-\mu_i)} = e^{\beta_0} e^{\beta_1(I_{Naive})} e^{\beta_2(I_{IEC-})} e^{\beta_3(I_{IEC+})}...$$
+
+And now, since $e^{ab} = (e^a)^b$, we get
+
+$$\frac{\mu_i}{(1-\mu_i)} = e^{\beta_0} (e^{\beta_1})^{(I_{Naive})} (e^{\beta_2})^{(I_{IEC-})} (e^{\beta_3})^{(I_{IEC+})}\dots$$
+This means, for example, that when you change from Memory to Naive cells, the *odds* of infection with HIV are *multiplied* by $e^{\beta_1}$. (So the bigger the odds to begin with for Memory cells, the bigger the decrease when changing to Naive cells.) Cool!
+
+### Official Interpretation
+
+Here's how the Eddy et al. paper puts it:
+
+>> In vivo, memory CD4+T cells are preferentially infected and harbor most of the latent reservoir. Therefore, we examined whether IEC stimulation has more effect on the memory population or the naïve population of resting CD4+T cells. We isolated CD4+CD45RO- naïve resting T cells and CD4+CD45RA- memory resting T cells from the same donor, and co-cultured them with IEC one day before infection. Infection rates (%GFP+) were examined on day 6 post-infection. We found that memory CD4+T cells were infected at much higher rates than naïve CD4+T cells in general (Fig. 1D, overall comparison between memory and naïve T cells, p<0.0001). Although both memory and naïve CD4+T cells co-cultured with IEC still showed greater infectivity than those CD4+T cells cultured alone (Fig. 1D, p<0.0001), the increases in infection for memory T cells were much higher than for naïve T cells: IEC − cocultures increased infection by >10% on average in memory T cells compared with 1.5% in naïve T cells; likewise, IEC+cocultures increased infection by >15% on average in memory T cells compared with 2% in naïve T cells. This suggested that signals provided by IEC to memory CD4+T cells were able to overcome the restrictions to a much greater extent than in naïve cells. 
+
+Yes, true, it's pretty complicated. Why does it matter?
+
+>> This is the first time IEC are implicated in HIV infection and pathology in the gut. As the intestinal mucosal area is a major site of HIV pathology and latency formation, this study highlights the importance of lymphoid tissue environment in HIV disease and persistence, particularly the involvement of EC in the gut microenvironment as a significant player.
+
+So...this finding (along with a lot of other similar experiments) is helping to work out the details of how and where in the body HIV infection begins and persists. And to model the experimental results well, we needed our new friend the beta regression model.
+
+Enjoy having one more tool in your regression arsenal!

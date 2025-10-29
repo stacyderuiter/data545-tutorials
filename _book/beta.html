@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; R Basics – DATA 545 Tutorial</title>
+<title>33&nbsp; Models for data bounded between 0 and 1 – DATA 545 Tutorial</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./how-to-quarto.html" rel="next">
-<link href="./install-r.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./quasibinomial.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -109,6 +109,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="_include/webex.css">
 </head>
@@ -122,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./install-r.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./r-basics.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./quasibinomial.html">More Fun Between 0-1</a></li><li class="breadcrumb-item"><a href="./beta.html"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Models for data bounded between 0 and 1</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -158,13 +187,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Getting Started</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./install-r.html" class="sidebar-item-text sidebar-link">
@@ -173,7 +202,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./r-basics.html" class="sidebar-item-text sidebar-link active">
+  <a href="./r-basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></span></a>
   </div>
 </li>
@@ -465,13 +494,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true">
  <span class="menu-text">More Fun Between 0-1</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./quasibinomial.html" class="sidebar-item-text sidebar-link">
@@ -480,7 +509,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beta.html" class="sidebar-item-text sidebar-link">
+  <a href="./beta.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Models for data bounded between 0 and 1</span></span></a>
   </div>
 </li>
@@ -502,51 +531,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#your-mission" id="toc-your-mission" class="nav-link active" data-scroll-target="#your-mission"><span class="header-section-number">2.1</span> Your Mission</a></li>
-  <li><a href="#communicating-with-r" id="toc-communicating-with-r" class="nav-link" data-scroll-target="#communicating-with-r"><span class="header-section-number">2.2</span> Communicating with R</a>
+  <li><a href="#section-learning-outcomes" id="toc-section-learning-outcomes" class="nav-link active" data-scroll-target="#section-learning-outcomes"><span class="header-section-number">33.1</span> Section Learning Outcomes</a></li>
+  <li><a href="#text-reference" id="toc-text-reference" class="nav-link" data-scroll-target="#text-reference"><span class="header-section-number">33.2</span> Text Reference</a></li>
+  <li><a href="#data-bounded-0-1" id="toc-data-bounded-0-1" class="nav-link" data-scroll-target="#data-bounded-0-1"><span class="header-section-number">33.3</span> Data bounded 0-1</a>
   <ul class="collapse">
-  <li><a href="#two-key-questions" id="toc-two-key-questions" class="nav-link" data-scroll-target="#two-key-questions">Two Key Questions</a></li>
-  <li><a href="#the-questions" id="toc-the-questions" class="nav-link" data-scroll-target="#the-questions">The Questions</a></li>
-  <li><a href="#providing-r-with-the-information-it-needs" id="toc-providing-r-with-the-information-it-needs" class="nav-link" data-scroll-target="#providing-r-with-the-information-it-needs">Providing R with the information it needs</a></li>
-  <li><a href="#using-simple-functions" id="toc-using-simple-functions" class="nav-link" data-scroll-target="#using-simple-functions">Using simple functions</a></li>
-  <li><a href="#storing-information-in-r-variables" id="toc-storing-information-in-r-variables" class="nav-link" data-scroll-target="#storing-information-in-r-variables">Storing information in R: variables</a></li>
-  <li><a href="#what-if-i-have-a-list-of-numbers-to-store" id="toc-what-if-i-have-a-list-of-numbers-to-store" class="nav-link" data-scroll-target="#what-if-i-have-a-list-of-numbers-to-store">What if I have a list of numbers to store?</a></li>
-  <li><a href="#what-about-data-that-are-not-numeric" id="toc-what-about-data-that-are-not-numeric" class="nav-link" data-scroll-target="#what-about-data-that-are-not-numeric">What about data that are not numeric?</a></li>
-  <li><a href="#what-if-i-have-a-lot-more-data-to-store" id="toc-what-if-i-have-a-lot-more-data-to-store" class="nav-link" data-scroll-target="#what-if-i-have-a-lot-more-data-to-store">What if I have a LOT more data to store?</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   </ul></li>
-  <li><a href="#how-should-data-tables-be-organized-for-statistical-analysis" id="toc-how-should-data-tables-be-organized-for-statistical-analysis" class="nav-link" data-scroll-target="#how-should-data-tables-be-organized-for-statistical-analysis"><span class="header-section-number">2.3</span> How should data tables be organized for statistical analysis?</a></li>
-  <li><a href="#using-built-in-datasets-in-r" id="toc-using-built-in-datasets-in-r" class="nav-link" data-scroll-target="#using-built-in-datasets-in-r"><span class="header-section-number">2.4</span> Using built-in datasets in R</a>
+  <li><a href="#hiv-data" id="toc-hiv-data" class="nav-link" data-scroll-target="#hiv-data"><span class="header-section-number">33.4</span> HIV Data</a>
   <ul class="collapse">
-  <li><a href="#example-of-loading-a-package" id="toc-example-of-loading-a-package" class="nav-link" data-scroll-target="#example-of-loading-a-package">Example of loading a package</a></li>
-  <li><a href="#viewing-a-dataset" id="toc-viewing-a-dataset" class="nav-link" data-scroll-target="#viewing-a-dataset">Viewing a dataset</a></li>
-  <li><a href="#gathering-information-about-a-dataset" id="toc-gathering-information-about-a-dataset" class="nav-link" data-scroll-target="#gathering-information-about-a-dataset">Gathering information about a dataset</a></li>
-  <li><a href="#getting-more-help" id="toc-getting-more-help" class="nav-link" data-scroll-target="#getting-more-help">Getting more help</a></li>
+  <li><a href="#research-questions" id="toc-research-questions" class="nav-link" data-scroll-target="#research-questions">Research Questions</a></li>
+  <li><a href="#sample-collection" id="toc-sample-collection" class="nav-link" data-scroll-target="#sample-collection">Sample Collection</a></li>
+  <li><a href="#experiments" id="toc-experiments" class="nav-link" data-scroll-target="#experiments">Experiments</a></li>
+  <li><a href="#the-actual-data" id="toc-the-actual-data" class="nav-link" data-scroll-target="#the-actual-data">The Actual Data</a></li>
   </ul></li>
-  <li><a href="#reading-in-data-from-a-file" id="toc-reading-in-data-from-a-file" class="nav-link" data-scroll-target="#reading-in-data-from-a-file"><span class="header-section-number">2.5</span> Reading in data from a file</a>
+  <li><a href="#why-not-lm" id="toc-why-not-lm" class="nav-link" data-scroll-target="#why-not-lm"><span class="header-section-number">33.5</span> Why not <code>lm()</code>?</a></li>
+  <li><a href="#which-probability-distribution" id="toc-which-probability-distribution" class="nav-link" data-scroll-target="#which-probability-distribution"><span class="header-section-number">33.6</span> Which Probability Distribution?</a></li>
+  <li><a href="#regression-equation" id="toc-regression-equation" class="nav-link" data-scroll-target="#regression-equation"><span class="header-section-number">33.7</span> Regression Equation</a></li>
+  <li><a href="#beta-model-in-r" id="toc-beta-model-in-r" class="nav-link" data-scroll-target="#beta-model-in-r"><span class="header-section-number">33.8</span> Beta model in R</a></li>
+  <li><a href="#conditions" id="toc-conditions" class="nav-link" data-scroll-target="#conditions"><span class="header-section-number">33.9</span> Conditions</a></li>
+  <li><a href="#assessment" id="toc-assessment" class="nav-link" data-scroll-target="#assessment"><span class="header-section-number">33.10</span> Assessment</a></li>
+  <li><a href="#aside-fix" id="toc-aside-fix" class="nav-link" data-scroll-target="#aside-fix"><span class="header-section-number">33.11</span> Aside: fix</a></li>
+  <li><a href="#selection" id="toc-selection" class="nav-link" data-scroll-target="#selection"><span class="header-section-number">33.12</span> Selection</a></li>
+  <li><a href="#prediction-plots" id="toc-prediction-plots" class="nav-link" data-scroll-target="#prediction-plots"><span class="header-section-number">33.13</span> Prediction Plots</a>
   <ul class="collapse">
-  <li><a href="#the-most-common-mistakes" id="toc-the-most-common-mistakes" class="nav-link" data-scroll-target="#the-most-common-mistakes">The most common mistakes</a></li>
-  <li><a href="#what-about-local-files" id="toc-what-about-local-files" class="nav-link" data-scroll-target="#what-about-local-files">What about local files?</a></li>
-  <li><a href="#named-input-arguments" id="toc-named-input-arguments" class="nav-link" data-scroll-target="#named-input-arguments">Named input arguments</a></li>
-  <li><a href="#renaming-variables-in-a-dataset" id="toc-renaming-variables-in-a-dataset" class="nav-link" data-scroll-target="#renaming-variables-in-a-dataset">Renaming variables in a dataset</a></li>
-  <li><a href="#check-out-the-data" id="toc-check-out-the-data" class="nav-link" data-scroll-target="#check-out-the-data">Check out the data</a></li>
+  <li><a href="#the-math" id="toc-the-math" class="nav-link" data-scroll-target="#the-math">The math!</a></li>
+  <li><a href="#official-interpretation" id="toc-official-interpretation" class="nav-link" data-scroll-target="#official-interpretation">Official Interpretation</a></li>
   </ul></li>
-  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">2.6</span> Review</a>
-  <ul class="collapse">
-  <li><a href="#functions-in-r" id="toc-functions-in-r" class="nav-link" data-scroll-target="#functions-in-r">Functions in R</a></li>
-  <li><a href="#variables-in-r" id="toc-variables-in-r" class="nav-link" data-scroll-target="#variables-in-r">Variables in R</a></li>
-  <li><a href="#datasets-in-r" id="toc-datasets-in-r" class="nav-link" data-scroll-target="#datasets-in-r">Datasets in R</a></li>
-  <li><a href="#vocabulary" id="toc-vocabulary" class="nav-link" data-scroll-target="#vocabulary">Vocabulary</a></li>
-  </ul></li>
-  <li><a href="#congratulations" id="toc-congratulations" class="nav-link" data-scroll-target="#congratulations"><span class="header-section-number">2.7</span> Congratulations!</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/r-basics.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/beta.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./install-r.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./r-basics.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./quasibinomial.html">More Fun Between 0-1</a></li><li class="breadcrumb-item"><a href="./beta.html"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Models for data bounded between 0 and 1</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></h1>
+<h1 class="title"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Models for data bounded between 0 and 1</span></h1>
 </div>
 
 
@@ -563,148 +582,365 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="cell" data-setup="true" data-autorun="true" data-exercise="[&quot;find-sqrt&quot;,&quot;round-sqrt&quot;,&quot;c-and-sum&quot;,&quot;name-a-variable&quot;,&quot;cat-var&quot;,&quot;check-out-data&quot;,&quot;get-help&quot;,&quot;baseball-mistakes&quot;,&quot;look-at-MI_lead&quot;,&quot;rename-MI_lead&quot;]">
-<script type="exercise-setup-find-sqrt-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
+<div class="cell" data-layout-align="center" data-setup="true" data-exercise="[&quot;figure-1d&quot;,&quot;hiv-lm&quot;,&quot;bridge-ex&quot;,&quot;beta-model&quot;,&quot;scaled-res&quot;,&quot;beta-acf&quot;,&quot;averaged-beta&quot;,&quot;anova-prac&quot;]">
+<script type="exercise-setup-figure-1d-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImZpZ3VyZS0xZCIsImhpdi1sbSIsImJyaWRnZS1leCIsImJldGEtbW9kZWwiLCJzY2FsZWQtcmVzIiwiYmV0YS1hY2YiLCJhdmVyYWdlZC1iZXRhIiwiYW5vdmEtcHJhYyJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5oaXZfbWVtb3J5X25haXZlIDwtIHJlYWRfZXhjZWwoJ2RhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3gnKSB8PlxuICBtdXRhdGUoSW5mUmF0ZVByb3AgPSBJbmZSYXRlcyAvIDEwMCxcbiAgICAgICAgIEluZlJhdGVQcm9wID0gSW5mUmF0ZVByb3AgKyAxZS0xMCxcbiAgICAgICAgIENlbGxUeXBlID0gZmFjdG9yKENlbGxUeXBlKSxcbiAgICAgICAgIENlbGxUeXBlID0gZmN0X3JlbGV2ZWwoQ2VsbFR5cGUsICdSZXN0aW5nJykpXG5cbmJldGFfbW9kZWwgPC0gZ2xtbVRNQihJbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlKVxuXG5oaXZfbWVtb3J5X25haXZlMiA8LSBoaXZfbWVtb3J5X25haXZlIHw+XG4gIGdyb3VwX2J5KERvbm9yLCBDZWxsVHlwZSwgTW9yTikgfD5cbiAgc3VtbWFyaXNlKE1lYW5JbmZSYXRlUHJvcCA9IG1lYW4oSW5mUmF0ZVByb3ApLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuXG5iZXRhX21vZGVsMiA8LSBnbG1tVE1CKE1lYW5JbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlMilcblxuYnJpZGdlcyA8LSByZWFkLmNzdihcImRhdGEvYnJpZGdlcy5jc3ZcIikifQ==
 </script>
-<script type="exercise-setup-round-sqrt-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
+<script type="exercise-setup-hiv-lm-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImZpZ3VyZS0xZCIsImhpdi1sbSIsImJyaWRnZS1leCIsImJldGEtbW9kZWwiLCJzY2FsZWQtcmVzIiwiYmV0YS1hY2YiLCJhdmVyYWdlZC1iZXRhIiwiYW5vdmEtcHJhYyJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5oaXZfbWVtb3J5X25haXZlIDwtIHJlYWRfZXhjZWwoJ2RhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3gnKSB8PlxuICBtdXRhdGUoSW5mUmF0ZVByb3AgPSBJbmZSYXRlcyAvIDEwMCxcbiAgICAgICAgIEluZlJhdGVQcm9wID0gSW5mUmF0ZVByb3AgKyAxZS0xMCxcbiAgICAgICAgIENlbGxUeXBlID0gZmFjdG9yKENlbGxUeXBlKSxcbiAgICAgICAgIENlbGxUeXBlID0gZmN0X3JlbGV2ZWwoQ2VsbFR5cGUsICdSZXN0aW5nJykpXG5cbmJldGFfbW9kZWwgPC0gZ2xtbVRNQihJbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlKVxuXG5oaXZfbWVtb3J5X25haXZlMiA8LSBoaXZfbWVtb3J5X25haXZlIHw+XG4gIGdyb3VwX2J5KERvbm9yLCBDZWxsVHlwZSwgTW9yTikgfD5cbiAgc3VtbWFyaXNlKE1lYW5JbmZSYXRlUHJvcCA9IG1lYW4oSW5mUmF0ZVByb3ApLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuXG5iZXRhX21vZGVsMiA8LSBnbG1tVE1CKE1lYW5JbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlMilcblxuYnJpZGdlcyA8LSByZWFkLmNzdihcImRhdGEvYnJpZGdlcy5jc3ZcIikifQ==
 </script>
-<script type="exercise-setup-c-and-sum-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
+<script type="exercise-setup-bridge-ex-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImZpZ3VyZS0xZCIsImhpdi1sbSIsImJyaWRnZS1leCIsImJldGEtbW9kZWwiLCJzY2FsZWQtcmVzIiwiYmV0YS1hY2YiLCJhdmVyYWdlZC1iZXRhIiwiYW5vdmEtcHJhYyJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5oaXZfbWVtb3J5X25haXZlIDwtIHJlYWRfZXhjZWwoJ2RhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3gnKSB8PlxuICBtdXRhdGUoSW5mUmF0ZVByb3AgPSBJbmZSYXRlcyAvIDEwMCxcbiAgICAgICAgIEluZlJhdGVQcm9wID0gSW5mUmF0ZVByb3AgKyAxZS0xMCxcbiAgICAgICAgIENlbGxUeXBlID0gZmFjdG9yKENlbGxUeXBlKSxcbiAgICAgICAgIENlbGxUeXBlID0gZmN0X3JlbGV2ZWwoQ2VsbFR5cGUsICdSZXN0aW5nJykpXG5cbmJldGFfbW9kZWwgPC0gZ2xtbVRNQihJbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlKVxuXG5oaXZfbWVtb3J5X25haXZlMiA8LSBoaXZfbWVtb3J5X25haXZlIHw+XG4gIGdyb3VwX2J5KERvbm9yLCBDZWxsVHlwZSwgTW9yTikgfD5cbiAgc3VtbWFyaXNlKE1lYW5JbmZSYXRlUHJvcCA9IG1lYW4oSW5mUmF0ZVByb3ApLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuXG5iZXRhX21vZGVsMiA8LSBnbG1tVE1CKE1lYW5JbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlMilcblxuYnJpZGdlcyA8LSByZWFkLmNzdihcImRhdGEvYnJpZGdlcy5jc3ZcIikifQ==
 </script>
-<script type="exercise-setup-name-a-variable-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
+<script type="exercise-setup-beta-model-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImZpZ3VyZS0xZCIsImhpdi1sbSIsImJyaWRnZS1leCIsImJldGEtbW9kZWwiLCJzY2FsZWQtcmVzIiwiYmV0YS1hY2YiLCJhdmVyYWdlZC1iZXRhIiwiYW5vdmEtcHJhYyJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5oaXZfbWVtb3J5X25haXZlIDwtIHJlYWRfZXhjZWwoJ2RhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3gnKSB8PlxuICBtdXRhdGUoSW5mUmF0ZVByb3AgPSBJbmZSYXRlcyAvIDEwMCxcbiAgICAgICAgIEluZlJhdGVQcm9wID0gSW5mUmF0ZVByb3AgKyAxZS0xMCxcbiAgICAgICAgIENlbGxUeXBlID0gZmFjdG9yKENlbGxUeXBlKSxcbiAgICAgICAgIENlbGxUeXBlID0gZmN0X3JlbGV2ZWwoQ2VsbFR5cGUsICdSZXN0aW5nJykpXG5cbmJldGFfbW9kZWwgPC0gZ2xtbVRNQihJbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlKVxuXG5oaXZfbWVtb3J5X25haXZlMiA8LSBoaXZfbWVtb3J5X25haXZlIHw+XG4gIGdyb3VwX2J5KERvbm9yLCBDZWxsVHlwZSwgTW9yTikgfD5cbiAgc3VtbWFyaXNlKE1lYW5JbmZSYXRlUHJvcCA9IG1lYW4oSW5mUmF0ZVByb3ApLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuXG5iZXRhX21vZGVsMiA8LSBnbG1tVE1CKE1lYW5JbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlMilcblxuYnJpZGdlcyA8LSByZWFkLmNzdihcImRhdGEvYnJpZGdlcy5jc3ZcIikifQ==
 </script>
-<script type="exercise-setup-cat-var-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
+<script type="exercise-setup-scaled-res-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImZpZ3VyZS0xZCIsImhpdi1sbSIsImJyaWRnZS1leCIsImJldGEtbW9kZWwiLCJzY2FsZWQtcmVzIiwiYmV0YS1hY2YiLCJhdmVyYWdlZC1iZXRhIiwiYW5vdmEtcHJhYyJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5oaXZfbWVtb3J5X25haXZlIDwtIHJlYWRfZXhjZWwoJ2RhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3gnKSB8PlxuICBtdXRhdGUoSW5mUmF0ZVByb3AgPSBJbmZSYXRlcyAvIDEwMCxcbiAgICAgICAgIEluZlJhdGVQcm9wID0gSW5mUmF0ZVByb3AgKyAxZS0xMCxcbiAgICAgICAgIENlbGxUeXBlID0gZmFjdG9yKENlbGxUeXBlKSxcbiAgICAgICAgIENlbGxUeXBlID0gZmN0X3JlbGV2ZWwoQ2VsbFR5cGUsICdSZXN0aW5nJykpXG5cbmJldGFfbW9kZWwgPC0gZ2xtbVRNQihJbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlKVxuXG5oaXZfbWVtb3J5X25haXZlMiA8LSBoaXZfbWVtb3J5X25haXZlIHw+XG4gIGdyb3VwX2J5KERvbm9yLCBDZWxsVHlwZSwgTW9yTikgfD5cbiAgc3VtbWFyaXNlKE1lYW5JbmZSYXRlUHJvcCA9IG1lYW4oSW5mUmF0ZVByb3ApLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuXG5iZXRhX21vZGVsMiA8LSBnbG1tVE1CKE1lYW5JbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlMilcblxuYnJpZGdlcyA8LSByZWFkLmNzdihcImRhdGEvYnJpZGdlcy5jc3ZcIikifQ==
 </script>
-<script type="exercise-setup-check-out-data-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
+<script type="exercise-setup-beta-acf-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImZpZ3VyZS0xZCIsImhpdi1sbSIsImJyaWRnZS1leCIsImJldGEtbW9kZWwiLCJzY2FsZWQtcmVzIiwiYmV0YS1hY2YiLCJhdmVyYWdlZC1iZXRhIiwiYW5vdmEtcHJhYyJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5oaXZfbWVtb3J5X25haXZlIDwtIHJlYWRfZXhjZWwoJ2RhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3gnKSB8PlxuICBtdXRhdGUoSW5mUmF0ZVByb3AgPSBJbmZSYXRlcyAvIDEwMCxcbiAgICAgICAgIEluZlJhdGVQcm9wID0gSW5mUmF0ZVByb3AgKyAxZS0xMCxcbiAgICAgICAgIENlbGxUeXBlID0gZmFjdG9yKENlbGxUeXBlKSxcbiAgICAgICAgIENlbGxUeXBlID0gZmN0X3JlbGV2ZWwoQ2VsbFR5cGUsICdSZXN0aW5nJykpXG5cbmJldGFfbW9kZWwgPC0gZ2xtbVRNQihJbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlKVxuXG5oaXZfbWVtb3J5X25haXZlMiA8LSBoaXZfbWVtb3J5X25haXZlIHw+XG4gIGdyb3VwX2J5KERvbm9yLCBDZWxsVHlwZSwgTW9yTikgfD5cbiAgc3VtbWFyaXNlKE1lYW5JbmZSYXRlUHJvcCA9IG1lYW4oSW5mUmF0ZVByb3ApLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuXG5iZXRhX21vZGVsMiA8LSBnbG1tVE1CKE1lYW5JbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlMilcblxuYnJpZGdlcyA8LSByZWFkLmNzdihcImRhdGEvYnJpZGdlcy5jc3ZcIikifQ==
 </script>
-<script type="exercise-setup-get-help-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
+<script type="exercise-setup-averaged-beta-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImZpZ3VyZS0xZCIsImhpdi1sbSIsImJyaWRnZS1leCIsImJldGEtbW9kZWwiLCJzY2FsZWQtcmVzIiwiYmV0YS1hY2YiLCJhdmVyYWdlZC1iZXRhIiwiYW5vdmEtcHJhYyJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5oaXZfbWVtb3J5X25haXZlIDwtIHJlYWRfZXhjZWwoJ2RhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3gnKSB8PlxuICBtdXRhdGUoSW5mUmF0ZVByb3AgPSBJbmZSYXRlcyAvIDEwMCxcbiAgICAgICAgIEluZlJhdGVQcm9wID0gSW5mUmF0ZVByb3AgKyAxZS0xMCxcbiAgICAgICAgIENlbGxUeXBlID0gZmFjdG9yKENlbGxUeXBlKSxcbiAgICAgICAgIENlbGxUeXBlID0gZmN0X3JlbGV2ZWwoQ2VsbFR5cGUsICdSZXN0aW5nJykpXG5cbmJldGFfbW9kZWwgPC0gZ2xtbVRNQihJbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlKVxuXG5oaXZfbWVtb3J5X25haXZlMiA8LSBoaXZfbWVtb3J5X25haXZlIHw+XG4gIGdyb3VwX2J5KERvbm9yLCBDZWxsVHlwZSwgTW9yTikgfD5cbiAgc3VtbWFyaXNlKE1lYW5JbmZSYXRlUHJvcCA9IG1lYW4oSW5mUmF0ZVByb3ApLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuXG5iZXRhX21vZGVsMiA8LSBnbG1tVE1CKE1lYW5JbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlMilcblxuYnJpZGdlcyA8LSByZWFkLmNzdihcImRhdGEvYnJpZGdlcy5jc3ZcIikifQ==
 </script>
-<script type="exercise-setup-baseball-mistakes-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
-</script>
-<script type="exercise-setup-look-at-MI_lead-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
-</script>
-<script type="exercise-setup-rename-MI_lead-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOlsiZmluZC1zcXJ0Iiwicm91bmQtc3FydCIsImMtYW5kLXN1bSIsIm5hbWUtYS12YXJpYWJsZSIsImNhdC12YXIiLCJjaGVjay1vdXQtZGF0YSIsImdldC1oZWxwIiwiYmFzZWJhbGwtbWlzdGFrZXMiLCJsb29rLWF0LU1JX2xlYWQiLCJyZW5hbWUtTUlfbGVhZCJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdnZm9ybXVsYSlcbmxpYnJhcnkobW9zYWljKVxubGlicmFyeShtb3NhaWNEYXRhKVxuXG50aGVtZV9zZXQodGhlbWVfYncoKSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gVFJVRSxcbiAgZmlnLmFsaWduID0gXCJjZW50ZXJcIixcbiAgZmlnLndpZHRoID0gNiwgZmlnLmhlaWdodCA9IDIuNSlcblxub3B0aW9ucyhcInJlYWRyLmVkaXRpb25cIiA9IDEpXG5cbmRhdGEoSEVMUHJjdCwgcGFja2FnZSA9IFwibW9zYWljRGF0YVwiKVxuXG5NSV9sZWFkIDwtIHJlYWRfY3N2KGZpbGU9J2h0dHBzOi8vc2xkci5uZXRsaWZ5LmFwcC9kYXRhL01JX2xlYWQuY3N2JykifQ==
+<script type="exercise-setup-anova-prac-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImZpZ3VyZS0xZCIsImhpdi1sbSIsImJyaWRnZS1leCIsImJldGEtbW9kZWwiLCJzY2FsZWQtcmVzIiwiYmV0YS1hY2YiLCJhdmVyYWdlZC1iZXRhIiwiYW5vdmEtcHJhYyJdLCJpbmNsdWRlIjpmYWxzZSwib3V0cHV0IjpmYWxzZSwic2V0dXAiOnRydWV9LCJjb2RlIjoiXG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnbG1tVE1CKVxubGlicmFyeShnZ2Zvcm11bGEpXG5saWJyYXJ5KGdnZWZmZWN0cylcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5oaXZfbWVtb3J5X25haXZlIDwtIHJlYWRfZXhjZWwoJ2RhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3gnKSB8PlxuICBtdXRhdGUoSW5mUmF0ZVByb3AgPSBJbmZSYXRlcyAvIDEwMCxcbiAgICAgICAgIEluZlJhdGVQcm9wID0gSW5mUmF0ZVByb3AgKyAxZS0xMCxcbiAgICAgICAgIENlbGxUeXBlID0gZmFjdG9yKENlbGxUeXBlKSxcbiAgICAgICAgIENlbGxUeXBlID0gZmN0X3JlbGV2ZWwoQ2VsbFR5cGUsICdSZXN0aW5nJykpXG5cbmJldGFfbW9kZWwgPC0gZ2xtbVRNQihJbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlKVxuXG5oaXZfbWVtb3J5X25haXZlMiA8LSBoaXZfbWVtb3J5X25haXZlIHw+XG4gIGdyb3VwX2J5KERvbm9yLCBDZWxsVHlwZSwgTW9yTikgfD5cbiAgc3VtbWFyaXNlKE1lYW5JbmZSYXRlUHJvcCA9IG1lYW4oSW5mUmF0ZVByb3ApLCAuZ3JvdXBzID0gJ2Ryb3AnKVxuXG5iZXRhX21vZGVsMiA8LSBnbG1tVE1CKE1lYW5JbmZSYXRlUHJvcCB+IENlbGxUeXBlICsgTW9yTiArIERvbm9yICxcbiAgICAgICAgICAgICAgIGZhbWlseSA9IGJldGFfZmFtaWx5KGxpbmsgPSAnbG9naXQnKSxcbiAgICAgICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlMilcblxuYnJpZGdlcyA8LSByZWFkLmNzdihcImRhdGEvYnJpZGdlcy5jc3ZcIikifQ==
 </script>
 </div>
-<style type="text/css">
-  span.boxed {
-    border:5px solid gray;
-    border-radius:10px;
-    padding: 5px;
-  }
-span.invboxed {
-  border:5px solid gray;
-  padding: 5px;
-  border-radius:10px;
-  color: white;
-}
-
-table, td, th { border:0px; }
-
-/* cellpadding */
-  th, td { padding: 5px; }
-
-</style>
-<section id="your-mission" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="your-mission"><span class="header-section-number">2.1</span> Your Mission</h2>
-<p>The purpose of this tutorial is to help you start to get familiar with the way R works, and some basic R commands…even if you haven’t yet installed R on your computer or made a <a href="https://posit.cloud">posit.cloud</a> account.</p>
-<p>This tutorial environment uses <a href="#0">webr</a>, which lets you read some helpful information, then immediately practice writing and running your own R code, <em>all in your web browser</em>.</p>
-<p>Here’s hoping it provides a nice, gentle introduction in a controlled environment!</p>
+<section id="section-learning-outcomes" class="level2" data-number="33.1">
+<h2 data-number="33.1" class="anchored" data-anchor-id="section-learning-outcomes"><span class="header-section-number">33.1</span> Section Learning Outcomes</h2>
+<p>We’ve already considered a pretty diverse set of types of response variables, but there are still more out there!</p>
+<p>This section, we will explore one of those: double-bounded data, which often arises when the measurement of interest is a proportion (which must be between 0-1) and it cannot - either conceptually or practically - be treated a binary.</p>
+<p>Usually, that means that the number of “trials” is either undefined or unknown.</p>
+<p>For this kind of response variable, we can consider a beta regression model. They are becoming more and more common in the literature recently, as both frequentist and Bayesian tools to fit them have become more available and user-friendly.</p>
+<p>By the end of the module you will:</p>
+<ol type="1">
+<li>Outline the mathematical adjustments needed to go from multiple linear regression to beta regression</li>
+<li>Compare and contrast binary regression (with and without overdispersion) and beta regression</li>
+<li>Fit, assess, and interpret beta GLMs in R</li>
+</ol>
 </section>
-<section id="communicating-with-r" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="communicating-with-r"><span class="header-section-number">2.2</span> Communicating with R</h2>
-<p>You will do most of your work in R with <em>code</em> or <em>commands</em>. Instead of pointing and clicking, you will type one or more lines of code, which R will <em>execute</em> (doing the work you have asked it to do).</p>
-<p>Then, R will return the results of whatever operation you asked it to do - sometimes producing a plot, other times creating a plot.</p>
-<p>Sometimes executing code has almost no visible effect (no plot or text output is produced), but instead some object is created and stored in R’s <em>environment</em> for later use.</p>
-<section id="two-key-questions" class="level3">
-<h3 class="anchored" data-anchor-id="two-key-questions">Two Key Questions</h3>
-<p>To get R (or any software) to do something for you, there are two important questions you must be able to answer. Before continuing, think about what those questions might be.</p>
+<section id="text-reference" class="level2" data-number="33.2">
+<h2 data-number="33.2" class="anchored" data-anchor-id="text-reference"><span class="header-section-number">33.2</span> Text Reference</h2>
+<p>Recommended reading for the materials covered in this tutorial can be found in:</p>
+<ul>
+<li><a href="https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.3940" target="_blank">Geissinger <em>et al.</em> 2022</a></li>
+<li><a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13234" target="_blank">Douma &amp; Weedon 2019</a></li>
+</ul>
+<p>It’s suggested that you consider consulting these papers <em>after</em> doing this tutorial, with particular focus on any topics you found most challenging.</p>
 </section>
-<section id="the-questions" class="level3">
-<h3 class="anchored" data-anchor-id="the-questions">The Questions</h3>
-<p>To get R (or any software) to do a job for you, there are two important questions you must be able to answer:</p>
-<section id="what-do-you-want-the-computer-to-do" class="level4">
-<h4 class="anchored" data-anchor-id="what-do-you-want-the-computer-to-do">1. What do you want the computer to do?</h4>
+<section id="data-bounded-0-1" class="level2" data-number="33.3">
+<h2 data-number="33.3" class="anchored" data-anchor-id="data-bounded-0-1"><span class="header-section-number">33.3</span> Data bounded 0-1</h2>
+<p>We’ve already considered several response variable types:</p>
+<ul>
+<li>Continuous, quantitative data</li>
+<li>Count data</li>
+<li>Binary data (one- or multiple-trials-per-row)</li>
+</ul>
+<p>What else is left? Well, what about continuous data that are bounded between 0-1 (or alternatively, data that have both an upper and a lower bound on their possible values), but that <em>cannot</em> be considered to be measuring the proportion of successes in a set of binary trials? That’s our topic this module!</p>
+<section id="examples" class="level3">
+<h3 class="anchored" data-anchor-id="examples">Examples</h3>
+<p>Examples of data bounded between 0-1 are surprisingly common. Notice also that any continuous quantity that has both upper and lower bounds on its possible values <em>can</em> be transformed to be between 0-1 – some examples of that are on the list below, too.</p>
+<p>Here are a few examples:</p>
+<ul>
+<li>Scores on an exam, measured as a proportion between 0-1</li>
+<li>Batting averages of baseball players</li>
+<li>Interest rates</li>
+<li>Rank of individual contestants on <em>Survivor</em>, measured as a quantile (if you were best on your season, your rank would be 1, and if you were worst, then 0)</li>
+<li>Hours of sleep per 24 hours, computed as <span class="math inline">\(\frac{(\text{hours slept})}{24}\)</span></li>
+<li>Proportion of each hour during which dolphin sounds were audible on an underwater sound recording</li>
+<li><a href="https://www.fhwa.dot.gov/bridge/mtguide.pdf">Bridge condition ratings</a>, determined according to US government standards and ranging from 0-9 (so they can be converted to 0-1 bounded data by dividing by 9)</li>
+<li>Proportion of time a mouse spent floating (rather than actively swimming) during a “<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3353513/">forced swim test</a>”</li>
+</ul>
+<p>So…this kind of data is more common than you might think! Why is beta regression not as well known as, say, logistic regression, then? It’s likely at least partly because it’s only in the last handful of years that the software to easily fit beta regression models has been available.</p>
 </section>
-<section id="what-must-the-computer-know-in-order-to-do-that" class="level4">
-<h4 class="anchored" data-anchor-id="what-must-the-computer-know-in-order-to-do-that">2. What must the computer know in order to do that?</h4>
 </section>
+<section id="hiv-data" class="level2" data-number="33.4">
+<h2 data-number="33.4" class="anchored" data-anchor-id="hiv-data"><span class="header-section-number">33.4</span> HIV Data</h2>
+<p>The data we’ll consider as an example has been generously provided by Calvin professor Anding Shen, and (some of) the analysis we’ll see has been published in a peer-reviewed paper (<a href="https://doi.org/10.1186/s12977-023-00621-y">Eddy et al.&nbsp;2023</a>). The description here is a very simplified one (so check out the paper if you want more detail).</p>
+<section id="research-questions" class="level3">
+<h3 class="anchored" data-anchor-id="research-questions">Research Questions</h3>
+<p>The work in the paper sought to understand how human cells become infected with HIV: when exposed to the virus, what conditions make cells more/less susceptible, and what types of cells are more/less likely to become infected?</p>
 </section>
-<section id="providing-r-with-the-information-it-needs" class="level3">
-<h3 class="anchored">Providing R with the information it needs</h3>
-<p>R <em>functions</em> provide R with the answer to the first question: what do you want the computer to do?</p>
-<p>Most functions in R have short, but descriptive names that describe what they do. For example, R has some functions to do basic mathematical operations: the function <code>sqrt()</code> computes the square root of a number, and the function <code>round()</code> rounds a number (by default, it rounds to the nearest integer).</p>
-<p>But just giving R a function is not enough: you also need to answer the second question (what information does R need to do the job?). For example, if you want to use the function <code>round()</code>, you also need to provide R with the number you want to round!</p>
-<p>We will provide answers to our two questions by filling in the boxes of a basic template:</p>
-<center>
-<h2 class="anchored" data-anchor-id="providing-r-with-the-information-it-needs">
-<strong><span class="boxed">function</span> ( <span class="boxed">&nbsp;information1&nbsp; , &nbsp;information2&nbsp; , …)</span></strong>
-</h2>
-</center>
-<p>&nbsp;</p>
-<p>(The <code>...</code> indicates that there may be some additional <em>input arguments</em> (input information we could provide to R) we could add eventually. Some functions need only one input, but if a function takes more than one argument, they are separated by commas. They have names, and if named (like: <code>function(input_name = value, input2_name = 'value')</code>) they can be in any order.</p>
+<section id="sample-collection" class="level3">
+<h3 class="anchored" data-anchor-id="sample-collection">Sample Collection</h3>
+<p>The authors recruited healthy volunteers to donate blood samples, from which different types of cells were isolated and then grown in the lab.</p>
 </section>
-<section id="using-simple-functions" class="level3">
-<h3 class="anchored" data-anchor-id="using-simple-functions">Using simple functions</h3>
-<p>Let’s practice what you just learned, trying out the mathematical <code>sqrt()</code> and <code>round()</code> functions.</p>
-<p>Edit the code below to compute the square root of 64:</p>
-<div class="cell" data-exercise="find-sqrt">
+<section id="experiments" class="level3">
+<h3 class="anchored" data-anchor-id="experiments">Experiments</h3>
+<p>The cells (in varying conditions) were exposed to modified versions of the HIV virus – the parts of the virus that facilitate infection were intact, but <strong>not the disease-causing parts</strong>; and a GFP (green fluorescent protein) gene was added so that infected cells would glow. Some exposed cells become infected, and some do not. What proportion get infected? Well, it depends on the conditions (and other things, such as the donor and more).</p>
+<p>To measure the rate of infection for each type of cell and condition, a device called a flow cytometer was used (which can detect the GFP-expressing glowing cells).</p>
+<p>The resulting data includes the percent GFP-positive cells detected in each sample (but not the total number of cells that went through the machine).</p>
+</section>
+<section id="the-actual-data" class="level3">
+<h3 class="anchored" data-anchor-id="the-actual-data">The Actual Data</h3>
+<p>Here’s a <code>glimpse()</code> of the dataset, called <code>hiv_memory_naive</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(hiv_memory_naive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 54
+Columns: 5
+$ Donor       &lt;chr&gt; "D13", "D13", "D13", "D13", "D13", "D13", "D13", "D13", "D…
+$ CellType    &lt;fct&gt; Resting, Resting, Resting, IEC-, IEC-, IEC-, IEC+, IEC+, I…
+$ MorN        &lt;chr&gt; "Memory", "Memory", "Memory", "Memory", "Memory", "Memory"…
+$ InfRates    &lt;dbl&gt; 1.3582343, 1.5347334, 1.0518934, 12.5454545, 9.1435185, 7.…
+$ InfRateProp &lt;dbl&gt; 0.013582343, 0.015347335, 0.010518934, 0.125454546, 0.0914…</code></pre>
+</div>
+</div>
+<p>Variables in the data include:</p>
+<ul>
+<li><code>Donor</code> ID of the person who provided the sample</li>
+<li><code>CellType</code>, which may be:
+<ul>
+<li>“Resting,” the cells were cultured alone, without human intestinal endothelial cells</li>
+<li>“IEC-,” the cells were cultured along with human intestinal endothelial cells (IEC), but <em>without</em> interferon <span class="math inline">\(\gamma\)</span></li>
+<li>“IEC+,” the cells were cultured along with IEC, <em>and also</em> with interferon <span class="math inline">\(\gamma\)</span></li>
+</ul></li>
+<li><code>MorN</code>, whether the cells were:
+<ul>
+<li>“Memory” T cells, immune cells that are primed to respond more to certain infections</li>
+<li>“Naive” T cells, immune cells that help the body fight infect by new/unfamiliar infections</li>
+</ul></li>
+<li><code>InfRates</code>: The HIV infection rate (= GFP glow rate) as a percentage</li>
+<li><code>InfRateProp</code>: The HIV infection rate (= GFP glow rate) as a proportion</li>
+</ul>
+<p>We want to model the differences in HIV infection rate by cell type and memory vs naive cells, while controlling for differences between donors.</p>
+<p>How do the data look? (Feel free to make some more/other graphs too, if you like…)</p>
+<div class="cell" data-layout-align="center" data-exercise="figure-1d">
 <div>
 <div id="webr-2" class="exercise-cell">
 
 </div>
 <script type="webr-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImZpbmQtc3FydCJ9LCJjb2RlIjoiZnVuY3Rpb24oaW5mb3JtYXRpb25fUl9uZWVkcykifQ==
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImZpZ3VyZS0xZCJ9LCJjb2RlIjoiXG5nZl9ib3hwbG90KEluZlJhdGVzIH4gQ2VsbFR5cGUgfCBNb3JOLFxuICAgICAgICAgICAgd2lkdGggPSAwLjUsXG4gICAgICAgICAgIGRhdGEgPSBoaXZfbWVtb3J5X25haXZlLFxuICAgICAgICAgICBvcmllbnRhdGlvbiA9IFwieFwiKSB8PlxuICBnZl9qaXR0ZXIoc2hhcGUgPSB+RG9ub3IsIHdpZHRoID0gMC4xLFxuICAgICAgICAgICAgb3V0bGllci5jb2xvciA9ICd3aGl0ZScpIHw+XG4gIGdmX2xhYnMoeSA9ICdJbmZlY3Rpb24gKCVHRlArKScsXG4gICAgICAgICAgeCA9ICcnKSB8PlxuICBnZl9saW1zKHkgPSBjKDAsIDI1KSkgfD5cbiAgZ2ZfdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gXCJub25lXCIsXG4gICAgICAgICAgIHN0cmlwLmJhY2tncm91bmQgPSBlbGVtZW50X2JsYW5rKCkpIn0=
 </script>
 </div>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="find-sqrt">
-<div class="callout callout-style-default callout-note callout-titled">
+</section>
+</section>
+<section id="why-not-lm" class="level2" data-number="33.5">
+<h2 data-number="33.5" class="anchored" data-anchor-id="why-not-lm"><span class="header-section-number">33.5</span> Why not <code>lm()</code>?</h2>
+<p>The response variable <code>InfRateProp</code> <em>is</em> a continuous numeric value. So why not try a linear model? What will go wrong?</p>
+<p>(If you guessed “model assessment,” that’s a pretty good guess…)</p>
+<p>Let’s try:</p>
+<div class="cell" data-layout-align="center" data-exercise="hiv-lm">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6Imhpdi1sbSJ9LCJjb2RlIjoiXG5oaXZfbG0gPC0gbG0oSW5mUmF0ZVByb3AgfiBDZWxsVHlwZSArIE1vck4gKyBEb25vcixcbiAgICAgICAgICAgICBkYXRhID0gaGl2X21lbW9yeV9uYWl2ZSlcblxuZ2ZfcG9pbnQocmVzaWQoaGl2X2xtKSB+IGZpdHRlZChoaXZfbG0pKSJ9
+</script>
+</div>
+</div>
+<p>Yikes! We have a strange trend, which we might call nonlinearity if we had any quantitative predictors, and <em>also</em> we have non-constant variance.</p>
+<p>The non-constant variance problem, especially, is very common if you try to model proportion data with a normal linear model.</p>
+<p>Sometimes, you also see sharp, straight edges on the residuals vs fitted point cloud, like the example below (which is from another dataset entirely: one on US Highway bridge condition ratings):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bridges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'https://sldr.netlify.app/data/bridges.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center" data-exercise="bridge-ex">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImJyaWRnZS1leCJ9LCJjb2RlIjoiXG5icmlkZ2VfbW9kZWwgPC0gbG0oQ29uZGl0aW9uLlJhdGluZyAvIDkgfiBZZWFyLkJ1aWx0LCBkYXRhID0gYnJpZGdlcylcbmdmX3BvaW50KHJlc2lkKGJyaWRnZV9tb2RlbCkgfiBmaXR0ZWQoYnJpZGdlX21vZGVsKSkifQ==
+</script>
+</div>
+</div>
+<p>So, if you notice any of these issues when fitting an <code>lm()</code>:</p>
+<ul>
+<li>“trumpet” type non-constant variance, but the data isn’t count data (or any kind of binary data)</li>
+<li>Sharp straight boundaries on both the top and bottom of the point cloud in the residuals vs fitted plot</li>
+</ul>
+<p>…ask yourself if you might maybe have proportion data!</p>
+</section>
+<section id="which-probability-distribution" class="level2" data-number="33.6">
+<h2 data-number="33.6" class="anchored" data-anchor-id="which-probability-distribution"><span class="header-section-number">33.6</span> Which Probability Distribution?</h2>
+<p>At this point, when we need to define a new type of regression model, we often ask ourselves:</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>What probability distribution matches the <em>shape</em> and <em>support</em> of the response variable distribution?</p>
+</blockquote>
+</blockquote>
+<p>Here, we’re looking for a distribution with support bounded between 0 and 1.</p>
+<section id="beta-distribution-to-the-rescue" class="level4">
+<h4 class="anchored" data-anchor-id="beta-distribution-to-the-rescue">Beta distribution to the rescue!</h4>
+</section>
+<section id="waitwhat-is-the-beta-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="waitwhat-is-the-beta-distribution">Wait…what <em>is</em> the beta distribution?</h4>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Vybd22JERFE?si=As3cIUvlmdLwdzik" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+</section>
+</section>
+<section id="regression-equation" class="level2" data-number="33.7">
+<h2 data-number="33.7" class="anchored" data-anchor-id="regression-equation"><span class="header-section-number">33.7</span> Regression Equation</h2>
+<p>So…how does this beta PDF fit into a regression model?</p>
+<p>The approach should be pretty familiar now – we need to identify a parameter of the distribution that relates somehow to our actual response variable, and then use <em>that</em> (plus an appropriate link function, if needed) on the left-hand side of our regression equation.</p>
+<p>So we need to fill in:</p>
+<p><span class="math display">\[?? = \beta_0 + \beta_1(x_1) + \beta_2(x_2) + \beta_3(x_3) + ... \beta_k(x_k)\]</span> Well, the beta distribution has those two shape parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.</p>
+<p>But…well, choosing and using just one of those isn’t super intuitive, since neither of them alone measures the central value of the distribution.</p>
+<p>There’s also an alternative parameterization of the Beta distribution in terms of its mean (called <span class="math inline">\(\mu\)</span>) and a spread parameter (which turns out to be <span class="math inline">\(v = \alpha + \beta\)</span>).</p>
+<p>Without worrying about the details, <span class="math inline">\(\mu\)</span> seems like exactly the kind of thing we’d like to have on the left-hand side of our equation, so we might suppose that in beta regression</p>
+<p><span class="math display">\[\text{response variable}_i \sim \text{Beta}(\mu_i, v)\]</span></p>
+<p>The mean <span class="math inline">\(\mu_i\)</span> must be bounded between 0 and 1, so to spread it out over the whole real line, a sensible choice of link function might be…well, what?</p>
+<p>Hint: remember, probabilities (like in binary regression) are also bounded between 0 and 1…</p>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+What link function would work well for beta regression?
+<div id="radio_BRDBAJJIWG" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BRDBAJJIWG" value="answer"> <span>logit</span></label><label><input type="radio" autocomplete="off" name="radio_BRDBAJJIWG" value=""> <span>inverse</span></label><label><input type="radio" autocomplete="off" name="radio_BRDBAJJIWG" value=""> <span>no link function is needed (use the 'identity' link)</span></label><label><input type="radio" autocomplete="off" name="radio_BRDBAJJIWG" value=""> <span>square root</span></label><label><input type="radio" autocomplete="off" name="radio_BRDBAJJIWG" value=""> <span>base-10 logarithm</span></label><label><input type="radio" autocomplete="off" name="radio_BRDBAJJIWG" value=""> <span>natural logarithm ('log')</span></label>
+</div>
+</div>
+</div>
+<p>So, we end up with:</p>
+<p><span class="math display">\[logit(\mu_i) = \beta_0 + \beta_1(x_{1,i}) + \beta_2(x_{2,i}) + \beta_3(x_{3,i}) + ... \]</span></p>
+<p>Or, in our specific example (leaving out the Donor terms to make it a bit shorter),</p>
+<p><span class="math display">\[logit(\mu_i) = \beta_0 + \beta_1(I_{Naive}) + \beta_2(I_{IEC-}) + \beta_3(I_{IEC+}) + ... \]</span> Where</p>
+<ul>
+<li><span class="math inline">\(\mu_i\)</span> is the mean parameter of a Beta distribution, corresponding to the mean HIV infection rate</li>
+<li><span class="math inline">\(I_{Naive}\)</span> is an indicator variable that is 1 for Naive cells and 0 for Memory cells,</li>
+<li><span class="math inline">\(I_{IEC-}\)</span> is an indicator variable that is 1 for IEC- cells and 0 otherwise, and</li>
+<li><span class="math inline">\(I+{IEC+}\)</span> is an indicator variable that is 1 for IEC+ cells and 0 otherwise, and</li>
+</ul>
+<p><span class="math display">\[\text{InfRates} \sim \text{Beta}(\mu_i, v)\]</span> <span class="math display">\[\epsilon_i = \mu_i - \text{InfRates}_i\]</span></p>
+</section>
+<section id="beta-model-in-r" class="level2" data-number="33.8">
+<h2 data-number="33.8" class="anchored" data-anchor-id="beta-model-in-r"><span class="header-section-number">33.8</span> Beta model in R</h2>
+<p>In R, we can fit this model if we just specify we want the <code>family = beta_family(link = 'logit')</code>.</p>
+<p>So for our HIV infection data, change the code below to fit a beta GLM (remember, you’ll need to use <code>glmmTMB()</code> instead of <code>lm()</code> now too).</p>
+<div class="cell" data-layout-align="center" data-exercise="beta-model">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImJldGEtbW9kZWwifSwiY29kZSI6ImJldGFfbW9kZWwgPC0gbG0oSW5mUmF0ZVByb3AgfiBDZWxsVHlwZSArIE1vck4gKyBEb25vcixcbiAgICAgICAgICAgICBkYXRhID0gaGl2X21lbW9yeV9uYWl2ZSkifQ==
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="beta-model">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Hint 1
+Hint:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Consider using the <code>sqrt()</code> function:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(___)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>beta_model <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(InfRateProp <span class="sc">~</span> CellType <span class="sc">+</span> MorN <span class="sc">+</span> Donor ,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> ...,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> hiv_memory_naive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="find-sqrt">
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="beta-model">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Hint 2
+Solution:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The input information that <code>sqrt()</code> needs to make your calculation is the number you want the square root of: 64.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>beta_model <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(InfRateProp <span class="sc">~</span> CellType <span class="sc">+</span> MorN <span class="sc">+</span> Donor ,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> <span class="fu">beta_family</span>(<span class="at">link =</span> <span class="st">'logit'</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> hiv_memory_naive)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(beta_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="find-sqrt">
+</section>
+<section id="conditions" class="level2" data-number="33.9">
+<h2 data-number="33.9" class="anchored" data-anchor-id="conditions"><span class="header-section-number">33.9</span> Conditions</h2>
+<p>Just as for binary and count regression, the conditions we have to check are:</p>
+<ol type="1">
+<li>logit-linearity</li>
+<li>Independence of residuals</li>
+<li>Mean-variance relationship</li>
+</ol>
+</section>
+<section id="assessment" class="level2" data-number="33.10">
+<h2 data-number="33.10" class="anchored" data-anchor-id="assessment"><span class="header-section-number">33.10</span> Assessment</h2>
+<p>Again like before, we’ll rely on the scaled residual plot to check linearity and the mean-variance relationship, and an ACF to check residual independence.</p>
+<div class="cell" data-layout-align="center" data-exercise="scaled-res" data-envir="beta-model">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJldGEtbW9kZWwiLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InNjYWxlZC1yZXMifSwiY29kZSI6ImJldGFfc2ltIDwtIHNpbXVsYXRlUmVzaWR1YWxzKGJldGFfbW9kZWwpXG5wbG90UmVzaWR1YWxzKGJldGFfc2ltKSJ9
+</script>
+</div>
+</div>
+<div class="cell" data-layout-align="center" data-exercise="beta-acf" data-envir="beta-model">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJldGEtbW9kZWwiLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImJldGEtYWNmIn0sImNvZGUiOiJhY2YocmVzaWQoYmV0YV9tb2RlbCksIG1haW4gPSAnJykifQ==
+</script>
+</div>
+</div>
+<p>(We could also plot <code>logit(InfRateProp)</code> as a function of any quantitative predictors (if we had any). But our predictors are all categorical…)</p>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+What problem(s) do you see?
+<div id="radio_GFASIZBCZE" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_GFASIZBCZE" value="answer"> <span>The scaled residuals aren't spread uniformly up-and-down so there's likely a problem with the mean-variance condition</span></label><label><input type="radio" autocomplete="off" name="radio_GFASIZBCZE" value=""> <span>There are no issues at all – this model passes assessment</span></label><label><input type="radio" autocomplete="off" name="radio_GFASIZBCZE" value=""> <span>Many ACF values are outside the confidence bounds, so there's clear evidence of a problem with residual dependence</span></label><label><input type="radio" autocomplete="off" name="radio_GFASIZBCZE" value=""> <span>The residual normality condition is violated</span></label><label><input type="radio" autocomplete="off" name="radio_GFASIZBCZE" value=""> <span>There might be a problem with logit-linearity</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for more explanation of the answers above…
+</button>
+<p>Maybe there is a trend seen in the scaled residual plot, I agree…but according to the researcher there were not any other uncontrolled variables known that we might be able to add, much less ones that are clearly quantitative.</p>
+<p>Remember that there IS no normality condition.</p>
+</div>
+</section>
+<section id="aside-fix" class="level2" data-number="33.11">
+<h2 data-number="33.11" class="anchored" data-anchor-id="aside-fix"><span class="header-section-number">33.11</span> Aside: fix</h2>
+<p>In this case, the “fix” to the problem with the mean-variance condition was to average the values within each donor for each cell type prior to fitting the model. It reduces sample size, but also reduces noise. The code below prepares the dataset for this approach, fits the model, and re-makes a new scaled residual plot.</p>
+<div class="cell" data-layout-align="center" data-exercise="averaged-beta" data-envir="beta-model">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJldGEtbW9kZWwiLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImF2ZXJhZ2VkLWJldGEifSwiY29kZSI6IlxuaGl2X21lbW9yeV9uYWl2ZTIgPC0gaGl2X21lbW9yeV9uYWl2ZSB8PlxuICBncm91cF9ieShEb25vciwgQ2VsbFR5cGUsIE1vck4pIHw+XG4gIHN1bW1hcmlzZShNZWFuSW5mUmF0ZVByb3AgPSBtZWFuKEluZlJhdGVQcm9wKSwgLmdyb3VwcyA9ICdkcm9wJylcblxuYmV0YV9tb2RlbDIgPC0gZ2xtbVRNQihNZWFuSW5mUmF0ZVByb3AgfiBDZWxsVHlwZSArIE1vck4gKyBEb25vciAsXG4gICAgICAgICAgICAgICBmYW1pbHkgPSBiZXRhX2ZhbWlseShsaW5rID0gJ2xvZ2l0JyksXG4gICAgICAgICAgICAgICBkYXRhID0gaGl2X21lbW9yeV9uYWl2ZTIpXG5cbmJldGFfc2ltMiA8LSBzaW11bGF0ZVJlc2lkdWFscyhiZXRhX21vZGVsMilcbnBsb3RSZXNpZHVhbHMoYmV0YV9zaW0yKSJ9
+</script>
+</div>
+</div>
+<p>Looks pretty good now. (And for sure, WAY better than the <code>lm()</code> did.)</p>
+</section>
+<section id="selection" class="level2" data-number="33.12">
+<h2 data-number="33.12" class="anchored" data-anchor-id="selection"><span class="header-section-number">33.12</span> Selection</h2>
+<p>Model selection for beta regression is coded and interpreted just as for other models we’ve worked with already. So, since Shen and colleagues chose to use a hypothesis testing approach, we might use ANOVA – go ahead and code it!</p>
+<div class="cell" data-layout-align="center" data-exercise="anova-prac" data-envir="beta-model">
+<div>
+<div id="webr-9" class="exercise-cell">
+
+</div>
+<script type="webr-9-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJldGEtbW9kZWwiLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImFub3ZhLXByYWMifSwiY29kZSI6IiJ9
+</script>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="anova-prac">
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -717,66 +953,48 @@ Solution:
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">64</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(beta_model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
-<p>Now try computing the square root of 44, <em>and then</em> rounding it to the nearest integer:</p>
-<div class="cell" data-exercise="round-sqrt">
+<p>In this case, we find there is very, very strong evidence of differences in HIV infection rates between cell types and between memory and naive cells. (We don’t really care to <em>test</em> whether there are Donor effects or not; rather, we assume and suspect there are such effects, and want to control for them in our model.)</p>
+</section>
+<section id="prediction-plots" class="level2" data-number="33.13">
+<h2 data-number="33.13" class="anchored" data-anchor-id="prediction-plots"><span class="header-section-number">33.13</span> Prediction Plots</h2>
+<p>Prediction plots for beta regression are also made just as they were for other GLMs, using <code>ggpredict()</code>. Try making a prediction plot for <code>MorN</code> and <code>CellType</code> together!</p>
+<div class="cell" data-layout-align="center" data-exercise="beta-preds" data-envir="beta-model">
 <div>
-<div id="webr-3" class="exercise-cell">
+<div id="webr-10" class="exercise-cell">
 
 </div>
-<script type="webr-3-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InJvdW5kLXNxcnQifSwiY29kZSI6IiJ9
+<script type="webr-10-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJldGEtbW9kZWwiLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImJldGEtcHJlZHMifSwiY29kZSI6IiJ9
 </script>
 </div>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="round-sqrt">
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="beta-preds">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Hint 1
+Hint:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You’ll need to use <em>two</em> functions this time:</p>
-<p>The <code>sqrt()</code> function, and then the <code>round()</code> function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(___)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(___)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict_response</span>(beta_model2, ...) <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="round-sqrt">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint 2
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The input information that <code>sqrt()</code> needs to make your calculation is the number you want the square root of: 44. Run that code first, to get the input you will need for <code>round()</code>…</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">44</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(___)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="round-sqrt">
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="beta-preds">
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -785,464 +1003,49 @@ Solution:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">44</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">6.63325</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Can you do it all in one go? Well…yes!</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="dv">44</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>There’s also an easier-to-read way to do that, using a <em>pipe operator</em> <code>|&gt;</code>. It takes the output of one operation and passes it as input to the next. You can read it as <code>|&gt;</code> = “and then…” so we could do:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">44</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol type="1">
-<li>Take the square root of 44, <em>and then</em></li>
-<li>round the result.</li>
-</ol>
-<p>(More on pipes later!)</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict_response</span>(beta_model2, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">'MorN'</span>, <span class="st">'CellType'</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
+<p>What do we see? Memory cells have higher infection rates than Naive cells. Compared to lone “Resting” cells, those cultures along with IEC (intestinal endothelial cells) were infected much more, and adding interferon <span class="math inline">\(\gamma\)</span> (the “+” in IEC+) further increased infection rates.</p>
+<p>Each of these “increases” happens in a proportional way (by a multiplicative factor); for example, since the Resting infection rate was higher for Memory cells, the increases in proportion infected were larger.</p>
+<section id="the-math" class="level3">
+<h3 class="anchored" data-anchor-id="the-math">The math!</h3>
+<p>We can see how this happens by checking out the equation (leaving out the donor terms to keep it shorter).</p>
+<p><span class="math display">\[logit(\mu_i) = log(\frac{\mu_i}{(1-\mu_i)}) = \beta_0 + \beta_1 I_{Naive} + \beta_2 I_{IEC-} + \beta_3 I_{IEC+} + ... \]</span></p>
+<p>(Here, each <span class="math inline">\(I_{label}\)</span> is an indicator variable if that cell type is true, and 0 otherwise. And also, <span class="math inline">\(\frac{\mu_i}{(1-\mu_i)}\)</span> is the <em>odds</em> of infection!)</p>
+<p>Exponentiating both sides, we get:</p>
+<p><span class="math display">\[\frac{\mu_i}{(1-\mu_i)} = e^{(\beta_0 + \beta_1(I_{Naive}) + \beta_2(I_{IEC-}) + \beta_3(I_{IEC+}) + ...)}\]</span></p>
+<p>Since <span class="math inline">\(e^{(a + b)} = e^ae^b\)</span>, that is</p>
+<p><span class="math display">\[\frac{\mu_i}{(1-\mu_i)} = e^{\beta_0} e^{\beta_1(I_{Naive})} e^{\beta_2(I_{IEC-})} e^{\beta_3(I_{IEC+})}...\]</span></p>
+<p>And now, since <span class="math inline">\(e^{ab} = (e^a)^b\)</span>, we get</p>
+<p><span class="math display">\[\frac{\mu_i}{(1-\mu_i)} = e^{\beta_0} (e^{\beta_1})^{(I_{Naive})} (e^{\beta_2})^{(I_{IEC-})} (e^{\beta_3})^{(I_{IEC+})}\dots\]</span> This means, for example, that when you change from Memory to Naive cells, the <em>odds</em> of infection with HIV are <em>multiplied</em> by <span class="math inline">\(e^{\beta_1}\)</span>. (So the bigger the odds to begin with for Memory cells, the bigger the decrease when changing to Naive cells.) Cool!</p>
 </section>
-<section id="storing-information-in-r-variables" class="level3">
-<h3 class="anchored" data-anchor-id="storing-information-in-r-variables">Storing information in R: variables</h3>
-<p>In the last section, you computed the square root of 44 and then rounded it, perhaps like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">44</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 6.63325</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">6.63325</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 7</code></pre>
-</div>
-</div>
-<p>But to do that, you probably had to first find the root, make a note of the result, and then provide that number to the <code>round</code> function. What a pain!</p>
-<p>A very useful option, if you have value (or a variable, dataset, or other R object) that you will want to use later on, is to store it as a named object in R. In the previous example, you might want to store the square root of 44 in a variable called <code>my_root</code>; then you can provide my_root to the <code>round()</code> function without checking the result of the <code>sqrt()</code> calculation first:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>my_root <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">44</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(my_root)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 7</code></pre>
-</div>
-</div>
-<p>Notice that to assign a name to the results of some R code, you use the symbol <code>&lt;-</code>. You can think of it as an <em>assignment arrow</em> – it points <em>from</em> a value or item <em>toward a name</em> and assigns the name to the thing.</p>
-<p>Try editing the code to change the name of the variable from <code>my_root</code> to something else, then run your new code:</p>
-<div class="cell" data-exercise="name-a-variable">
-<div>
-<div id="webr-4" class="exercise-cell">
-
-</div>
-<script type="webr-4-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6Im5hbWUtYS12YXJpYWJsZSJ9LCJjb2RlIjoibXlfcm9vdCA8LSBzcXJ0KDQ0KVxucm91bmQobXlfcm9vdCkifQ==
-</script>
-</div>
-</div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="name-a-variable">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Make sure you change the name <code>my_root</code> in <em>both</em> places.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="name-a-variable">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>your_new_name <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">44</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(your_new_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="what-if-i-have-a-list-of-numbers-to-store" class="level3">
-<h3 class="anchored" data-anchor-id="what-if-i-have-a-list-of-numbers-to-store">What if I have a list of numbers to store?</h3>
-<p>Sometime you might want to create a variable that contains more than one number. You can use the function <code>c()</code> to <em>concatenate</em> a list of numbers:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>my_fave_numbers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">44</span>, <span class="dv">16</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>my_fave_numbers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1]  4 44 16</code></pre>
-</div>
-</div>
-<p>(First we stored the list of numbers, calling it my_fave_numbers; then we printed the results to the screen by simply typing the variable name my_fave_numbers).</p>
-<p>Try making a list of your three favorite numbers, then using the function <code>sum</code> to add them all up:</p>
-<div class="cell" data-exercise="c-and-sum">
-<div>
-<div id="webr-5" class="exercise-cell">
-
-</div>
-<script type="webr-5-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImMtYW5kLXN1bSJ9LCJjb2RlIjoiIn0=
-</script>
-</div>
-</div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="c-and-sum">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>First use <code>c()</code> to concatenate your chosen numbers (separated by commas).</p>
-<p>Don’t forget to use <code>&lt;-</code> to assign your list of numbers a name!</p>
-<p>Then, use <code>sum()</code> to add them up.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_numbers <span class="ot">&lt;-</span> <span class="fu">c</span>(___,___,___)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(___)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="c-and-sum">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>This is just one possible solution.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>my_numbers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">16</span>, <span class="dv">44</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(my_numbers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Notice you <em>could</em> also nest <code>sum()</code> and <code>c()</code>, or use the pipe operator <code>|&gt;</code> to calculate the numeric answer, <em>but then you would not have the object <code>my_numbers</code> available for later use</em>…</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">16</span>, <span class="dv">44</span>))</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or </span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">16</span>, <span class="dv">44</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="what-about-data-that-are-not-numeric" class="level3">
-<h3 class="anchored" data-anchor-id="what-about-data-that-are-not-numeric">What about data that are not numeric?</h3>
-<p>R can work with categorical data as well as numeric data. For example, we could create a list of words and store it as a variable if we wanted (feel free to try changing the words if you want):</p>
-<div class="cell" data-exercise="cat-var">
-<div>
-<div id="webr-6" class="exercise-cell">
-
-</div>
-<script type="webr-6-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImNhdC12YXIifSwiY29kZSI6Im15X3dvcmRzIDwtIGMoJ1JTdHVkaW8nLCAnaXMnLCAnYXdlc29tZScpXG5teV93b3JkcyJ9
-</script>
-</div>
-</div>
-</section>
-<section id="what-if-i-have-a-lot-more-data-to-store" class="level3">
-<h3 class="anchored" data-anchor-id="what-if-i-have-a-lot-more-data-to-store">What if I have a LOT more data to store?</h3>
-<p><code>c()</code> works great for creating small lists of just a few values, but it is <em>not</em> a good way to enter or store large data tables - there is lots of potential for user error. In this course, you will usually be given a dataset already in electronic form; if you need to create one, you would turn to spreadsheet or database software. Either way you read the existing data file into R directly.</p>
-<p>In R, these larger datasets are stored as objects called <code>data.frame</code>s. The next sections will get you started using them.</p>
-</section>
-</section>
-<section id="how-should-data-tables-be-organized-for-statistical-analysis" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="how-should-data-tables-be-organized-for-statistical-analysis"><span class="header-section-number">2.3</span> How should data tables be organized for statistical analysis?</h2>
-<p>A comprehensive guide to good practices for formatting data tables is available at <a href="http://kbroman.org/dataorg/" class="uri">http://kbroman.org/dataorg/</a>.</p>
-<p>A few key points to keep in mind:</p>
-<ul>
-<li>This data table is for the computer to read, not for humans! So eliminate formatting designed to make it “pretty” (color coding, shading, fonts…)</li>
-<li>Use short, simple variable names that do not contain any spaces or special characters (like ?, $, %, -, etc.)</li>
-<li>Organize the table so there is one column for every variable, and one row for every observation (person/place/thing for which data were collected).</li>
-<li>Use informative variable values rather than arbitrary numeric codes. For example, a variable Color should have values ‘red’, ‘white’, and ‘blue’ rather than 1, 2, and 3.</li>
-</ul>
-<p>You will have chances to practice making your own data files and importing them into R outside this tutorial.</p>
-</section>
-<section id="using-built-in-datasets-in-r" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="using-built-in-datasets-in-r"><span class="header-section-number">2.4</span> Using built-in datasets in R</h2>
-<p>R has a number of built-in datasets that are accessible to you as soon as you start RStudio.</p>
-<p>In addition to the datasets that are included with base R, there are add-on <em>packages</em> for R that contain additional software tools and sometimes datasets.</p>
-<p>To use datasets contained in a package, you have to load the package by running the command:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(packagename) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="example-of-loading-a-package" class="level3">
-<h3 class="anchored" data-anchor-id="example-of-loading-a-package">Example of loading a package</h3>
-<p>For example, we will practice looking at a dataset from the package <code>mosaic</code>.</p>
-<p>Before we can access the data, we have to load the package. The code might look like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>(Nothing obvious will happen when you run this code…it basically just gives R permission to access the package, so there is often no output visible.)</strong></p>
-</section>
-<section id="viewing-a-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="viewing-a-dataset">Viewing a dataset</h3>
-<p>The <code>mosaic</code> package includes a dataset called <code>HELPrct</code>.</p>
-<p>If you just run the dataset name (<code>HELPrct</code>) as a command, R will print some (or all - egad!) of the dataset out to the screen! (So don’t…)</p>
-<p><strong>But</strong>…how can we extract selected, useful information about a dataset?</p>
-</section>
-<section id="gathering-information-about-a-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="gathering-information-about-a-dataset">Gathering information about a dataset</h3>
-<p>There are a few functions that make it easier to take a quick look at a dataset:</p>
-<ul>
-<li><code>head()</code> prints out the first few rows of the dataset.</li>
-<li><code>names()</code> prints out the names of the variables (columns) in the dataset</li>
-<li><code>dplyr::glimpse()</code> (function <code>glimpse()</code> from package <code>dplyr</code>) gives an short list-like overview of the dataset</li>
-<li><code>skimr::skim()</code> (function <code>skim()</code> from the package <code>skimr</code>) prints out more detailed graphical summary information about a dataset</li>
-<li><code>nrow()</code> reports the number of rows (observations or cases) in the dataset</li>
-<li><code>ncol()</code> reports the number of columns (variables) in the dataset</li>
-</ul>
-<p>Try applying each of these functions to the <code>HELPrct</code> data and see what the output looks like each time:</p>
-<div class="cell" data-exercise="check-out-data">
-<div>
-<div id="webr-7" class="exercise-cell">
-
-</div>
-<script type="webr-7-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImNoZWNrLW91dC1kYXRhIn0sImNvZGUiOiJmdW5jdGlvbihfX19fKSJ9
-</script>
-</div>
-</div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="check-out-data">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>The input for each of the functions is the name of the dataset: <code>HELPrct</code>.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(HELPrct)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(HELPrct)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(HELPrct)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(HELPrct)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(HELPrct)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(HELPrct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In this case, the point is usually to view the information on-screen, not to store it for later use, so we have not used <code>&lt;-</code> at all to store any output for later use or reference.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="getting-more-help" class="level3">
-<h3 class="anchored" data-anchor-id="getting-more-help">Getting more help</h3>
-<p>You can get help related to R function, and built-in R datasets, using a special function: <code>?</code>. Just type ? followed by the name of the function or dataset you want help on:</p>
-<div class="cell" data-exercise="get-help">
-<div>
-<div id="webr-8" class="exercise-cell">
-
-</div>
-<script type="webr-8-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImdldC1oZWxwIn0sImNvZGUiOiIifQ==
-</script>
-</div>
-</div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="get-help">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>For example, if you want to know about the function <code>nrow()</code>:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>?nrow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="reading-in-data-from-a-file" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="reading-in-data-from-a-file"><span class="header-section-number">2.5</span> Reading in data from a file</h2>
-<p>For this class, you will often be asked to analyze data that is stored in files that are available online - usually in csv format. It’s simple to read them into R. For example, we can read in the file MI_lead.csv, which is stored at <a href="https://sldr.netlify.app/data/MI_lead.csv" class="uri">https://sldr.netlify.app/data/MI_lead.csv</a> using the function <code>read_csv()</code> (from package <code>readr</code> or super-package <code>tidyverse</code>):</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr) <span class="co"># the readr package contains the read_csv() function</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>MI_lead <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">'https://sldr.netlify.app/data/MI_lead.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="the-most-common-mistakes" class="level3">
-<h3 class="anchored" data-anchor-id="the-most-common-mistakes">The most common mistakes</h3>
-<p>The code below contains several of the <strong>most common mistakes</strong> students make when they try to read in a data file. See if you can find and correct them <strong>all</strong>!</p>
-<p>The code below - if corrected - <em>would</em> (on posit.cloud or in standalone R/RStudio) run without an error and read in some baseball statistics from the file <a href="http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv" class="uri">http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv</a>.</p>
-<p>Here in this tutorial, it may give the error: <code>! curl package not installed, falling back to using url()</code> – there’s not a straightforward fix, sorry, but try it on the server if you want to prove to yourself that it works!</p>
-<div class="cell" data-exercise="baseball-mistakes">
-<div>
-<div id="webr-9" class="exercise-cell">
-
-</div>
-<script type="webr-9-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImJhc2ViYWxsLW1pc3Rha2VzIn0sImNvZGUiOiJyZWFkX2NzdihodHRwOi8vc3RhY3lkZXJ1aXRlci5naXRodWIuaW8vdGVhY2hpbmdkYXRhL2RhdGEtcmF3L2Jhc2UpIn0=
-</script>
-</div>
-</div>
-<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="baseball-mistakes">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hints
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Think about:</p>
-<ul>
-<li>Is the filename or URL spelled correctly, with no typos?</li>
-<li>Is the filename or URL in quotation marks (either ” or ’ work equally)?</li>
-<li>Is the URL complete (including the file extension “.csv”)</li>
-<li>Was <code>&lt;-</code> used to assign a <em>name</em> to the dataset once read in? (Otherwise it will just be uselessly printed to the screen and not available for later use!)</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="baseball-mistakes">
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>baseball_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">'http://stacyderuiter.github.io/teachingdata/data-raw/baseball.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="what-about-local-files" class="level3">
-<h3 class="anchored" data-anchor-id="what-about-local-files">What about local files?</h3>
-<p>The same function, <code>read_csv()</code>, can be used to read in a local file. You just need to change the input to <code>read_csv()</code> – instead of a URL, you provide a path and filename (in quotes). For example, the input <code>file = 'https://sldr.netlify.app/data/MI_lead.csv'</code> might become <code>file = 'C:\\Data\\MI_lead.csv'</code>.</p>
-<p>We won’t do an example in this tutorial because it’s not straightforward to work with local files within a tutorial environment, but you can practice it once you are working independently in RStudio.</p>
-<p>If you are working on the server r.cs.calvin.edu, you will have to <em>upload</em> files to your cloud space on the server before you can read them in (RStudio on the server cannot access files on your computer’s hard drive). Look in the “Files” tab on the lower right, and then click “Upload.”</p>
-</section>
-<section id="named-input-arguments" class="level3">
-<h3 class="anchored" data-anchor-id="named-input-arguments">Named input arguments</h3>
-<p>The input argument we provided to R is the URL (in quotes – either single or double quotes are fine). But notice that this time, we gave the input argument a <em>name</em>, “file”, and specified its value with an equal sign.</p>
-<p>This is not <em>required</em> - the command works fine without it:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>MI_lead <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://sldr.netlify.app/data/MI_lead.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>However, if a function has <em>more than just one</em> input argument, it’s good to get in the habit of providing names for the inputs. If you provide names, then the order in which you list the inputs doesn’t matter; without names, <strong>the order matters</strong> and you have to use ? to figure out what order R expects!</p>
-</section>
-<section id="renaming-variables-in-a-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="renaming-variables-in-a-dataset">Renaming variables in a dataset</h3>
-<p>This is an advanced topic, so don’t worry if it seems complicated; for now, it just nice to realize some of the power R has to clean up and reorganize data.</p>
-<p>What if we didn’t like the names of the <code>MI_lead</code> variables? For example, a new user of the dataset might not know that that ELL stands for “elevated lead levels” and that ELL2005 gives the <em>proportion</em> of tested kids who had elevated lead levels in the year 2005.</p>
-<p>If we wanted to use a clearer (though longer) variable name, we might prefer “prop_elevated_lead_2005” instead of “ELL2005” – more letters to type, but a bit easier to understand for a new user. How can we tell R we want to rename a variable?</p>
-<p>We use the code:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>MI_lead <span class="ot">&lt;-</span> MI_lead <span class="sc">|&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">prop_elevated_lead_2005 =</span> ELL2005)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(MI_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The code above uses some tools you’ve seen, and some more advanced ones you haven’t seen yet. The symbol <code>|&gt;</code> is called a “pipe” and basically means “and then…” Translated into words, the code above tells R:</p>
-<ul>
-<li>Make a dataset called <code>MI_lead</code> by starting with the dataset <code>MI_lead</code>.</li>
-<li><strong>Next, take the results do something more with them</strong> (<code>|&gt;</code>) …</li>
-<li><code>rename()</code> a variable. What I want to rename is the variable <code>ELL2005</code>. Its new name should be <code>prop_elevated_lead_2005</code>.”</li>
-</ul>
-<p><em>See…you can already start to make sense of even some pretty complicated (and useful) code.</em></p>
-<p>Note: If you give R several commands, <em>not</em> connected by pipes, it will do the first, then the second, then the third, and so on. R doesn’t need the pipe for permission to continue! Instead, the pipe tells R to take the <em>results</em> from the first command, and use them as the input or starting material for the next command.</p>
-</section>
-<section id="check-out-the-data" class="level3">
-<h3 class="anchored" data-anchor-id="check-out-the-data">Check out the data</h3>
-<p>OK, back to business - simple functions and datasets in R.</p>
-<p>It’s your turn to practice now. Use one of the functions you have learned so far to extract some information about the MI_lead dataset.</p>
-<p>How many rows are in the dataset? How many variables (columns)?</p>
-<p>What are the variables named, and what are their values like?</p>
-<p><em>Remember, <code>?</code> won’t work on MI_lead because it’s not a built-in R dataset. Also, the dataset MI_lead is already read in for you, here…so you don’t need to use <code>read_csv()</code>.</em></p>
-<div class="cell" data-exercise="look-at-MI_lead">
-<div>
-<div id="webr-10" class="exercise-cell">
-
-</div>
-<script type="webr-10-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6Imxvb2stYXQtTUlfbGVhZCJ9LCJjb2RlIjoiIn0=
-</script>
-</div>
-</div>
-</section>
-</section>
-<section id="review" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="review"><span class="header-section-number">2.6</span> Review</h2>
-<p>What have you learned so far? More than you think!</p>
-<section id="functions-in-r" class="level3">
-<h3 class="anchored">Functions in R</h3>
-<p>You’ve learned that R code is made up of functions, which are generally named descriptively according to the job they do. Functions have one or more input arguments, which is where you provide R with all the data and information it needs to do the job. The syntax for calling a function uses the template:</p>
-<center>
-<h2 class="anchored" data-anchor-id="functions-in-r">
-<strong><span class="boxed">function</span> ( <span class="boxed">&nbsp;information1&nbsp; , &nbsp;information2&nbsp; , …)</span></strong>
-</h2>
-</center>
-<p>&nbsp;</p>
-</section>
-<section id="variables-in-r" class="level3">
-<h3 class="anchored" data-anchor-id="variables-in-r">Variables in R</h3>
-<p>You’ve practiced creating variables in R using <code>c()</code>, and saving information (or the results of a computation) using the assignment arrow &lt;-.</p>
-</section>
-<section id="datasets-in-r" class="level3">
-<h3 class="anchored" data-anchor-id="datasets-in-r">Datasets in R</h3>
-<p>You’ve considered several different ways to get datasets to work with in R: you can use datasets that are built in to R or R packages, or you can use <code>read_csv()</code> to read in data files stored in .csv format.</p>
-</section>
-<section id="vocabulary" class="level3">
-<h3 class="anchored" data-anchor-id="vocabulary">Vocabulary</h3>
-<p>You should now be able to define and work with some R-related terms:</p>
-<ul>
-<li><em>code</em> or <em>commands</em> that R can <em>execute</em></li>
-<li><em>function</em> and <em>inputs</em> or <em>arguments</em></li>
-<li><em>assignment arrow</em>: <code>&lt;-</code></li>
-<li><em>pipe</em> = “and then…”: <code>|&gt;</code> (note: <code>|&gt;</code> is an older way of writing a pipe, and it does basically the <em>same</em> thing as <code>|&gt;</code>)</li>
-</ul>
-</section>
-</section>
-<section id="congratulations" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="congratulations"><span class="header-section-number">2.7</span> Congratulations!</h2>
-<p>You just completed your first tutorial on R, and wrote some of your own R code. I <em>knew</em> you could do it…</p>
-<p>Want more help and practice? Consider checking out outside resources from posit: <a href="https://posit.cloud/learn/primers" class="uri">https://posit.cloud/learn/primers</a></p>
+<section id="official-interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="official-interpretation">Official Interpretation</h3>
+<p>Here’s how the Eddy et al.&nbsp;paper puts it:</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>In vivo, memory CD4+T cells are preferentially infected and harbor most of the latent reservoir. Therefore, we examined whether IEC stimulation has more effect on the memory population or the naïve population of resting CD4+T cells. We isolated CD4+CD45RO- naïve resting T cells and CD4+CD45RA- memory resting T cells from the same donor, and co-cultured them with IEC one day before infection. Infection rates (%GFP+) were examined on day 6 post-infection. We found that memory CD4+T cells were infected at much higher rates than naïve CD4+T cells in general (Fig. 1D, overall comparison between memory and naïve T cells, p&lt;0.0001). Although both memory and naïve CD4+T cells co-cultured with IEC still showed greater infectivity than those CD4+T cells cultured alone (Fig. 1D, p&lt;0.0001), the increases in infection for memory T cells were much higher than for naïve T cells: IEC − cocultures increased infection by &gt;10% on average in memory T cells compared with 1.5% in naïve T cells; likewise, IEC+cocultures increased infection by &gt;15% on average in memory T cells compared with 2% in naïve T cells. This suggested that signals provided by IEC to memory CD4+T cells were able to overcome the restrictions to a much greater extent than in naïve cells.</p>
+</blockquote>
+</blockquote>
+<p>Yes, true, it’s pretty complicated. Why does it matter?</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>This is the first time IEC are implicated in HIV infection and pathology in the gut. As the intestinal mucosal area is a major site of HIV pathology and latency formation, this study highlights the importance of lymphoid tissue environment in HIV disease and persistence, particularly the involvement of EC in the gut microenvironment as a significant player.</p>
+</blockquote>
+</blockquote>
+<p>So…this finding (along with a lot of other similar experiments) is helping to work out the details of how and where in the body HIV infection begins and persists. And to model the experimental results well, we needed our new friend the beta regression model.</p>
+<p>Enjoy having one more tool in your regression arsenal!</p>
 
 
 <script type="webr-data">
-eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImRwbHlyIiwidGlkeXIiLCJyZWFkciIsInN0cmluZ3IiLCJza2ltciIsImd0IiwicGFuZGVyIiwicmVhY3RhYmxlIl0sInJlcG9zIjpbXX0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImRwbHlyIiwidGlkeXIiLCJyZWFkciIsInJlYWR4bCIsInN0cmluZ3IiLCJnZ3Bsb3QyIiwiZ2dmb3JtdWxhIiwibW9zYWljIiwiY2FyIiwiREhBUk1hIl0sInJlcG9zIjpbXX0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
 </script>
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0xMC1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzEwID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMCwge30pO1xuX3dlYnJfZmVlZGJhY2tfMTAgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzEwLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC05IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV85O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzkgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici05LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItOS1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzkgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzksIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzkgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzkuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTgiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici04IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfOCA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici04LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfOCwge30pO1xuX3dlYnJfZmVlZGJhY2tfOCA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfOC5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNztcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTciLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl83ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTctY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV83ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl83LCB7fSk7XG5fd2Vicl9mZWVkYmFja183ID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV83LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItNi1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzYgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzYsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzYuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici01IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNSA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici01LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNSwge30pO1xuX3dlYnJfZmVlZGJhY2tfNSA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfNS5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTQiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl80ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTQtY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV80ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl80LCB7fSk7XG5fd2Vicl9mZWVkYmFja180ID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV80LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItMy1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzMgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzMsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzMuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMiA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0yLWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMiwge30pO1xuX3dlYnJfZmVlZGJhY2tfMiA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfMi5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici1wcmVsdWRlIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoid2ViUk9qcyA9IHtcbiAgY29uc3QgeyBXZWJSLCBDaGFubmVsVHlwZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZS5XZWJSO1xuICBjb25zdCB7XG4gICAgV2ViUkV2YWx1YXRvcixcbiAgICBXZWJSRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoXG4gIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHN0YXR1c0NvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1zdGF0dXNcIik7XG4gIGNvbnN0IGluZGljYXRvckNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGluZGljYXRvckNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKFwiZC1ub25lXCIpO1xuXG4gIGxldCBzdGF0dXNUZXh0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICBzdGF0dXNUZXh0LmNsYXNzTGlzdCA9IFwiZXhlcmNpc2UtbG9hZGluZy1kZXRhaWxzXCI7XG4gIHN0YXR1c1RleHQgPSBzdGF0dXNDb250YWluZXIuYXBwZW5kQ2hpbGQoc3RhdHVzVGV4dCk7XG4gIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5pdGlhbGlzZWA7XG5cbiAgLy8gSG9pc3QgaW5kaWNhdG9yIG91dCBmcm9tIGZpbmFsIHNsaWRlIHdoZW4gcnVubmluZyB1bmRlciByZXZlYWxcbiAgY29uc3QgcmV2ZWFsU3RhdHVzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgLmV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpZiAocmV2ZWFsU3RhdHVzKSB7XG4gICAgcmV2ZWFsU3RhdHVzLnJlbW92ZSgpO1xuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsID4gLnNsaWRlc1wiKS5hcHBlbmRDaGlsZChyZXZlYWxTdGF0dXMpO1xuICB9XG5cbiAgLy8gTWFrZSBhbnkgcmV2ZWFsIHNsaWRlcyB3aXRoIGxpdmUgY2VsbHMgc2Nyb2xsYWJsZVxuICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFwiLnJldmVhbCAuZXhlcmNpc2UtY2VsbFwiKS5mb3JFYWNoKChlbCkgPT4ge1xuICAgIGVsLmNsb3Nlc3QoJ3NlY3Rpb24uc2xpZGUnKS5jbGFzc0xpc3QuYWRkKFwic2Nyb2xsYWJsZVwiKTtcbiAgfSlcblxuICAvLyB3ZWJSIHN1cHBsZW1lbnRhbCBkYXRhIGFuZCBvcHRpb25zXG4gIGNvbnN0IGRhdGFDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItZGF0YVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwidmZzLWZpbGVcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBmaWxlcyA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGZpbGVzQ29udGVudCkpO1xuXG4gIC8vIFVzZSBQb3N0TWVzc2FnZSBjaGFubmVsIGZvciBhc3luYyBjb21tdW5pY2F0aW9uXG4gIC8vIFdlIGRvIG5vdCBleHBlY3QgdG8gdGFrZSBuZXN0ZWQgcHJvbXB0IGlucHV0IGluIFF1YXJ0byBMaXZlIGNlbGxzXG4gIGRhdGEub3B0aW9ucy5jaGFubmVsVHlwZSA9IENoYW5uZWxUeXBlLlBvc3RNZXNzYWdlO1xuXG4gIC8vIEluaXRpYWxpc2Ugd2ViUiBhbmQgc2V0dXAgZm9yIFIgY29kZSBldmFsdWF0aW9uXG4gIGxldCB3ZWJSUHJvbWlzZSA9IChhc3luYyAod2ViUikgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICAvLyBJbnN0YWxsIHByb3ZpZGVkIGxpc3Qgb2YgcGFja2FnZXNcbiAgICAvLyBFbnN1cmUgd2ViUiBkZWZhdWx0IHJlcG8gaXMgaW5jbHVkZWRcbiAgICBkYXRhLnBhY2thZ2VzLnJlcG9zLnB1c2goXCJodHRwczovL3JlcG8uci13YXNtLm9yZ1wiKVxuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBcbiAgICAgICAgd2Vicjo6aW5zdGFsbChwa2csIHJlcG9zID0gcmVwb3MpXG4gICAgICAgIGxpYnJhcnkocGtnLCBjaGFyYWN0ZXIub25seSA9IFRSVUUpXG4gICAgICBgLCB7IGVudjoge1xuICAgICAgICBwa2c6IHBrZyxcbiAgICAgICAgcmVwb3M6IGRhdGEucGFja2FnZXMucmVwb3MsXG4gICAgICB9fSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgY29uc3QgYW5hbHlzaXMgPSBhd2FpdCB3ZWJSLkZTLmFuYWx5emVQYXRoKHBhdGgpO1xuICAgICAgICBpZiAoIWFuYWx5c2lzLmV4aXN0cykge1xuICAgICAgICAgIHRyeSB7XG4gICAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvcjogXCIke2UubWVzc2FnZX1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9KShuZXcgV2ViUihkYXRhLm9wdGlvbnMpKTtcblxuICAvLyBLZWVwIHRyYWNrIG9mIGluaXRpYWwgT0pTIGJsb2NrIHJlbmRlclxuICBjb25zdCByZW5kZXJlZE9qcyA9IHt9O1xuXG4gIGNvbnN0IHByb2Nlc3MgPSBhc3luYyAoY29udGV4dCwgaW5wdXRzKSA9PiB7XG4gICAgY29uc3Qgd2ViUiA9IGF3YWl0IHdlYlJQcm9taXNlO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICB3ZWJSUHJvbWlzZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiJ9XX0=
@@ -1256,8 +1059,9 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMCIsImlubGluZSI6ZmFsc2UsIm1l
 </div>
 </div>
 <script type="vfs-file">
-W10=
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS9nYXBtaW5kZXJfY2xlYW4uY3N2IiwiZGF0YS9mcm9nLWFibm9ybWFsaXRpZXMuY3N2IiwiZGF0YS9ib25vYm9fZmFjZXMuY3N2IiwiZGF0YS9iZWUtdmlydXMuY3N2Il0=
 </script>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1879,13 +1683,13 @@ window._ojs.runtime.interpretFromScriptTags();
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./install-r.html" class="pagination-link" aria-label="Installation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installation</span></span>
+      <a href="./quasibinomial.html" class="pagination-link" aria-label="Models for Overdispered Binary Data">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Models for Overdispered Binary Data</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./how-to-quarto.html" class="pagination-link" aria-label="Using Quarto">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using Quarto</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1903,7 +1707,7 @@ window._ojs.runtime.interpretFromScriptTags();
 </a>
   </li>  
 </ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/r-basics.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/beta.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

@@ -1,0 +1,398 @@
+---
+live-html:
+resources:
+  - data
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - readr
+    - readxl
+    - stringr
+    - ggplot2
+    - ggformula
+    - mosaic
+    - car
+    - DHARMa
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Models for Overdispered Binary Data
+
+```{r setup, include=FALSE}
+library(webexercises)
+library(tidyverse)
+library(glmmTMB)
+library(ggformula)
+library(ggeffects)
+library(readxl)
+library(DHARMa)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+CSAdata  <- read_excel("data/CSAAlldata.xlsx")
+# format date, extract month and week
+CSAdata <- CSAdata |> 
+  dplyr::mutate(Date = lubridate::ymd(Date), 
+                month = lubridate::month(Date, label = TRUE), 
+                week = factor(lubridate::week(Date)),
+                BA = fct_relevel(BA, 'Before'),
+                OnshoreNNE = ifelse(OnshoreNNE == 0, 'Other', 'Onshore NNE'),
+                Wind_Dir3 = case_when(Wind_Dir == "NE" ~ "NE",
+                                      Wind_Dir == "N" ~ "N",
+                                      TRUE ~ "Other"),
+                POS_SWIM = `POS/SWIM`) |>
+  dplyr::filter(TOTAL_SWIM != 0 & Wind_Dir != "" & !is.na(Water_Temp)) |>
+  select(Date, TOTAL_SI, SI_Totalneg, TOTAL_SWIM, OnshoreNNE, POS_SWIM, BA) 
+
+CSA_logistic <- glmmTMB(cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE ,
+                     data  = CSAdata,
+                     family = binomial(link = 'logit'))
+
+CSA_quasi <- glm(cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE ,
+                     data  = CSAdata,
+                     family = quasibinomial(link = 'logit'))
+
+```
+
+```{webr}
+#| setup: true
+#| include: false
+#| exercise:
+#|   - si-viz
+#|   - first-model
+#|   - first-scaled-resid
+#|   - second-scaled-resid
+#|   - quasi-model
+#|   - quasi-scaled-resid
+
+
+library(tidyverse)
+library(glmmTMB)
+library(ggformula)
+library(ggeffects)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+CSAdata  <- read_excel("data/CSAAlldata.xlsx")
+# format date, extract month and week
+CSAdata <- CSAdata |> 
+  dplyr::mutate(Date = lubridate::ymd(Date), 
+                month = lubridate::month(Date, label = TRUE), 
+                week = factor(lubridate::week(Date)),
+                BA = fct_relevel(BA, 'Before'),
+                OnshoreNNE = ifelse(OnshoreNNE == 0, 'Other', 'Onshore NNE'),
+                Wind_Dir3 = case_when(Wind_Dir == "NE" ~ "NE",
+                                      Wind_Dir == "N" ~ "N",
+                                      TRUE ~ "Other"),
+                POS_SWIM = `POS/SWIM`) |>
+  dplyr::filter(TOTAL_SWIM != 0 & Wind_Dir != "" & !is.na(Water_Temp)) |>
+  select(Date, TOTAL_SI, SI_Totalneg, TOTAL_SWIM, OnshoreNNE, POS_SWIM, BA) 
+
+CSA_logistic <- glmmTMB(cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE ,
+                     data  = CSAdata,
+                     family = binomial(link = 'logit'))
+
+CSA_quasi <- glm(cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE ,
+                     data  = CSAdata,
+                     family = quasibinomial(link = 'logit'))
+
+```
+
+## Section Learning Outcomes
+
+We've already considered a pretty diverse set of types of response variables, but there are still more out there! 
+
+In addition learning about beta regression this module, we'll also consider: what happens (if you experience the very rare case) when binary data is *overdispersed*? Spoiler: You use a quasi-binomial regression model...
+
+By the end of the module you will:
+
+1) Fit, assess, and interpret overdispersed binary GLMs in R 
+
+## Text Reference
+Recommended reading for the materials covered in this tutorial can be found in:
+
+- [Geissinger *et al.* 2022](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.3940){target="_blank"}
+- [Douma & Weedon 2019](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13234){target="_blank"}
+
+It's suggested that you consider consulting these papers *after* doing this tutorial, with particular focus on any topics you found most challenging.
+
+## Overdispersion, revisited
+
+We first encountered the term **overdispersion** when modeling count data. Overdispersion (for count data) is the variance of residuals being much larger than expected according to a Poisson model, that is, the variance of residuals being larger than the predicted response value. It was present *so* often, in fact, that we more or less abandoned Poisson regression altogether and opted for negative binomial models (which can account for overdispersion) as a default for count response variables.
+
+But when learning about binary regression, we didn't even *mention* overdispersion?
+
+That's because it is MUCH more rare for binary data! In fact, I've only encountered one real example...which you'll soon see too.
+
+The definition of overdispersion is similar: binary data are overdispersed if the variance of the residuals is larger than expected, that is, larger than a binomial distribution would predict it to be.
+
+## Swimmer's itch
+The dataset we'll consider is from research by Calvin professor Randall DeJong into the parasite that causes swimmer's itch. 
+
+Swimmer's itch is an itchy rash caused by a parasite; people often get it after swimming in waters where the parasite is present:
+
+```{r, echo = FALSE, out.width = '90%'}
+knitr::include_graphics('https://s.hdnux.com/photos/01/27/71/27/23041531/3/rawImage.jpg')
+```
+
+*image above courtesy of US Centers for Disease Control*
+
+## CSA Data Collection
+
+Swimmer's itch has been a common problem at Crystal Lake in Michigan, and staff at the [Congregational Summer Assembly (CSA)](https://summerassembly.org/about/about-the-csa.html) waterfront there collected the data used in published research, and by us today. The data have been used by the [Crystal Lake Watershed Association](https://crystallakewatershed.org/) to combat swimmer's itch, and in peer-reviewed scientific research too - so this case study is a great example of scientists and citizens partnering together to solve a community problem.
+
+```{r, echo = FALSE, out.width = '90%'}
+knitr::include_graphics('https://s.hdnux.com/photos/01/05/00/16/18088872/4/rawImage.jpg')
+```
+
+*Image: Congregational Summer Assembly beach, photo published in the [Benzie Country Record Patriot](https://www.recordpatriot.com/local-news/article/Congregational-Summer-Assembly-to-host-History-14315729.php)*
+
+## Solutions
+As understanding of how swimmer's itch spreads has improved, the Crystal Lake Watershed Association has been able to relocate merganser ducks (the video below shows their methods) and reduce infections. So this work has had real, practical impact.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_SpBS8yR7jQ?si=w_IPlHmOlHb5Pmfc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+## Swimmer's itch data
+Prof. DeJong has ongoing research using data provided by the CSA, including the 2023 paper ["Swimmer’s itch control: timely waterfowl brood relocation significantly reduces an avian schistosome population and human cases on recreational lakes"](https://doi.org/10.1101/2023.07.10.548414) and in preparation, to understand whether the merganser relocation intervention helps reduce swimmer's itch or not. We will consider one example dataset, here called `CSAdata`.
+
+```{r, echo = TRUE}
+glimpse(CSAdata)
+```
+
+Variables in the dataset include:
+
+- `Date` of data collection and swimmer's itch testing
+- `TOTAL_SI`, the number of tests that were positive for swimmer's itch
+- `SI_Totalneg`, the number of tests that were negative for swimmer's itch
+- `OnshoreNNE`, whether or not there was an onshore North/Northeast wind. Since the location where most of the parasites live is located a certain direction from the beach, the number of cases seen at the CSA beach varies a lot depending on whether or not the prevailing wind is carrying the parasites toward the beach.
+- `POS_SWIM` The number of positive tests divided by the total number of swimmers
+- `BA` (standing for "Before and After"): whether the data point was collected before or after the intervention where the mergansers were relocated.
+
+
+::: {.webex-check .webex-box}
+```{r results = 'asis', echo = FALSE}
+#| label: swimmer-itch-model-type
+
+opts <- sample(c(answer = "This is multiple-trials-per-row binary data, so I'd use binary (aka logistic) regression.",
+        "This is one-trial-per-row binary data, so I'd use binary (aka logistic) regression.",
+        "This is count data, so I'd try negative binomial regression.",
+        "The response is continuous and quantitative, so I would try linear regression.",
+        "The response is proportion data (without associated information on the number of binary trials) so I would try beta regression."
+        ))
+
+cat("To model the frequency of swimmer's itch using this data, what type of response variable do we have, and so which kind of model would you first try fit?",
+    longmcq(opts))
+```
+:::
+
+`r hide("Click for more explanation of the answer above.")`
+
+Consider whether or not this scenario can be considered to be the result of a set of binary trials (where each one results in either a "success" or a "failure"), or not. 
+
+If debating between and "original" format of the possible response variable and a derived quantity, it usually works better (and stays truer to the understanding of the experts who designed the study and collected the data) to model the original.
+
+`r unhide()`
+
+## Data Viz
+
+Researchers hypothesized that the intervention would reduce the number of cases of swimmer's itch, and that the wind direction would serve as a moderator.
+
+::: {.webex-check .webex-box}
+```{r results = 'asis', echo = FALSE}
+#| label: model-eqn-q
+
+opts <- sample(c(answer = "`cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE`",
+        "`TOTAL_SI ~ BA * OnshoreNNE`",
+        "`cbind(TOTAL_SI, SI_Totalneg) ~ BA + OnshoreNNE`",
+        "`cbind(TOTAL_SI, SI_Totalneg) ~ BA : OnshoreNNE`",
+        "`SI_Totalneg ~ BA * OnshoreNNE`",
+        "`POS_SWIM ~ BA * OnshoreNNE`"
+        ))
+
+cat("What model formula would you use to fit a regression model consistent with the statement above?",
+    longmcq(opts))
+```
+:::
+
+Does an initial exploration of the data seem consistent with this idea? See what you think...feel free to begin with the graph below and try your own variations if you wish!
+
+```{webr}
+#| exercise: si-viz
+#| fig-width: 6.4
+#| fig-height: 4
+
+gf_sina(POS_SWIM ~ BA | OnshoreNNE, 
+        data = CSAdata, alpha = 0.2) |>
+  gf_labs(x = 'Timepoint', 
+          y = 'Number of Cases/\nNumber of Swimmers',
+          title = "Merganser relocation\nreduces swimmer's itch cases")
+```
+
+## Model
+
+Will the model verify the patterns we see in our graph(s) -- that the intervention worked to reduce swimmer's itch, and that the presence of an onshore NNE wind moderates that impact, with more cases in NNE wind and larger reductions in cases without NNE winds?
+
+Let's fit a model (based on the plans determined so far).
+
+```{webr}
+#| exercise: first-model
+CSA_logistic <- glmmTMB(
+  cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE ,
+  data  = CSAdata,
+  family = binomial(link = 'logit'))
+```
+
+Before we can get any answers, better do some model assessment!
+
+## Assessment
+
+### Residual Independence
+
+```{r}
+acf(resid(CSA_logistic), main = '')
+```
+
+`r hide("What do you think? Click to check your conclusions...")`
+
+No issues here: all the ACF values at lags greater than 0 are (almost) within the confidence bounds, so we have no evidence of any problem with the residual independence condition!
+
+`r unhide()`
+
+### Mean-Variance and Linearity
+
+```{webr}
+#| exercise: first-scaled-resid
+sim_resid_model1 <- simulateResiduals(CSA_logistic)
+plotResiduals(sim_resid_model1, quantreg = FALSE)
+```
+
+`r hide("What do you think? Click to check your conclusions...")`
+
+Uh-oh. All the red does *not* seem to be a good sign. And it looks like the spread of the residuals for some fitted values is much less than others.
+
+`r unhide()`
+
+Since our model has only two predictors, both categorical, there are only 4 unique fitted values. In a case like this, `plotResiduals()` defaults to treating the fitted values as categorical. This makes sense, but to get a plot more like what we're used to (with points, rather than boxplots) we can do:
+
+```{webr}
+#| exercise: second-scaled-resid
+
+sim_resid_model1 <- simulateResiduals(CSA_logistic)
+plotResiduals(sim_resid_model1, quantreg = FALSE,
+              asFactor = FALSE)
+```
+
+`r hide("What do you think? Click to check your conclusions...")`
+
+However we make the graph, we have a big problem: The mean-variance relationship is *not* as our model expects it to be.
+
+We can see this because the spread of the points in the scaled residual plot is not uniform vertically (the fact that they are arranged in "columns" is **not** the problem here - it's the non-uniform up-and-down spread that's the issue).
+
+(We don't have a clear indication of a linearity issue, though, and as all our predictors are categorical there *can't* actually be such a problem anyway!)
+
+`r unhide()`
+
+## Quasi-Binary Regression
+
+As mentioned before, this particular condition violation is *very* rare. But if you run into it, you can fit a modified version of a binary regression model called **quasi-binary regression.** Essentially, code-wise, we just change the `family` to `quasibionimal()` (and use the `glm()` function rather than `glmmTMB()` for fitting the model):
+
+```{webr}
+#| exercise: quasi-model
+CSA_quasi <- glm(
+  cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE ,
+  data  = CSAdata,
+  family = quasibinomial(link = 'logit'))
+```
+
+## More Assessment
+
+Does the scaled residual plot look better now?
+
+```{webr}
+#| exercise: quasi-scaled-resid
+#| error: true
+
+sim_resid_model2 <- simulateResiduals(CSA_quasi)
+plotResiduals(sim_resid_model2, quantreg = FALSE)
+```
+
+Ummm...uh-oh. We can't actually make the plot; the necessary functions to do so are "not implemented."
+
+The `DHARMa` package does have a *test* for overdispersion; if this returns a small p-value, that indicated that we have strong evidence against the null hypothesis of no overdispersion. 
+
+Normally, we'd prefer to use the plot, since we are making judgement calls rather than trying to make inferences about a truth about a population of interest...but since we are not able to make the graph in this case, we'll try the test (on our original non-quasi-binary model):
+
+```{r, disptest, exercise = TRUE}
+testDispersion(CSA_logistic)
+```
+
+*Definite* evidence of overdispersion there. 
+
+While we can't verify that the mean-variance condition is perfectly met for the quasi-binomial regression model, we *can* safely assume that it's *got* to be a lot better than the binomial regression, since it *does* account for overdispersion (which we *definitely* have present).
+
+## "Quasi" & Selection
+The "quasi" in the name "quasi-binomial" is because this model is fitted using "quasi-likelihood" instead of likelihood!
+
+We won't go into the mathematical details here, but one consequence is that we won't have a full estimate of the *likelihood* of our fitted model and so...
+
+**we can't really use AIC or BIC for selection** 
+
+as we have for other models. (But `car::Anova()` still has a method for quasi-binary regression models, so we can still do selection via ANOVA.)
+
+
+## Selection
+
+```{r}
+car::Anova(CSA_quasi)
+```
+
+::: {.webex-check .webex-box}
+```{r seln-q, results = 'asis', echo = FALSE}
+
+opts <- sample(c(answer = "Both wind direction and the merganser relocation affect swimmer's itch probability, but they don't interact",
+        "Both wind direction and the merganser relocation affect swimmer's itch probability, with wind direction moderating the effectiveness of the relocations",
+        "Neither wind direction nor the merganser relocation affect swimmer's itch probability",
+        "Winds, but not the merganser relocation program, affect swimmer's itch probability",
+        "We can't make any valid conclusions, since this model does not pass assessment"
+        ))
+
+cat("What can we conclude based on the ANOVA results?",
+    longmcq(opts))
+```
+:::
+
+## Prediction Plots
+
+So, wind direction and merganser relocation both matter. How much? And what direction are the effects?
+
+We *need to know* these details to choose when it's safest to swim!
+
+```{r, pred-plot, exercise = TRUE}
+predict_response(CSA_quasi,
+          terms = c('OnshoreNNE', 'BA')) |>
+  plot()
+```
+
+## Swimmer's Action Items
+
+Based on this, when would you feel safest swimming?
+
+The [advice the Crystal Lake Watershed Association gives](https://crystallakewatershed.org/wp-content/uploads/2023/07/Swimmers-Itch-Brochure_2023.pdf), based at least partly on these results, is to avoid swimming after there has been an onshore (NNE) wind. 
+
+News articles have also reported that in 2023, [swimmer's itch cases are WAY up after merganser relocations were banned to prevent avian flu spread](https://www.recordpatriot.com/news/article/crystal-lake-swimmer-s-itch-cases-1-000-18210588.php)...
+
+

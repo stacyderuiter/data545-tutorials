@@ -59,6 +59,10 @@ book:
   - part: "Zero Inflation"
     chapters:
     - zi-od.qmd
+  - part: "More Fun Between 0-1"
+    chapters:
+    - quasibinomial.qmd
+    - beta.qmd
   - references.qmd
   page-footer:
     center:
