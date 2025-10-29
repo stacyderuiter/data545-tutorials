@@ -532,12 +532,19 @@ window.Quarto = {
   <li><a href="#part-1-what-we-need-to-measure" id="toc-part-1-what-we-need-to-measure" class="nav-link" data-scroll-target="#part-1-what-we-need-to-measure">Part 1: What we need to measure</a></li>
   <li><a href="#part-2-how-we-measure-it" id="toc-part-2-how-we-measure-it" class="nav-link" data-scroll-target="#part-2-how-we-measure-it">Part 2: How we measure it</a></li>
   <li><a href="#sampling-distribution-of-f-simulated" id="toc-sampling-distribution-of-f-simulated" class="nav-link" data-scroll-target="#sampling-distribution-of-f-simulated">Sampling Distribution of F, Simulated</a></li>
-  <li><a href="#letting-r-do-all-the-work" id="toc-letting-r-do-all-the-work" class="nav-link" data-scroll-target="#letting-r-do-all-the-work">Letting R do all the work</a></li>
   </ul></li>
-  <li><a href="#akaikes-information-criterion" id="toc-akaikes-information-criterion" class="nav-link" data-scroll-target="#akaikes-information-criterion"><span class="header-section-number">24.5</span> Akaike’s Information Criterion</a></li>
-  <li><a href="#aic-definition" id="toc-aic-definition" class="nav-link" data-scroll-target="#aic-definition"><span class="header-section-number">24.6</span> AIC Definition</a></li>
-  <li><a href="#aic-practice" id="toc-aic-practice" class="nav-link" data-scroll-target="#aic-practice"><span class="header-section-number">24.7</span> AIC Practice</a></li>
-  <li><a href="#ic-how-big-a-difference" id="toc-ic-how-big-a-difference" class="nav-link" data-scroll-target="#ic-how-big-a-difference"><span class="header-section-number">24.8</span> IC, How big a difference?</a></li>
+  <li><a href="#anova-practical-process" id="toc-anova-practical-process" class="nav-link" data-scroll-target="#anova-practical-process"><span class="header-section-number">24.5</span> ANOVA: Practical Process</a>
+  <ul class="collapse">
+  <li><a href="#letting-r-do-all-the-work" id="toc-letting-r-do-all-the-work" class="nav-link" data-scroll-target="#letting-r-do-all-the-work">Letting R do all the Work</a></li>
+  <li><a href="#interpretation-of-anova-for-regression" id="toc-interpretation-of-anova-for-regression" class="nav-link" data-scroll-target="#interpretation-of-anova-for-regression">Interpretation of ANOVA for Regression</a></li>
+  <li><a href="#why-not-to-select-a-best-model" id="toc-why-not-to-select-a-best-model" class="nav-link" data-scroll-target="#why-not-to-select-a-best-model">Why <em>not</em> to “select” a “best” model</a></li>
+  <li><a href="#r-note-anova-not-anova" id="toc-r-note-anova-not-anova" class="nav-link" data-scroll-target="#r-note-anova-not-anova">R Note: <code>Anova()</code>, not <code>anova()</code>!</a></li>
+  <li><a href="#other-model-comparisons" id="toc-other-model-comparisons" class="nav-link" data-scroll-target="#other-model-comparisons">Other Model Comparisons</a></li>
+  </ul></li>
+  <li><a href="#akaikes-information-criterion" id="toc-akaikes-information-criterion" class="nav-link" data-scroll-target="#akaikes-information-criterion"><span class="header-section-number">24.6</span> Akaike’s Information Criterion</a></li>
+  <li><a href="#aic-definition" id="toc-aic-definition" class="nav-link" data-scroll-target="#aic-definition"><span class="header-section-number">24.7</span> AIC Definition</a></li>
+  <li><a href="#aic-practice" id="toc-aic-practice" class="nav-link" data-scroll-target="#aic-practice"><span class="header-section-number">24.8</span> AIC Practice</a></li>
+  <li><a href="#ic-how-big-a-difference" id="toc-ic-how-big-a-difference" class="nav-link" data-scroll-target="#ic-how-big-a-difference"><span class="header-section-number">24.9</span> IC, How big a difference?</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/lm-interp-more.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -739,8 +746,8 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 You test the hypothesis that the slope of the life_model is zero. What is the p-value of the test?
-<div id="radio_GNJBZUDWUB" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_GNJBZUDWUB" value=""> <span>0.0424</span></label><label><input type="radio" autocomplete="off" name="radio_GNJBZUDWUB" value=""> <span>Something else</span></label><label><input type="radio" autocomplete="off" name="radio_GNJBZUDWUB" value=""> <span>4.22e-14</span></label><label><input type="radio" autocomplete="off" name="radio_GNJBZUDWUB" value="answer"> <span>0.00377</span></label>
+<div id="radio_ALZEXLRRIT" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_ALZEXLRRIT" value=""> <span>4.22e-14</span></label><label><input type="radio" autocomplete="off" name="radio_ALZEXLRRIT" value=""> <span>Something else</span></label><label><input type="radio" autocomplete="off" name="radio_ALZEXLRRIT" value="answer"> <span>0.00377</span></label><label><input type="radio" autocomplete="off" name="radio_ALZEXLRRIT" value=""> <span>0.0424</span></label>
 </div>
 </div>
 </div>
@@ -806,8 +813,8 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 In our model to compare the gratitude and hassles groups, the grouphassles coefficient estimate is about -1.54. What does this mean?
-<div id="radio_WMJYAUCYTP" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_WMJYAUCYTP" value=""> <span>The mean gratitude score is 1.54 units higher in the hassles group than in the gratitude group.</span></label><label><input type="radio" autocomplete="off" name="radio_WMJYAUCYTP" value=""> <span>Something else</span></label><label><input type="radio" autocomplete="off" name="radio_WMJYAUCYTP" value="answer"> <span>The mean gratitude_score is 1.54 units lower in the hassles group than in the gratitude group.</span></label><label><input type="radio" autocomplete="off" name="radio_WMJYAUCYTP" value=""> <span>The mean gratitude_score for people in the hassles group is -1.54.</span></label><label><input type="radio" autocomplete="off" name="radio_WMJYAUCYTP" value=""> <span>When the amount of 'hassles' increases by one unit, the gratitude_score goes down by 1.54 units.</span></label>
+<div id="radio_XPMWZXBXRQ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_XPMWZXBXRQ" value=""> <span>When the amount of 'hassles' increases by one unit, the gratitude_score goes down by 1.54 units.</span></label><label><input type="radio" autocomplete="off" name="radio_XPMWZXBXRQ" value=""> <span>The mean gratitude score is 1.54 units higher in the hassles group than in the gratitude group.</span></label><label><input type="radio" autocomplete="off" name="radio_XPMWZXBXRQ" value=""> <span>The mean gratitude_score for people in the hassles group is -1.54.</span></label><label><input type="radio" autocomplete="off" name="radio_XPMWZXBXRQ" value=""> <span>Something else</span></label><label><input type="radio" autocomplete="off" name="radio_XPMWZXBXRQ" value="answer"> <span>The mean gratitude_score is 1.54 units lower in the hassles group than in the gratitude group.</span></label>
 </div>
 </div>
 </div>
@@ -877,12 +884,12 @@ F-statistic: 11.15 on 2 and 193 DF,  p-value: 2.612e-05</code></pre>
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 If the null hypothesis is true, what will the value of the F-ratio be?
-<div id="radio_LBVRSQXBVW" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_LBVRSQXBVW" value=""> <span>It depends…</span></label><label><input type="radio" autocomplete="off" name="radio_LBVRSQXBVW" value=""> <span>Very Large</span></label><label><input type="radio" autocomplete="off" name="radio_LBVRSQXBVW" value=""> <span>Close to 1</span></label><label><input type="radio" autocomplete="off" name="radio_LBVRSQXBVW" value="answer"> <span>Close to 0</span></label>
+<div id="radio_YNXYHKVPWP" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_YNXYHKVPWP" value="answer"> <span>Close to 0</span></label><label><input type="radio" autocomplete="off" name="radio_YNXYHKVPWP" value=""> <span>It depends…</span></label><label><input type="radio" autocomplete="off" name="radio_YNXYHKVPWP" value=""> <span>Very Large</span></label><label><input type="radio" autocomplete="off" name="radio_YNXYHKVPWP" value=""> <span>Close to 1</span></label>
 </div>
 If the population group means are actually very different, with little variation within groups, what will the value of the F-ratio be?
-<div id="radio_TUPFQFMXWZ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_TUPFQFMXWZ" value=""> <span>Close to 0</span></label><label><input type="radio" autocomplete="off" name="radio_TUPFQFMXWZ" value="answer"> <span>Very Large</span></label><label><input type="radio" autocomplete="off" name="radio_TUPFQFMXWZ" value=""> <span>It depends…</span></label><label><input type="radio" autocomplete="off" name="radio_TUPFQFMXWZ" value=""> <span>Close to 1</span></label>
+<div id="radio_GYMAFUGTOB" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_GYMAFUGTOB" value=""> <span>It depends…</span></label><label><input type="radio" autocomplete="off" name="radio_GYMAFUGTOB" value=""> <span>Close to 1</span></label><label><input type="radio" autocomplete="off" name="radio_GYMAFUGTOB" value=""> <span>Close to 0</span></label><label><input type="radio" autocomplete="off" name="radio_GYMAFUGTOB" value="answer"> <span>Very Large</span></label>
 </div>
 </div>
 </div>
@@ -897,8 +904,11 @@ Click for more explanations…
 <p>Again, we know that a <em>large</em> value of F will let us reject the null. But <em>how big is “large”?</em></p>
 <p>We’d need to know the sampling distribution of F (when <span class="math inline">\(H_0\)</span> is true) in order to judge.</p>
 </section>
+</section>
+<section id="anova-practical-process" class="level2" data-number="24.5">
+<h2 data-number="24.5" class="anchored" data-anchor-id="anova-practical-process"><span class="header-section-number">24.5</span> ANOVA: Practical Process</h2>
 <section id="letting-r-do-all-the-work" class="level3">
-<h3 class="anchored" data-anchor-id="letting-r-do-all-the-work">Letting R do all the work</h3>
+<h3 class="anchored" data-anchor-id="letting-r-do-all-the-work">Letting R do all the Work</h3>
 <!-- *Text book reference: FAStR2 Chapter 7.3.2 - 7.3.3* -->
 <p>We won’t go into the details of the calculation here; we’ll just note that there’s an R function to automate it all.</p>
 <div class="cell" data-layout-align="center">
@@ -922,8 +932,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <li>The “Pr(&gt;F)” is the p-value of the test</li>
 </ul>
 <p>(A classic intro-stat textbook ANOVA problem is to give you a partially-filled-in ANOVA results table, and ask you to fill in the missing values.)</p>
-<section id="practical-process" class="level4">
-<h4 class="anchored" data-anchor-id="practical-process">Practical Process</h4>
+</section>
+<section id="interpretation-of-anova-for-regression" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation-of-anova-for-regression">Interpretation of ANOVA for Regression</h3>
 <p>So…how do we interpret the results we get from <code>anova()</code> then?</p>
 <p>In the gratitude example, we could safely assume there were no confounders since it was a controlled experiment, so it was valid to fit a model with only the one predictor <code>group</code> – any other variables could only be mediators or precision covariates, so it would not bias our results to omit them.</p>
 <p>But it would probably also be fair to argue that <code>life_rating</code> and <code>illness_score</code> and <code>exercise_hours</code> might all be precision covariates, also affecting gratitude scores (but not <code>group</code> of course). So we <em>could</em> fit a model including them. Then our ANOVA table would look like:</p>
@@ -978,6 +989,9 @@ Solution:
 </div>
 </div>
 </div>
+</section>
+<section id="why-not-to-select-a-best-model" class="level3">
+<h3 class="anchored" data-anchor-id="why-not-to-select-a-best-model">Why <em>not</em> to “select” a “best” model</h3>
 <p>The p-values for the other predictors (illness and exercise) are very large, so we actually have no evidence that those predictors are actually associated with gratitude scores.</p>
 <p>Wait…does that mean we should stop and fit a new “reduced” model <em>without</em> those two predictors because it would be “better” somehow, and report those results instead of the full model?</p>
 <p><strong>NOPE, please don’t!</strong></p>
@@ -990,32 +1004,31 @@ Solution:
 <li>Another perspective that suggests similar principles probably hold in Bayesian models and <em>maybe</em> some predictive models: <a href="https://mc-stan.org/loo/articles/online-only/faq.html#modelselection" class="uri">https://mc-stan.org/loo/articles/online-only/faq.html#modelselection</a></li>
 </ul>
 </section>
-<section id="r-note-anova-not-anova" class="level4">
-<h4 class="anchored" data-anchor-id="r-note-anova-not-anova">R Note: <code>Anova()</code>, not <code>anova()</code>!</h4>
+<section id="r-note-anova-not-anova" class="level3">
+<h3 class="anchored" data-anchor-id="r-note-anova-not-anova">R Note: <code>Anova()</code>, not <code>anova()</code>!</h3>
 <p>Be careful not to use <code>anova()</code> to carry out tests related to predictors in a regression model.</p>
 <p><code>anova()</code> does “sequential” tests; for example, if you fit a model <code>y ~ pred1 + pred2 + pred3</code>, for <code>pred1</code> <code>anova()</code> will compare the intercept-only model to the one with <code>pred1</code> in it, but for <code>pred2</code> it will compare the model with <code>pred1</code> and <code>pred2</code> in it to the one with only <code>pred2</code>, and for <code>pred3</code> it will compare the model with all three predictors to the one without <code>pred3</code>. ACK!</p>
 <p>In other words, with <code>anova()</code>, the order in which predictors are listed greatly affects the hypotheses tested, and the test results. <em>THIS IS (ALMOST ALWAYS) NONSENSE.</em> You want <code>Anova()</code> which is in the package <code>car</code>.</p>
 </section>
-<section id="other-model-comparisons" class="level4">
-<h4 class="anchored" data-anchor-id="other-model-comparisons">Other Model Comparisons</h4>
+<section id="other-model-comparisons" class="level3">
+<h3 class="anchored" data-anchor-id="other-model-comparisons">Other Model Comparisons</h3>
 <p>In other cases, if we want to compare two particular models with <em>the same response variable</em> but different predictors, we can just <em>fit them both</em> and then compare them with the syntax below.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model1, model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>(Yes, little-a <code>anova()</code> is what you want this time.)</p>
-<p>Why might we want to do this? Maybe, for example, you have two different predictors that measure a similar quantity in different ways and you want to know which one works better as a predictor?</p>
-<p>This <code>anova(model1, model2)</code> approach also works for any of the above cases (removing parameters), if you manually fit the two models.</p>
+<p>Why might we want to do this? Maybe, for example, you have two different predictors that measure a similar quantity in different ways and you want to know which one works better as a predictor? In that case, <code>Anova()</code> won’t work because neither model is a subset of the other - for these comparisons of <em>non-nested</em> models fitting each model and then using <code>anova()</code> to compare the two will work.</p>
+<p>This <code>anova(model1, model2)</code> approach also works for any of the above cases (removing parameters in sets of <em>nested</em> models), if you manually fit the two models…it’s just a bit more work.</p>
 </section>
 </section>
-</section>
-<section id="akaikes-information-criterion" class="level2" data-number="24.5">
-<h2 data-number="24.5" class="anchored" data-anchor-id="akaikes-information-criterion"><span class="header-section-number">24.5</span> Akaike’s Information Criterion</h2>
+<section id="akaikes-information-criterion" class="level2" data-number="24.6">
+<h2 data-number="24.6" class="anchored" data-anchor-id="akaikes-information-criterion"><span class="header-section-number">24.6</span> Akaike’s Information Criterion</h2>
 <p>Information theory has influenced many fields, including statistics. In 1974, Japanese statistician Hirotugu Akaike</p>
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Akaike.jpg/330px-Akaike.jpg" class="img-fluid"></p>
 <p>used information theory to <a href="http://bayes.acs.unt.edu:8083/BayesContent/class/Jon/MiscDocs/Akaike_1974.pdf">derive a new criterion, now known as Akaike’s Information Criterion (AIC),</a> to allow comparison of a set of statistical models fitted to a dataset.</p>
 </section>
-<section id="aic-definition" class="level2" data-number="24.6">
-<h2 data-number="24.6" class="anchored" data-anchor-id="aic-definition"><span class="header-section-number">24.6</span> AIC Definition</h2>
+<section id="aic-definition" class="level2" data-number="24.7">
+<h2 data-number="24.7" class="anchored" data-anchor-id="aic-definition"><span class="header-section-number">24.7</span> AIC Definition</h2>
 <p>AIC is defined as:</p>
 <p><span class="math display">\[ \text{AIC} = 2k - 2(\hat{\ell})\]</span></p>
 <p>Where <span class="math inline">\(k\)</span> is the size of the model (number of parameters being estimated), and <span class="math inline">\(\hat{\ell}\)</span> is the maximum value of the (base <span class="math inline">\(e\)</span>) log-likelihood fuction.</p>
@@ -1025,8 +1038,8 @@ Solution:
 </ul>
 <p>R function <code>AIC()</code> computes the AIC for fitted <code>lm()</code> models.</p>
 </section>
-<section id="aic-practice" class="level2" data-number="24.7">
-<h2 data-number="24.7" class="anchored" data-anchor-id="aic-practice"><span class="header-section-number">24.7</span> AIC Practice</h2>
+<section id="aic-practice" class="level2" data-number="24.8">
+<h2 data-number="24.8" class="anchored" data-anchor-id="aic-practice"><span class="header-section-number">24.8</span> AIC Practice</h2>
 <p>We can use AIC to choose the “best” of a pair (or a larger group) of models.</p>
 <p>For example, before we used ANOVA to decide whether <code>group</code> (“gratitude”, “hassles”, and “events”) is a good predictor of <code>gratitude</code> score:</p>
 <div class="cell" data-layout-align="center">
@@ -1086,19 +1099,19 @@ Hints…
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What is the difference in AIC between the two gratitude models you just fitted?
-<div id="radio_UCJQRRYKBX" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_UCJQRRYKBX" value=""> <span>17.4; the intercept-only model has lower AIC</span></label><label><input type="radio" autocomplete="off" name="radio_UCJQRRYKBX" value=""> <span>The AIC values for the two models are about the same</span></label><label><input type="radio" autocomplete="off" name="radio_UCJQRRYKBX" value=""> <span>834.5; the model with the group predictor has lower AIC.</span></label><label><input type="radio" autocomplete="off" name="radio_UCJQRRYKBX" value="answer"> <span>17.4; the model with the group predictor has lower AIC.</span></label>
+<div id="radio_RAWSGVHSFT" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_RAWSGVHSFT" value=""> <span>The AIC values for the two models are about the same</span></label><label><input type="radio" autocomplete="off" name="radio_RAWSGVHSFT" value="answer"> <span>17.4; the model with the group predictor has lower AIC.</span></label><label><input type="radio" autocomplete="off" name="radio_RAWSGVHSFT" value=""> <span>834.5; the model with the group predictor has lower AIC.</span></label><label><input type="radio" autocomplete="off" name="radio_RAWSGVHSFT" value=""> <span>17.4; the intercept-only model has lower AIC</span></label>
 </div>
 Which model is better, according to AIC?
-<div id="radio_SLUNVWAAVG" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_SLUNVWAAVG" value=""> <span>Intercept-only model</span></label><label><input type="radio" autocomplete="off" name="radio_SLUNVWAAVG" value=""> <span>They are both about the same</span></label><label><input type="radio" autocomplete="off" name="radio_SLUNVWAAVG" value="answer"> <span>Model with group predictor</span></label>
+<div id="radio_TJMXTDOBTK" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_TJMXTDOBTK" value=""> <span>Intercept-only model</span></label><label><input type="radio" autocomplete="off" name="radio_TJMXTDOBTK" value=""> <span>They are both about the same</span></label><label><input type="radio" autocomplete="off" name="radio_TJMXTDOBTK" value="answer"> <span>Model with group predictor</span></label>
 </div>
 </div>
 </div>
 <p><em>Remember – smaller AIC is better!</em></p>
 </section>
-<section id="ic-how-big-a-difference" class="level2" data-number="24.8">
-<h2 data-number="24.8" class="anchored" data-anchor-id="ic-how-big-a-difference"><span class="header-section-number">24.8</span> IC, How big a difference?</h2>
+<section id="ic-how-big-a-difference" class="level2" data-number="24.9">
+<h2 data-number="24.9" class="anchored" data-anchor-id="ic-how-big-a-difference"><span class="header-section-number">24.9</span> IC, How big a difference?</h2>
 <p>Strictly and simply using AIC, we can say that a model with <em>lower</em> AIC is <em>better</em> (regardless of how small the difference between the AIC values is).</p>
 <p>In practice, if using AIC to choose between two models, analysts often require some minimal AIC improvement to justify <em>adding</em> an additional parameter/predictor to a model. (Common thresholds are 2, 3, or maybe 6). So, one might not prefer a larger model unless it reduces AIC by <em>at least 2-3 units</em>.</p>
 <p>So, if we are comparing two models (say, with and without a key predictor of interest), if the model <em>with</em> the predictor is better by well over 2-3 AIC units, we consider that pretty convincing evidence of an association between that predictor and the response.</p>

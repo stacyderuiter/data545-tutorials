@@ -435,7 +435,7 @@ Also remember that in our course, we avoid the word 'significant' like it's cont
 `r unhide()`
 
 
-### Practical Procedure
+## Selection: Practical Procedure
 
 OK, so the example above suggests by example that if your key predictor is interacting with another predictor in a model, and you are using ANOVA to help make inferences, the first thing to do is to look at the p-value for the *interaction term*.
 

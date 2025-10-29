@@ -393,7 +393,9 @@ Again, we know that a *large* value of F will let us reject the null. But *how b
 
 We'd need to know the sampling distribution of F (when $H_0$ is true) in order to judge.
 
-### Letting R do all the work
+## ANOVA: Practical Process
+
+### Letting R do all the Work
 
 <!-- *Text book reference: FAStR2 Chapter 7.3.2 - 7.3.3* -->
 
@@ -413,7 +415,7 @@ But **notice** -- all the quantities that we used in our derivation of the F-sta
 
 (A classic intro-stat textbook ANOVA problem is to give you a partially-filled-in ANOVA results table, and ask you to fill in the missing values.)
 
-#### Practical Process
+### Interpretation of ANOVA for Regression
 
 So...how do we interpret the results we get from `anova()` then? 
 
@@ -455,6 +457,8 @@ We see that gratitude scores go up by about 0.5 units for every one-unit increas
 :::
 ::::
 
+### Why *not* to "select" a "best" model
+
 The p-values for the other predictors (illness and exercise) are very large, so we actually have no evidence that those predictors are actually associated with gratitude scores.
 
 Wait...does that mean we should stop and fit a new "reduced" model *without* those two predictors because it would be "better" somehow, and report those results instead of the full model?
@@ -471,7 +475,7 @@ Don't believe me; or, want to read more about this? Optionally, consider checkin
 - Another perspective that suggests similar principles probably hold in Bayesian models and *maybe* some predictive models: <https://mc-stan.org/loo/articles/online-only/faq.html#modelselection>
 
 
-#### R Note: `Anova()`, not `anova()`!
+### R Note: `Anova()`, not `anova()`!
 
 Be careful not to use `anova()` to carry out tests related to predictors in a regression model.
 
@@ -479,7 +483,7 @@ Be careful not to use `anova()` to carry out tests related to predictors in a re
 
 In other words, with `anova()`, the order in which predictors are listed greatly affects the hypotheses tested, and the test results. *THIS IS (ALMOST ALWAYS) NONSENSE.* You want `Anova()` which is in the package `car`.
 
-#### Other Model Comparisons
+### Other Model Comparisons
 
 In other cases, if we want to compare two particular models with *the same response variable* but different predictors, we can just *fit them both* and then compare them with the syntax below.
 
@@ -489,11 +493,9 @@ anova(model1, model2)
 
 (Yes, little-a `anova()` is what you want this time.)
 
-Why might we want to do this? Maybe, for example, you have two different predictors that measure a similar quantity in different ways and you want to know which one works better as a predictor?
+Why might we want to do this? Maybe, for example, you have two different predictors that measure a similar quantity in different ways and you want to know which one works better as a predictor? In that case, `Anova()` won't work because neither model is a subset of the other - for these comparisons of *non-nested* models fitting each model and then using `anova()` to compare the two will work.
 
-This `anova(model1, model2)` approach also works for any of the above cases (removing parameters), if you manually fit the two models.
-
-
+This `anova(model1, model2)` approach also works for any of the above cases (removing parameters in sets of *nested* models), if you manually fit the two models...it's just a bit more work.
 
 ## Akaike's Information Criterion
 

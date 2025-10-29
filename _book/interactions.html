@@ -528,27 +528,25 @@ window.Quarto = {
   <li><a href="#categorical-quantitative-interaction-1" id="toc-categorical-quantitative-interaction-1" class="nav-link" data-scroll-target="#categorical-quantitative-interaction-1">Categorical-Quantitative Interaction</a></li>
   <li><a href="#selection-anova" id="toc-selection-anova" class="nav-link" data-scroll-target="#selection-anova">Selection: ANOVA</a></li>
   </ul></li>
-  <li><a href="#selection-note-about-p-values" id="toc-selection-note-about-p-values" class="nav-link" data-scroll-target="#selection-note-about-p-values"><span class="header-section-number">25.7</span> Selection: Note about p-values</a>
-  <ul class="collapse">
-  <li><a href="#practical-procedure" id="toc-practical-procedure" class="nav-link" data-scroll-target="#practical-procedure">Practical Procedure</a></li>
-  </ul></li>
-  <li><a href="#selection-ic" id="toc-selection-ic" class="nav-link" data-scroll-target="#selection-ic"><span class="header-section-number">25.8</span> Selection: IC</a>
+  <li><a href="#selection-note-about-p-values" id="toc-selection-note-about-p-values" class="nav-link" data-scroll-target="#selection-note-about-p-values"><span class="header-section-number">25.7</span> Selection: Note about p-values</a></li>
+  <li><a href="#selection-practical-procedure" id="toc-selection-practical-procedure" class="nav-link" data-scroll-target="#selection-practical-procedure"><span class="header-section-number">25.8</span> Selection: Practical Procedure</a></li>
+  <li><a href="#selection-ic" id="toc-selection-ic" class="nav-link" data-scroll-target="#selection-ic"><span class="header-section-number">25.9</span> Selection: IC</a>
   <ul class="collapse">
   <li><a href="#categorical-quantitative-interaction-2" id="toc-categorical-quantitative-interaction-2" class="nav-link" data-scroll-target="#categorical-quantitative-interaction-2">Categorical-Quantitative Interaction</a></li>
   <li><a href="#quant-quant-interaction" id="toc-quant-quant-interaction" class="nav-link" data-scroll-target="#quant-quant-interaction">Quant-Quant Interaction</a></li>
   <li><a href="#going-further" id="toc-going-further" class="nav-link" data-scroll-target="#going-further">Going Further</a></li>
   </ul></li>
-  <li><a href="#prediction-plots" id="toc-prediction-plots" class="nav-link" data-scroll-target="#prediction-plots"><span class="header-section-number">25.9</span> Prediction Plots</a></li>
-  <li><a href="#car-examples" id="toc-car-examples" class="nav-link" data-scroll-target="#car-examples"><span class="header-section-number">25.10</span> Car Examples</a></li>
-  <li><a href="#model-equations" id="toc-model-equations" class="nav-link" data-scroll-target="#model-equations"><span class="header-section-number">25.11</span> Model Equations?</a>
+  <li><a href="#prediction-plots" id="toc-prediction-plots" class="nav-link" data-scroll-target="#prediction-plots"><span class="header-section-number">25.10</span> Prediction Plots</a></li>
+  <li><a href="#car-examples" id="toc-car-examples" class="nav-link" data-scroll-target="#car-examples"><span class="header-section-number">25.11</span> Car Examples</a></li>
+  <li><a href="#model-equations" id="toc-model-equations" class="nav-link" data-scroll-target="#model-equations"><span class="header-section-number">25.12</span> Model Equations?</a>
   <ul class="collapse">
   <li><a href="#one-quantitative-predictor" id="toc-one-quantitative-predictor" class="nav-link" data-scroll-target="#one-quantitative-predictor">One Quantitative Predictor</a></li>
   <li><a href="#two-quantitative-predictors" id="toc-two-quantitative-predictors" class="nav-link" data-scroll-target="#two-quantitative-predictors">Two Quantitative Predictors</a></li>
   <li><a href="#interacting-quantitative-predictors" id="toc-interacting-quantitative-predictors" class="nav-link" data-scroll-target="#interacting-quantitative-predictors">Interacting Quantitative Predictors</a></li>
   <li><a href="#categorical-quantitative-interaction-3" id="toc-categorical-quantitative-interaction-3" class="nav-link" data-scroll-target="#categorical-quantitative-interaction-3">Categorical-Quantitative Interaction</a></li>
   </ul></li>
-  <li><a href="#interactions-what-are-they-again" id="toc-interactions-what-are-they-again" class="nav-link" data-scroll-target="#interactions-what-are-they-again"><span class="header-section-number">25.12</span> Interactions: what are they, again?</a></li>
-  <li><a href="#more-practice" id="toc-more-practice" class="nav-link" data-scroll-target="#more-practice"><span class="header-section-number">25.13</span> More Practice</a></li>
+  <li><a href="#interactions-what-are-they-again" id="toc-interactions-what-are-they-again" class="nav-link" data-scroll-target="#interactions-what-are-they-again"><span class="header-section-number">25.13</span> Interactions: what are they, again?</a></li>
+  <li><a href="#more-practice" id="toc-more-practice" class="nav-link" data-scroll-target="#more-practice"><span class="header-section-number">25.14</span> More Practice</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/interactions.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -784,8 +782,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJlZS1lbnYiLCJldmFs
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What would it <em>mean</em> for the bees’ diet to modulate the effect of the virus on the bees? (If you’re struggling, refer to the data graph shown earlier, which may help you to understand…)
-<div id="radio_RSKSNGRSEO" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_RSKSNGRSEO" value=""> <span>Both diet AND virus infection have effects on the number of bees that die</span></label><label><input type="radio" autocomplete="off" name="radio_RSKSNGRSEO" value=""> <span>None of the above</span></label><label><input type="radio" autocomplete="off" name="radio_RSKSNGRSEO" value=""> <span>An interaction between diet and virus means that diet and virus affect one another, that is, they are associated with each other</span></label><label><input type="radio" autocomplete="off" name="radio_RSKSNGRSEO" value="answer"> <span>Diet and virus interact if the effect of the virus on bee mortality rates is BIGGER for some diet(s) than others.</span></label>
+<div id="radio_TPMMNJYYFC" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_TPMMNJYYFC" value=""> <span>None of the above</span></label><label><input type="radio" autocomplete="off" name="radio_TPMMNJYYFC" value=""> <span>Both diet AND virus infection have effects on the number of bees that die</span></label><label><input type="radio" autocomplete="off" name="radio_TPMMNJYYFC" value=""> <span>An interaction between diet and virus means that diet and virus affect one another, that is, they are associated with each other</span></label><label><input type="radio" autocomplete="off" name="radio_TPMMNJYYFC" value="answer"> <span>Diet and virus interact if the effect of the virus on bee mortality rates is BIGGER for some diet(s) than others.</span></label>
 </div>
 </div>
 </div>
@@ -917,8 +915,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjp0cnVlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJl
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 Based on the ANOVA results, do we have evidence that <code>Virus</code> and <code>Food</code> interact?
-<div id="radio_FUSPYEFVHG" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_FUSPYEFVHG" value=""> <span>Yes, I'm basically sure</span></label><label><input type="radio" autocomplete="off" name="radio_FUSPYEFVHG" value=""> <span>Nope, most definitely NOT</span></label><label><input type="radio" autocomplete="off" name="radio_FUSPYEFVHG" value="answer"> <span>Some; with a p-value of about 0.02, the evidence is moderate but not completely compelling</span></label><label><input type="radio" autocomplete="off" name="radio_FUSPYEFVHG" value=""> <span>There is significant evidence (p &lt; 0.05)</span></label>
+<div id="radio_HFGIHOLZMP" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_HFGIHOLZMP" value="answer"> <span>Some; with a p-value of about 0.02, the evidence is moderate but not completely compelling</span></label><label><input type="radio" autocomplete="off" name="radio_HFGIHOLZMP" value=""> <span>Nope, most definitely NOT</span></label><label><input type="radio" autocomplete="off" name="radio_HFGIHOLZMP" value=""> <span>Yes, I'm basically sure</span></label><label><input type="radio" autocomplete="off" name="radio_HFGIHOLZMP" value=""> <span>There is significant evidence (p &lt; 0.05)</span></label>
 </div>
 </div>
 </div>
@@ -930,8 +928,9 @@ Click for explanations of solution above.
 <p>If you said you were “basically sure” or that there was “definitely NOT” evidence, maybe reconsider your phrasing and level of certainty? We rarely want to sound <em>that</em> sure. Also, consider the exact p-value and the strength of evidence it provides…</p>
 <p>Also remember that in our course, we avoid the word ‘significant’ like it’s contaminated! Because…it kind of is, by decades of dubious stats teaching and practice reinforcing the idea that hypothesis testing yield ironclad yes-or-no results. Try the strength-of-evidence way outlined above, instead…</p>
 </div>
-<section id="practical-procedure" class="level3">
-<h3 class="anchored" data-anchor-id="practical-procedure">Practical Procedure</h3>
+</section>
+<section id="selection-practical-procedure" class="level2" data-number="25.8">
+<h2 data-number="25.8" class="anchored" data-anchor-id="selection-practical-procedure"><span class="header-section-number">25.8</span> Selection: Practical Procedure</h2>
 <p>OK, so the example above suggests by example that if your key predictor is interacting with another predictor in a model, and you are using ANOVA to help make inferences, the first thing to do is to look at the p-value for the <em>interaction term</em>.</p>
 <p>Yes, that’s correct: <em>first</em> we look at the <em>interaction</em> p-value, which is at the BOTTOM of the ANOVA table!</p>
 <p>That tells us whether there is evidence of an interaction or not. If yes, we are <em>done:</em> we can conclude the two interacting predictors interact, and thus they are both associated with the response. Ta-da!</p>
@@ -943,9 +942,8 @@ Click for explanations of solution above.
 <li>If there is <em>not</em> evidence of an interaction, <em>then</em> look at the main effect p-value for your predictor of interest to determine if there’s evidence it has an overall effect (though you already know there’s no evidence of the interaction, it might still have an overall consistent effect on the response).</li>
 </ol>
 </section>
-</section>
-<section id="selection-ic" class="level2" data-number="25.8">
-<h2 data-number="25.8" class="anchored" data-anchor-id="selection-ic"><span class="header-section-number">25.8</span> Selection: IC</h2>
+<section id="selection-ic" class="level2" data-number="25.9">
+<h2 data-number="25.9" class="anchored" data-anchor-id="selection-ic"><span class="header-section-number">25.9</span> Selection: IC</h2>
 <p>What if we wanted to make the same comparison – of models <em>with</em> and <em>without</em> the interaction – but using information criteria instead of hypothesis testing?</p>
 <p>We’d use the same conceptual process as above: first compare the full model (with both predictors in, and interacting) with one where they are both included, but they don’t interact (replace the * with a + in the model formula). Then, if there is <em>not</em> evidence of interaction, we could also compare models with and without the key predictor to check for an overall effect. But now, instead of one <code>Anova(full_model)</code> call, we will need to fit each model and use <code>AIC()</code> to compare them.</p>
 <p>Give it a try…</p>
@@ -1002,8 +1000,8 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 Based on your results (using AIC), what do you conclude?
-<div id="radio_UKMHKGVCWG" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_UKMHKGVCWG" value="answer"> <span>The AIC is about 4 units lower for the model with the interaction, so the model with the interaction fits a fair amount better and according to this analysis, there probably is an interaction</span></label><label><input type="radio" autocomplete="off" name="radio_UKMHKGVCWG" value=""> <span>The AIC is about 4 units lower for the model with the interaction, so the model with the interaction doesn't fit as well, and according to this analysis, there probably is NOT an interaction</span></label><label><input type="radio" autocomplete="off" name="radio_UKMHKGVCWG" value=""> <span>Since the AIC score is negative (-154) for the model with the interaction and also for the one without, we have some doubts about the validity of the model overall.</span></label><label><input type="radio" autocomplete="off" name="radio_UKMHKGVCWG" value=""> <span>Nope, most definitely NOT an interaction there!</span></label><label><input type="radio" autocomplete="off" name="radio_UKMHKGVCWG" value=""> <span>There's most definitely an interaction</span></label>
+<div id="radio_EPWPXFKOJG" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_EPWPXFKOJG" value=""> <span>The AIC is about 4 units lower for the model with the interaction, so the model with the interaction doesn't fit as well, and according to this analysis, there probably is NOT an interaction</span></label><label><input type="radio" autocomplete="off" name="radio_EPWPXFKOJG" value=""> <span>Since the AIC score is negative (-154) for the model with the interaction and also for the one without, we have some doubts about the validity of the model overall.</span></label><label><input type="radio" autocomplete="off" name="radio_EPWPXFKOJG" value=""> <span>Nope, most definitely NOT an interaction there!</span></label><label><input type="radio" autocomplete="off" name="radio_EPWPXFKOJG" value="answer"> <span>The AIC is about 4 units lower for the model with the interaction, so the model with the interaction fits a fair amount better and according to this analysis, there probably is an interaction</span></label><label><input type="radio" autocomplete="off" name="radio_EPWPXFKOJG" value=""> <span>There's most definitely an interaction</span></label>
 </div>
 </div>
 </div>
@@ -1115,8 +1113,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJlZS1jcSIsImV2YWwi
 </div>
 </section>
 </section>
-<section id="prediction-plots" class="level2" data-number="25.9">
-<h2 data-number="25.9" class="anchored" data-anchor-id="prediction-plots"><span class="header-section-number">25.9</span> Prediction Plots</h2>
+<section id="prediction-plots" class="level2" data-number="25.10">
+<h2 data-number="25.10" class="anchored" data-anchor-id="prediction-plots"><span class="header-section-number">25.10</span> Prediction Plots</h2>
 <p>What about prediction plots for a model with interaction(s)? Certainly, we’d want to be able to show them…</p>
 <blockquote class="blockquote">
 <blockquote class="blockquote">
@@ -1140,16 +1138,16 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJlZS1jcSIsImV2YWwi
 <p>Which graph is easier to interpret, in your opinion?</p>
 <p>Often one way tells the story a lot better than the other, so it pays to consider carefully which to show (or try both, and then choose).</p>
 </section>
-<section id="car-examples" class="level2" data-number="25.10">
-<h2 data-number="25.10" class="anchored" data-anchor-id="car-examples"><span class="header-section-number">25.10</span> Car Examples</h2>
+<section id="car-examples" class="level2" data-number="25.11">
+<h2 data-number="25.11" class="anchored" data-anchor-id="car-examples"><span class="header-section-number">25.11</span> Car Examples</h2>
 <p>How does the model equation work when you have an interaction? For each pair of interacting variables, you get an <em>additional term in the model</em> that is the <em>product</em> of the interacting variables.</p>
 <p>If one or more of them are <em>categorical</em>, then there will be a new product term <em>for every pair of indicator variables possible</em> between the two variables! (So interactions between categorical variables with many groups can quickly lead to a need to estimate a LOT of parameters…)</p>
 <p>We focus more on understanding what interactions are and <em>when</em> to include them in our models, but let’s spend just a bit of time considering the model equation with interactions.</p>
 <p>Let’s go!</p>
 <p>For these examples, we’ll consider a toy example in which we want to model the price of a car as a function of its mileage, color, and age.</p>
 </section>
-<section id="model-equations" class="level2" data-number="25.11">
-<h2 data-number="25.11" class="anchored" data-anchor-id="model-equations"><span class="header-section-number">25.11</span> Model Equations?</h2>
+<section id="model-equations" class="level2" data-number="25.12">
+<h2 data-number="25.12" class="anchored" data-anchor-id="model-equations"><span class="header-section-number">25.12</span> Model Equations?</h2>
 <section id="one-quantitative-predictor" class="level3">
 <h3 class="anchored" data-anchor-id="one-quantitative-predictor">One Quantitative Predictor</h3>
 <p>This one should be all review…no interactions yet.</p>
@@ -1175,14 +1173,14 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJlZS1jcSIsImV2YWwi
 </iframe>
 </section>
 </section>
-<section id="interactions-what-are-they-again" class="level2" data-number="25.12">
-<h2 data-number="25.12" class="anchored" data-anchor-id="interactions-what-are-they-again"><span class="header-section-number">25.12</span> Interactions: what are they, again?</h2>
+<section id="interactions-what-are-they-again" class="level2" data-number="25.13">
+<h2 data-number="25.13" class="anchored" data-anchor-id="interactions-what-are-they-again"><span class="header-section-number">25.13</span> Interactions: what are they, again?</h2>
 <p>This might be a good time to watch that initial video one more time, to review and maybe pick up something you missed the first time through:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/3CCkeFShB3U?si=YunTWwImluB0wxH6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
 </iframe>
 </section>
-<section id="more-practice" class="level2" data-number="25.13">
-<h2 data-number="25.13" class="anchored" data-anchor-id="more-practice"><span class="header-section-number">25.13</span> More Practice</h2>
+<section id="more-practice" class="level2" data-number="25.14">
+<h2 data-number="25.14" class="anchored" data-anchor-id="more-practice"><span class="header-section-number">25.14</span> More Practice</h2>
 <p>It can be really challenging to understand what an interaction <em>means</em> and gain skills at using and interpreting them.</p>
 <p>Here is one way to see some additional examples, and collaborate with me and students from your class <em>and even beyond</em>! Check out the instructions and examples in <a href="https://docs.google.com/presentation/d/1lzS4ipQbfQDwp6L69AFdqr_S9we1zDbmcK9geqwiL8g/edit?usp=sharing">our shared Google slide deck.</a></p>
 
