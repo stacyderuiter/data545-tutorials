@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>34&nbsp; Hierarchical Models (part 1) – DATA 545 Tutorial</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./beta.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e22fbe6e69edb8577f7b7bd0719516f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="site_libs/datatables-binding-0.34.0/datatables.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="_include/webex.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hier1.html">Hierarchical Models</a></li><li class="breadcrumb-item"><a href="./hier1.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">DATA 545 Tutorial</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/stacyderuiter/data545-tutorials/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./install-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how-to-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R Results in Quarto Text</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math-notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Math Notation in Quarto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Designing Effective Visualizations</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-no-junk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">What is <em>Necessary</em>?</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-color.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Color</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-text-elements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Text Elements</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-choose.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Choose a Graph Type</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-var-types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Variable Types</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Gallery: One Categorical Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gallery: One Quantitative Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gallery: 2-3 Categorical Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Gallery: Multiple Quantitative Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-cat-quant-mix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Gallery: Mixed Quantitative + Categorical</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization with ggformula</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-ggformula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ggformula and Formulas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Datasets Used</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Code Examples</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./design-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study Design &amp; Model Planning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Sample and Study Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./plan.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Model Planning for Inference</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Multiple Linear Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-fit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Fitting Linear Models in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-assess.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Assessment for Linear Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interpretation and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Selection and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Interactions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Interactions in Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Likelihood</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Maximum Likelihood Estimation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Count Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./count-regression-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regression for Count Responses: Formulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./count-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Interpreting Count Regression</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Binary Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses (one trial per row)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Zero Inflation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zi-od.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Zero Inflation for Overdispersed Counts</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">More Fun Between 0-1</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quasibinomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Models for Overdispered Binary Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beta.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Models for data bounded between 0 and 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="true">
+ <span class="menu-text">Hierarchical Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#section-learning-outcomes" id="toc-section-learning-outcomes" class="nav-link active" data-scroll-target="#section-learning-outcomes"><span class="header-section-number">34.1</span> Section Learning Outcomes</a></li>
+  <li><a href="#text-reference" id="toc-text-reference" class="nav-link" data-scroll-target="#text-reference"><span class="header-section-number">34.2</span> Text Reference</a></li>
+  <li><a href="#random-effects" id="toc-random-effects" class="nav-link" data-scroll-target="#random-effects"><span class="header-section-number">34.3</span> Random Effects</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset"><span class="header-section-number">34.4</span> Dataset</a>
+  <ul class="collapse">
+  <li><a href="#the-whales" id="toc-the-whales" class="nav-link" data-scroll-target="#the-whales">The Whales</a></li>
+  <li><a href="#the-tags" id="toc-the-tags" class="nav-link" data-scroll-target="#the-tags">The Tags</a></li>
+  <li><a href="#the-issue" id="toc-the-issue" class="nav-link" data-scroll-target="#the-issue">The Issue</a></li>
+  <li><a href="#and-back-to-our-data" id="toc-and-back-to-our-data" class="nav-link" data-scroll-target="#and-back-to-our-data">And, back to our data</a></li>
+  </ul></li>
+  <li><a href="#model-plan-data-exploration" id="toc-model-plan-data-exploration" class="nav-link" data-scroll-target="#model-plan-data-exploration"><span class="header-section-number">34.5</span> Model Plan &amp; Data Exploration</a></li>
+  <li><a href="#why-not-lm" id="toc-why-not-lm" class="nav-link" data-scroll-target="#why-not-lm"><span class="header-section-number">34.6</span> Why not <code>lm()</code>?</a></li>
+  <li><a href="#model-assessment" id="toc-model-assessment" class="nav-link" data-scroll-target="#model-assessment"><span class="header-section-number">34.7</span> Model assessment</a>
+  <ul class="collapse">
+  <li><a href="#which-conditions" id="toc-which-conditions" class="nav-link" data-scroll-target="#which-conditions">Which conditions?</a></li>
+  <li><a href="#plot-to-check" id="toc-plot-to-check" class="nav-link" data-scroll-target="#plot-to-check">Plot to Check</a></li>
+  </ul></li>
+  <li><a href="#random-effects-1" id="toc-random-effects-1" class="nav-link" data-scroll-target="#random-effects-1"><span class="header-section-number">34.8</span> Random Effects</a>
+  <ul class="collapse">
+  <li><a href="#for-multiple-linear-regression-we-would-have" id="toc-for-multiple-linear-regression-we-would-have" class="nav-link" data-scroll-target="#for-multiple-linear-regression-we-would-have">For multiple linear regression we would have:</a></li>
+  </ul></li>
+  <li><a href="#re-candidates" id="toc-re-candidates" class="nav-link" data-scroll-target="#re-candidates"><span class="header-section-number">34.9</span> RE candidates?</a></li>
+  <li><a href="#re-candidates-1" id="toc-re-candidates-1" class="nav-link" data-scroll-target="#re-candidates-1"><span class="header-section-number">34.10</span> RE Candidates</a></li>
+  <li><a href="#model-formula" id="toc-model-formula" class="nav-link" data-scroll-target="#model-formula"><span class="header-section-number">34.11</span> Model Formula</a>
+  <ul class="collapse">
+  <li><a href="#and-the-function-glmmtmb." id="toc-and-the-function-glmmtmb." class="nav-link" data-scroll-target="#and-the-function-glmmtmb.">and the function: <code>glmmTMB()</code>.</a></li>
+  </ul></li>
+  <li><a href="#nested-random-effects" id="toc-nested-random-effects" class="nav-link" data-scroll-target="#nested-random-effects"><span class="header-section-number">34.12</span> Nested Random Effects</a></li>
+  <li><a href="#re-of-individual" id="toc-re-of-individual" class="nav-link" data-scroll-target="#re-of-individual"><span class="header-section-number">34.13</span> RE of Individual</a></li>
+  <li><a href="#model-assessment-1" id="toc-model-assessment-1" class="nav-link" data-scroll-target="#model-assessment-1"><span class="header-section-number">34.14</span> Model Assessment</a>
+  <ul class="collapse">
+  <li><a href="#lmer-conditions" id="toc-lmer-conditions" class="nav-link" data-scroll-target="#lmer-conditions">LMER Conditions</a></li>
+  <li><a href="#glmm-conditions" id="toc-glmm-conditions" class="nav-link" data-scroll-target="#glmm-conditions">GLMM Conditions</a></li>
+  </ul></li>
+  <li><a href="#in-or-out" id="toc-in-or-out" class="nav-link" data-scroll-target="#in-or-out"><span class="header-section-number">34.15</span> In or Out</a></li>
+  <li><a href="#next-nested" id="toc-next-nested" class="nav-link" data-scroll-target="#next-nested"><span class="header-section-number">34.16</span> Next: Nested?</a>
+  <ul class="collapse">
+  <li><a href="#better" id="toc-better" class="nav-link" data-scroll-target="#better">Better?</a></li>
+  </ul></li>
+  <li><a href="#comparison-with-lm" id="toc-comparison-with-lm" class="nav-link" data-scroll-target="#comparison-with-lm"><span class="header-section-number">34.17</span> Comparison with <code>lm()</code>?</a>
+  <ul class="collapse">
+  <li><a href="#coefficients" id="toc-coefficients" class="nav-link" data-scroll-target="#coefficients">Coefficients</a></li>
+  </ul></li>
+  <li><a href="#selection" id="toc-selection" class="nav-link" data-scroll-target="#selection"><span class="header-section-number">34.18</span> Selection</a></li>
+  <li><a href="#reml-or-ml" id="toc-reml-or-ml" class="nav-link" data-scroll-target="#reml-or-ml"><span class="header-section-number">34.19</span> REML or ML?</a></li>
+  <li><a href="#random-slopes" id="toc-random-slopes" class="nav-link" data-scroll-target="#random-slopes"><span class="header-section-number">34.20</span> Random Slopes?</a></li>
+  <li><a href="#prediction-plots" id="toc-prediction-plots" class="nav-link" data-scroll-target="#prediction-plots"><span class="header-section-number">34.21</span> Prediction Plots</a>
+  <ul class="collapse">
+  <li><a href="#parametric-bootstrap-to-the-rescue" id="toc-parametric-bootstrap-to-the-rescue" class="nav-link" data-scroll-target="#parametric-bootstrap-to-the-rescue">Parametric bootstrap to the rescue!</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/hier1.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hier1.html">Hierarchical Models</a></li><li class="breadcrumb-item"><a href="./hier1.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell" data-layout-align="center" data-setup="true" data-exercise="[&quot;zc-graphs&quot;,&quot;base-lm&quot;,&quot;lm-acf&quot;,&quot;fit-re-model&quot;,&quot;compare-acfs&quot;]">
+<script type="exercise-setup-zc-graphs-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbInpjLWdyYXBocyIsImJhc2UtbG0iLCJsbS1hY2YiLCJmaXQtcmUtbW9kZWwiLCJjb21wYXJlLWFjZnMiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG56Y19kaXZlcyA8LSByZWFkLmNzdignZGF0YS96c2hhbC5jc3YnKSB8PlxuICBtdXRhdGUoU29uYXJBID0gZmFjdG9yKFNvbmFyQSkpIHw+XG4gIG11dGF0ZShEdXJBdmcgPSBEdXJBdmcgLyA2MCxcbiAgICAgICAgIERlcHRoQXZnID0gRGVwdGhBdmcpIHw+XG4gIHJlbmFtZShUaW1lT2ZEYXkgPSBUcmFuc0NsYXNzKVxuXG5iYXNlX21vZGVsIDwtIGxtKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpXG5yZW0xIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArICgxIHwgVGFnSUQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5yZW0yIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArXG4gICAgICAgICAgICAgICAgICAoMXxUYWdJRC9UYWdEYXlQZXJpb2QpLCBcbiAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpIn0=
+</script>
+<script type="exercise-setup-base-lm-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbInpjLWdyYXBocyIsImJhc2UtbG0iLCJsbS1hY2YiLCJmaXQtcmUtbW9kZWwiLCJjb21wYXJlLWFjZnMiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG56Y19kaXZlcyA8LSByZWFkLmNzdignZGF0YS96c2hhbC5jc3YnKSB8PlxuICBtdXRhdGUoU29uYXJBID0gZmFjdG9yKFNvbmFyQSkpIHw+XG4gIG11dGF0ZShEdXJBdmcgPSBEdXJBdmcgLyA2MCxcbiAgICAgICAgIERlcHRoQXZnID0gRGVwdGhBdmcpIHw+XG4gIHJlbmFtZShUaW1lT2ZEYXkgPSBUcmFuc0NsYXNzKVxuXG5iYXNlX21vZGVsIDwtIGxtKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpXG5yZW0xIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArICgxIHwgVGFnSUQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5yZW0yIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArXG4gICAgICAgICAgICAgICAgICAoMXxUYWdJRC9UYWdEYXlQZXJpb2QpLCBcbiAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpIn0=
+</script>
+<script type="exercise-setup-lm-acf-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbInpjLWdyYXBocyIsImJhc2UtbG0iLCJsbS1hY2YiLCJmaXQtcmUtbW9kZWwiLCJjb21wYXJlLWFjZnMiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG56Y19kaXZlcyA8LSByZWFkLmNzdignZGF0YS96c2hhbC5jc3YnKSB8PlxuICBtdXRhdGUoU29uYXJBID0gZmFjdG9yKFNvbmFyQSkpIHw+XG4gIG11dGF0ZShEdXJBdmcgPSBEdXJBdmcgLyA2MCxcbiAgICAgICAgIERlcHRoQXZnID0gRGVwdGhBdmcpIHw+XG4gIHJlbmFtZShUaW1lT2ZEYXkgPSBUcmFuc0NsYXNzKVxuXG5iYXNlX21vZGVsIDwtIGxtKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpXG5yZW0xIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArICgxIHwgVGFnSUQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5yZW0yIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArXG4gICAgICAgICAgICAgICAgICAoMXxUYWdJRC9UYWdEYXlQZXJpb2QpLCBcbiAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpIn0=
+</script>
+<script type="exercise-setup-fit-re-model-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbInpjLWdyYXBocyIsImJhc2UtbG0iLCJsbS1hY2YiLCJmaXQtcmUtbW9kZWwiLCJjb21wYXJlLWFjZnMiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG56Y19kaXZlcyA8LSByZWFkLmNzdignZGF0YS96c2hhbC5jc3YnKSB8PlxuICBtdXRhdGUoU29uYXJBID0gZmFjdG9yKFNvbmFyQSkpIHw+XG4gIG11dGF0ZShEdXJBdmcgPSBEdXJBdmcgLyA2MCxcbiAgICAgICAgIERlcHRoQXZnID0gRGVwdGhBdmcpIHw+XG4gIHJlbmFtZShUaW1lT2ZEYXkgPSBUcmFuc0NsYXNzKVxuXG5iYXNlX21vZGVsIDwtIGxtKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpXG5yZW0xIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArICgxIHwgVGFnSUQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5yZW0yIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArXG4gICAgICAgICAgICAgICAgICAoMXxUYWdJRC9UYWdEYXlQZXJpb2QpLCBcbiAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpIn0=
+</script>
+<script type="exercise-setup-compare-acfs-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbInpjLWdyYXBocyIsImJhc2UtbG0iLCJsbS1hY2YiLCJmaXQtcmUtbW9kZWwiLCJjb21wYXJlLWFjZnMiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG56Y19kaXZlcyA8LSByZWFkLmNzdignZGF0YS96c2hhbC5jc3YnKSB8PlxuICBtdXRhdGUoU29uYXJBID0gZmFjdG9yKFNvbmFyQSkpIHw+XG4gIG11dGF0ZShEdXJBdmcgPSBEdXJBdmcgLyA2MCxcbiAgICAgICAgIERlcHRoQXZnID0gRGVwdGhBdmcpIHw+XG4gIHJlbmFtZShUaW1lT2ZEYXkgPSBUcmFuc0NsYXNzKVxuXG5iYXNlX21vZGVsIDwtIGxtKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwsIFxuICAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpXG5yZW0xIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArICgxIHwgVGFnSUQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5yZW0yIDwtIGdsbW1UTUIoRHVyQXZnIH4gRGVwdGhBdmcgKyBUaW1lT2ZEYXkgKyBTb25hckEgKyBTb25hckIgKyBUaW1lT2ZEYXkgK1xuICAgICAgICAgICAgICAgICAgIFNvbmFyQU1pbkttLmZpbGwgKyBTb25hckJNaW5LbS5maWxsICsgU29uYXJBUGVyY09MLmZpbGwgKyBTb25hckJQZXJjT0wuZmlsbCArXG4gICAgICAgICAgICAgICAgICAoMXxUYWdJRC9UYWdEYXlQZXJpb2QpLCBcbiAgICAgICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpIn0=
+</script>
+</div>
+<section id="section-learning-outcomes" class="level2" data-number="34.1">
+<h2 data-number="34.1" class="anchored" data-anchor-id="section-learning-outcomes"><span class="header-section-number">34.1</span> Section Learning Outcomes</h2>
+<p>There are some datasets that have a hierarchical structure to them, with data collected a several levels - for example, imagine a math tutoring program that tracks student progress over time in several different schools in each of several school districts. The levels are student, school, and district and there may be multiple datapoints - and relevant predictors - at each level.</p>
+<p>Looking at it from a really different angle, there are sometimes predictor variables that we really anticipate to impact response, but we’d hate to have to specify their values in order to make model predictions…in the example above, think of Student ID and school, for example.</p>
+<p>Here’s another way of thinking about it: sometimes, you have a categorical variable for which you’ve got plenty of observations of all the possible values of interest. For example, you want to understand whether people prefer to drink “coffee” or “tea” or “neither” – and have plenty of observations of people who prefer each. That’s a standard “fixed effect” predictor (what we’ve just been calling a “predictor” in our models so far). But other times, you have a categorical variable with a large to infinite range of possible values, and you’ve got observations of just a few: for instance, maybe the variable is <code>City</code> in a global dataset, or maybe it’s <code>person_ID</code> in a health claims data on thousands of Americans. In cases like these, you have data on only a small subset (or at least not all) of the possible “groups” of interest, and using such a variable as a standard “fixed effect” predictor in a regression model feels a bit off…because you don’t care to specify a single particular city or person to make predictions, but also because what about all the other cities and people you <em>don’t</em> have data on?</p>
+<p>And one more way of thinking about it (last one, I promise) – what if your data are collected at different <em>levels</em> of some kind of hierarchy? Going back to the school example, you might have students within a class (and know their age and demographic information), plus know which school their class is part of (and how big it is, what its geographic locations is, etc.), plus you know the school district the school belongs to (and whether it’s urban or rural, etc.) These are levels in a hierarchy of data. All the students in a district have the same district characteristics, but also their own individual-level characteristics like their age, too. The class of models we’re about to see <em>can</em> also help to organize and keep track of all these multiple levels.</p>
+<p>Whichever way we think about it…</p>
+<p>Hierarchical models, aka random effects models, aka multilevel models, aka mixed effects models…to the rescue! (Note, aka stands for “also known as” - these models have <em>many</em> names but all refer to basically the same strategy.)</p>
+<p>By the end of the module you will:</p>
+<ol type="1">
+<li>Explain why random effects are useful. What structural features of data do they account for, and what shortcomings of regression models they typically help correct?</li>
+<li>Make informed, sensible decisions about whether a given candidate variable makes more sense as a fixed effect (“normal” predictor) or a random effect</li>
+<li>Explain what a model with random slopes is, and why we use them sparingly if at all</li>
+<li>Plan, fit and assess models with random effects in R</li>
+</ol>
+</section>
+<section id="text-reference" class="level2" data-number="34.2">
+<h2 data-number="34.2" class="anchored" data-anchor-id="text-reference"><span class="header-section-number">34.2</span> Text Reference</h2>
+<p>Recommended reading for the materials covered in this tutorial can be found in:</p>
+<ul>
+<li><em>Beyond Multiple Linear Regression</em> <a href="https://bookdown.org/roback/bookdown-BeyondMLR/ch-multilevelintro.html" target="_blank">Chapters 8-11</a></li>
+<li>Course Notes <a href="https://stacyderuiter.github.io/regression/random-effects.html" target="_blank">Chapters 14-15</a></li>
+<li><em>Regression Modeling Strategies</em> Chapter 7</li>
+<li><em>Ecological Models &amp; Data in R</em> Chapter 10</li>
+</ul>
+<p>It’s suggested that you consider consulting these chapters <em>after</em> doing this tutorial, with particular focus on any topics you found most challenging.</p>
+</section>
+<section id="random-effects" class="level2" data-number="34.3">
+<h2 data-number="34.3" class="anchored" data-anchor-id="random-effects"><span class="header-section-number">34.3</span> Random Effects</h2>
+<ul>
+<li>What if residuals are <em>not independent</em>?</li>
+<li>In other words: we have “dependent data”…</li>
+<li>A solution (with many names): hierarchical models, multi-level models, random effects models, or mixed effects models.</li>
+</ul>
+</section>
+<section id="dataset" class="level2" data-number="34.4">
+<h2 data-number="34.4" class="anchored" data-anchor-id="dataset"><span class="header-section-number">34.4</span> Dataset</h2>
+<p>This week’s dataset is about beaked whales, and how they might react to sounds made by naval vessels using mid-frequency sonar at sea (it’s used to hunt submarines, and is used in many training exercises and probably on real naval operations as well).</p>
+<section id="the-whales" class="level3">
+<h3 class="anchored" data-anchor-id="the-whales">The Whales</h3>
+<p>Here’s a tiny bit (1 minute!) about this type of whale:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2xEvyvcARPE?si=SoqRlFQ0hbXjnlf8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+</section>
+<section id="the-tags" class="level3">
+<h3 class="anchored" data-anchor-id="the-tags">The Tags</h3>
+<p>And, although this next clip (also 1 minute) is about killer whales, it’s a tag that is similar to the one used to collect our data:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0PTKnRGO9-8?si=SAFVCG2zTJ7dYj2K" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+</section>
+<section id="the-issue" class="level3">
+<h3 class="anchored" data-anchor-id="the-issue">The Issue</h3>
+<p>Why would we expect that these animals might respond adversely to sonar sounds? Well…there have been some unusual mass stranding events. What? Well…</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/6CVzrIMGG0M?si=DFBTW5Ix1u_OrGq5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+<p>So what about sonar? The video below gives a bit of background, but also note that it’s produced by an environmental non-profit with a very specific point of view (they think the sonar is <em>very</em> harmful and have made this video to try to convince you of that). But, it also does give a quick bit of background. Just know that others (world navies, for one, and probably also most scientists) would present things a bit differently.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uQi8nqNTF5Y?si=jczi84A-Y3K9-Sp_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+</section>
+<section id="and-back-to-our-data" class="level3">
+<h3 class="anchored" data-anchor-id="and-back-to-our-data">And, back to our data</h3>
+<p>The data we’ll examine this time are from a paper by Erin Falcone and others published in 2017 (<a href="http://rsos.royalsocietypublishing.org/content/royopensci/4/8/170629.full.pdf" class="uri">http://rsos.royalsocietypublishing.org/content/royopensci/4/8/170629.full.pdf</a>).</p>
+<p>Satellite tags were used to record dive data and movements of 16 Cuvier’s beaked whales for up to 88 days each. The whales were incidentally exposed to different types of naval sonar exercises during the study period.</p>
+<p>None of them were stranded, thankfully. But still they may have responded by changing their behavior, and examining how could help us understand how the sonar might affect them short- and long-terms, and maybe how similar reactions might in some cases <em>lead</em> to those strandings. So…</p>
+<p>How did characteristics of the whales’ dives change during sonar exposure? We will look specifically at shallow dive duration as a response variable. We can read in the dataset like so:</p>
+<p>Some variables in the dataset include:</p>
+<ul>
+<li><code>DurAvg</code>, the duration of each dive in hours</li>
+<li><code>DepthAvg</code>, the maximum dive depth in meters</li>
+<li><code>StartTime</code> of the dive (as a date time)</li>
+<li><code>TimeOfDay</code> when the dive happened: “Dawn”, “Day”, “Dusk”, or “Night”</li>
+<li>Whether <code>SonarA</code> and <code>SonarB</code> (two different types of naval mid-frequency sonar) were present</li>
+<li><code>SonarAMinKm.fill</code> and <code>SonarBMinKm.fill</code>, the minimum distance between known sonar sources and the whale (for each sonar type)</li>
+<li><code>SonarAPercOL.fill</code> and <code>SonarBPercOL.fill</code>: the percent overlap between the sonar sounds and the whale’s dive (during what proportion of the dive were sonar sounds present?)</li>
+<li><code>TagDay</code>, the calendar date of data collection</li>
+<li><code>Period</code>, the two-hour period of the the <code>TagDay</code> when this dive happened</li>
+<li><code>TagDayPeriod</code> combination of the <code>TagDay</code> and <code>Period</code> variables to give a unique ID for each 2-hour time block</li>
+</ul>
+</section>
+</section>
+<section id="model-plan-data-exploration" class="level2" data-number="34.5">
+<h2 data-number="34.5" class="anchored" data-anchor-id="model-plan-data-exploration"><span class="header-section-number">34.5</span> Model Plan &amp; Data Exploration</h2>
+<p>We are especially interested in how dive duration depends on sonar exposure. We also need to control for effects of other variables like depth and time of day.</p>
+<p>What do the data look like? Check out a few simple plots in the hints, and feel free to make some more of your own…</p>
+<div class="cell" data-layout-align="center" data-exercise="zc-graphs">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InpjLWdyYXBocyIsImZpZy1oZWlnaHQiOjQsImZpZy13aWR0aCI6NX0sImNvZGUiOiJnZl9ib3hwbG90KER1ckF2ZyB+IFNvbmFyQSxcbiAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKSB8PlxuICBnZl9sYWJzKHggPSAnU29uYXIgQSBQcmVzZW5jZScsIFxuICAgICAgICAgIHkgPSAnRHVyYXRpb25cXG4obWludXRlcyknKVxuXG5nZl9wb2ludChEdXJBdmcgfiBEZXB0aEF2ZywgZGF0YSA9IHpjX2RpdmVzLCBhbHBoYSA9IDAuMSkgfD5cbiAgZ2ZfbGFicyh4ID0gJ01heC4gRGVwdGggKG0pJywgeSA9ICdEdXJhdGlvblxcbihtaW51dGVzKScpXG5cbmdmX2JveHBsb3QoRHVyQXZnIH4gVGltZU9mRGF5LFxuICAgICAgICAgICBkYXRhID0gemNfZGl2ZXMpIHw+XG4gIGdmX2xhYnMoeCA9ICdUaW1lIG9mIERheScsIHkgPSAnRHVyYXRpb24gKG1pbnV0ZXMpJykifQ==
+</script>
+</div>
+</div>
+</section>
+<section id="why-not-lm" class="level2" data-number="34.6">
+<h2 data-number="34.6" class="anchored" data-anchor-id="why-not-lm"><span class="header-section-number">34.6</span> Why not <code>lm()</code>?</h2>
+<p>Just considering our response variable, <code>DurAvg</code>, which is continuous numeric data, we’d probably try fitting a linear regression model with <code>lm()</code>.</p>
+<p>(Note: Random effects models can also be used for any GLM, too: count, binary, beta regression, etc. This example just happens to be a linear regression one.)</p>
+<p>Following Falcone and colleagues’ modeling plan, we’d fit a model with predictors: <code>DepthAvg</code>, <code>SonarA</code>, <code>SonarB</code>, <code>TimeOfDay</code>, <code>SonarAMinKm.fill</code>, <code>SonarBMinKm.fill</code>, <code>SonarAPercOL.fill</code> and <code>SonarBPercOL.fill</code>.</p>
+<p>Give it a try and show the model summary:</p>
+<div class="cell" data-layout-align="center" data-exercise="base-lm">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImJhc2UtbG0ifSwiY29kZSI6IiJ9
+</script>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="base-lm">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>base_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(DurAvg <span class="sc">~</span> DepthAvg <span class="sc">+</span> TimeOfDay <span class="sc">+</span> SonarA <span class="sc">+</span> SonarB <span class="sc">+</span> TimeOfDay <span class="sc">+</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                   SonarAMinKm.fill <span class="sc">+</span> SonarBMinKm.fill <span class="sc">+</span> SonarAPercOL.fill <span class="sc">+</span> SonarBPercOL.fill, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> zc_dives)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(base_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-assessment" class="level2" data-number="34.7">
+<h2 data-number="34.7" class="anchored" data-anchor-id="model-assessment"><span class="header-section-number">34.7</span> Model assessment</h2>
+<section id="which-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="which-conditions">Which conditions?</h3>
+<p>Since this is time-series data, where we have many rows of data for each of relatively few individual tagged whales, which assessment condition might we be most worried about not being met? (Select true or false for each statement…)</p>
+<div class="webex-check webex-box">
+<ul>
+<li>We should worry about residual independence, since characteristics of one dive might be like those that are near it in time. <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></li>
+<li>We should worry about residual normality, since event duration data are often right skewed. <select class="webex-select"><option value="blank"></option><option value="answer">TRUE</option><option value="">FALSE</option></select></li>
+<li>We should worry about linearity: the effect of time induces non-monotonicity. <select class="webex-select"><option value="blank"></option><option value="">TRUE</option><option value="answer">FALSE</option></select></li>
+</ul>
+</div>
+<div class="webex-solution">
+<button>
+Click for more explanation of the answer above.
+</button>
+<p>For normality: It’s true that the residuals may not be normal, but this isn’t really the standard thing we worry about with <em>dependent</em> data that require a random effects model…it’s more a separate problem specific to data where the response variable is non-negative. We are most concerned about the independence.</p>
+<p>The statement about why we should worry about linearity is just pretty much nonsense (no need to understand what it would mean).</p>
+</div>
+</section>
+<section id="plot-to-check" class="level3">
+<h3 class="anchored" data-anchor-id="plot-to-check">Plot to Check</h3>
+<p>Make the plot you’d need to check the key condition, and see what you think:</p>
+<div class="cell" data-layout-align="center" data-exercise="lm-acf" data-envir="base-lm">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJhc2UtbG0iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImxtLWFjZiJ9LCJjb2RlIjoiIn0=
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="lm-acf">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We want to check independence so we need a residual ACF plot.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(base_model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+What do you think, based on the plot?
+<div id="radio_SPJVNYOEZX" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_SPJVNYOEZX" value=""> <span>It looks like the residuals definitely don't have constant variance (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_SPJVNYOEZX" value=""> <span>There's a clear problem with linearity (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_SPJVNYOEZX" value="answer"> <span>We have clear evidence of dependence in the residuals (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_SPJVNYOEZX" value=""> <span>The residual normality condition is violated (since all the ACF values at lags above one are way outside the confidence bounds).</span></label>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="random-effects-1" class="level2" data-number="34.8">
+<h2 data-number="34.8" class="anchored" data-anchor-id="random-effects-1"><span class="header-section-number">34.8</span> Random Effects</h2>
+<section id="for-multiple-linear-regression-we-would-have" class="level3">
+<h3 class="anchored" data-anchor-id="for-multiple-linear-regression-we-would-have">For multiple linear regression we would have:</h3>
+<p><span class="math display">\[ y = \beta_0 + \beta_1x_1 + \beta_2x_2 + ...\beta_n x_n +  \epsilon\]</span></p>
+<p>Where <span class="math inline">\(\epsilon \sim N(0,\sigma)\)</span> are the normally distributed residuals with mean 0.</p>
+<p>Now…what will be different for our new model class (the random effect or random intercept model)?</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Q_pvAIqCWDs?si=18KfTsKNEmBgh-IK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+<p>We are saying that the <em>differences</em> between the overall intercept and the <em>group specific intercepts</em> of all the categories defined by the random effect variable follow a normal distribution with mean 0 and some standard deviation that we want to estimate.</p>
+</section>
+</section>
+<section id="re-candidates" class="level2" data-number="34.9">
+<h2 data-number="34.9" class="anchored" data-anchor-id="re-candidates"><span class="header-section-number">34.9</span> RE candidates?</h2>
+<p>What kind of variables usually are well modeled as random effects? Well, for one thing, <strong>random effect variables</strong> <em>must</em> <strong>be categorical.</strong> Other common characteristics are:</p>
+<ul>
+<li>Variables that measure <em>time</em></li>
+<li>Variables that measure <em>space</em> or <em>location</em></li>
+<li>Variables that identify an individual person/place/site/thing for which multiple observations were collected (name, individual ID number)</li>
+<li>Any (categorical) variable that has many or near-infinite <em>possible</em> values, and we only have observations on a subset of those</li>
+</ul>
+<p>Consider one or more of the datasets below. In each one, which variable(s) do you think would make good candidates for being modeled as random effects? (Don’t worry about what the response would be, or any details of model planning – this is based solely on the variable type and the context of the situation (as well as you can understand it without more metadata)).</p>
+<ul>
+<li>Thermal preference: <a href="https://sldr.netlify.app/data/cold.csv" class="uri">https://sldr.netlify.app/data/cold.csv</a></li>
+<li>NY car crashes <a href="https://sldr.netlify.app/data/ny_cars.csv" class="uri">https://sldr.netlify.app/data/ny_cars.csv</a></li>
+<li>Sports votes <a href="https://sldr.netlify.app/data/sports-votes-lz27.csv" class="uri">https://sldr.netlify.app/data/sports-votes-lz27.csv</a></li>
+<li>PhD innovation <a href="https://sldr.netlify.app/data/phd_innovation.csv" class="uri">https://sldr.netlify.app/data/phd_innovation.csv</a></li>
+<li>Wood frog abnormality <a href="https://sldr.netlify.app/data/FrogAbnormalities.csv" class="uri">https://sldr.netlify.app/data/FrogAbnormalities.csv</a></li>
+</ul>
+<p>(Read in your chosen dataset and <code>glimpse()</code> it to see what variables are present, then think: which ones are candidates? You probably need to do this in RStudio outside this book, since here you can’t read in datasets from the web – alternatively, you can download a file and view it in spreadsheet software if you prefer.)</p>
+</section>
+<section id="re-candidates-1" class="level2" data-number="34.10">
+<h2 data-number="34.10" class="anchored" data-anchor-id="re-candidates-1"><span class="header-section-number">34.10</span> RE Candidates</h2>
+<p>Here are some suggested answers (not definitive, since borderline cases certainly exist).</p>
+<ul>
+<li>Thermal preference: random effect of <code>id</code> (Really, no other good possibilities in this dataset. Yes, <code>location</code> is a location, but it’s either “Indoor” or “Outdoor” and that pretty much covers all the options.)</li>
+<li>NY car crashes: random effects of <code>county</code>, <code>city</code>, <code>year</code> (each of these might work as fixed effects too, depending on goals and context)</li>
+<li>Sports votes: random effects of <code>Area</code>, perhaps <code>State</code></li>
+<li>PhD Innovation: random effects of <code>year</code> (maybe), and possibly <code>field</code></li>
+<li>Wood Frogs: random effects of <code>FrogID</code> and maybe <code>Year</code>.</li>
+</ul>
+</section>
+<section id="model-formula" class="level2" data-number="34.11">
+<h2 data-number="34.11" class="anchored" data-anchor-id="model-formula"><span class="header-section-number">34.11</span> Model Formula</h2>
+<section id="and-the-function-glmmtmb." class="level3">
+<h3 class="anchored" data-anchor-id="and-the-function-glmmtmb.">and the function: <code>glmmTMB()</code>.</h3>
+<p><em>Many people also use <code>lme4::(g)lmer()</code> to fit these kinds of models, and the syntax for using that function is similar. However, we will stick with <code>glmmTMB()</code> for consistency, and because it can fit models in the negative binomial family, and works well technically.</em></p>
+<ul>
+<li>We add random effects to the model formula with:</li>
+</ul>
+<p><span class="math display">\[ + (1|\text{ variable})\]</span></p>
+</section>
+</section>
+<section id="nested-random-effects" class="level2" data-number="34.12">
+<h2 data-number="34.12" class="anchored" data-anchor-id="nested-random-effects"><span class="header-section-number">34.12</span> Nested Random Effects</h2>
+<p>Sometimes you might have <em>multiple</em> random effects in play in a situation. It’s important to distinguish whether these are <strong>nested</strong> or not (if not, they are “crossed”).</p>
+<ul>
+<li><em>Nested</em> random effects occur when there’s one random effect grouping variable at a higher level of the hierarchy, and another at a lower level; and <em>every lower-level group belongs to one and only one higher-level group.</em> Example: students (lowest level of hierarchy) nested in classes (middle level) nested in universities (top level). If I am in DATA 545 at Calvin, I am a student <em>only</em> at Calvin and no other universities.</li>
+<li><em>Crossed</em> random effects are when the members of a single lowest-level grouping might belong to <em>more than one</em> higher-level group. (For example, what if I was actually enrolled in DATA 545 at Calvin and ALSO taking some other course at some other university too? Not nested anymore…)</li>
+</ul>
+<p>Here’s a bit more detailed explainer with more examples:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pbQ0MdvML3E?si=D7rQKkx2cpxVgBnh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+<p>If you do have <strong>nested random effects</strong>, you add them to your model formula with syntax:</p>
+<p><span class="math display">\[\text{response} \sim ... + (1|\text{ variable1 }/ \text{ variable2}) \dots\]</span></p>
+<p>If they were <strong>not nested</strong> you would just keep them separate, like:</p>
+<p><span class="math display">\[\text{response} \sim ... + (1|\text{ variable1 }) + (1| \text{ variable2}) \dots\]</span></p>
+</section>
+<section id="re-of-individual" class="level2" data-number="34.13">
+<h2 data-number="34.13" class="anchored" data-anchor-id="re-of-individual"><span class="header-section-number">34.13</span> RE of Individual</h2>
+<p>When defining random effects earlier, we supposed that each individual tagged whale might have its own characteristic average dive depth that was consistently different from the others. We could account for that with a random effect of <code>TagID</code>. Code it up (remember to use <code>glmmTMB()</code> to fit your model: <code>lm()</code> can’t fit mixed effect models!)</p>
+<div class="cell" data-layout-align="center" data-exercise="fit-re-model" data-envir="base-lm">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJhc2UtbG0iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImZpdC1yZS1tb2RlbCJ9LCJjb2RlIjoiIn0=
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="fit-re-model">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rem1 <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(DurAvg <span class="sc">~</span> DurAvg <span class="sc">~</span> DepthAvg <span class="sc">+</span> TimeOfDay <span class="sc">+</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                  SonarA <span class="sc">+</span> SonarB <span class="sc">+</span> TimeOfDay <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                  onarAMinKm.fill <span class="sc">+</span> SonarBMinKm.fill <span class="sc">+</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                  SonarAPercOL.fill <span class="sc">+</span> SonarBPercOL.fill <span class="sc">+</span> ...,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> zc_dives)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="fit-re-model">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rem1 <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(DurAvg <span class="sc">~</span> DepthAvg <span class="sc">+</span> TimeOfDay <span class="sc">+</span> SonarA <span class="sc">+</span> SonarB <span class="sc">+</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                          TimeOfDay <span class="sc">+</span> SonarAMinKm.fill <span class="sc">+</span> SonarBMinKm.fill <span class="sc">+</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                          SonarAPercOL.fill <span class="sc">+</span> SonarBPercOL.fill <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> TagID), </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> zc_dives)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-assessment-1" class="level2" data-number="34.14">
+<h2 data-number="34.14" class="anchored" data-anchor-id="model-assessment-1"><span class="header-section-number">34.14</span> Model Assessment</h2>
+<p>We need to check <strong>the same conditions that we would check for any model of the type we’re fitting.</strong></p>
+<section id="lmer-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="lmer-conditions">LMER Conditions</h3>
+<p>Here, since we’re fitting a linear model (with a random effect), also known as a linear mixed-effect model or LMER or linear mixed model, we’d check</p>
+<ul>
+<li>Linearity of predictor-response relationships (using data scatter plots and residuals vs.&nbsp;fitted plot)</li>
+<li>Independence of residuals (using ACF plot)</li>
+<li>Normality of residuals (using histogram of residuals)</li>
+<li>Error variance constant (using residuals vs fitted plot)</li>
+</ul>
+</section>
+<section id="glmm-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="glmm-conditions">GLMM Conditions</h3>
+<p>All models with <em>other</em> families and/or link functions are <em>generalized</em> linear mixed-effect models or GLMMs (also but more rarely called GLMER models).</p>
+<p>If we had a <strong>count</strong>, <strong>binary</strong>, or <strong>beta</strong> regression model we’d check instead:</p>
+<ul>
+<li>Linearity (on the link scale, using data plots and/or the scaled residual plot)</li>
+<li>Indepdendence of residuals (using the ACF plot)</li>
+<li>Mean-variance relationship (using the scaled residual plot)</li>
+</ul>
+<p>Whatever set of conditions we need to check, <strong>residual independence</strong> is in there, and is the one that we are really hoping our added random effect(s) will help us meet.</p>
+<p>Let’s check it! Make an ACF for the <code>rem1</code> model and compare it with the one for the <code>base_model</code>.</p>
+<div class="cell" data-layout-align="center" data-exercise="compare-acfs" data-envir="base-lm">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJhc2UtbG0iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImNvbXBhcmUtYWNmcyJ9LCJjb2RlIjoiIn0=
+</script>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="compare-acfs">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(base_model))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(rem1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+How does the ACF look for the model with the random effect included?
+<div id="radio_XOXFCCRIAJ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_XOXFCCRIAJ" value="answer"> <span>Noticably better, but…alas, still bad - condition is still not met.</span></label><label><input type="radio" autocomplete="off" name="radio_XOXFCCRIAJ" value=""> <span>The ACF for the original linear model actually looks a bit better</span></label><label><input type="radio" autocomplete="off" name="radio_XOXFCCRIAJ" value=""> <span>Better! We are good to go now and ready to interpret the results</span></label><label><input type="radio" autocomplete="off" name="radio_XOXFCCRIAJ" value=""> <span>It was OK before, but now it's looking great</span></label>
+</div>
+</div>
+</div>
+<p>We made progress, but there is still more work to do…</p>
+</section>
+</section>
+<section id="in-or-out" class="level2" data-number="34.15">
+<h2 data-number="34.15" class="anchored" data-anchor-id="in-or-out"><span class="header-section-number">34.15</span> In or Out</h2>
+<p>Note that we’ve been comparing models <em>with</em> the random effect variable included as a random effect, and with that variable <em>excluded</em> entirely.</p>
+<p>There’s not a lot of sense comparing models that both <em>include</em> the same variable, once as a random effect and once as a fixed effect.</p>
+<p>We <strong>do not choose whether to make a variable a fixed vs random effect via model selection.</strong></p>
+<p>It depends on the context, the question of interest, and the characteristics of the predictor variable(s).</p>
+</section>
+<section id="next-nested" class="level2" data-number="34.16">
+<h2 data-number="34.16" class="anchored" data-anchor-id="next-nested"><span class="header-section-number">34.16</span> Next: Nested?</h2>
+<p>What else can we try? Well, in addition to whales being different from each other, maybe they are also different from themselves.</p>
+<p><strong>Huh?</strong></p>
+<p>I mean, maybe a whale’s behavior <em>right now</em> is more similar to its behavior 10 minutes ago than it is to behavior hours and hours ago. Whales maybe tend to behave one way for a while, then switch to a new mode.</p>
+<p>How can we include this in our model? One way is to use the <code>TagDayPeriod</code> variable, which defines two-hour time blocks. Maybe behavior is pretty consistent within each two-hour time-block, and not so much outside that time window.</p>
+<p>(<em>Note: in the Falcone paper, the authors tried several different time-scales (2 hours, 3 hours, 6 hours…) and then used the one that best fit the data - we are skipping that comparison part for simplicity here.</em>)</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(zc_dives)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 6,183
+Columns: 14
+$ TagID             &lt;dbl&gt; 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, …
+$ DurAvg            &lt;dbl&gt; 0.29300000, 0.32850000, 0.30183333, 0.34633333, 0.33…
+$ StartTime         &lt;dttm&gt; 2011-01-06 20:45:30, 2011-01-06 22:13:23, 2011-01-0…
+$ DepthAvg          &lt;dbl&gt; 335.5, 351.5, 287.5, 279.5, 359.5, 311.5, 263.5, 303…
+$ TimeOfDay         &lt;chr&gt; "Day", "Day", "Day", "Day", "Day", "Dusk", "Dusk", "…
+$ SonarA            &lt;fct&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ SonarB            &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ SonarAMinKm.fill  &lt;dbl&gt; 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 50…
+$ SonarBMinKm.fill  &lt;dbl&gt; 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 50…
+$ SonarAPercOL.fill &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ SonarBPercOL.fill &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ TagDay            &lt;date&gt; 2011-01-06, 2011-01-06, 2011-01-06, 2011-01-06, 201…
+$ Period            &lt;chr&gt; "(18,20]", "(20,22]", "(20,22]", "(20,22]", "[0,2]",…
+$ TagDayPeriod      &lt;chr&gt; "2011-01-06.(18,20]", "2011-01-06.(20,22]", "2011-01…</code></pre>
+</div>
+</div>
+<p>Fit the model! I suggest using a <em>nested</em> random effect here: can you explain why?</p>
+<div class="cell" data-layout-align="center" data-exercise="fit-nested" data-envir="base-lm">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6ImJhc2UtbG0iLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImZpdC1uZXN0ZWQifSwiY29kZSI6IiJ9
+</script>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="fit-nested">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rem2 <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(DurAvg <span class="sc">~</span> DepthAvg <span class="sc">+</span> TimeOfDay <span class="sc">+</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                  SonarA <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                  (<span class="dv">1</span><span class="sc">|</span>TagID<span class="sc">/</span>TagDayPeriod), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> zc_dives)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<section id="better" class="level3">
+<h3 class="anchored" data-anchor-id="better">Better?</h3>
+<p>How does the ACF look now?</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(rem2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier1_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="624"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It’s much better. Still not perfect, but <em>way</em> better than what we began with (and about as well as we can do with the data available). Since the residual independence condition is met - at least very close to met - we can expect conclusions drawn from the LMER to be much more reliable than if we’d used the original linear model without the random effect.</p>
+<p>(We’d need to check the other conditions too, but are skipping it now in the interest of time.)</p>
+</section>
+</section>
+<section id="comparison-with-lm" class="level2" data-number="34.17">
+<h2 data-number="34.17" class="anchored" data-anchor-id="comparison-with-lm"><span class="header-section-number">34.17</span> Comparison with <code>lm()</code>?</h2>
+<p>How does this model compare to the original linear regression model?</p>
+<ul>
+<li>Coefficient estimates?</li>
+<li>SEs?</li>
+<li>Additional stuff in the summary output?</li>
+</ul>
+<section id="coefficients" class="level3">
+<h3 class="anchored" data-anchor-id="coefficients">Coefficients</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-0d91e8c82855a4584a6f" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-0d91e8c82855a4584a6f">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11"],["(Intercept)","DepthAvg","TimeOfDayDay","TimeOfDayDusk","TimeOfDayNight","SonarA1","SonarB","SonarAMinKm.fill","SonarBMinKm.fill","SonarAPercOL.fill","SonarBPercOL.fill"],[0.2522,0.0005999999999999999,-0.0135,-0.0351,-0.0407,0.8446,-0.7865,0.0017,-0.0018,0.0001,0.007],[0.4293,0.0007,-0.0048,-0.0222,-0.0385,0.3841,-0.5357,0.0007,-0.0013,0.0163,0.0034],[0.7065,0,0.0045,0.0059,0.0045,0.5332,0.4682,0.0011,0.001,0.0361,0.0385],[0.7318,0,0.0042,0.0056,0.0042,0.5654,0.4481,0.0012,0.0009,0.0299,0.0319]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variable<\/th>\n      <th>lm() est.<\/th>\n      <th>RE model est.<\/th>\n      <th>lm SE<\/th>\n      <th>RE SE<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Variable","targets":1},{"name":"lm() est.","targets":2},{"name":"RE model est.","targets":3},{"name":"lm SE","targets":4},{"name":"RE SE","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>There’s no guarantee that the estimates of the <span class="math inline">\(\beta\)</span>s will be the same for a linear model and a corresponding random effect model. Their standard errors may vary, too, and although it’s not a rule, the SEs may often be biased <em>small</em> in the model without random effects, which means that if you used that no-RE model to draw conclusions, you might <em>wrongly</em> conclude there were real associations between some predictors and the response.</p>
+<p>But more broadly: estimates and conclusions may definitely change when you add random effects. The good news: as we already know, if assessment conditions (like residual independence) aren’t met, the conclusions are not valid, but if we can ensure they’re met with the use of random effects, then we <em>should</em> be able to draw valid conclusions.</p>
+</section>
+</section>
+<section id="selection" class="level2" data-number="34.18">
+<h2 data-number="34.18" class="anchored" data-anchor-id="selection"><span class="header-section-number">34.18</span> Selection</h2>
+<p>Can we use standard likelihood-based model selection criteria with these models ? Well…yes, and no. They can be fitted two ways, one which <em>does</em> and one which <em>doesn’t</em> allow us to use AIC or BIC for selection as we have been doing previously.</p>
+</section>
+<section id="reml-or-ml" class="level2" data-number="34.19">
+<h2 data-number="34.19" class="anchored" data-anchor-id="reml-or-ml"><span class="header-section-number">34.19</span> REML or ML?</h2>
+<p>There are two different ways to fit these models to data:</p>
+<ul>
+<li>by maximizing the likelihood (ML, as we learned about earlier in the course). Unfortunately, it turns out that in this case, <strong>the ML estimates of the variance components (the random effects) is biased, toward underestimating variance, when sample size is small.</strong></li>
+<li>by maximizing the restricted maximum likelihood (REML), which separates the likelhood into two parts (one with the fixed effects and one with the variance components). Maximizing parameters with respect to the second part only yields the <strong>REML estimators, which are unbiased and so preferred for smaller sample sizes.</strong> BUT there’s a catch…<strong>REML values can be used to compare models with different error and random effects structures, but <em>not</em> to determine which predictor variables should remain in a best model.</strong></li>
+</ul>
+<p>So, to do the type of model selection and inference we are used to, we want to always be sure to estimate our models via ML (not REML).</p>
+<p>Here, we do have a large sample size, so even if we use ML there should not be too much bias.</p>
+<p>If we ensure our model is fitted by ML we can also try using AIC or BIC for model selection.</p>
+<p><strong>The default for <code>glmmTMB()</code> is to use ML. If you want to be explicit in requiring that (to make it transparent and remind yourself), you can add the input <code>REML = FALSE</code>.</strong></p>
+<p><em>If you ever use OTHER functions to fit random-effect models, know: The default of <code>lmer()</code> and <code>glmer()</code> is to use REML. So if we want to use ML we have to add the input <code>REML = FALSE</code> to our call.</em></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>zc_dives_noNA <span class="ot">&lt;-</span> zc_dives <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># think: why do this?</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(DurAvg, DepthAvg, TimeOfDay, SonarA, SonarB,  TimeOfDay,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>          SonarAMinKm.fill, SonarBMinKm.fill, SonarAPercOL.fill, SonarBPercOL.fill) </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>rem_sonar <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(DurAvg <span class="sc">~</span> DepthAvg <span class="sc">+</span> TimeOfDay <span class="sc">+</span> SonarA <span class="sc">+</span> SonarB <span class="sc">+</span> TimeOfDay <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                    SonarAMinKm.fill <span class="sc">+</span> SonarBMinKm.fill <span class="sc">+</span> SonarAPercOL.fill <span class="sc">+</span> SonarBPercOL.fill <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                  (<span class="dv">1</span><span class="sc">|</span>TagID <span class="sc">/</span> TagDayPeriod),</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> zc_dives_noNA)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>rem_no_sonar <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(DurAvg <span class="sc">~</span> DepthAvg <span class="sc">+</span> TimeOfDay <span class="sc">+</span> TimeOfDay <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                  (<span class="dv">1</span><span class="sc">|</span>TagID <span class="sc">/</span> TagDayPeriod),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> zc_dives_noNA)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">BIC</span>(rem_sonar, rem_no_sonar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             df       BIC
+rem_sonar    14 -14348.92
+rem_no_sonar  8 -14321.29</code></pre>
+</div>
+</div>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+What do the BIC results tell us?
+<div id="radio_IIVEYKPTEQ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_IIVEYKPTEQ" value=""> <span>The models with the sonar predictors included fits a tiny bit better</span></label><label><input type="radio" autocomplete="off" name="radio_IIVEYKPTEQ" value=""> <span>The model with the sonar predictors doesn't fit as well as the one without</span></label><label><input type="radio" autocomplete="off" name="radio_IIVEYKPTEQ" value="answer"> <span>The model with the sonar predictors included fits a LOT better</span></label>
+</div>
+</div>
+</div>
+<p>Think: does this give us evidence that sonar is associated with whale dive characteristics? How strong?</p>
+</section>
+<section id="random-slopes" class="level2" data-number="34.20">
+<h2 data-number="34.20" class="anchored" data-anchor-id="random-slopes"><span class="header-section-number">34.20</span> Random Slopes?</h2>
+<p>What we just practiced and called a “random effect” is sometimes also called a “random intercept” model because, although we allowed for an offset between the overall average predicted response value and that of an individual, we did not allow the <em>slope</em> of the relationship with any of the predictor variables to vary randomly with individual. It is possible to do this, although in my experience it often makes interpretation difficult.</p>
+<p><strong>Before you do it, think to yourself: do you really think that there is random variation in the relationship of the predictor with the response? One case where random slopes will work well is where there is a strong, clear overall effect and small variations in its magnitude between individuals. Another might be where the relationship with a certain predictor has very strong and very different slopes for different individuals, and you want to account for the added variability this adds to the model. Generally, fitting a random slope model requires a large dataset and interpretation can get VERY complicated; I recommend avoiding it unless you are VERY sure it’s a good idea.</strong></p>
+<p>In the <code>glmmTMB()</code> formula, a model with a random slope <em>and</em> intercept in relation to a particular quantitative predictor (<code>PredictorVariable</code>) and random effect or grouping variable (<code>GroupingVariable</code>) is specified with the form:</p>
+<p><span class="math display">\[ ... + (PredictorVariable | GroupingVariable)\]</span> or equivalently <span class="math display">\[ ... + (1 + PredictorVariable | GroupingVariable)\]</span></p>
+<p>If you want to have a random slope for a certain predictor <em>without</em> the corresponding random intercept (I can’t think of an example where this would be a good idea but you can do it), then use:</p>
+<p><span class="math display">\[ ... + (0 + PredictorVariable | GroupingVariable)\]</span></p>
+<p>Still a bit confused about what random slopes <em>are</em>? Well, even if you’re not…Check out this awesome interactive visualization by Michael Freeman!</p>
+<p><a href="http://mfviz.com/hierarchical-models/" class="uri">http://mfviz.com/hierarchical-models/</a></p>
+</section>
+<section id="prediction-plots" class="level2" data-number="34.21">
+<h2 data-number="34.21" class="anchored" data-anchor-id="prediction-plots"><span class="header-section-number">34.21</span> Prediction Plots</h2>
+<p>There is a bit of added consideration involved in making prediction plots for some random effects models.</p>
+<p>Unlike GEEs, which provide <em>marginal</em> predictions (predictions of the population average value for any combination of predictor variable values), random effects models provide predictions for an <em>average individual</em> (that is, matching the average of all the random effect groups).</p>
+<p><strong>For a linear regression model (or any model with the identity link function, that is, no link function), the predicted values for the population average and average individual are the same</strong>.</p>
+<p>But with a link function in the mix, <strong>it’s different</strong>. Consider a (hypothetical) example of a logistic regression vs linear.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier1_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="336"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/LogRegIndAve.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="199"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the image above, the linear model case is the first plot, on the top. There, think of the central blue line as the “average RE group” (the prediction you’d get by setting the random effect variance to 0 in making predictions). If you think of each colored line as a different individual. Pick one predictor variable value – say, 5. To get the <em>population</em> average for x = 5, you’d add up the y-values for the light green, pink, blue, orange and green lines and divide by 5…<em>and you would get the y-value along the blue line.</em> Same happens for any other x-value you choose: the “average individual” is the <em>same</em> as the “population average.”</p>
+<p>It’s not the same for the logistic regression example on the bottom. There, the “average individual” is the central grey line (and other random effect groups or “individuals” are the other grey lines). But if you follow the process described above to get the “population average” you’ll get, not the middle grey line, but the fat black line.</p>
+<p>So, the average predicted response variable value <em>across all possible random effect groups</em> – that is, the marginal or population average – is <em>not</em> the same as the “average individual” or “average RE group” that is easy to compute from the model equation by setting the random effect value to 0.</p>
+<section id="parametric-bootstrap-to-the-rescue" class="level3">
+<h3 class="anchored" data-anchor-id="parametric-bootstrap-to-the-rescue">Parametric bootstrap to the rescue!</h3>
+<p>How can we get around this problem? We can make predictions from our model for many, many (simulated) individuals to get a ``population” of predictions. Then, we can take a point-wise average over all those individuals (and also use them to find a CI), to get population average predictions and confidence intervals.</p>
+<p>We can do this…and we’ll consider it all – prediction, interpretation, and drawing conclusions – in more detail next module!</p>
+
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImRwbHlyIiwidGlkeXIiLCJyZWFkciIsInJlYWR4bCIsInN0cmluZ3IiLCJnZ3Bsb3QyIiwiZ2dmb3JtdWxhIiwibW9zYWljIiwiY2FyIiwiREhBUk1hIl0sInJlcG9zIjpbXX0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC03IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV83O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzcgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici03LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItNy1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzcgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzcsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzcgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzcuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTYiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici02IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNiA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici02LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfNiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNiwge30pO1xuX3dlYnJfZmVlZGJhY2tfNiA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfNi5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl81ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTUtY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV81ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl81LCB7fSk7XG5fd2Vicl9mZWVkYmFja181ID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV81LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV80O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici00LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItNC1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzQgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzQsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzQgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzQuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTMiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMyA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0zLWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfMyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMywge30pO1xuX3dlYnJfZmVlZGJhY2tfMyA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfMy5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8yID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTItY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV8yID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yLCB7fSk7XG5fd2Vicl9mZWVkYmFja18yID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV8yLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ3ZWJST2pzID0ge1xuICBjb25zdCB7IFdlYlIsIENoYW5uZWxUeXBlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lLldlYlI7XG4gIGNvbnN0IHtcbiAgICBXZWJSRXZhbHVhdG9yLFxuICAgIFdlYlJFbnZpcm9ubWVudE1hbmFnZXIsXG4gICAgc2V0dXBSLFxuICAgIGI2NERlY29kZSxcbiAgICBjb2xsYXBzZVBhdGhcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIHdlYlIgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgLy8gVXNlIFBvc3RNZXNzYWdlIGNoYW5uZWwgZm9yIGFzeW5jIGNvbW11bmljYXRpb25cbiAgLy8gV2UgZG8gbm90IGV4cGVjdCB0byB0YWtlIG5lc3RlZCBwcm9tcHQgaW5wdXQgaW4gUXVhcnRvIExpdmUgY2VsbHNcbiAgZGF0YS5vcHRpb25zLmNoYW5uZWxUeXBlID0gQ2hhbm5lbFR5cGUuUG9zdE1lc3NhZ2U7XG5cbiAgLy8gSW5pdGlhbGlzZSB3ZWJSIGFuZCBzZXR1cCBmb3IgUiBjb2RlIGV2YWx1YXRpb25cbiAgbGV0IHdlYlJQcm9taXNlID0gKGFzeW5jICh3ZWJSKSA9PiB7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIC8vIEluc3RhbGwgcHJvdmlkZWQgbGlzdCBvZiBwYWNrYWdlc1xuICAgIC8vIEVuc3VyZSB3ZWJSIGRlZmF1bHQgcmVwbyBpcyBpbmNsdWRlZFxuICAgIGRhdGEucGFja2FnZXMucmVwb3MucHVzaChcImh0dHBzOi8vcmVwby5yLXdhc20ub3JnXCIpXG4gICAgYXdhaXQgZGF0YS5wYWNrYWdlcy5wa2dzLm1hcCgocGtnKSA9PiAoKSA9PiB7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgICB3ZWJyOjppbnN0YWxsKHBrZywgcmVwb3MgPSByZXBvcylcbiAgICAgICAgbGlicmFyeShwa2csIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSlcbiAgICAgIGAsIHsgZW52OiB7XG4gICAgICAgIHBrZzogcGtnLFxuICAgICAgICByZXBvczogZGF0YS5wYWNrYWdlcy5yZXBvcyxcbiAgICAgIH19KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICBjb25zdCBhbmFseXNpcyA9IGF3YWl0IHdlYlIuRlMuYW5hbHl6ZVBhdGgocGF0aCk7XG4gICAgICAgIGlmICghYW5hbHlzaXMuZXhpc3RzKSB7XG4gICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yOiBcIiR7ZS5tZXNzYWdlfVwiLmApO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH0pKG5ldyBXZWJSKGRhdGEub3B0aW9ucykpO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgd2ViUlByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIHdlYlJQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIn1dfQ==
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
+</script>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./beta.html" class="pagination-link" aria-label="Models for data bounded between 0 and 1">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Models for data bounded between 0 and 1</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="./cclicense.html">
+<p>License</p>
+</a>
+  </li>  
+</ul>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/hier1.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

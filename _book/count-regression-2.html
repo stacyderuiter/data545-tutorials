@@ -515,6 +515,23 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false">
+ <span class="menu-text">Hierarchical Models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -630,8 +647,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6Indhc2gtZ2xtcyIsImV2
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What do you learn from the ANOVA results? Select all correct answers.
-<div id="radio_KQBZUFMYLY" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_KQBZUFMYLY" value=""> <span>There is very strong evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone</span></label><label><input type="radio" autocomplete="off" name="radio_KQBZUFMYLY" value="answer"> <span>There is very strong evidence that the patient occupancy is associated with the number of N95 masks used</span></label><label><input type="radio" autocomplete="off" name="radio_KQBZUFMYLY" value=""> <span>According to these results, there is no evidence of any of the predictors being associated with the response.</span></label><label><input type="radio" autocomplete="off" name="radio_KQBZUFMYLY" value="answer"> <span>There is very strong evidence that the number of N95 masks used is associated with the number of medical staff entering the high-risk zone</span></label><label><input type="radio" autocomplete="off" name="radio_KQBZUFMYLY" value=""> <span>There is not enough data to draw any conclusions based on this analysis, and further study is required.</span></label>
+<div id="radio_FDKADTUAEZ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_FDKADTUAEZ" value="answer"> <span>There is very strong evidence that the patient occupancy is associated with the number of N95 masks used</span></label><label><input type="radio" autocomplete="off" name="radio_FDKADTUAEZ" value=""> <span>There is very strong evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone</span></label><label><input type="radio" autocomplete="off" name="radio_FDKADTUAEZ" value=""> <span>There is not enough data to draw any conclusions based on this analysis, and further study is required.</span></label><label><input type="radio" autocomplete="off" name="radio_FDKADTUAEZ" value="answer"> <span>There is very strong evidence that the number of N95 masks used is associated with the number of medical staff entering the high-risk zone</span></label><label><input type="radio" autocomplete="off" name="radio_FDKADTUAEZ" value=""> <span>According to these results, there is no evidence of any of the predictors being associated with the response.</span></label>
 </div>
 </div>
 </div>
@@ -696,12 +713,12 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 Why does the model selection code for AIC-based selection (and not ANOVA) require us to first select only the variables used in the model and then drop all rows with missing values?
-<div id="radio_SZOTEPARUM" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_SZOTEPARUM" value=""> <span>It isn't really necessary - we only do that in order to be able to add model predictions to the dataset during assessment</span></label><label><input type="radio" autocomplete="off" name="radio_SZOTEPARUM" value="answer"> <span>AIC can only be compared for models fitted to the exact same rows of data.</span></label><label><input type="radio" autocomplete="off" name="radio_SZOTEPARUM" value=""> <span>AIC cannot deal with missing data, although BIC can.</span></label><label><input type="radio" autocomplete="off" name="radio_SZOTEPARUM" value=""> <span>AIC can only be compared for models with the exact same response variable (no transformations etc.!)</span></label>
+<div id="radio_NUQCQHPFTK" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_NUQCQHPFTK" value="answer"> <span>AIC can only be compared for models fitted to the exact same rows of data.</span></label><label><input type="radio" autocomplete="off" name="radio_NUQCQHPFTK" value=""> <span>AIC can only be compared for models with the exact same response variable (no transformations etc.!)</span></label><label><input type="radio" autocomplete="off" name="radio_NUQCQHPFTK" value=""> <span>AIC cannot deal with missing data, although BIC can.</span></label><label><input type="radio" autocomplete="off" name="radio_NUQCQHPFTK" value=""> <span>It isn't really necessary - we only do that in order to be able to add model predictions to the dataset during assessment</span></label>
 </div>
 What do you learn from the AIC results? Select all correct answers.
-<div id="radio_ACBBKDMOXH" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_ACBBKDMOXH" value=""> <span>According to these results, there is no evidence of any of the predictors being associated with the response.</span></label><label><input type="radio" autocomplete="off" name="radio_ACBBKDMOXH" value="answer"> <span>There is very strong evidence that the patient occupancy is associated with the number of N95 masks used</span></label><label><input type="radio" autocomplete="off" name="radio_ACBBKDMOXH" value=""> <span>There is very strong evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone</span></label><label><input type="radio" autocomplete="off" name="radio_ACBBKDMOXH" value="answer"> <span>There is moderate evidence that the patient occupancy is associated with the number of N95 masks used</span></label><label><input type="radio" autocomplete="off" name="radio_ACBBKDMOXH" value=""> <span>There is weak to no evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone</span></label>
+<div id="radio_QWQZUEBAET" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_QWQZUEBAET" value=""> <span>According to these results, there is no evidence of any of the predictors being associated with the response.</span></label><label><input type="radio" autocomplete="off" name="radio_QWQZUEBAET" value="answer"> <span>There is moderate evidence that the patient occupancy is associated with the number of N95 masks used</span></label><label><input type="radio" autocomplete="off" name="radio_QWQZUEBAET" value=""> <span>There is weak to no evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone</span></label><label><input type="radio" autocomplete="off" name="radio_QWQZUEBAET" value=""> <span>There is very strong evidence that the patient occupancy is associated with the number of medical staff entering the high-risk zone</span></label><label><input type="radio" autocomplete="off" name="radio_QWQZUEBAET" value="answer"> <span>There is very strong evidence that the patient occupancy is associated with the number of N95 masks used</span></label>
 </div>
 </div>
 </div>
@@ -832,8 +849,8 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What does the model with the offset say about the relationship between Occupancy and the number of masks used per medical person entering the HRZ?
-<div id="radio_SZGZQPHGMQ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_SZGZQPHGMQ" value=""> <span>Because of the offset in the model, selection is not possible in this case and an answer cannot be obtained.</span></label><label><input type="radio" autocomplete="off" name="radio_SZGZQPHGMQ" value=""> <span>As we found earlier in the model without the offset, there is strong evidence of an association</span></label><label><input type="radio" autocomplete="off" name="radio_SZGZQPHGMQ" value="answer"> <span>Unlike the model without the offset, there is basically no evidence of an association in this case.</span></label>
+<div id="radio_GGWADTRMTY" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_GGWADTRMTY" value=""> <span>As we found earlier in the model without the offset, there is strong evidence of an association</span></label><label><input type="radio" autocomplete="off" name="radio_GGWADTRMTY" value="answer"> <span>Unlike the model without the offset, there is basically no evidence of an association in this case.</span></label><label><input type="radio" autocomplete="off" name="radio_GGWADTRMTY" value=""> <span>Because of the offset in the model, selection is not possible in this case and an answer cannot be obtained.</span></label>
 </div>
 </div>
 </div>
@@ -872,7 +889,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS9nYXBtaW5kZXJfY2xlYW4uY3N2IiwiZGF0YS9mcm9nLWFibm9ybWFsaXRpZXMuY3N2IiwiZGF0YS9ib25vYm9fZmFjZXMuY3N2IiwiZGF0YS9iZWUtdmlydXMuY3N2Il0=
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
 </script>
 </section>
 </section>

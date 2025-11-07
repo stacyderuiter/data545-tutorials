@@ -63,6 +63,9 @@ book:
     chapters:
     - quasibinomial.qmd
     - beta.qmd
+  - part: "Hierarchical Models"
+    chapters:
+    - hier1.qmd
   - references.qmd
   page-footer:
     center:
