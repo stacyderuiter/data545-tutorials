@@ -527,7 +527,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hier1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></span></a>
   </div>
 </li>
       </ul>
@@ -636,7 +642,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRy
 <h2 data-number="29.3" class="anchored" data-anchor-id="data-source"><span class="header-section-number">29.3</span> Data Source</h2>
 <p>The dataset used here is on Alaskan wood frogs, detailing some physical characteristics, habitat characteristics, and the number of developmental and other abnormalities found in the frogs. It was originally obtained from:[<a href="http://datadryad.org/resource/doi:10.5061/dryad.sq72d" class="uri">http://datadryad.org/resource/doi:10.5061/dryad.sq72d</a>].</p>
 <p>What the researchers were really interested in studying was whether the frogs’ abnormalities were associated with several sources of stress in their habitat, including predators hunting the frogs and tadpoles as well as the amount of toxins contaminating their habitat. So, they also measured the abundance of frogs’ predators and levels of various contaminants in the water at the study sites where the frogs were captured.</p>
-<p>The data file can be accessed online at: [<a href="http://sldr.netlify.com/data/frog-abnormalities.csv" class="uri">http://sldr.netlify.com/data/frog-abnormalities.csv</a>]</p>
+<p>The data file can be accessed online at: [<a href="https://sldr.netlify.app/data/frog-abnormalities.csv" class="uri">https://sldr.netlify.app/data/frog-abnormalities.csv</a>]</p>
 <p>And so can be read into R as shown below:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
@@ -1094,7 +1100,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yIiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvcHdkLmNzdiIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
 </script>
 </section>
 

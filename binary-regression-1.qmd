@@ -111,7 +111,7 @@ contaminants in the water at the study sites where the frogs were
 captured.
 
 The data file can be accessed online at:
-[<http://sldr.netlify.com/data/frog-abnormalities.csv>]
+[<https://sldr.netlify.app/data/frog-abnormalities.csv>]
 
 And so can be read into R as shown below:
 

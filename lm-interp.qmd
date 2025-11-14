@@ -169,7 +169,7 @@ The dataset is at <https://sldr.netlify.app/data/bonobo_faces.csv> and so you co
 ```{r}
 #| echo: true
 #| eval: false
-bonobos <- readr::read_csv('http://sldr.netlify.app/data/bonobo_faces.csv')
+bonobos <- readr::read_csv('https://sldr.netlify.app/data/bonobo_faces.csv')
 ```
 
 ### Practice

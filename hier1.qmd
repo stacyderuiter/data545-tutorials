@@ -20,7 +20,7 @@ webr:
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-# Hierarchical Models (part 1)
+# Hierarchical Models - Introduction
 
 ```{r setup, include=FALSE}
 library(webexercises)

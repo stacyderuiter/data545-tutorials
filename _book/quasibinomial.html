@@ -498,7 +498,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hier1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></span></a>
   </div>
 </li>
       </ul>
@@ -673,8 +679,8 @@ $ BA          &lt;fct&gt; Before, Before, Before, Before, Before, Before, Before
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 To model the frequency of swimmer’s itch using this data, what type of response variable do we have, and so which kind of model would you first try fit?
-<div id="radio_YFSKKQYYLG" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_YFSKKQYYLG" value="answer"> <span>This is multiple-trials-per-row binary data, so I'd use binary (aka logistic) regression.</span></label><label><input type="radio" autocomplete="off" name="radio_YFSKKQYYLG" value=""> <span>This is one-trial-per-row binary data, so I'd use binary (aka logistic) regression.</span></label><label><input type="radio" autocomplete="off" name="radio_YFSKKQYYLG" value=""> <span>The response is continuous and quantitative, so I would try linear regression.</span></label><label><input type="radio" autocomplete="off" name="radio_YFSKKQYYLG" value=""> <span>The response is proportion data (without associated information on the number of binary trials) so I would try beta regression.</span></label><label><input type="radio" autocomplete="off" name="radio_YFSKKQYYLG" value=""> <span>This is count data, so I'd try negative binomial regression.</span></label>
+<div id="radio_EUCMQMOLRL" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_EUCMQMOLRL" value=""> <span>This is one-trial-per-row binary data, so I'd use binary (aka logistic) regression.</span></label><label><input type="radio" autocomplete="off" name="radio_EUCMQMOLRL" value=""> <span>The response is continuous and quantitative, so I would try linear regression.</span></label><label><input type="radio" autocomplete="off" name="radio_EUCMQMOLRL" value="answer"> <span>This is multiple-trials-per-row binary data, so I'd use binary (aka logistic) regression.</span></label><label><input type="radio" autocomplete="off" name="radio_EUCMQMOLRL" value=""> <span>This is count data, so I'd try negative binomial regression.</span></label><label><input type="radio" autocomplete="off" name="radio_EUCMQMOLRL" value=""> <span>The response is proportion data (without associated information on the number of binary trials) so I would try beta regression.</span></label>
 </div>
 </div>
 </div>
@@ -692,8 +698,8 @@ Click for more explanation of the answer above.
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What model formula would you use to fit a regression model consistent with the statement above?
-<div id="radio_AVZAUUFZCX" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_AVZAUUFZCX" value=""> <span><code>cbind(TOTAL_SI, SI_Totalneg) ~ BA + OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_AVZAUUFZCX" value=""> <span><code>cbind(TOTAL_SI, SI_Totalneg) ~ BA : OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_AVZAUUFZCX" value="answer"> <span><code>cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_AVZAUUFZCX" value=""> <span><code>SI_Totalneg ~ BA * OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_AVZAUUFZCX" value=""> <span><code>TOTAL_SI ~ BA * OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_AVZAUUFZCX" value=""> <span><code>POS_SWIM ~ BA * OnshoreNNE</code></span></label>
+<div id="radio_OTQYSJWJGJ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_OTQYSJWJGJ" value=""> <span><code>TOTAL_SI ~ BA * OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_OTQYSJWJGJ" value="answer"> <span><code>cbind(TOTAL_SI, SI_Totalneg) ~ BA * OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_OTQYSJWJGJ" value=""> <span><code>cbind(TOTAL_SI, SI_Totalneg) ~ BA + OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_OTQYSJWJGJ" value=""> <span><code>SI_Totalneg ~ BA * OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_OTQYSJWJGJ" value=""> <span><code>cbind(TOTAL_SI, SI_Totalneg) ~ BA : OnshoreNNE</code></span></label><label><input type="radio" autocomplete="off" name="radio_OTQYSJWJGJ" value=""> <span><code>POS_SWIM ~ BA * OnshoreNNE</code></span></label>
 </div>
 </div>
 </div>
@@ -863,8 +869,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What can we conclude based on the ANOVA results?
-<div id="radio_VQZHFLGHRB" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_VQZHFLGHRB" value=""> <span>Winds, but not the merganser relocation program, affect swimmer's itch probability</span></label><label><input type="radio" autocomplete="off" name="radio_VQZHFLGHRB" value=""> <span>We can't make any valid conclusions, since this model does not pass assessment</span></label><label><input type="radio" autocomplete="off" name="radio_VQZHFLGHRB" value=""> <span>Both wind direction and the merganser relocation affect swimmer's itch probability, with wind direction moderating the effectiveness of the relocations</span></label><label><input type="radio" autocomplete="off" name="radio_VQZHFLGHRB" value=""> <span>Neither wind direction nor the merganser relocation affect swimmer's itch probability</span></label><label><input type="radio" autocomplete="off" name="radio_VQZHFLGHRB" value="answer"> <span>Both wind direction and the merganser relocation affect swimmer's itch probability, but they don't interact</span></label>
+<div id="radio_UCAOLQIVFJ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_UCAOLQIVFJ" value="answer"> <span>Both wind direction and the merganser relocation affect swimmer's itch probability, but they don't interact</span></label><label><input type="radio" autocomplete="off" name="radio_UCAOLQIVFJ" value=""> <span>Winds, but not the merganser relocation program, affect swimmer's itch probability</span></label><label><input type="radio" autocomplete="off" name="radio_UCAOLQIVFJ" value=""> <span>Neither wind direction nor the merganser relocation affect swimmer's itch probability</span></label><label><input type="radio" autocomplete="off" name="radio_UCAOLQIVFJ" value=""> <span>Both wind direction and the merganser relocation affect swimmer's itch probability, with wind direction moderating the effectiveness of the relocations</span></label><label><input type="radio" autocomplete="off" name="radio_UCAOLQIVFJ" value=""> <span>We can't make any valid conclusions, since this model does not pass assessment</span></label>
 </div>
 </div>
 </div>
@@ -919,7 +925,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC03IiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvcHdkLmNzdiIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
 </script>
 </section>
 

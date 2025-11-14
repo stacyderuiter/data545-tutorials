@@ -527,7 +527,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hier1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></span></a>
   </div>
 </li>
       </ul>
@@ -683,7 +689,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRy
 <p>Finally, they also measured each bonobo’s assertiveness score (<code>AssR</code>) and dominance score (<code>normDS</code>).</p>
 <p>The dataset is at <a href="https://sldr.netlify.app/data/bonobo_faces.csv" class="uri">https://sldr.netlify.app/data/bonobo_faces.csv</a> and so you could read the dataset in to R by running:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>bonobos <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'http://sldr.netlify.app/data/bonobo_faces.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>bonobos <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://sldr.netlify.app/data/bonobo_faces.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="practice" class="level3">
@@ -750,16 +756,16 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What is the intercept estimate for the model you just fitted?
-<div id="radio_JNJJSMQFFS" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_JNJJSMQFFS" value=""> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_JNJJSMQFFS" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_JNJJSMQFFS" value="answer"> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_JNJJSMQFFS" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_JNJJSMQFFS" value=""> <span>0.023</span></label>
+<div id="radio_OOLNCPJCTR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_OOLNCPJCTR" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_OOLNCPJCTR" value=""> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_OOLNCPJCTR" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_OOLNCPJCTR" value=""> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_OOLNCPJCTR" value="answer"> <span>2.008</span></label>
 </div>
 What is the slope for the model you just fitted?
-<div id="radio_HUMTUOCPZJ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_HUMTUOCPZJ" value="answer"> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_HUMTUOCPZJ" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_HUMTUOCPZJ" value=""> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_HUMTUOCPZJ" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_HUMTUOCPZJ" value=""> <span>0.023</span></label>
+<div id="radio_VKIDPBHSTZ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_VKIDPBHSTZ" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_VKIDPBHSTZ" value="answer"> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_VKIDPBHSTZ" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_VKIDPBHSTZ" value=""> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_VKIDPBHSTZ" value=""> <span>0.023</span></label>
 </div>
 What is sigma, the standard deviation of the residuals, for the model you just fitted?
-<div id="radio_SMGPRGSNNN" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_SMGPRGSNNN" value=""> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_SMGPRGSNNN" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_SMGPRGSNNN" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_SMGPRGSNNN" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_SMGPRGSNNN" value="answer"> <span>1.031</span></label>
+<div id="radio_CDLEPQGABU" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_CDLEPQGABU" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_CDLEPQGABU" value="answer"> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_CDLEPQGABU" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_CDLEPQGABU" value=""> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_CDLEPQGABU" value=""> <span>0.926</span></label>
 </div>
 </div>
 </div>
@@ -795,8 +801,8 @@ F-statistic: 0.2312 on 1 and 66 DF,  p-value: 0.6322</code></pre>
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What is the SE for the slope, for the regression to predict normDS as a function of weight for our bonobo dataset?
-<div id="radio_EHXFMFLBAW" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_EHXFMFLBAW" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_EHXFMFLBAW" value="answer"> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_EHXFMFLBAW" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_EHXFMFLBAW" value=""> <span>1.031</span></label><label><input type="radio" autocomplete="off" name="radio_EHXFMFLBAW" value=""> <span>2.008</span></label>
+<div id="radio_YBOERWQWYO" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_YBOERWQWYO" value=""> <span>0.926</span></label><label><input type="radio" autocomplete="off" name="radio_YBOERWQWYO" value="answer"> <span>0.023</span></label><label><input type="radio" autocomplete="off" name="radio_YBOERWQWYO" value=""> <span>0.011</span></label><label><input type="radio" autocomplete="off" name="radio_YBOERWQWYO" value=""> <span>2.008</span></label><label><input type="radio" autocomplete="off" name="radio_YBOERWQWYO" value=""> <span>1.031</span></label>
 </div>
 </div>
 </div>

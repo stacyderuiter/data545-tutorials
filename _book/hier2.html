@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>35&nbsp; Hierarchical Models - Interpretation &amp; Prediction – DATA 545 Tutorial</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./hier1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e22fbe6e69edb8577f7b7bd0719516f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="_include/webex.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hier1.html">Hierarchical Models</a></li><li class="breadcrumb-item"><a href="./hier2.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">DATA 545 Tutorial</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/stacyderuiter/data545-tutorials/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./install-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how-to-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R Results in Quarto Text</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math-notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Math Notation in Quarto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Designing Effective Visualizations</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-no-junk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">What is <em>Necessary</em>?</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-color.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Color</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-text-elements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Text Elements</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-choose.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Choose a Graph Type</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-var-types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Variable Types</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Gallery: One Categorical Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gallery: One Quantitative Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gallery: 2-3 Categorical Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Gallery: Multiple Quantitative Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-cat-quant-mix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Gallery: Mixed Quantitative + Categorical</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization with ggformula</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-ggformula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ggformula and Formulas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Datasets Used</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Code Examples</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./design-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study Design &amp; Model Planning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Sample and Study Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./plan.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Model Planning for Inference</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Multiple Linear Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-fit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Fitting Linear Models in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-assess.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Assessment for Linear Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interpretation and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Selection and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Interactions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Interactions in Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Likelihood</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Maximum Likelihood Estimation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Count Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./count-regression-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regression for Count Responses: Formulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./count-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Interpreting Count Regression</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Binary Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses (one trial per row)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Zero Inflation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zi-od.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Zero Inflation for Overdispersed Counts</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">More Fun Between 0-1</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quasibinomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Models for Overdispered Binary Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beta.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Models for data bounded between 0 and 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="true">
+ <span class="menu-text">Hierarchical Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#section-learning-outcomes" id="toc-section-learning-outcomes" class="nav-link active" data-scroll-target="#section-learning-outcomes"><span class="header-section-number">35.1</span> Section Learning Outcomes</a></li>
+  <li><a href="#text-reference" id="toc-text-reference" class="nav-link" data-scroll-target="#text-reference"><span class="header-section-number">35.2</span> Text Reference</a></li>
+  <li><a href="#random-effects-with-glmmtmb-and-standardized-residuals" id="toc-random-effects-with-glmmtmb-and-standardized-residuals" class="nav-link" data-scroll-target="#random-effects-with-glmmtmb-and-standardized-residuals"><span class="header-section-number">35.3</span> Random effects with glmmTMB and standardized residuals</a></li>
+  <li><a href="#average-re-group-vs-population-average" id="toc-average-re-group-vs-population-average" class="nav-link" data-scroll-target="#average-re-group-vs-population-average"><span class="header-section-number">35.4</span> Average RE Group vs Population Average</a>
+  <ul class="collapse">
+  <li><a href="#random-effect-equation" id="toc-random-effect-equation" class="nav-link" data-scroll-target="#random-effect-equation">Random Effect Equation</a></li>
+  <li><a href="#average-re-group-vs.-population-average" id="toc-average-re-group-vs.-population-average" class="nav-link" data-scroll-target="#average-re-group-vs.-population-average">Average RE Group vs.&nbsp;Population Average</a></li>
+  <li><a href="#average-group-predictions" id="toc-average-group-predictions" class="nav-link" data-scroll-target="#average-group-predictions">Average-group predictions</a></li>
+  <li><a href="#population-average-predictions" id="toc-population-average-predictions" class="nav-link" data-scroll-target="#population-average-predictions">Population average predictions</a></li>
+  </ul></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">35.5</span> Data</a>
+  <ul class="collapse">
+  <li><a href="#research-question" id="toc-research-question" class="nav-link" data-scroll-target="#research-question">Research Question</a></li>
+  </ul></li>
+  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting"><span class="header-section-number">35.6</span> Model Fitting</a>
+  <ul class="collapse">
+  <li><a href="#model-planning-check-in" id="toc-model-planning-check-in" class="nav-link" data-scroll-target="#model-planning-check-in">Model Planning check-in</a></li>
+  </ul></li>
+  <li><a href="#model-assessment" id="toc-model-assessment" class="nav-link" data-scroll-target="#model-assessment"><span class="header-section-number">35.7</span> Model Assessment</a></li>
+  <li><a href="#prediction-plots-average-re-group" id="toc-prediction-plots-average-re-group" class="nav-link" data-scroll-target="#prediction-plots-average-re-group"><span class="header-section-number">35.8</span> Prediction Plots: Average RE Group</a>
+  <ul class="collapse">
+  <li><a href="#values-of-other-predictors" id="toc-values-of-other-predictors" class="nav-link" data-scroll-target="#values-of-other-predictors">Values of “other” predictors?</a></li>
+  <li><a href="#the-prediction-plot" id="toc-the-prediction-plot" class="nav-link" data-scroll-target="#the-prediction-plot">The prediction plot</a></li>
+  <li><a href="#smoother-prediction-plot" id="toc-smoother-prediction-plot" class="nav-link" data-scroll-target="#smoother-prediction-plot">Smoother prediction plot</a></li>
+  </ul></li>
+  <li><a href="#prediction-plots-all-the-whales" id="toc-prediction-plots-all-the-whales" class="nav-link" data-scroll-target="#prediction-plots-all-the-whales"><span class="header-section-number">35.9</span> Prediction Plots: All the Whales</a></li>
+  <li><a href="#prediction-plots-population-average" id="toc-prediction-plots-population-average" class="nav-link" data-scroll-target="#prediction-plots-population-average"><span class="header-section-number">35.10</span> Prediction Plots: Population Average</a>
+  <ul class="collapse">
+  <li><a href="#parametric-bootstrap-overview" id="toc-parametric-bootstrap-overview" class="nav-link" data-scroll-target="#parametric-bootstrap-overview">Parametric Bootstrap Overview</a></li>
+  <li><a href="#step-0-no-nas" id="toc-step-0-no-nas" class="nav-link" data-scroll-target="#step-0-no-nas">Step 0: No NAs</a></li>
+  <li><a href="#parametric-bootstrap-prediction-function" id="toc-parametric-bootstrap-prediction-function" class="nav-link" data-scroll-target="#parametric-bootstrap-prediction-function">Parametric Bootstrap: Prediction function</a></li>
+  <li><a href="#parametric-bootstrap-run-simulations" id="toc-parametric-bootstrap-run-simulations" class="nav-link" data-scroll-target="#parametric-bootstrap-run-simulations">Parametric Bootstrap: Run Simulations</a></li>
+  <li><a href="#parametric-bootstrap-mean-and-ci" id="toc-parametric-bootstrap-mean-and-ci" class="nav-link" data-scroll-target="#parametric-bootstrap-mean-and-ci">Parametric Bootstrap: Mean and CI</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/hier2.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hier1.html">Hierarchical Models</a></li><li class="breadcrumb-item"><a href="./hier2.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell" data-layout-align="center" data-setup="true" data-exercise="[&quot;model-fit&quot;,&quot;check-m-15&quot;,&quot;logit-linearity&quot;,&quot;basic-pred-plot&quot;]">
+<script type="exercise-setup-model-fit-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbIm1vZGVsLWZpdCIsImNoZWNrLW0tMTUiLCJsb2dpdC1saW5lYXJpdHkiLCJiYXNpYy1wcmVkLXBsb3QiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5pbG9naXQgPC0gZnVuY3Rpb24gKHgpIFxue1xuICAgIGV4cCh4KS8oMSArIGV4cCh4KSlcbn1cblxuemNfZGl2ZXMgPC0gcmVhZC5jc3YoJ2RhdGEvenNoYWwuY3N2JykgfD5cbiAgbXV0YXRlKFNvbmFyQSA9IGZhY3RvcihTb25hckEpKSB8PlxuICBtdXRhdGUoRHVyQXZnID0gRHVyQXZnIC8gNjAsXG4gICAgICAgICBEZXB0aEF2ZyA9IERlcHRoQXZnKSB8PlxuICByZW5hbWUoVGltZU9mRGF5ID0gVHJhbnNDbGFzcylcblxuYmFzZV9tb2RlbCA8LSBsbShEdXJBdmcgfiBEZXB0aEF2ZyArIFRpbWVPZkRheSArIFNvbmFyQSArIFNvbmFyQiArIFRpbWVPZkRheSArXG4gICAgICAgICAgICAgICAgICAgU29uYXJBTWluS20uZmlsbCArIFNvbmFyQk1pbkttLmZpbGwgKyBTb25hckFQZXJjT0wuZmlsbCArIFNvbmFyQlBlcmNPTC5maWxsLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxucmVtMSA8LSBnbG1tVE1CKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwgKyAoMSB8IFRhZ0lEKSwgXG4gICAgICAgICAgICAgICAgIGRhdGEgPSB6Y19kaXZlcylcblxucmVtMiA8LSBnbG1tVE1CKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwgK1xuICAgICAgICAgICAgICAgICAgKDF8VGFnSUQvVGFnRGF5UGVyaW9kKSwgXG4gICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5wdyA8LSByZWFkX2NzdignZGF0YS9wd2QuY3N2JykgfD5cbiAgbXV0YXRlKGFjdGl2aXR5ID0gaWZlbHNlKG5fYnV6emVzID4gMCxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICdmb3JhZ2luZycsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAnb3RoZXInKSxcbiAgICAgICAgIGFjdGl2aXR5ID0gZm9yY2F0czo6ZmN0X3JlbGV2ZWwoYWN0aXZpdHksXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICdvdGhlcicsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICdmb3JhZ2luZycpKVxucHcgPC0gcHcgfD5cbiAgbXV0YXRlKHByZXZfYnV6emVzID0gYygwLCBoZWFkKHB1bGwocHcsIG5fYnV6emVzKSwgLTEpKSxcbiAgICAgICAgIHRpbWVfY2F0ID0gY3V0X2ludGVydmFsKHRpbWVfb2ZfZGF5LCBsZW5ndGggPSAwLjEpKVxuXG5wd19yZSA8LSBnbG1tVE1CKGFjdGl2aXR5IH4gT0RCQSArIGR1cmF0aW9uICsgXG4gICAgICAgICAgICAgICAgICAgcHJldl9idXp6ZXMqZGl2ZV9zdGF0ZSArIFxuICAgICAgICAgICAgICAgICAgICgxfGluZGl2aWR1YWwvdGltZV9jYXQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHB3LCBmYW1pbHkgPSBiaW5vbWlhbChsaW5rID0gJ2xvZ2l0JykpIn0=
+</script>
+<script type="exercise-setup-check-m-15-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbIm1vZGVsLWZpdCIsImNoZWNrLW0tMTUiLCJsb2dpdC1saW5lYXJpdHkiLCJiYXNpYy1wcmVkLXBsb3QiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5pbG9naXQgPC0gZnVuY3Rpb24gKHgpIFxue1xuICAgIGV4cCh4KS8oMSArIGV4cCh4KSlcbn1cblxuemNfZGl2ZXMgPC0gcmVhZC5jc3YoJ2RhdGEvenNoYWwuY3N2JykgfD5cbiAgbXV0YXRlKFNvbmFyQSA9IGZhY3RvcihTb25hckEpKSB8PlxuICBtdXRhdGUoRHVyQXZnID0gRHVyQXZnIC8gNjAsXG4gICAgICAgICBEZXB0aEF2ZyA9IERlcHRoQXZnKSB8PlxuICByZW5hbWUoVGltZU9mRGF5ID0gVHJhbnNDbGFzcylcblxuYmFzZV9tb2RlbCA8LSBsbShEdXJBdmcgfiBEZXB0aEF2ZyArIFRpbWVPZkRheSArIFNvbmFyQSArIFNvbmFyQiArIFRpbWVPZkRheSArXG4gICAgICAgICAgICAgICAgICAgU29uYXJBTWluS20uZmlsbCArIFNvbmFyQk1pbkttLmZpbGwgKyBTb25hckFQZXJjT0wuZmlsbCArIFNvbmFyQlBlcmNPTC5maWxsLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxucmVtMSA8LSBnbG1tVE1CKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwgKyAoMSB8IFRhZ0lEKSwgXG4gICAgICAgICAgICAgICAgIGRhdGEgPSB6Y19kaXZlcylcblxucmVtMiA8LSBnbG1tVE1CKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwgK1xuICAgICAgICAgICAgICAgICAgKDF8VGFnSUQvVGFnRGF5UGVyaW9kKSwgXG4gICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5wdyA8LSByZWFkX2NzdignZGF0YS9wd2QuY3N2JykgfD5cbiAgbXV0YXRlKGFjdGl2aXR5ID0gaWZlbHNlKG5fYnV6emVzID4gMCxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICdmb3JhZ2luZycsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAnb3RoZXInKSxcbiAgICAgICAgIGFjdGl2aXR5ID0gZm9yY2F0czo6ZmN0X3JlbGV2ZWwoYWN0aXZpdHksXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICdvdGhlcicsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICdmb3JhZ2luZycpKVxucHcgPC0gcHcgfD5cbiAgbXV0YXRlKHByZXZfYnV6emVzID0gYygwLCBoZWFkKHB1bGwocHcsIG5fYnV6emVzKSwgLTEpKSxcbiAgICAgICAgIHRpbWVfY2F0ID0gY3V0X2ludGVydmFsKHRpbWVfb2ZfZGF5LCBsZW5ndGggPSAwLjEpKVxuXG5wd19yZSA8LSBnbG1tVE1CKGFjdGl2aXR5IH4gT0RCQSArIGR1cmF0aW9uICsgXG4gICAgICAgICAgICAgICAgICAgcHJldl9idXp6ZXMqZGl2ZV9zdGF0ZSArIFxuICAgICAgICAgICAgICAgICAgICgxfGluZGl2aWR1YWwvdGltZV9jYXQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHB3LCBmYW1pbHkgPSBiaW5vbWlhbChsaW5rID0gJ2xvZ2l0JykpIn0=
+</script>
+<script type="exercise-setup-logit-linearity-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbIm1vZGVsLWZpdCIsImNoZWNrLW0tMTUiLCJsb2dpdC1saW5lYXJpdHkiLCJiYXNpYy1wcmVkLXBsb3QiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5pbG9naXQgPC0gZnVuY3Rpb24gKHgpIFxue1xuICAgIGV4cCh4KS8oMSArIGV4cCh4KSlcbn1cblxuemNfZGl2ZXMgPC0gcmVhZC5jc3YoJ2RhdGEvenNoYWwuY3N2JykgfD5cbiAgbXV0YXRlKFNvbmFyQSA9IGZhY3RvcihTb25hckEpKSB8PlxuICBtdXRhdGUoRHVyQXZnID0gRHVyQXZnIC8gNjAsXG4gICAgICAgICBEZXB0aEF2ZyA9IERlcHRoQXZnKSB8PlxuICByZW5hbWUoVGltZU9mRGF5ID0gVHJhbnNDbGFzcylcblxuYmFzZV9tb2RlbCA8LSBsbShEdXJBdmcgfiBEZXB0aEF2ZyArIFRpbWVPZkRheSArIFNvbmFyQSArIFNvbmFyQiArIFRpbWVPZkRheSArXG4gICAgICAgICAgICAgICAgICAgU29uYXJBTWluS20uZmlsbCArIFNvbmFyQk1pbkttLmZpbGwgKyBTb25hckFQZXJjT0wuZmlsbCArIFNvbmFyQlBlcmNPTC5maWxsLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxucmVtMSA8LSBnbG1tVE1CKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwgKyAoMSB8IFRhZ0lEKSwgXG4gICAgICAgICAgICAgICAgIGRhdGEgPSB6Y19kaXZlcylcblxucmVtMiA8LSBnbG1tVE1CKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwgK1xuICAgICAgICAgICAgICAgICAgKDF8VGFnSUQvVGFnRGF5UGVyaW9kKSwgXG4gICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5wdyA8LSByZWFkX2NzdignZGF0YS9wd2QuY3N2JykgfD5cbiAgbXV0YXRlKGFjdGl2aXR5ID0gaWZlbHNlKG5fYnV6emVzID4gMCxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICdmb3JhZ2luZycsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAnb3RoZXInKSxcbiAgICAgICAgIGFjdGl2aXR5ID0gZm9yY2F0czo6ZmN0X3JlbGV2ZWwoYWN0aXZpdHksXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICdvdGhlcicsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICdmb3JhZ2luZycpKVxucHcgPC0gcHcgfD5cbiAgbXV0YXRlKHByZXZfYnV6emVzID0gYygwLCBoZWFkKHB1bGwocHcsIG5fYnV6emVzKSwgLTEpKSxcbiAgICAgICAgIHRpbWVfY2F0ID0gY3V0X2ludGVydmFsKHRpbWVfb2ZfZGF5LCBsZW5ndGggPSAwLjEpKVxuXG5wd19yZSA8LSBnbG1tVE1CKGFjdGl2aXR5IH4gT0RCQSArIGR1cmF0aW9uICsgXG4gICAgICAgICAgICAgICAgICAgcHJldl9idXp6ZXMqZGl2ZV9zdGF0ZSArIFxuICAgICAgICAgICAgICAgICAgICgxfGluZGl2aWR1YWwvdGltZV9jYXQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHB3LCBmYW1pbHkgPSBiaW5vbWlhbChsaW5rID0gJ2xvZ2l0JykpIn0=
+</script>
+<script type="exercise-setup-basic-pred-plot-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbIm1vZGVsLWZpdCIsImNoZWNrLW0tMTUiLCJsb2dpdC1saW5lYXJpdHkiLCJiYXNpYy1wcmVkLXBsb3QiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcblxudGhlbWVfc2V0KHRoZW1lX2J3KGJhc2Vfc2l6ZT0xNikpXG5cbmtuaXRyOjpvcHRzX2NodW5rJHNldChcbiAgZWNobyA9IEZBTFNFLFxuICBmaWcuYWxpZ24gPSBcImNlbnRlclwiLFxuICBmaWcud2lkdGggPSA2LCBmaWcuaGVpZ2h0ID0gMi41KVxuXG5pbG9naXQgPC0gZnVuY3Rpb24gKHgpIFxue1xuICAgIGV4cCh4KS8oMSArIGV4cCh4KSlcbn1cblxuemNfZGl2ZXMgPC0gcmVhZC5jc3YoJ2RhdGEvenNoYWwuY3N2JykgfD5cbiAgbXV0YXRlKFNvbmFyQSA9IGZhY3RvcihTb25hckEpKSB8PlxuICBtdXRhdGUoRHVyQXZnID0gRHVyQXZnIC8gNjAsXG4gICAgICAgICBEZXB0aEF2ZyA9IERlcHRoQXZnKSB8PlxuICByZW5hbWUoVGltZU9mRGF5ID0gVHJhbnNDbGFzcylcblxuYmFzZV9tb2RlbCA8LSBsbShEdXJBdmcgfiBEZXB0aEF2ZyArIFRpbWVPZkRheSArIFNvbmFyQSArIFNvbmFyQiArIFRpbWVPZkRheSArXG4gICAgICAgICAgICAgICAgICAgU29uYXJBTWluS20uZmlsbCArIFNvbmFyQk1pbkttLmZpbGwgKyBTb25hckFQZXJjT0wuZmlsbCArIFNvbmFyQlBlcmNPTC5maWxsLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxucmVtMSA8LSBnbG1tVE1CKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwgKyAoMSB8IFRhZ0lEKSwgXG4gICAgICAgICAgICAgICAgIGRhdGEgPSB6Y19kaXZlcylcblxucmVtMiA8LSBnbG1tVE1CKER1ckF2ZyB+IERlcHRoQXZnICsgVGltZU9mRGF5ICsgU29uYXJBICsgU29uYXJCICsgVGltZU9mRGF5ICtcbiAgICAgICAgICAgICAgICAgICBTb25hckFNaW5LbS5maWxsICsgU29uYXJCTWluS20uZmlsbCArIFNvbmFyQVBlcmNPTC5maWxsICsgU29uYXJCUGVyY09MLmZpbGwgK1xuICAgICAgICAgICAgICAgICAgKDF8VGFnSUQvVGFnRGF5UGVyaW9kKSwgXG4gICAgICAgICAgICAgICAgZGF0YSA9IHpjX2RpdmVzKVxuXG5wdyA8LSByZWFkX2NzdignZGF0YS9wd2QuY3N2JykgfD5cbiAgbXV0YXRlKGFjdGl2aXR5ID0gaWZlbHNlKG5fYnV6emVzID4gMCxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICdmb3JhZ2luZycsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAnb3RoZXInKSxcbiAgICAgICAgIGFjdGl2aXR5ID0gZm9yY2F0czo6ZmN0X3JlbGV2ZWwoYWN0aXZpdHksXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICdvdGhlcicsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICdmb3JhZ2luZycpKVxucHcgPC0gcHcgfD5cbiAgbXV0YXRlKHByZXZfYnV6emVzID0gYygwLCBoZWFkKHB1bGwocHcsIG5fYnV6emVzKSwgLTEpKSxcbiAgICAgICAgIHRpbWVfY2F0ID0gY3V0X2ludGVydmFsKHRpbWVfb2ZfZGF5LCBsZW5ndGggPSAwLjEpKVxuXG5wd19yZSA8LSBnbG1tVE1CKGFjdGl2aXR5IH4gT0RCQSArIGR1cmF0aW9uICsgXG4gICAgICAgICAgICAgICAgICAgcHJldl9idXp6ZXMqZGl2ZV9zdGF0ZSArIFxuICAgICAgICAgICAgICAgICAgICgxfGluZGl2aWR1YWwvdGltZV9jYXQpLCBcbiAgICAgICAgICAgICAgICAgZGF0YSA9IHB3LCBmYW1pbHkgPSBiaW5vbWlhbChsaW5rID0gJ2xvZ2l0JykpIn0=
+</script>
+</div>
+<section id="section-learning-outcomes" class="level2" data-number="35.1">
+<h2 data-number="35.1" class="anchored" data-anchor-id="section-learning-outcomes"><span class="header-section-number">35.1</span> Section Learning Outcomes</h2>
+<p>This module, we continue to learn about hierarchical models. Now, we focus on additional practice at model planning and fitting as well as learning to interpret results (including use of prediction plots, which is more complicated for these models than for others we’ve seen).</p>
+<p>By the end of the module you will:</p>
+<ol type="1">
+<li>Do model selection for models with random effects, using information criteria or hypothesis tests (really, we did this last time - it’s the same as ever)</li>
+<li>Understand the difference between the individual average and the population average type predictions</li>
+<li>Make individual-average or population-average prediction plots for random effects models, with or without including random effects variance in the uncertainty estimates</li>
+<li>State an appropriate rationale for whether or not to include RE variance in uncertainty estimates for a particular case</li>
+<li>Interpret the results of a random effects model using the selection results and prediction plots mentioned above</li>
+</ol>
+</section>
+<section id="text-reference" class="level2" data-number="35.2">
+<h2 data-number="35.2" class="anchored" data-anchor-id="text-reference"><span class="header-section-number">35.2</span> Text Reference</h2>
+<p>Recommended reading for the materials covered in this tutorial can be found in:</p>
+<ul>
+<li><em>Beyond Multiple Linear Regression</em> <a href="https://bookdown.org/roback/bookdown-BeyondMLR/ch-multilevelintro.html" target="_blank">Chapters 8-11</a></li>
+<li>Course Notes <a href="https://stacyderuiter.github.io/regression/random-effects.html" target="_blank">Chapters 14-15</a></li>
+<li><em>Regression Modeling Strategies</em> Chapter 7</li>
+<li><em>Ecological Models &amp; Data in R</em> Chapter 10</li>
+</ul>
+<p>It’s suggested that you consider consulting these chapters <em>after</em> doing this tutorial, with particular focus on any topics you found most challenging.</p>
+</section>
+<section id="random-effects-with-glmmtmb-and-standardized-residuals" class="level2" data-number="35.3">
+<h2 data-number="35.3" class="anchored" data-anchor-id="random-effects-with-glmmtmb-and-standardized-residuals"><span class="header-section-number">35.3</span> Random effects with glmmTMB and standardized residuals</h2>
+<p>In the previous module we considered fitting and assessing mixed-effects models (using the package <code>glmmTMB</code>). We also touched on model selection for these models, which is <em>just the same</em> as for all the other models we’ve seen before (as long as we fit the model using maximum likelihood and not REML).</p>
+<p>What about making predictions from the fitted model and interpreting the results, though? That’s what we consider this module!</p>
+</section>
+<section id="average-re-group-vs-population-average" class="level2" data-number="35.4">
+<h2 data-number="35.4" class="anchored" data-anchor-id="average-re-group-vs-population-average"><span class="header-section-number">35.4</span> Average RE Group vs Population Average</h2>
+<ul>
+<li>Random effects models provide predictions for the <em>average random effect grouping</em> (here, the average whale and the average 2-hour timeblock).</li>
+<li><strong>For a linear regression model (or any model with the identity link function, that is, no link function), the predicted values for the average RE group and population average are the same</strong>.<br>
+</li>
+<li>But with a link function in the mix, <strong>it’s different</strong>.</li>
+</ul>
+<section id="random-effect-equation" class="level3">
+<h3 class="anchored" data-anchor-id="random-effect-equation">Random Effect Equation</h3>
+<p>What model are we talking about in this example, and what’s it’s equation?</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/TTm7JENzgXc?si=FUkAQaWNgTWphwd1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+</section>
+<section id="average-re-group-vs.-population-average" class="level3">
+<h3 class="anchored" data-anchor-id="average-re-group-vs.-population-average">Average RE Group vs.&nbsp;Population Average</h3>
+<p>OK, so what’s the difference between “average random effect group” predictions and “population average” predictions?</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/DdFXcksZw8U?si=FOfQcTRbWJfsnfBc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+</section>
+<section id="average-group-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="average-group-predictions">Average-group predictions</h3>
+<p>The easy one first: How do we make predictions for the average RE group?</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jXeUNmGBzQk?si=_wQEPtFkpAR9-NBH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+</section>
+<section id="population-average-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="population-average-predictions">Population average predictions</h3>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/CLw_4bEtnQ0?si=Wk9_JlrS_B4v3k-T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+<p>Wow, that is kind of a lot. Let’s consider another worked example to try to better understand. This time, we’ll fit a model <em>with</em> a link function…</p>
+</section>
+</section>
+<section id="data" class="level2" data-number="35.5">
+<h2 data-number="35.5" class="anchored" data-anchor-id="data"><span class="header-section-number">35.5</span> Data</h2>
+<p>Read in the data (you don’t need to interpret/understand the data preparation that is being done here):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://sldr.netlify.app/data/pwd.csv'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">activity =</span> <span class="fu">ifelse</span>(n_buzzes <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'foraging'</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'other'</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">activity =</span> forcats<span class="sc">::</span><span class="fu">fct_relevel</span>(activity,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">'other'</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">'foraging'</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> pw <span class="sc">|&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prev_buzzes =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">head</span>(<span class="fu">pull</span>(pw, n_buzzes), <span class="sc">-</span><span class="dv">1</span>)),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">time_cat =</span> <span class="fu">cut_interval</span>(time_of_day, <span class="at">length =</span> <span class="fl">0.1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(pw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 6,452
+Columns: 15
+$ n_buzzes    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ ODBA        &lt;dbl&gt; 2.853267, 2.250012, 3.324172, 1.460979, 3.996195, 3.900074…
+$ duration    &lt;dbl&gt; 10.8, 11.8, 15.8, 11.8, 13.2, 33.8, 20.2, 167.8, 18.0, 22.…
+$ depth       &lt;dbl&gt; 1.831620, 2.370770, 3.467474, 2.424436, 2.772356, 3.987231…
+$ exposure    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ dive_state  &lt;chr&gt; "Surf", "Surf", "Surf", "Surf", "Travel", "Travel", "Trave…
+$ ind_size    &lt;chr&gt; "Small", "Small", "Small", "Small", "Small", "Small", "Sma…
+$ sound_level &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ time_of_day &lt;dbl&gt; 15.27167, 15.27472, 15.27806, 15.28250, 15.28611, 15.28972…
+$ group_size  &lt;dbl&gt; 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9…
+$ water_depth &lt;dbl&gt; 400, 400, 400, 400, 400, 400, 400, 400, 450, 450, 450, 450…
+$ individual  &lt;chr&gt; "gm08_150c", "gm08_150c", "gm08_150c", "gm08_150c", "gm08_…
+$ activity    &lt;fct&gt; other, other, other, other, other, other, other, other, ot…
+$ prev_buzzes &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ time_cat    &lt;fct&gt; "(15.2,15.3]", "(15.2,15.3]", "(15.2,15.3]", "(15.2,15.3]"…</code></pre>
+</div>
+</div>
+<section id="research-question" class="level3">
+<h3 class="anchored" data-anchor-id="research-question">Research Question</h3>
+<p>The research question we will consider is:</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>What characteristics of pilot whale dives help you to predict whether they are foraging (hunting for food) or doing something else?</p>
+</blockquote>
+</blockquote>
+<p>We will use response variable <code>activity</code>.</p>
+<p>The dataset, like the beaked whale one we saw earlier, was collected with animal-borne electronic tags.</p>
+<p>The dataset has 6452 rows.</p>
+<p>Each row is one dive by an individual whale, and there are dives from 14 whales in the dataset.</p>
+<p>(So - comfortably similar to the beaked whale data you saw before in many ways…)</p>
+<p>Possible predictors include:</p>
+<ul>
+<li><code>ODBA</code> (Overall Dynamic Body Acceleration - a measure of how much energy the animal is using to move and swim),</li>
+<li>dive <code>duration</code> in seconds,</li>
+<li>dive <code>depth</code> in meters,</li>
+<li>sonar <code>exposure</code> (noise nearby that might affect how whales behave),</li>
+<li><code>dive_state</code> (behavior type, as judged by biologists watching whales when they are at the sea surface),</li>
+<li>whale’s size (<code>ind_size</code>),</li>
+<li><code>time_of_day</code> in decimal hours,</li>
+<li><code>time_cat</code> (time as categorical variable, in one-hour blocks – <em>do not</em> use both time of day variables in same model!),</li>
+<li><code>group_size</code> (number of other whales in same group),</li>
+<li><code>water_depth</code> at the whale’s location,</li>
+<li><code>prev_buzzes</code> (number of suspected feeding events in the <em>previous</em> dive),</li>
+<li>and <code>individual</code> (a unique identifier for each whale that was studied).</li>
+<li>(<strong>Ignore</strong> <code>sound_level</code> and <code>n_buzzes</code> – do not use those variables in this exercise.)</li>
+</ul>
+</section>
+</section>
+<section id="model-fitting" class="level2" data-number="35.6">
+<h2 data-number="35.6" class="anchored" data-anchor-id="model-fitting"><span class="header-section-number">35.6</span> Model Fitting</h2>
+<p>For this example, to save time, you will not plan the model yourself. But feel free to critique the plan you are given and decide if it makes sense to you!</p>
+<p>We’ll consider this mixed-effects logistic regression model:</p>
+<div class="cell" data-layout-align="center" data-exercise="model-fit">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6Im1vZGVsLWZpdCJ9LCJjb2RlIjoicHdfcmUgPC0gZ2xtbVRNQihhY3Rpdml0eSB+IE9EQkEgKyBkdXJhdGlvbiArIFxuICAgICAgICAgICAgICAgICAgIHByZXZfYnV6emVzKmRpdmVfc3RhdGUgKyBcbiAgICAgICAgICAgICAgICAgICAoMXxpbmRpdmlkdWFsL3RpbWVfY2F0KSwgXG4gICAgICAgICAgICAgICAgIGRhdGEgPSBwdywgZmFtaWx5ID0gYmlub21pYWwobGluayA9ICdsb2dpdCcpKVxuc3VtbWFyeShwd19yZSkifQ==
+</script>
+</div>
+</div>
+<div class="webex-check webex-box">
+<p>Considering the model given for the pilot whale dive data to answer the questions below.</p>
+<div class="cell" data-layout-align="center">
+What fixed effects are included in the model? (Choose all correct answers.)
+<div id="radio_DETQLLADLX" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value="answer"> <span><code>ODBA</code></span></label><label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value=""> <span>interaction between <code>individual</code> and <code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value="answer"> <span><code>prev_buzzes</code></span></label><label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value=""> <span><code>activity</code></span></label><label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value=""> <span><code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value="answer"> <span>interaction between <code>prev_buzzes</code> and <code>dive_state</code></span></label><label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value="answer"> <span><code>duration</code></span></label><label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value="answer"> <span><code>dive_state</code></span></label><label><input type="radio" autocomplete="off" name="radio_DETQLLADLX" value=""> <span><code>individual</code></span></label>
+</div>
+What random effect(s) are included in the model? Choose the one best answer.
+<div id="radio_CBUESSYJOJ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_CBUESSYJOJ" value=""> <span><code>time_cat</code> and <code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_CBUESSYJOJ" value=""> <span><code>individual</code> nested within <code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_CBUESSYJOJ" value=""> <span><code>prev_buzzes</code> and <code>dive_state</code></span></label><label><input type="radio" autocomplete="off" name="radio_CBUESSYJOJ" value=""> <span><code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_CBUESSYJOJ" value="answer"> <span><code>time_cat</code> nested within <code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_CBUESSYJOJ" value=""> <span><code>individual</code></span></label>
+</div>
+How many parameters have to be estimated to fit the model above?
+<div id="radio_HCCNPPKPFB" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_HCCNPPKPFB" value="answer"> <span>16</span></label><label><input type="radio" autocomplete="off" name="radio_HCCNPPKPFB" value=""> <span>7</span></label><label><input type="radio" autocomplete="off" name="radio_HCCNPPKPFB" value=""> <span>6</span></label><label><input type="radio" autocomplete="off" name="radio_HCCNPPKPFB" value=""> <span>17</span></label><label><input type="radio" autocomplete="off" name="radio_HCCNPPKPFB" value=""> <span>some other number</span></label><label><input type="radio" autocomplete="off" name="radio_HCCNPPKPFB" value=""> <span>4</span></label><label><input type="radio" autocomplete="off" name="radio_HCCNPPKPFB" value=""> <span>14</span></label><label><input type="radio" autocomplete="off" name="radio_HCCNPPKPFB" value=""> <span>50</span></label>
+</div>
+What if we had included <code>individual</code> as a fixed effect instead? We estimated one parameter (the random effect variance) to include it as a random effect. How many parameters would we have had to estimate to do it as a fixed effect?
+<div id="radio_UNTAWCOLSM" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_UNTAWCOLSM" value="answer"> <span>13</span></label><label><input type="radio" autocomplete="off" name="radio_UNTAWCOLSM" value=""> <span>some other number</span></label><label><input type="radio" autocomplete="off" name="radio_UNTAWCOLSM" value=""> <span>1</span></label><label><input type="radio" autocomplete="off" name="radio_UNTAWCOLSM" value=""> <span>0</span></label><label><input type="radio" autocomplete="off" name="radio_UNTAWCOLSM" value=""> <span>14</span></label><label><input type="radio" autocomplete="off" name="radio_UNTAWCOLSM" value=""> <span>2</span></label><label><input type="radio" autocomplete="off" name="radio_UNTAWCOLSM" value=""> <span>16</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for more explanation of the answers above.
+</button>
+<p><strong>About the number of parameters being estimated:</strong></p>
+<p>You can use graphs or tables to figure out how many values there are of each categorical variable and figure this out ‘by hand,’ but since the model has already been fitted, and easy way is to use the summary. There is one row in the coefficient table for each beta that was estimated (so 14 of those), and one variance term estimated for each random effect variable (so 2 more). In a logistic regression, there is no overdispersion parameter or residual variance being estimated, so that’s it: 14 + 2 = 16.”</p>
+<p><strong>About the number of parameters for a fixed vs a random effect:</strong> For categorical predictors, the ‘base’ level is included in the intercept, so if a categorical fixed-effect predictor variable has k possible values, we estimate (k-1) parameters to include it in the model.</p>
+</div>
+<section id="model-planning-check-in" class="level3">
+<h3 class="anchored" data-anchor-id="model-planning-check-in">Model Planning check-in</h3>
+<p>According to our previous rule of thumb, how many coefficients can we safely plan to estimate from this data set? To figure it out, create a table showing the number of “successes” and “failures” in the dataset.</p>
+<div class="cell" data-layout-align="center" data-exercise="check-m-15" data-envir="model-fit">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6Im1vZGVsLWZpdCIsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiY2hlY2stbS0xNSJ9LCJjb2RlIjoiIn0=
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="check-m-15">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We need a table (a “<code>tally()</code>”) of how often the variable <code>activity</code> takes on each value.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mosaic<span class="sc">::</span><span class="fu">tally</span>(<span class="sc">~</span>activity, <span class="at">data =</span> pw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="check-m-15">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We need a table (a “<code>tally()</code>”) of how often the variable <code>activity</code> takes on each value. Then we take the number of “successes” or “failures” – whichever is <em>smaller</em> – and divide it by 15 to get a rough idea of the upper limit on the number of parameters we can estimate well.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mosaic<span class="sc">::</span><span class="fu">tally</span>(<span class="sc">~</span>activity, <span class="at">data =</span> pw)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">522</span><span class="sc">/</span><span class="dv">15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="webex-check webex-box">
+<p>Considering the m/15 rule of thumb…</p>
+<div class="cell" data-layout-align="center">
+About how many parameters can we safely estimate with this dataset?
+<div id="radio_GNPMZNODIZ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_GNPMZNODIZ" value=""> <span>430</span></label><label><input type="radio" autocomplete="off" name="radio_GNPMZNODIZ" value="answer"> <span>35</span></label><label><input type="radio" autocomplete="off" name="radio_GNPMZNODIZ" value=""> <span>395</span></label><label><input type="radio" autocomplete="off" name="radio_GNPMZNODIZ" value=""> <span>522</span></label><label><input type="radio" autocomplete="off" name="radio_GNPMZNODIZ" value=""> <span>5930</span></label><label><input type="radio" autocomplete="off" name="radio_GNPMZNODIZ" value=""> <span>6452</span></label>
+</div>
+So…are we estimating too many coefficients, or are we OK?
+<div id="radio_YAJLXDDPLH" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_YAJLXDDPLH" value=""> <span>We are really pushing our luck</span></label><label><input type="radio" autocomplete="off" name="radio_YAJLXDDPLH" value=""> <span>We are estimating too many by so much that we are doomed</span></label><label><input type="radio" autocomplete="off" name="radio_YAJLXDDPLH" value="answer"> <span>We should be fine</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for more explanation of the answers above.
+</button>
+<p>If you have binary data, the rule of thumb say you’d use m/15 to determine your ‘dataset size’, with m being the number of successes or the number of failures (whichever is smaller).</p>
+<p>Side note, m/15 and multiple-trials-per-row binary data: If you have multiple-trials-per-row binary data, I have honestly never seen an n/15 type rule being discussed. I believe the safest option is to compute total successes, total failures, <em>and</em> total rows of data and take the smallest of all three for m. BUT we don’t have multiple-trials-per-row data here.</p>
+<p>In this case, We really should be fine in terms of dataset size.</p>
+<p>BUT: When fitting random effects models, <em>be conservative</em> about the number of coefficients you’re including.</p>
+<p>Fitting a random effect technically estimates just one parameter value, the random effect variance.</p>
+<p>But many argue that it ‘uses up’ an amount of coefficient-fitting capacity that is somewhere between 1 (for the random effect variance) and the number of coefficients it would take to include that same predictor as a regular predictor (here, 13).”</p>
+</div>
+</section>
+</section>
+<section id="model-assessment" class="level2" data-number="35.7">
+<h2 data-number="35.7" class="anchored" data-anchor-id="model-assessment"><span class="header-section-number">35.7</span> Model Assessment</h2>
+<p>Model assessment for this model is just as it would be for any binary regression model; adding the random effects doesn’t really change things. But, for practice, let’s do it! Your job is to interpret the graphs.</p>
+<section id="independence-of-residuals" class="level4">
+<h4 class="anchored" data-anchor-id="independence-of-residuals">Independence of residuals</h4>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(pw_re), <span class="at">main =</span> <span class="st">''</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier2_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="624"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mean-variance-relationship-and-logit-linearity" class="level4">
+<h4 class="anchored" data-anchor-id="mean-variance-relationship-and-logit-linearity">Mean-variance relationship and (logit) linearity</h4>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pw_sim <span class="ot">&lt;-</span> <span class="fu">simulateResiduals</span>(pw_re)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(pw_sim<span class="sc">$</span>scaledResiduals <span class="sc">~</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="co"># if you are going to "plot your own" scaled residuals</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>           <span class="co"># for a model with random effects, get fitted values</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>           <span class="co"># EXCLUDING REs with input re.form = NA.</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>           <span class="co"># If you wish you can also use rank(predict(...))</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>           <span class="co"># try it to see the difference, it scales the x axis :)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>           <span class="co"># you can also use plotResiduals() too.</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>           <span class="fu">predict</span>(pw_re, <span class="at">re.form =</span> <span class="cn">NA</span>, <span class="at">type =</span> <span class="st">'response'</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">'Predicted Prob(Feeding)'</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Scaled Residuals'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier2_files/figure-html/scaled-resid-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>An alternative view of a scaled residual plot with <code>rank()</code> to scale the x axis (should yield same conclusion as it’s the same model and data!):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pw_sim <span class="ot">&lt;-</span> <span class="fu">simulateResiduals</span>(pw_re)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(pw_sim<span class="sc">$</span>scaledResiduals <span class="sc">~</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>           <span class="co"># this is with rank(predict(...))</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>           <span class="co"># try it to see the difference, it scales the x axis :)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">rank</span>(<span class="fu">predict</span>(pw_re, <span class="at">re.form =</span> <span class="cn">NA</span>, <span class="at">type =</span> <span class="st">'response'</span>)),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">'Predicted Prob(Feeding) (rank transformed)'</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Scaled Residuals'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier2_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="logit-linearity" class="level4">
+<h4 class="anchored" data-anchor-id="logit-linearity">(logit) Linearity</h4>
+<p>In class we mentioned that for one-trial-per-row binary data, it’s a bit beyond the scope of our class to do the data prep needed to make a plot of the <em>data</em> to check logit linearity.</p>
+<p>But for fun and for your consideration, code is given here that shows one example of checking linearity on a per-predictor basis:</p>
+<div class="cell" data-layout-align="center" data-exercise="logit-linearity" data-envir="model-fit">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6Im1vZGVsLWZpdCIsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoibG9naXQtbGluZWFyaXR5In0sImNvZGUiOiJcbnB3X2R1ciA8LSBwdyB8PlxuICBtdXRhdGUoY2F0X2R1cmF0aW9uID0gY3V0X251bWJlcihkdXJhdGlvbiwgMTApKSB8PlxuICBncm91cF9ieShjYXRfZHVyYXRpb24pIHw+XG4gIG11dGF0ZShwcm9wX2ZlZWRpbmcgPSBwcm9wKH5hY3Rpdml0eSA9PSAnZm9yYWdpbmcnKSxcbiAgICAgICAgIG1lZGlhbl9kdXIgPSBtZWRpYW4ofmR1cmF0aW9uKSxcbiAgICAgICAgIGxvZ2l0X3BfZmVlZGluZyA9IGxvZ2l0KHByb3BfZmVlZGluZykpXG5cbmdmX3BvaW50KGxvZ2l0X3BfZmVlZGluZyB+IG1lZGlhbl9kdXIsXG4gICAgICAgICBkYXRhID0gcHdfZHVyKSB8PlxuICBnZl9sYWJzKHggPSAnRGl2ZSBEdXJhdGlvbicsXG4gICAgICAgICAgeSA9ICdsb2dpdChQKGZlZWRpbmcpKScpIn0=
+</script>
+</div>
+</div>
+<p>(If you have time, modify the code given to try this for one more quantitative predictor).</p>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+Considering all the graphs, does our model pass assessment? Select ALL true statements.
+<div id="radio_WEBGHPHIJG" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_WEBGHPHIJG" value="answer"> <span>In the ACF, there is some evidence of residual dependence, but it is kind of borderline. This model would probably give pretty reliable results, but if there is anything else we could try to further ensure independent residuals we should.</span></label><label><input type="radio" autocomplete="off" name="radio_WEBGHPHIJG" value="answer"> <span>The scaled residual plot doesn't show evidence of big issues with the mean-variance condition since the points are pretty evenly spread between 0-1.</span></label><label><input type="radio" autocomplete="off" name="radio_WEBGHPHIJG" value=""> <span>There is a clear linear trend in the final scatter plot, so the model fails the logit-linearity condition</span></label><label><input type="radio" autocomplete="off" name="radio_WEBGHPHIJG" value=""> <span>The ACF shows evidence of a major problem with residual dependence, so the model fails assessment.</span></label><label><input type="radio" autocomplete="off" name="radio_WEBGHPHIJG" value=""> <span>The scaled residual plot shows evidence of a problem with the mean-variance condition, because the points are clustered at the left and right edges near Prob(Feeding) = 0 and are very sparse between Prob(Feeding) of 0.25 and 0.9.</span></label><label><input type="radio" autocomplete="off" name="radio_WEBGHPHIJG" value=""> <span>The ACF looks great! No evidence of any problems with the residual independence condition.</span></label>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="prediction-plots-average-re-group" class="level2" data-number="35.8">
+<h2 data-number="35.8" class="anchored" data-anchor-id="prediction-plots-average-re-group"><span class="header-section-number">35.8</span> Prediction Plots: Average RE Group</h2>
+<p>First, let’s try to make the predictions that are most natural and technically simple to make for a hierarchical model like this: ones for “the average individual” (in this case, or more generally, the “average RE group”.</p>
+<p>These are equivalent to using the right-hand side of the model equation (<em>ignoring</em> both variance between random effect groups <em>and</em> residual variance) and applying the inverse logit transform to convert it to a probability.</p>
+<p>Since we have two random effects, time period nested within individual, here we’ll be making predictions for the <em>typical</em> time-period of the <em>typical individual whale</em>.</p>
+<section id="values-of-other-predictors" class="level3">
+<h3 class="anchored" data-anchor-id="values-of-other-predictors">Values of “other” predictors?</h3>
+<p>We have to choose one predictor to make the first predictions plots for; I’ll choose dive <code>duration</code>.</p>
+<div class="cell" data-layout-align="center" data-exercise="basic-pred-plot" data-envir="model-fit">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6Im1vZGVsLWZpdCIsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiYmFzaWMtcHJlZC1wbG90In0sImNvZGUiOiJnZ3ByZWRpY3QocHdfcmUsIFxuICAgICAgICAgIHRlcm1zID0gJ2R1cmF0aW9uJyxcbiAgICAgICAgICB0eXBlID0gJ2ZpeGVkJykifQ==
+</script>
+</div>
+</div>
+<p>At what values were the “predictors not shown” fixed?</p>
+<p>Remember: They are in the output above, under the heading “Adjusted for”.</p>
+</section>
+<section id="the-prediction-plot" class="level3">
+<h3 class="anchored" data-anchor-id="the-prediction-plot">The prediction plot</h3>
+<p>To get a graph rather than text output (now that we know the fixed values used to make the predictions), we just add <code>|&gt; plot()</code> to the code.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpredict</span>(pw_re, </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">terms =</span> <span class="st">'duration'</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">type =</span> <span class="st">'fixed'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>You are calculating adjusted predictions on the population-level (i.e.
+  `type = "fixed"`) for a *generalized* linear mixed model.
+  This may produce biased estimates due to Jensen's inequality. Consider
+  setting `bias_correction = TRUE` to correct for this bias.
+  See also the documentation of the `bias_correction` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Data were 'prettified'. Consider using `terms="duration [all]"` to get
+  smooth plots.</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="smoother-prediction-plot" class="level3">
+<h3 class="anchored" data-anchor-id="smoother-prediction-plot">Smoother prediction plot</h3>
+<p>Taking <code>ggeffects</code> up on its offer to get a “smooth plot”:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpredict</span>(pw_re, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">terms =</span> <span class="st">'duration [all]'</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">type =</span> <span class="st">'fixed'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">''</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Probability of Feeding'</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">'Dive Duration (seconds)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier2_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+Summarize the relationship that exists between dive duration and probability of feeding, according to this model. (If you think the model didn’t pass assessment, pretend for now that it did an interpret the results accordingly.)
+<div id="radio_TGRAUVGDFO" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_TGRAUVGDFO" value=""> <span>Our best estimate is that: Shorter dives below about 200 seconds have very low chances of being feeding dives, but the probability increases rapidly between 200-400 seconds duration so that almost all dives longer than 400 seconds are almost surely feeding dives. However, given the notable amount of uncertainty around this prediction, it is plausible that the probability of feeding doesn't really vary with dive duration; we can't draw firm conclusions.</span></label><label><input type="radio" autocomplete="off" name="radio_TGRAUVGDFO" value=""> <span>When dive duration goes up, probability of feeding increases.</span></label><label><input type="radio" autocomplete="off" name="radio_TGRAUVGDFO" value="answer"> <span>Shorter dives below about 200 seconds have very low chances of being feeding dives, but the probability increases rapidly between 200-400 seconds duration so that almost all dives longer than 400 seconds are almost surely feeding dives.</span></label><label><input type="radio" autocomplete="off" name="radio_TGRAUVGDFO" value=""> <span>As these predictions are made for fake data, no conclusions about the real world can be drawn.</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for more feedback about the answers above…
+</button>
+<ul>
+<li>If you chose, “When dive duration goes up, probability of feeding increases,” consider: This one is a bit too vague and makes it sound like the relationship is linear.</li>
+<li>If you chose, “As these predictions are made for fake data, no conclusions about the real world can be drawn,” consider: yes, we made predictions for a hypothetical situation, but the purpose of that was to <em>visualize</em> what the model (which was fitted to real data!) says about the relationships between variables. It should be a totally trustworthy view of what our model says (well, as long as the model is to be trusted, that is, if it was well planned and passed assessment)…</li>
+<li>One other answer was internally inconsistent: it gave a detailed description of the relationship between variables, but also then said maybe there <em>was</em> no relationship. That’s confusing! Based on model selection results (and maybe the prediction plot too), you judge whether there’s convincing evidence of an association. And if you conclude there’s not, don’t also describe the size and direction of the association the way you would if you <em>did</em> think it was real. Don’t ignore uncertainty in your conclusions, but also <em>do</em> draw firm conclusions when the results warrant it.</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="prediction-plots-all-the-whales" class="level2" data-number="35.9">
+<h2 data-number="35.9" class="anchored" data-anchor-id="prediction-plots-all-the-whales"><span class="header-section-number">35.9</span> Prediction Plots: All the Whales</h2>
+<p>This isn’t something you need to be able to do on your own, but I think it may help with understanding the idea of the random effect, and also the “typical RE group”.</p>
+<p>So just this once: I’ll show you how to make predictions for each of the whales in our dataset, and we’ll add them to our “average individual” prediction plot.</p>
+<p>First, we make a hypothetical dataset where duration varies from 4 to 825 seconds (like in the real data), for each of our 14 whales. We’ll fix the other predictors at the same values as before.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ind_pred_data <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">individual =</span> <span class="fu">pull</span>(pw, individual) <span class="sc">|&gt;</span> <span class="fu">unique</span>(),</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">duration =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">4</span>, <span class="at">by =</span> <span class="dv">10</span>, <span class="at">to =</span> <span class="dv">825</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">ODBA =</span> <span class="fl">2.05</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">water_depth =</span> <span class="fl">450.57</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">prev_buzzes =</span>   <span class="fl">0.18</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">dive_state =</span> <span class="st">'Travel'</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">time_cat =</span> <span class="cn">NA</span>) <span class="co">#(population-level)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, make predictions with SEs for this dataset, but <em>including</em> the random effect of individual. (R is able to estimate, for each individual, how far it is from the “average” individual; the standard deviation of these differences is the reported estimate of <span class="math inline">\(\sigma_{RE}\)</span>! Umm, yeah…this is why it’s a bit disingenuous to say that we “only estimate one variance parameter” for every random effect predictor…)</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ind_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(pw_re,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">'link'</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">se.fit =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">newdata =</span> ind_pred_data,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                     <span class="co"># to make specific-individual-level predictions rather than average-individual:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">re.form =</span> <span class="cn">NULL</span> </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                     )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in checkTerms(data.tmb1$terms, data.tmb0$terms): Predicting new random effect levels for terms: 1 | time_cat:individual
+Disable this warning with 'allow.new.levels=TRUE'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ave_ind <span class="ot">&lt;-</span> <span class="fu">predict</span>(pw_re,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">'link'</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">se.fit =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">newdata =</span> ind_pred_data,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                   <span class="co"># to EXCLUDE individual random effects from predictions:</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">re.form =</span> <span class="sc">~</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So far we made the predictions on the “link scale”, that is, in units of logit(p). To plot them on the probability scale, we need convert the predictions and SEs to CIs to the “response scale” – so, we need to inverse-logit transform the results to get them on the probability scale at the end.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ind_pred_data <span class="ot">&lt;-</span> ind_pred_data <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">ilogit</span>(ind_preds<span class="sc">$</span>fit),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">CI_bottom =</span> <span class="fu">ilogit</span>(ind_preds<span class="sc">$</span>fit <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>ind_preds<span class="sc">$</span>se.fit),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">CI_top =</span> <span class="fu">ilogit</span>(ind_preds<span class="sc">$</span>fit <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>ind_preds<span class="sc">$</span>se.fit),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">ave_ind_pred =</span> <span class="fu">ilogit</span>(ave_ind<span class="sc">$</span>fit),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">ave_CI_bottom =</span> <span class="fu">ilogit</span>(ave_ind<span class="sc">$</span>fit <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>ave_ind<span class="sc">$</span>se.fit),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">ave_CI_top =</span> <span class="fu">ilogit</span>(ave_ind<span class="sc">$</span>fit <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>ave_ind<span class="sc">$</span>se.fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally make the graph. Start with the previous <code>ggeffects</code> plot, and add on a new layer colored by whale. We omit the legend because we don’t really need to know which whale is which; but each color is one whale.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_ribbon</span>(CI_bottom <span class="sc">+</span> CI_top <span class="sc">~</span> duration,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">fill =</span> <span class="sc">~</span>individual,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ind_pred_data) <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_line</span>(pred <span class="sc">~</span> duration, </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ind_pred_data,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="sc">~</span>individual,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">''</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Probability of Feeding'</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">'Dive Duration (seconds)'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_theme</span>(<span class="at">legend.position =</span> <span class="st">'none'</span>)  <span class="sc">|&gt;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_line</span>(ave_ind_pred <span class="sc">~</span> duration,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> ind_pred_data,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">'black'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_ribbon</span>(ave_CI_bottom <span class="sc">+</span> ave_CI_top <span class="sc">~</span> duration,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">'black'</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.
+ℹ The deprecated feature was likely used in the base package.
+  Please report the issue to the authors.</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier2_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="720"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Hmm, kind of wild.</p>
+<p>What if we plot again without uncertainty, just to see the lines more clearly?</p>
+<p>Normally we’d never want to remove the CIs! But…Right now there are so many overlapping CIs it’s hard to see where the individual lines fall. We wouldn’t present this plot formally, but just to see where each whale’s average falls:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_line</span>(pred <span class="sc">~</span> duration, </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ind_pred_data,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="sc">~</span>individual,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">1.5</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">''</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Probability of Feeding'</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">'Dive Duration (seconds)'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  gf_theme(legend.position = 'none')  |&gt;</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_line</span>(ave_ind_pred <span class="sc">~</span> duration,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> ind_pred_data,</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">'black'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier2_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="720"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+Any ideas why the black ‘average individual’ does <em>not</em> look like it is in the middle in any sense?
+<div id="radio_AKEPNOCLSW" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_AKEPNOCLSW" value=""> <span>This is due to the nonlinearities introduced by using the logit link function</span></label><label><input type="radio" autocomplete="off" name="radio_AKEPNOCLSW" value=""> <span>What do you mean it's not in the middle? It's clearly in the middle.</span></label><label><input type="radio" autocomplete="off" name="radio_AKEPNOCLSW" value=""> <span>We must have made a mistake in our calculations.</span></label><label><input type="radio" autocomplete="off" name="radio_AKEPNOCLSW" value="answer"> <span>There are only 6-7 clearly distinguishalbe lines for 14 whales, so there must be 7-8 more others under the black one! Also, individuals may have very different numbers of dives, and one with more dives might affect the average more.</span></label>
+</div>
+</div>
+</div>
+</section>
+<section id="prediction-plots-population-average" class="level2" data-number="35.10">
+<h2 data-number="35.10" class="anchored" data-anchor-id="prediction-plots-population-average"><span class="header-section-number">35.10</span> Prediction Plots: Population Average</h2>
+<p>So far, we have made predictions for the <em>average or typical RE group.</em></p>
+<p>But what if we wanted to make predictions for the average probability of feeding, across all whales in a population? (<strong>This is the kind of “average” that a model with no random effects would usually predict.</strong>)</p>
+<section id="parametric-bootstrap-overview" class="level3">
+<h3 class="anchored" data-anchor-id="parametric-bootstrap-overview">Parametric Bootstrap Overview</h3>
+<p>One way is to use something called a <strong>parametric bootstrap</strong>.</p>
+<p>Focus on the big picture – we want to get population average predictions to compare with the average individual ones, and there’s a bit of somewhat advanced stats and code to achieve it.</p>
+<p>To do a “parametric bootstrap” means that we simulate many new hypothetical datasets <em>from the fitted model</em>.</p>
+<p>To carry out each simulation, we:</p>
+<ol type="1">
+<li>draw a proposed value for the intercept, all the slope coefficients, and the values of each random effect. (These will vary each simulation depending on the amount of uncertainty in the model and the variance <span class="math inline">\(\sigma_{RE}\)</span>.)</li>
+<li>Then we re-fit the model to the new fake data…</li>
+<li>and make predictions from that model.</li>
+</ol>
+<p>We do steps 1-3 over and over to get a sense of the <em>distribution</em> of predicted values for every desired combination of predictor variable values.</p>
+</section>
+<section id="step-0-no-nas" class="level3">
+<h3 class="anchored" data-anchor-id="step-0-no-nas">Step 0: No NAs</h3>
+<p>Before you start, make sure there are no missing values in your data (to avoid a hard-to-understand-where-it-came-from <code>bootMer()</code> error).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> pw <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in only the variables used in your model...</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    activity,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    ODBA,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    duration,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    prev_buzzes,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    dive_state,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    individual,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    time_cat</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="parametric-bootstrap-prediction-function" class="level3">
+<h3 class="anchored" data-anchor-id="parametric-bootstrap-prediction-function">Parametric Bootstrap: Prediction function</h3>
+<p>To make this work, we first have to create a function that takes a fitted model and makes the predictions we want from it. When you run the chunk below, it won’t seem to “do” anything, as what it’s doing is defining a function <code>predict_pw_re()</code> for later use.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>predict_pw_re <span class="ot">&lt;-</span> <span class="cf">function</span>(model){</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  new_dat <span class="ot">&lt;-</span> ggeffects<span class="sc">::</span><span class="fu">data_grid</span>(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    model, <span class="co"># don't change to the name of "your" model! "model" is an INPUT to the function</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">terms =</span> <span class="st">'duration [all]'</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># it's important (to pass input checks)</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># that you fill in a value *seen in the data* for each RE</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># but it does not matter which one it is - it's not actually used</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition =</span> <span class="fu">c</span>(<span class="at">individual =</span> <span class="st">"gm08_150c"</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time_cat =</span> <span class="st">"(15.2,15.3]"</span>))</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">predict</span>(model, <span class="co"># don't change!</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata =</span> new_dat,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>                 <span class="at">re.form =</span> <span class="cn">NULL</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type =</span> <span class="st">"response"</span>, </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">allow.new.levels =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="parametric-bootstrap-run-simulations" class="level3">
+<h3 class="anchored" data-anchor-id="parametric-bootstrap-run-simulations">Parametric Bootstrap: Run Simulations</h3>
+<p>The code below does the parametric bootstrap for you. But do not uncomment and run the commented lines - it will take at least half hour or so, so it’s been done for you (and then the result read in from online where I stored it).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(lme4)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># boot_pw_re &lt;- bootMer(pw_re, # name of YOUR fitted model</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                      FUN = predict_pw_re, # our function defined above</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                      nsim = 100, # make this 1000+ if you have time/computer can handle</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                      type = "parametric", # parametric bootstrap</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                      use.u = FALSE)</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>boot_pw_re <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">'https://sldr.netlify.app/data/boot_pw_re.RDS'</span>, <span class="st">"rb"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The last input to <code>bootMer()</code>, <code>use.u = FALSE</code>, tells <code>bootMer()</code> to draw new normal random effect values (simulate new whales each time, not re-use the 14 actually observed in the original dataset).</p>
+</section>
+<section id="parametric-bootstrap-mean-and-ci" class="level3">
+<h3 class="anchored" data-anchor-id="parametric-bootstrap-mean-and-ci">Parametric Bootstrap: Mean and CI</h3>
+<p>We get a population average prediction by taking the mean of the simulated predictions, and a quantile-based CI can be estimated by taking their 2.5 and 97.5 percentiles.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>pop_ave_data <span class="ot">&lt;-</span> <span class="fu">data_grid</span>(pw_re,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">terms =</span> <span class="st">'duration [all]'</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>pop_ave_data <span class="ot">&lt;-</span> pop_ave_data <span class="sc">|&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pop_ave_pred =</span> <span class="fu">apply</span>(boot_pw_re<span class="sc">$</span>t, <span class="dv">2</span>, mean),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">CIlow =</span> <span class="fu">apply</span>(boot_pw_re<span class="sc">$</span>t, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fl">0.025</span>),</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">CIhigh =</span> <span class="fu">apply</span>(boot_pw_re<span class="sc">$</span>t, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fl">0.975</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, we just want to plot the results (and, since we’re trying to learn and understand how the different kinds of predictions compare for RE models, we want to compare the “average individual” predictions to the “population average” predictions, too).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_line</span>(ave_ind_pred <span class="sc">~</span> duration,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> ind_pred_data,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">'darkblue'</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">linetype =</span> <span class="st">'dashed'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_ribbon</span>(ave_CI_bottom <span class="sc">+</span> ave_CI_top <span class="sc">~</span> duration,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> ind_pred_data,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">'darkblue'</span>, </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">inherit =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_line</span>(pop_ave_pred <span class="sc">~</span> duration,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> pop_ave_data,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">'darkred'</span>,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">inherit =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_ribbon</span>(CIlow <span class="sc">+</span> CIhigh <span class="sc">~</span> duration,</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> pop_ave_data,</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">fill =</span> <span class="st">'darkred'</span>,</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">inherit =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">'Probability of Feeding'</span>,</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">'Dive Duration (seconds)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hier2_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The population average prediction (solid red) has a somewhat different shape, and wider confidence bands compared to the blue dashed average-individual line (because it includes the individual-to-individual variation as well as uncertainty in the coefficient estimates).</p>
+<p>Which one is “better”? It depends.</p>
+<p>Do you think it makes more sense to show how <em>one whale’s</em> probability of feeding would be expected to vary over a range of depths?</p>
+<p>Or do we want to show the feeding probability – depth relationship that we’d get if we sampled bunches of dives from many whales, at many depths?</p>
+<p>There’s no clear-cut answer. Different researchers will think differently for a given scenario, and the best practice will vary by discipline and from problem to problem. So you really do need to think through which one you think shows what you really want to show (as for almost all visualization)!</p>
+
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImRwbHlyIiwidGlkeXIiLCJyZWFkciIsInJlYWR4bCIsInN0cmluZ3IiLCJnZ3Bsb3QyIiwiZ2dmb3JtdWxhIiwibW9zYWljIiwiY2FyIiwiREhBUk1hIl0sInJlcG9zIjpbXX0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC01IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV81O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzUgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici01LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItNS1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzUgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzUsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzUgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzUuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTQiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNCA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici00LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfNCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNCwge30pO1xuX3dlYnJfZmVlZGJhY2tfNCA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfNC5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMztcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTMiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8zID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTMtY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV8zID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8zLCB7fSk7XG5fd2Vicl9mZWVkYmFja18zID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV8zLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8yO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItMi1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzIgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzIsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzIgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzIuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItcHJlbHVkZSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IndlYlJPanMgPSB7XG4gIGNvbnN0IHsgV2ViUiwgQ2hhbm5lbFR5cGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWUuV2ViUjtcbiAgY29uc3Qge1xuICAgIFdlYlJFdmFsdWF0b3IsXG4gICAgV2ViUkVudmlyb25tZW50TWFuYWdlcixcbiAgICBzZXR1cFIsXG4gICAgYjY0RGVjb2RlLFxuICAgIGNvbGxhcHNlUGF0aFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gd2ViUiBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICAvLyBVc2UgUG9zdE1lc3NhZ2UgY2hhbm5lbCBmb3IgYXN5bmMgY29tbXVuaWNhdGlvblxuICAvLyBXZSBkbyBub3QgZXhwZWN0IHRvIHRha2UgbmVzdGVkIHByb21wdCBpbnB1dCBpbiBRdWFydG8gTGl2ZSBjZWxsc1xuICBkYXRhLm9wdGlvbnMuY2hhbm5lbFR5cGUgPSBDaGFubmVsVHlwZS5Qb3N0TWVzc2FnZTtcblxuICAvLyBJbml0aWFsaXNlIHdlYlIgYW5kIHNldHVwIGZvciBSIGNvZGUgZXZhbHVhdGlvblxuICBsZXQgd2ViUlByb21pc2UgPSAoYXN5bmMgKHdlYlIpID0+IHtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHdlYlJgO1xuICAgIGF3YWl0IHdlYlIuaW5pdCgpO1xuXG4gICAgLy8gSW5zdGFsbCBwcm92aWRlZCBsaXN0IG9mIHBhY2thZ2VzXG4gICAgLy8gRW5zdXJlIHdlYlIgZGVmYXVsdCByZXBvIGlzIGluY2x1ZGVkXG4gICAgZGF0YS5wYWNrYWdlcy5yZXBvcy5wdXNoKFwiaHR0cHM6Ly9yZXBvLnItd2FzbS5vcmdcIilcbiAgICBhd2FpdCBkYXRhLnBhY2thZ2VzLnBrZ3MubWFwKChwa2cpID0+ICgpID0+IHtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcGFja2FnZTogJHtwa2d9YDtcbiAgICAgIHJldHVybiB3ZWJSLmV2YWxSVm9pZChgXG4gICAgICAgIHdlYnI6Omluc3RhbGwocGtnLCByZXBvcyA9IHJlcG9zKVxuICAgICAgICBsaWJyYXJ5KHBrZywgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKVxuICAgICAgYCwgeyBlbnY6IHtcbiAgICAgICAgcGtnOiBwa2csXG4gICAgICAgIHJlcG9zOiBkYXRhLnBhY2thZ2VzLnJlcG9zLFxuICAgICAgfX0pO1xuICAgIH0pLnJlZHVjZSgoY3VyLCBuZXh0KSA9PiBjdXIudGhlbihuZXh0KSwgUHJvbWlzZS5yZXNvbHZlKCkpO1xuXG4gICAgLy8gRG93bmxvYWQgYW5kIGluc3RhbGwgcmVzb3VyY2VzXG4gICAgYXdhaXQgZmlsZXMubWFwKChmaWxlKSA9PiBhc3luYyAoKSA9PiB7XG4gICAgICBjb25zdCBuYW1lID0gZmlsZS5zdWJzdHJpbmcoZmlsZS5sYXN0SW5kZXhPZignLycpICsgMSk7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHJlc291cmNlOiAke25hbWV9YDtcbiAgICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgZmV0Y2goZmlsZSk7XG4gICAgICBpZiAoIXJlc3BvbnNlLm9rKSB7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgQ2FuJ3QgZG93bmxvYWQgXFxgJHtmaWxlfVxcYC4gRXJyb3IgJHtyZXNwb25zZS5zdGF0dXN9OiBcIiR7cmVzcG9uc2Uuc3RhdHVzVGV4dH1cIi5gKTtcbiAgICAgIH1cbiAgICAgIGNvbnN0IGRhdGEgPSBhd2FpdCByZXNwb25zZS5hcnJheUJ1ZmZlcigpO1xuXG4gICAgICAvLyBTdG9yZSBVUkxzIGluIHRoZSBjd2Qgd2l0aG91dCBhbnkgc3ViZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgaWYgKGZpbGUuaW5jbHVkZXMoXCI6Ly9cIikpIHtcbiAgICAgICAgZmlsZSA9IG5hbWU7XG4gICAgICB9XG5cbiAgICAgIC8vIENvbGxhcHNlIGhpZ2hlciBkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBmaWxlID0gY29sbGFwc2VQYXRoKGZpbGUpO1xuXG4gICAgICAvLyBDcmVhdGUgZGlyZWN0b3J5IHRyZWUsIGlnbm9yaW5nIFwiZGlyZWN0b3J5IGV4aXN0c1wiIFZGUyBlcnJvcnNcbiAgICAgIGNvbnN0IHBhcnRzID0gZmlsZS5zcGxpdCgnLycpLnNsaWNlKDAsIC0xKTtcbiAgICAgIGxldCBwYXRoID0gJyc7XG4gICAgICB3aGlsZSAocGFydHMubGVuZ3RoID4gMCkge1xuICAgICAgICBwYXRoICs9IHBhcnRzLnNoaWZ0KCkgKyAnLyc7XG4gICAgICAgIGNvbnN0IGFuYWx5c2lzID0gYXdhaXQgd2ViUi5GUy5hbmFseXplUGF0aChwYXRoKTtcbiAgICAgICAgaWYgKCFhbmFseXNpcy5leGlzdHMpIHtcbiAgICAgICAgICB0cnkge1xuICAgICAgICAgICAgYXdhaXQgd2ViUi5GUy5ta2RpcihwYXRoKTtcbiAgICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYEZpbGVzeXN0ZW0gRXJyb3I6IFwiJHtlLm1lc3NhZ2V9XCIuYCk7XG4gICAgICAgICAgfVxuICAgICAgICB9XG4gICAgICB9XG5cbiAgICAgIC8vIFdyaXRlIHRoaXMgZmlsZSB0byB0aGUgVkZTXG4gICAgICByZXR1cm4gYXdhaXQgd2ViUi5GUy53cml0ZUZpbGUoZmlsZSwgbmV3IFVpbnQ4QXJyYXkoZGF0YSkpO1xuICAgIH0pLnJlZHVjZSgoY3VyLCBuZXh0KSA9PiBjdXIudGhlbihuZXh0KSwgUHJvbWlzZS5yZXNvbHZlKCkpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbnN0YWxsaW5nIHdlYlIgc2hpbXNgO1xuICAgIGF3YWl0IHdlYlIuZXZhbFJWb2lkKGB3ZWJyOjpzaGltX2luc3RhbGwoKWApO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBXZWJSIGVudmlyb25tZW50IHNldHVwYDtcbiAgICBhd2FpdCBzZXR1cFIod2ViUiwgZGF0YSk7XG5cbiAgICBzdGF0dXNUZXh0LnJlbW92ZSgpO1xuICAgIGlmIChzdGF0dXNDb250YWluZXIuY2hpbGRyZW4ubGVuZ3RoID09IDApIHtcbiAgICAgIHN0YXR1c0NvbnRhaW5lci5wYXJlbnROb2RlLnJlbW92ZSgpO1xuICAgIH1cbiAgICByZXR1cm4gd2ViUjtcbiAgfSkobmV3IFdlYlIoZGF0YS5vcHRpb25zKSk7XG5cbiAgLy8gS2VlcCB0cmFjayBvZiBpbml0aWFsIE9KUyBibG9jayByZW5kZXJcbiAgY29uc3QgcmVuZGVyZWRPanMgPSB7fTtcblxuICBjb25zdCBwcm9jZXNzID0gYXN5bmMgKGNvbnRleHQsIGlucHV0cykgPT4ge1xuICAgIGNvbnN0IHdlYlIgPSBhd2FpdCB3ZWJSUHJvbWlzZTtcbiAgICBjb25zdCBldmFsdWF0b3IgPSBuZXcgV2ViUkV2YWx1YXRvcih3ZWJSLCBjb250ZXh0KVxuICAgIGF3YWl0IGV2YWx1YXRvci5wcm9jZXNzKGlucHV0cyk7XG4gICAgcmV0dXJuIGV2YWx1YXRvci5jb250YWluZXI7XG4gIH1cblxuICByZXR1cm4ge1xuICAgIHByb2Nlc3MsXG4gICAgd2ViUlByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gIH07XG59XG4ifV19
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvcHdkLmNzdiIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
+</script>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./hier1.html" class="pagination-link" aria-label="Hierarchical Models - Introduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="./cclicense.html">
+<p>License</p>
+</a>
+  </li>  
+</ul>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/hier2.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

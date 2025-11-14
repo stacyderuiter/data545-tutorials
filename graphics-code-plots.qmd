@@ -852,7 +852,7 @@ gf_bar(~Education, data = NHANES) |>
 
 ### Your Turn!
 
-The dataset at <http://sldr.netlify.app/data/MammalMetabolicRates.csv> provides data on mammal metabolic rates. Read it in and make a bar graph of the number of observations per Order (or per Family, Genus, or Species) with legible axis tick labels.
+The dataset at <https://sldr.netlify.app/data/MammalMetabolicRates.csv> provides data on mammal metabolic rates. Read it in and make a bar graph of the number of observations per Order (or per Family, Genus, or Species) with legible axis tick labels.
 
 ```{webr}
 #| exercise: mmr
@@ -864,12 +864,12 @@ The dataset at <http://sldr.netlify.app/data/MammalMetabolicRates.csv> provides 
 ## Solution:
 
 ``` r
-mmr <- read_csv('http://sldr.netlify.app/data/MammalMetabolicRates.csv')
+mmr <- read_csv('https://sldr.netlify.app/data/MammalMetabolicRates.csv')
 gf_bar(~ Order, data = mmr) |>
   gf_refine(coord_flip())
 
 # to be extra: adjust the order of groups
-mmr <- read_csv('http://sldr.netlify.app/data/MammalMetabolicRates.csv')
+mmr <- read_csv('https://sldr.netlify.app/data/MammalMetabolicRates.csv')
 gf_bar(~ fct_infreq(Order), data = mmr) |>
   gf_refine(coord_flip())
 # note: other solutions are possible.

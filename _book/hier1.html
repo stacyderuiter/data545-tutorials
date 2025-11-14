@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>34&nbsp; Hierarchical Models (part 1) – DATA 545 Tutorial</title>
+<title>34&nbsp; Hierarchical Models - Introduction – DATA 545 Tutorial</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./hier2.html" rel="next">
 <link href="./beta.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -161,7 +161,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hier1.html">Hierarchical Models</a></li><li class="breadcrumb-item"><a href="./hier1.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hier1.html">Hierarchical Models</a></li><li class="breadcrumb-item"><a href="./hier1.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -537,7 +537,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hier1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></span></a>
   </div>
 </li>
       </ul>
@@ -614,9 +620,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hier1.html">Hierarchical Models</a></li><li class="breadcrumb-item"><a href="./hier1.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hier1.html">Hierarchical Models</a></li><li class="breadcrumb-item"><a href="./hier1.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models (part 1)</span></h1>
+<h1 class="title"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></h1>
 </div>
 
 
@@ -838,8 +844,8 @@ Hint:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What do you think, based on the plot?
-<div id="radio_SPJVNYOEZX" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_SPJVNYOEZX" value=""> <span>It looks like the residuals definitely don't have constant variance (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_SPJVNYOEZX" value=""> <span>There's a clear problem with linearity (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_SPJVNYOEZX" value="answer"> <span>We have clear evidence of dependence in the residuals (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_SPJVNYOEZX" value=""> <span>The residual normality condition is violated (since all the ACF values at lags above one are way outside the confidence bounds).</span></label>
+<div id="radio_RITWYBYDLD" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_RITWYBYDLD" value=""> <span>The residual normality condition is violated (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_RITWYBYDLD" value=""> <span>There's a clear problem with linearity (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_RITWYBYDLD" value=""> <span>It looks like the residuals definitely don't have constant variance (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_RITWYBYDLD" value="answer"> <span>We have clear evidence of dependence in the residuals (since all the ACF values at lags above one are way outside the confidence bounds).</span></label>
 </div>
 </div>
 </div>
@@ -1026,8 +1032,8 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 How does the ACF look for the model with the random effect included?
-<div id="radio_XOXFCCRIAJ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_XOXFCCRIAJ" value="answer"> <span>Noticably better, but…alas, still bad - condition is still not met.</span></label><label><input type="radio" autocomplete="off" name="radio_XOXFCCRIAJ" value=""> <span>The ACF for the original linear model actually looks a bit better</span></label><label><input type="radio" autocomplete="off" name="radio_XOXFCCRIAJ" value=""> <span>Better! We are good to go now and ready to interpret the results</span></label><label><input type="radio" autocomplete="off" name="radio_XOXFCCRIAJ" value=""> <span>It was OK before, but now it's looking great</span></label>
+<div id="radio_QWHVRAYCEU" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_QWHVRAYCEU" value=""> <span>It was OK before, but now it's looking great</span></label><label><input type="radio" autocomplete="off" name="radio_QWHVRAYCEU" value=""> <span>The ACF for the original linear model actually looks a bit better</span></label><label><input type="radio" autocomplete="off" name="radio_QWHVRAYCEU" value="answer"> <span>Noticably better, but…alas, still bad - condition is still not met.</span></label><label><input type="radio" autocomplete="off" name="radio_QWHVRAYCEU" value=""> <span>Better! We are good to go now and ready to interpret the results</span></label>
 </div>
 </div>
 </div>
@@ -1130,8 +1136,8 @@ Solution:
 <h3 class="anchored" data-anchor-id="coefficients">Coefficients</h3>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-0d91e8c82855a4584a6f" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-0d91e8c82855a4584a6f">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11"],["(Intercept)","DepthAvg","TimeOfDayDay","TimeOfDayDusk","TimeOfDayNight","SonarA1","SonarB","SonarAMinKm.fill","SonarBMinKm.fill","SonarAPercOL.fill","SonarBPercOL.fill"],[0.2522,0.0005999999999999999,-0.0135,-0.0351,-0.0407,0.8446,-0.7865,0.0017,-0.0018,0.0001,0.007],[0.4293,0.0007,-0.0048,-0.0222,-0.0385,0.3841,-0.5357,0.0007,-0.0013,0.0163,0.0034],[0.7065,0,0.0045,0.0059,0.0045,0.5332,0.4682,0.0011,0.001,0.0361,0.0385],[0.7318,0,0.0042,0.0056,0.0042,0.5654,0.4481,0.0012,0.0009,0.0299,0.0319]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variable<\/th>\n      <th>lm() est.<\/th>\n      <th>RE model est.<\/th>\n      <th>lm SE<\/th>\n      <th>RE SE<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Variable","targets":1},{"name":"lm() est.","targets":2},{"name":"RE model est.","targets":3},{"name":"lm SE","targets":4},{"name":"RE SE","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-abcd1f35a413e18a0995" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-abcd1f35a413e18a0995">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11"],["(Intercept)","DepthAvg","TimeOfDayDay","TimeOfDayDusk","TimeOfDayNight","SonarA1","SonarB","SonarAMinKm.fill","SonarBMinKm.fill","SonarAPercOL.fill","SonarBPercOL.fill"],[0.2522,0.0005999999999999999,-0.0135,-0.0351,-0.0407,0.8446,-0.7865,0.0017,-0.0018,0.0001,0.007],[0.4293,0.0007,-0.0048,-0.0222,-0.0385,0.3841,-0.5357,0.0007,-0.0013,0.0163,0.0034],[0.7065,0,0.0045,0.0059,0.0045,0.5332,0.4682,0.0011,0.001,0.0361,0.0385],[0.7318,0,0.0042,0.0056,0.0042,0.5654,0.4481,0.0012,0.0009,0.0299,0.0319]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variable<\/th>\n      <th>lm() est.<\/th>\n      <th>RE model est.<\/th>\n      <th>lm SE<\/th>\n      <th>RE SE<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Variable","targets":1},{"name":"lm() est.","targets":2},{"name":"RE model est.","targets":3},{"name":"lm SE","targets":4},{"name":"RE SE","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>There’s no guarantee that the estimates of the <span class="math inline">\(\beta\)</span>s will be the same for a linear model and a corresponding random effect model. Their standard errors may vary, too, and although it’s not a rule, the SEs may often be biased <em>small</em> in the model without random effects, which means that if you used that no-RE model to draw conclusions, you might <em>wrongly</em> conclude there were real associations between some predictors and the response.</p>
@@ -1177,8 +1183,8 @@ rem_no_sonar  8 -14321.29</code></pre>
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What do the BIC results tell us?
-<div id="radio_IIVEYKPTEQ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_IIVEYKPTEQ" value=""> <span>The models with the sonar predictors included fits a tiny bit better</span></label><label><input type="radio" autocomplete="off" name="radio_IIVEYKPTEQ" value=""> <span>The model with the sonar predictors doesn't fit as well as the one without</span></label><label><input type="radio" autocomplete="off" name="radio_IIVEYKPTEQ" value="answer"> <span>The model with the sonar predictors included fits a LOT better</span></label>
+<div id="radio_ETBKJVPVII" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_ETBKJVPVII" value=""> <span>The models with the sonar predictors included fits a tiny bit better</span></label><label><input type="radio" autocomplete="off" name="radio_ETBKJVPVII" value=""> <span>The model with the sonar predictors doesn't fit as well as the one without</span></label><label><input type="radio" autocomplete="off" name="radio_ETBKJVPVII" value="answer"> <span>The model with the sonar predictors included fits a LOT better</span></label>
 </div>
 </div>
 </div>
@@ -1241,7 +1247,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC03IiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvcHdkLmNzdiIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvRmxpbnRXYXRlclRlc3RKYW5NYXIyMDE2LmNzdiIsImRhdGEvUHJvZkV2YWx0bnNCZWF1dHlQdWJsaWMuY3N2IiwiZGF0YS9FSUFwcm9wZGF0YS5jc3YiLCJkYXRhL2JyaWRnZXMuY3N2IiwiZGF0YS96c2hhbC5jc3YiLCJkYXRhL2dhcG1pbmRlcl9jbGVhbi5jc3YiLCJkYXRhL2Zyb2ctYWJub3JtYWxpdGllcy5jc3YiLCJkYXRhL2Jvbm9ib19mYWNlcy5jc3YiLCJkYXRhL2JlZS12aXJ1cy5jc3YiXQ==
 </script>
 </section>
 </section>
@@ -1870,8 +1876,8 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./hier2.html" class="pagination-link" aria-label="Hierarchical Models - Interpretation &amp; Prediction">
+        <span class="nav-page-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
