@@ -67,6 +67,9 @@ book:
     chapters:
     - hier1.qmd
     - hier2.qmd
+  - part: "Generalized Additive Models (GAMs)"
+    chapters:
+    - gams1.qmd
   - references.qmd
   page-footer:
     center:

@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>36&nbsp; Generalized Additive Models - Introduction – DATA 545 Tutorial</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./hier2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e22fbe6e69edb8577f7b7bd0719516f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="_include/webex.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gams1.html">Generalized Additive Models (GAMs)</a></li><li class="breadcrumb-item"><a href="./gams1.html"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Introduction</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">DATA 545 Tutorial</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/stacyderuiter/data545-tutorials/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./install-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how-to-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">R Results in Quarto Text</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math-notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Math Notation in Quarto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Designing Effective Visualizations</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-no-junk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">What is <em>Necessary</em>?</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-color.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Color</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-text-elements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Text Elements</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graph-design-summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-choose.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Choose a Graph Type</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-var-types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Variable Types</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Gallery: One Categorical Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-one-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Gallery: One Quantitative Variable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-cat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Gallery: 2-3 Categorical Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-multiple-quant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Gallery: Multiple Quantitative Variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-choose-cat-quant-mix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Gallery: Mixed Quantitative + Categorical</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./graphics-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization with ggformula</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-ggformula.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">ggformula and Formulas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Datasets Used</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphics-code-plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Code Examples</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./design-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study Design &amp; Model Planning</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Sample and Study Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./plan.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Model Planning for Inference</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Multiple Linear Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-fit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Fitting Linear Models in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-assess.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Assessment for Linear Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Interpretation and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lm-interp-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Selection and Inference for Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Interactions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Interactions in Regression Models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Likelihood</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Maximum Likelihood Estimation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Count Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./count-regression-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Regression for Count Responses: Formulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./count-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Interpreting Count Regression</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Binary Regression</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Regression for Binary Responses (one trial per row)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./binary-regression-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Binary Regression <em>Another Way</em>: Multiple Trials Per Row</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Zero Inflation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zi-od.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Zero Inflation for Overdispersed Counts</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">More Fun Between 0-1</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quasibinomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Models for Overdispered Binary Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beta.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Models for data bounded between 0 and 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false">
+ <span class="menu-text">Hierarchical Models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Hierarchical Models - Introduction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hier2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="true">
+ <span class="menu-text">Generalized Additive Models (GAMs)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gams1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Introduction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#section-learning-outcomes" id="toc-section-learning-outcomes" class="nav-link active" data-scroll-target="#section-learning-outcomes"><span class="header-section-number">36.1</span> Section Learning Outcomes</a></li>
+  <li><a href="#text-reference" id="toc-text-reference" class="nav-link" data-scroll-target="#text-reference"><span class="header-section-number">36.2</span> Text Reference</a></li>
+  <li><a href="#already-nonlinear" id="toc-already-nonlinear" class="nav-link" data-scroll-target="#already-nonlinear"><span class="header-section-number">36.3</span> Already Nonlinear</a>
+  <ul class="collapse">
+  <li><a href="#categorical-predictor-variables" id="toc-categorical-predictor-variables" class="nav-link" data-scroll-target="#categorical-predictor-variables">Categorical predictor variables</a></li>
+  <li><a href="#sowhy-go-further-than-this" id="toc-sowhy-go-further-than-this" class="nav-link" data-scroll-target="#sowhy-go-further-than-this">So…why go further than this?</a></li>
+  <li><a href="#glms" id="toc-glms" class="nav-link" data-scroll-target="#glms">GLMs</a></li>
+  <li><a href="#sowhy-go-further-than-this-1" id="toc-sowhy-go-further-than-this-1" class="nav-link" data-scroll-target="#sowhy-go-further-than-this-1">So…why go further than this?</a></li>
+  </ul></li>
+  <li><a href="#roads-not-taken" id="toc-roads-not-taken" class="nav-link" data-scroll-target="#roads-not-taken"><span class="header-section-number">36.4</span> Roads not Taken</a>
+  <ul class="collapse">
+  <li><a href="#transformations-of-predictors-or-response-log-powers-etc." id="toc-transformations-of-predictors-or-response-log-powers-etc." class="nav-link" data-scroll-target="#transformations-of-predictors-or-response-log-powers-etc.">Transformations of predictors or response (log, powers, etc.)</a></li>
+  </ul></li>
+  <li><a href="#data-bats" id="toc-data-bats" class="nav-link" data-scroll-target="#data-bats"><span class="header-section-number">36.5</span> Data: Bats</a></li>
+  <li><a href="#goal-smooths" id="toc-goal-smooths" class="nav-link" data-scroll-target="#goal-smooths"><span class="header-section-number">36.6</span> Goal: Smooths</a></li>
+  <li><a href="#basis-functions" id="toc-basis-functions" class="nav-link" data-scroll-target="#basis-functions"><span class="header-section-number">36.7</span> Basis functions</a></li>
+  <li><a href="#overfitting" id="toc-overfitting" class="nav-link" data-scroll-target="#overfitting"><span class="header-section-number">36.8</span> Overfitting</a></li>
+  <li><a href="#mgcvgam" id="toc-mgcvgam" class="nav-link" data-scroll-target="#mgcvgam"><span class="header-section-number">36.9</span> <code>mgcv::gam()</code></a></li>
+  <li><a href="#gam-formula-syntax" id="toc-gam-formula-syntax" class="nav-link" data-scroll-target="#gam-formula-syntax"><span class="header-section-number">36.10</span> <code>gam()</code> formula syntax</a>
+  <ul class="collapse">
+  <li><a href="#choosing-a-basis-dimension" id="toc-choosing-a-basis-dimension" class="nav-link" data-scroll-target="#choosing-a-basis-dimension">Choosing a basis dimension</a></li>
+  <li><a href="#choosing-k" id="toc-choosing-k" class="nav-link" data-scroll-target="#choosing-k">Choosing k</a></li>
+  </ul></li>
+  <li><a href="#n15" id="toc-n15" class="nav-link" data-scroll-target="#n15"><span class="header-section-number">36.11</span> n/15?</a></li>
+  <li><a href="#random-effects" id="toc-random-effects" class="nav-link" data-scroll-target="#random-effects"><span class="header-section-number">36.12</span> Random Effects</a></li>
+  <li><a href="#gam-options" id="toc-gam-options" class="nav-link" data-scroll-target="#gam-options"><span class="header-section-number">36.13</span> <code>gam()</code> Options</a></li>
+  <li><a href="#snow-data" id="toc-snow-data" class="nav-link" data-scroll-target="#snow-data"><span class="header-section-number">36.14</span> Snow Data</a></li>
+  <li><a href="#gam-example---snow" id="toc-gam-example---snow" class="nav-link" data-scroll-target="#gam-example---snow"><span class="header-section-number">36.15</span> GAM Example - Snow</a></li>
+  <li><a href="#model-assessment" id="toc-model-assessment" class="nav-link" data-scroll-target="#model-assessment"><span class="header-section-number">36.16</span> Model Assessment</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">36.17</span> What’s next?</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/gams1.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gams1.html">Generalized Additive Models (GAMs)</a></li><li class="breadcrumb-item"><a href="./gams1.html"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Introduction</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Introduction</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell" data-layout-align="center" data-setup="true" data-exercise="[&quot;bat-plots&quot;,&quot;snow-figs&quot;,&quot;snow-gam&quot;,&quot;gam-pred&quot;,&quot;gam-pred2&quot;]">
+<script type="exercise-setup-bat-plots-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImJhdC1wbG90cyIsInNub3ctZmlncyIsInNub3ctZ2FtIiwiZ2FtLXByZWQiLCJnYW0tcHJlZDIiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcbmxpYnJhcnkobWdjdilcbmxpYnJhcnkobHVicmlkYXRlKVxuXG50aGVtZV9zZXQodGhlbWVfYncoYmFzZV9zaXplPTE2KSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gRkFMU0UsXG4gIGZpZy5hbGlnbiA9IFwiY2VudGVyXCIsXG4gIGZpZy53aWR0aCA9IDYsIGZpZy5oZWlnaHQgPSAyLjUpXG5cbmdyd2VhdGhlciA8LSByZWFkLmNzdignZGF0YS9ncnItd2VhdGhlci1tZXRyaWMuY3N2JyxcbiAgICAgICAgIHNob3dfY29sX3R5cGVzID0gRkFMU0UpIHw+XG4gICAgc2VsZWN0KFNOT1csIFRNSU4sIERBVEUsIFRTVU4pIHw+XG4gIG11dGF0ZShNT05USCA9IGx1YnJpZGF0ZTo6bW9udGgoREFURSksXG4gICAgICAgICBEQVkgPSBsdWJyaWRhdGU6OnlkYXkoREFURSksXG4gICAgICAgICBZRUFSID0gbHVicmlkYXRlOjp5ZWFyKERBVEUpLFxuICAgICAgICAgV0VFSyA9IGx1YnJpZGF0ZTo6aXNvd2VlayhEQVRFKSxcbiAgICAgICAgICMgdGhpcyBuZXcgdmFyaWFibGUgd2lsbCBiZSB0aGUgc25vdyBvbmUgZGF5IGFnb1xuICAgICAgICAgUFJFVi5TTk9XID0gbGFnKFNOT1cpKSB8PlxuICBkcm9wX25hKClcblxuc25vdy5nYW0gPC0gZ2FtKFNOT1cgfiBzKERBWSwgayA9IDIwLCBicyA9ICdjYycpICtcbiAgICAgICAgICAgICAgICBzKFRNSU4sIGsgPSA1LCBicyA9ICdjcycpICtcbiAgICAgICAgICAgICAgICBzKFlFQVIsIGsgPSA1LCBicyA9ICdjcycpICsgXG4gICAgICAgICAgICAgICAgICBQUkVWLlNOT1csXG4gICAgICAgICAgICAgIGRhdGEgPSBncndlYXRoZXIsXG4gICAgICAgICAgICAgIG1ldGhvZCA9ICdNTCcsIFxuICAgICAgICAgICAgICBzZWxlY3QgPSBUUlVFKVxuXG5iYXRzIDwtICNyZWFkX2NzdignaHR0cHM6Ly9uZG93bmxvYWRlci5maWdzaGFyZS5jb20vZmlsZXMvOTM0ODAxMCcpXG4gIHJlYWQuY3N2KFwiZGF0YS9yc2JsMjAxNzAzOTVfc2lfMDAzLmNzdlwiKSJ9
+</script>
+<script type="exercise-setup-snow-figs-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImJhdC1wbG90cyIsInNub3ctZmlncyIsInNub3ctZ2FtIiwiZ2FtLXByZWQiLCJnYW0tcHJlZDIiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcbmxpYnJhcnkobWdjdilcbmxpYnJhcnkobHVicmlkYXRlKVxuXG50aGVtZV9zZXQodGhlbWVfYncoYmFzZV9zaXplPTE2KSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gRkFMU0UsXG4gIGZpZy5hbGlnbiA9IFwiY2VudGVyXCIsXG4gIGZpZy53aWR0aCA9IDYsIGZpZy5oZWlnaHQgPSAyLjUpXG5cbmdyd2VhdGhlciA8LSByZWFkLmNzdignZGF0YS9ncnItd2VhdGhlci1tZXRyaWMuY3N2JyxcbiAgICAgICAgIHNob3dfY29sX3R5cGVzID0gRkFMU0UpIHw+XG4gICAgc2VsZWN0KFNOT1csIFRNSU4sIERBVEUsIFRTVU4pIHw+XG4gIG11dGF0ZShNT05USCA9IGx1YnJpZGF0ZTo6bW9udGgoREFURSksXG4gICAgICAgICBEQVkgPSBsdWJyaWRhdGU6OnlkYXkoREFURSksXG4gICAgICAgICBZRUFSID0gbHVicmlkYXRlOjp5ZWFyKERBVEUpLFxuICAgICAgICAgV0VFSyA9IGx1YnJpZGF0ZTo6aXNvd2VlayhEQVRFKSxcbiAgICAgICAgICMgdGhpcyBuZXcgdmFyaWFibGUgd2lsbCBiZSB0aGUgc25vdyBvbmUgZGF5IGFnb1xuICAgICAgICAgUFJFVi5TTk9XID0gbGFnKFNOT1cpKSB8PlxuICBkcm9wX25hKClcblxuc25vdy5nYW0gPC0gZ2FtKFNOT1cgfiBzKERBWSwgayA9IDIwLCBicyA9ICdjYycpICtcbiAgICAgICAgICAgICAgICBzKFRNSU4sIGsgPSA1LCBicyA9ICdjcycpICtcbiAgICAgICAgICAgICAgICBzKFlFQVIsIGsgPSA1LCBicyA9ICdjcycpICsgXG4gICAgICAgICAgICAgICAgICBQUkVWLlNOT1csXG4gICAgICAgICAgICAgIGRhdGEgPSBncndlYXRoZXIsXG4gICAgICAgICAgICAgIG1ldGhvZCA9ICdNTCcsIFxuICAgICAgICAgICAgICBzZWxlY3QgPSBUUlVFKVxuXG5iYXRzIDwtICNyZWFkX2NzdignaHR0cHM6Ly9uZG93bmxvYWRlci5maWdzaGFyZS5jb20vZmlsZXMvOTM0ODAxMCcpXG4gIHJlYWQuY3N2KFwiZGF0YS9yc2JsMjAxNzAzOTVfc2lfMDAzLmNzdlwiKSJ9
+</script>
+<script type="exercise-setup-snow-gam-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImJhdC1wbG90cyIsInNub3ctZmlncyIsInNub3ctZ2FtIiwiZ2FtLXByZWQiLCJnYW0tcHJlZDIiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcbmxpYnJhcnkobWdjdilcbmxpYnJhcnkobHVicmlkYXRlKVxuXG50aGVtZV9zZXQodGhlbWVfYncoYmFzZV9zaXplPTE2KSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gRkFMU0UsXG4gIGZpZy5hbGlnbiA9IFwiY2VudGVyXCIsXG4gIGZpZy53aWR0aCA9IDYsIGZpZy5oZWlnaHQgPSAyLjUpXG5cbmdyd2VhdGhlciA8LSByZWFkLmNzdignZGF0YS9ncnItd2VhdGhlci1tZXRyaWMuY3N2JyxcbiAgICAgICAgIHNob3dfY29sX3R5cGVzID0gRkFMU0UpIHw+XG4gICAgc2VsZWN0KFNOT1csIFRNSU4sIERBVEUsIFRTVU4pIHw+XG4gIG11dGF0ZShNT05USCA9IGx1YnJpZGF0ZTo6bW9udGgoREFURSksXG4gICAgICAgICBEQVkgPSBsdWJyaWRhdGU6OnlkYXkoREFURSksXG4gICAgICAgICBZRUFSID0gbHVicmlkYXRlOjp5ZWFyKERBVEUpLFxuICAgICAgICAgV0VFSyA9IGx1YnJpZGF0ZTo6aXNvd2VlayhEQVRFKSxcbiAgICAgICAgICMgdGhpcyBuZXcgdmFyaWFibGUgd2lsbCBiZSB0aGUgc25vdyBvbmUgZGF5IGFnb1xuICAgICAgICAgUFJFVi5TTk9XID0gbGFnKFNOT1cpKSB8PlxuICBkcm9wX25hKClcblxuc25vdy5nYW0gPC0gZ2FtKFNOT1cgfiBzKERBWSwgayA9IDIwLCBicyA9ICdjYycpICtcbiAgICAgICAgICAgICAgICBzKFRNSU4sIGsgPSA1LCBicyA9ICdjcycpICtcbiAgICAgICAgICAgICAgICBzKFlFQVIsIGsgPSA1LCBicyA9ICdjcycpICsgXG4gICAgICAgICAgICAgICAgICBQUkVWLlNOT1csXG4gICAgICAgICAgICAgIGRhdGEgPSBncndlYXRoZXIsXG4gICAgICAgICAgICAgIG1ldGhvZCA9ICdNTCcsIFxuICAgICAgICAgICAgICBzZWxlY3QgPSBUUlVFKVxuXG5iYXRzIDwtICNyZWFkX2NzdignaHR0cHM6Ly9uZG93bmxvYWRlci5maWdzaGFyZS5jb20vZmlsZXMvOTM0ODAxMCcpXG4gIHJlYWQuY3N2KFwiZGF0YS9yc2JsMjAxNzAzOTVfc2lfMDAzLmNzdlwiKSJ9
+</script>
+<script type="exercise-setup-gam-pred-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImJhdC1wbG90cyIsInNub3ctZmlncyIsInNub3ctZ2FtIiwiZ2FtLXByZWQiLCJnYW0tcHJlZDIiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcbmxpYnJhcnkobWdjdilcbmxpYnJhcnkobHVicmlkYXRlKVxuXG50aGVtZV9zZXQodGhlbWVfYncoYmFzZV9zaXplPTE2KSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gRkFMU0UsXG4gIGZpZy5hbGlnbiA9IFwiY2VudGVyXCIsXG4gIGZpZy53aWR0aCA9IDYsIGZpZy5oZWlnaHQgPSAyLjUpXG5cbmdyd2VhdGhlciA8LSByZWFkLmNzdignZGF0YS9ncnItd2VhdGhlci1tZXRyaWMuY3N2JyxcbiAgICAgICAgIHNob3dfY29sX3R5cGVzID0gRkFMU0UpIHw+XG4gICAgc2VsZWN0KFNOT1csIFRNSU4sIERBVEUsIFRTVU4pIHw+XG4gIG11dGF0ZShNT05USCA9IGx1YnJpZGF0ZTo6bW9udGgoREFURSksXG4gICAgICAgICBEQVkgPSBsdWJyaWRhdGU6OnlkYXkoREFURSksXG4gICAgICAgICBZRUFSID0gbHVicmlkYXRlOjp5ZWFyKERBVEUpLFxuICAgICAgICAgV0VFSyA9IGx1YnJpZGF0ZTo6aXNvd2VlayhEQVRFKSxcbiAgICAgICAgICMgdGhpcyBuZXcgdmFyaWFibGUgd2lsbCBiZSB0aGUgc25vdyBvbmUgZGF5IGFnb1xuICAgICAgICAgUFJFVi5TTk9XID0gbGFnKFNOT1cpKSB8PlxuICBkcm9wX25hKClcblxuc25vdy5nYW0gPC0gZ2FtKFNOT1cgfiBzKERBWSwgayA9IDIwLCBicyA9ICdjYycpICtcbiAgICAgICAgICAgICAgICBzKFRNSU4sIGsgPSA1LCBicyA9ICdjcycpICtcbiAgICAgICAgICAgICAgICBzKFlFQVIsIGsgPSA1LCBicyA9ICdjcycpICsgXG4gICAgICAgICAgICAgICAgICBQUkVWLlNOT1csXG4gICAgICAgICAgICAgIGRhdGEgPSBncndlYXRoZXIsXG4gICAgICAgICAgICAgIG1ldGhvZCA9ICdNTCcsIFxuICAgICAgICAgICAgICBzZWxlY3QgPSBUUlVFKVxuXG5iYXRzIDwtICNyZWFkX2NzdignaHR0cHM6Ly9uZG93bmxvYWRlci5maWdzaGFyZS5jb20vZmlsZXMvOTM0ODAxMCcpXG4gIHJlYWQuY3N2KFwiZGF0YS9yc2JsMjAxNzAzOTVfc2lfMDAzLmNzdlwiKSJ9
+</script>
+<script type="exercise-setup-gam-pred2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlY2hvIjpmYWxzZSwiZWRpdCI6ZmFsc2UsImV2YWwiOnRydWUsImV4ZXJjaXNlIjpbImJhdC1wbG90cyIsInNub3ctZmlncyIsInNub3ctZ2FtIiwiZ2FtLXByZWQiLCJnYW0tcHJlZDIiXSwiaW5jbHVkZSI6ZmFsc2UsIm91dHB1dCI6ZmFsc2UsInNldHVwIjp0cnVlfSwiY29kZSI6IlxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoZ2xtbVRNQilcbmxpYnJhcnkoZ2dmb3JtdWxhKVxubGlicmFyeShnZ2VmZmVjdHMpXG5saWJyYXJ5KERIQVJNYSlcbmxpYnJhcnkobWdjdilcbmxpYnJhcnkobHVicmlkYXRlKVxuXG50aGVtZV9zZXQodGhlbWVfYncoYmFzZV9zaXplPTE2KSlcblxua25pdHI6Om9wdHNfY2h1bmskc2V0KFxuICBlY2hvID0gRkFMU0UsXG4gIGZpZy5hbGlnbiA9IFwiY2VudGVyXCIsXG4gIGZpZy53aWR0aCA9IDYsIGZpZy5oZWlnaHQgPSAyLjUpXG5cbmdyd2VhdGhlciA8LSByZWFkLmNzdignZGF0YS9ncnItd2VhdGhlci1tZXRyaWMuY3N2JyxcbiAgICAgICAgIHNob3dfY29sX3R5cGVzID0gRkFMU0UpIHw+XG4gICAgc2VsZWN0KFNOT1csIFRNSU4sIERBVEUsIFRTVU4pIHw+XG4gIG11dGF0ZShNT05USCA9IGx1YnJpZGF0ZTo6bW9udGgoREFURSksXG4gICAgICAgICBEQVkgPSBsdWJyaWRhdGU6OnlkYXkoREFURSksXG4gICAgICAgICBZRUFSID0gbHVicmlkYXRlOjp5ZWFyKERBVEUpLFxuICAgICAgICAgV0VFSyA9IGx1YnJpZGF0ZTo6aXNvd2VlayhEQVRFKSxcbiAgICAgICAgICMgdGhpcyBuZXcgdmFyaWFibGUgd2lsbCBiZSB0aGUgc25vdyBvbmUgZGF5IGFnb1xuICAgICAgICAgUFJFVi5TTk9XID0gbGFnKFNOT1cpKSB8PlxuICBkcm9wX25hKClcblxuc25vdy5nYW0gPC0gZ2FtKFNOT1cgfiBzKERBWSwgayA9IDIwLCBicyA9ICdjYycpICtcbiAgICAgICAgICAgICAgICBzKFRNSU4sIGsgPSA1LCBicyA9ICdjcycpICtcbiAgICAgICAgICAgICAgICBzKFlFQVIsIGsgPSA1LCBicyA9ICdjcycpICsgXG4gICAgICAgICAgICAgICAgICBQUkVWLlNOT1csXG4gICAgICAgICAgICAgIGRhdGEgPSBncndlYXRoZXIsXG4gICAgICAgICAgICAgIG1ldGhvZCA9ICdNTCcsIFxuICAgICAgICAgICAgICBzZWxlY3QgPSBUUlVFKVxuXG5iYXRzIDwtICNyZWFkX2NzdignaHR0cHM6Ly9uZG93bmxvYWRlci5maWdzaGFyZS5jb20vZmlsZXMvOTM0ODAxMCcpXG4gIHJlYWQuY3N2KFwiZGF0YS9yc2JsMjAxNzAzOTVfc2lfMDAzLmNzdlwiKSJ9
+</script>
+</div>
+<section id="section-learning-outcomes" class="level2" data-number="36.1">
+<h2 data-number="36.1" class="anchored" data-anchor-id="section-learning-outcomes"><span class="header-section-number">36.1</span> Section Learning Outcomes</h2>
+<p>Before we got to hierarchical models, all the variations on regression models we learned were designed to allow us to model different types of response variables. Hierarchical models changed our models in a different way - they let us add more structure to our models, essentially considering different types of predictors (beyond just categorical and quantitative; adding random vs.&nbsp;fixed effects). Even earlier on, we used interactions to account for another “different way” for predictors and response to relate. This module, we will explore yet another (super useful!) model refinement that lets us model a relationship between predictor and response that is potentially non-linear, even non-monotonic. Or, with less jargon: relationships characterized by a smooth curve that may not be a straight line, and may even go up and down and wiggle around.</p>
+<p>By the end of the module you will:</p>
+<ol type="1">
+<li>Explain how basis functions are combined to create splines</li>
+<li>List characteristics of some common types of splines, and choose an appropriate type for a specific application</li>
+<li>Understand how degrees of freedom/basis dimension controls the “wiggliness” of a spline, and set a basis of appropriate size for a specific application</li>
+<li>State an appropriate rationale for whether a given predictor variable should be included in a model as a linear or a smooth term</li>
+<li>Plan and fit generalized additive models in R</li>
+</ol>
+</section>
+<section id="text-reference" class="level2" data-number="36.2">
+<h2 data-number="36.2" class="anchored" data-anchor-id="text-reference"><span class="header-section-number">36.2</span> Text Reference</h2>
+<p>Recommended reading for the materials covered in this tutorial can be found in:</p>
+<ul>
+<li>Course Notes <a href="https://stacyderuiter.github.io/regression/gams.html" target="_blank">Chapter 19</a></li>
+<li><a href="https://noamross.github.io/gams-in-r-course/chapter1" target="_blank">GAMs in R, Chapter 1</a></li>
+<li><a href="https://eric-pedersen.github.io/mgcv-esa-workshop/">GAM workshop materials</a>) (A bit older, from 2016, but still with some helpful background presented at a nice level)</li>
+</ul>
+<p>It’s suggested that you consider consulting these resources <em>after</em> doing this tutorial, with particular focus on any topics you found most challenging.</p>
+</section>
+<section id="already-nonlinear" class="level2" data-number="36.3">
+<h2 data-number="36.3" class="anchored" data-anchor-id="already-nonlinear"><span class="header-section-number">36.3</span> Already Nonlinear</h2>
+<p>This module, we’re learning to fit models with non-linear relationships between predictor and response. But it’s important to give a little more detail about what exactly we mean by that, and to acknowledge that actually we’ve already been working with models that are “non-linear” in one way or another for a while! Can you think of some examples you’ve already seen in this course?</p>
+<section id="categorical-predictor-variables" class="level3">
+<h3 class="anchored" data-anchor-id="categorical-predictor-variables">Categorical predictor variables</h3>
+<p>Any regression model with a categorical predictor variable allows for nonlinear relationships (of a sort).</p>
+<p>Making use of indicator variables for (all but one of the) categories, we can model a situation where each value of the predictor variable has a different effect on the response.</p>
+</section>
+<section id="sowhy-go-further-than-this" class="level3">
+<h3 class="anchored" data-anchor-id="sowhy-go-further-than-this">So…why go further than this?</h3>
+<p>We might imagine just forcing every (continuous quantitative or count) variable that we think has a nonlinear relationship with the response to be categorical, binning values appropriately to make it so.</p>
+<p>In fact, we have already done this sometimes – for example, treating variables like day of the week, month of the year, etc. as categorical.</p>
+<p>But that could lead to some problems, among them:</p>
+<ul>
+<li>How many categories is the right number?
+<ul>
+<li>In some cases, it might be hard to decide.</li>
+<li>In others, we might need so many categories that the variable becomes unwieldy, requiring estimation of a ton of parameters and thus a very large dataset.</li>
+</ul></li>
+<li>What about periodicity? Some predictors - often those associated with time (day of week, month of year, etc.) or angles, are measured on a periodic scale. In these cases, we’d usually want the response variable value at the very end of one cycle to match up with the value at the start of the next; for example, if we are predicting expected snowfall as a function of day of the year (1-365), there probably shouldn’t be a huge jump between the expected amount on Dec.&nbsp;31 and the one on Jan 1. Treating day-of-year as categorical would not enforce this smooth periodicity.</li>
+</ul>
+</section>
+<section id="glms" class="level3">
+<h3 class="anchored" data-anchor-id="glms">GLMs</h3>
+<p>In binary or count regression, predictor-response relationship is linear on the scale of the link function ( = scale of the right-hand side of the equation), but non-linear on the scale of the response variable (left-hand side of the equation).</p>
+<p>Think of the prediction plots you’ve made for quantitative predictors in count and binary regression models – they often show curves rather than straight lines, of course!</p>
+</section>
+<section id="sowhy-go-further-than-this-1" class="level3">
+<h3 class="anchored" data-anchor-id="sowhy-go-further-than-this-1">So…why go further than this?</h3>
+<p>Well - the relationships between predictors and responses in count and binary regressions are nonlinear, but of a very particular form. They are log-linear, or logit-linear…and have very specific, characteristic possible shapes.</p>
+<p>In particular, they are always <strong>monotonic.</strong> You’d never get a trend that is rainbow-shaped, or u-shaped, or wiggling-up-and-down-repeatedly, or any number of other possible shapes that you might want to model in real data.</p>
+</section>
+</section>
+<section id="roads-not-taken" class="level2" data-number="36.4">
+<h2 data-number="36.4" class="anchored" data-anchor-id="roads-not-taken"><span class="header-section-number">36.4</span> Roads not Taken</h2>
+<p>There are a number of popular options for modeling nonlinear relationships that we won’t pursue in this course, and for each one I’ll try to give a reason why it’s not the approach we’ve chosen.</p>
+<section id="transformations-of-predictors-or-response-log-powers-etc." class="level3">
+<h3 class="anchored" data-anchor-id="transformations-of-predictors-or-response-log-powers-etc.">Transformations of predictors or response (log, powers, etc.)</h3>
+<p>Often people will try to apply a function to predictor variable(s) and/or the response variable in order to obtain a linear relationship between the predictor and response, and residual normality, in fitting a simple linear regression model.</p>
+<p>This sometimes works, but it often greatly complicates interpretation (you have to think in terms of the logarithm of height depending on the square root of mass, etc.).</p>
+<p>Another variation on this approach is to add additional polynomial terms (adding <span class="math inline">\(\text{predictor}^2\)</span>, <span class="math inline">\(\text{predictor}^3\)</span>, etc.) to achieve a nonlinear total relationship between a certain predictor and the response.</p>
+<p>There is something of a science to figuring out how to do this, and if you are interested you can review (totally optional) online notes about the <a href="https://zief0002.github.io/bespectacled-antelope/notes/09-rule-of-the-bulge.html#power-transformations">Ladder of Power Transformations and the Bulge Rules</a>.</p>
+<p>An approach of this type is suitable - maybe even necessary - <em>with theoretical justification</em>. That is, if the underlying physics of your scenario tells you that your response variable will depend on the square of the length of an object, by all means use <span class="math inline">\(\text{length}^2\)</span> as a predictor.</p>
+<p>In the absence of theoretical justification, though, choosing transformations can be a bit ad-hoc. There are systematic ways of choosing (see above about the Ladder of Transformation and Bulge Rules), but as already mentioned, applying ad-hoc transformations makes interpretation of results more challenging.</p>
+<p>In addition, sometimes it just doesn’t work very well: you can’t always find a transformation to linearity, or a polynomial combination that yields a good match between model predictions and trends in the data.</p>
+<p>Our preference is for one, flexible solution to get any shape that might be needed, without too much analyst control or arbitrary decision-making. We’d also like to be able to easily get predictions, and prediction plots, on a natural scale: the same units of measure as the response, not the log of the response or the response to the <span class="math inline">\(\frac{2}{3}\)</span> power or anything else like that.</p>
+<p>Enter: GAMs! (That stands for Generalized Additive Models.)</p>
+</section>
+</section>
+<section id="data-bats" class="level2" data-number="36.5">
+<h2 data-number="36.5" class="anchored" data-anchor-id="data-bats"><span class="header-section-number">36.5</span> Data: Bats</h2>
+<p>To get an idea of the type of dataset - and the type of nonlinear relationships - we might be trying to model, let’s consider an example.</p>
+<p>This dataset comes from a 2017 paper by Dina Dechmann and colleagues, called “<a href="https://royalsocietypublishing.org/doi/10.1098/rsbl.2017.0395">Determinants of spring migration departure decision in a bat</a>.” The authors were interested in studying how migratory bats decide when to begin their migration journey. The abstract says,</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>[Conditions that] trigger bat migration [remain unknown]. To learn more about the rare phenomenon of bat migration, we studied departure decisions of female common noctules (<em>Nyctalus noctula</em>) in southern Germany… Female noctules departed after a regular evening foraging session, uniformly heading northeast. As the day of year increased, migratory decisions were based on the interactions among wind speed, wind direction and air pressure. As the migration season progressed, bats were likely to migrate on nights with higher air pressure and faster tail winds in the direction of travel, and also show high probability of migration on low-pressure nights with slow head winds. Common noctules thus monitor complex environmental conditions to find the optimal migration night.</p>
+</blockquote>
+</blockquote>
+<p>This suggests that there are optimal conditions for bat migration - so non-monotonic relationships may well be present (for example, bats migrate when air pressure is high enought, but not too high).</p>
+<p>You can read in the data as shown below:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>bats <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://ndownloader.figshare.com/files/9348010'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Variables in the dataset include:</p>
+<ul>
+<li>Timing information: the <code>date</code>, <code>julian.day</code> of data collection, <code>julian.day.of.capture</code> (to attach a tracking tag), <code>days.since.capture</code></li>
+<li><code>tx.frequency</code>, the radio frequency at which the bat’s tracking tag transmits (we should ignore this, or could think of it as an individual ID)</li>
+<li>Information about the bat:
+<ul>
+<li><code>sex</code></li>
+<li><code>mass.grams</code></li>
+<li><code>forearm.mm</code> forearm length in mm</li>
+<li><code>capture.body.condition</code> (bigger is fatter and better)</li>
+</ul></li>
+<li><code>migration</code>, which is 0 if the bat did not migrate this day; 1 if it did</li>
+<li>Information about environmental conditions:
+<ul>
+<li><code>cloud.cover</code> (higher is more)</li>
+<li><code>windspeed</code> (in meters per second)</li>
+<li><code>winddirection</code> (in degrees)</li>
+<li><code>airpressure</code> (likely measured in millibars)</li>
+<li><code>airtemp</code> in degrees Celsius</li>
+<li><code>relativehumid</code>ity as a percent</li>
+</ul></li>
+</ul>
+<p>Let’s try exploring this dataset a bit to see what kinds of nonlinear relationships are present between the response variable <code>migration</code> and some predictors describing the environmental conditions. Remember, the study authors concluded that bats chose to depart on their migrations when the wind speed, direction, and air pressure were just right. But there may also be other stuff going on in the data – the approach the authors used to get their conclusions was very unlike what we’d use.</p>
+<p>In the block below, there are some “hints” of things you might try, but feel free to get creative, too! You’ll likely need to prep the data a bit by grouping observations and computing a proportion migrating for each group, in order to really see what is going on.</p>
+<div class="cell" data-layout-align="center" data-exercise="bat-plots">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImJhdC1wbG90cyJ9LCJjb2RlIjoiIn0=
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="bat-plots">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hints and ideas:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(relativehumid <span class="sc">~</span> <span class="fu">factor</span>(migration), <span class="at">data =</span> bats)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bats2 <span class="ot">&lt;-</span> bats <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># bin humidity into 7 levels (feel free to try changing the number!)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">humid_bins =</span> <span class="fu">cut_number</span>(relativehumid, <span class="at">n =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># group by humidity level</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(humid_bins) <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute the median humidity and proportion migrating in each bin</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_hum =</span> <span class="fu">median</span>(relativehumid, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">migration_prop =</span> <span class="fu">sum</span>(migration) <span class="sc">/</span> <span class="fu">n</span>() ) <span class="sc">|&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(migration_prop <span class="sc">~</span> median_hum, <span class="at">data =</span> bats2) <span class="sc">|&gt;</span> </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">'Relative Humidity'</span>, </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Proportion Migrating'</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>bats3 <span class="ot">&lt;-</span> bats <span class="sc">|&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># bin wind speed and direction</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">windspeed_bins =</span> <span class="fu">cut_number</span>(windspeed, <span class="at">n =</span> <span class="dv">7</span>),</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">winddirection_bins =</span> <span class="fu">cut_interval</span>(winddirection, <span class="at">n =</span> <span class="dv">4</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># group by bins</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(windspeed_bins, winddirection_bins) <span class="sc">|&gt;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute the median/mean speed/direction and proportion migrating in each bin</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_windspeed =</span> <span class="fu">median</span>(windspeed, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_winddir =</span> CircStats<span class="sc">::</span><span class="fu">circ.mean</span>(winddirection),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">migration_prop =</span> <span class="fu">sum</span>(migration) <span class="sc">/</span> <span class="fu">n</span>() ) <span class="sc">|&gt;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(migration_prop <span class="sc">~</span> median_windspeed <span class="sc">|</span> winddirection_bins, <span class="at">data =</span> bats3) <span class="sc">|&gt;</span> </span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">'Wind Speed (m/s)'</span>, </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Proportion Migrating'</span>) <span class="sc">|&gt;</span> <span class="fu">gf_lims</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>bats4 <span class="ot">&lt;-</span> bats <span class="sc">|&gt;</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># bin wind speed and direction</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pressure_bins =</span> <span class="fu">cut_number</span>(airpressure, <span class="at">n =</span> <span class="dv">10</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># group by bins</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(pressure_bins) <span class="sc">|&gt;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute the bin median and proportion migrating in each bin</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_pressure =</span> <span class="fu">median</span>(airpressure, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">migration_prop =</span> <span class="fu">sum</span>(migration) <span class="sc">/</span> <span class="fu">n</span>() ) <span class="sc">|&gt;</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(migration_prop <span class="sc">~</span> median_pressure, <span class="at">data =</span> bats4) <span class="sc">|&gt;</span> </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">'Air Pressure'</span>, </span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Proportion Migrating'</span>) <span class="sc">|&gt;</span> <span class="fu">gf_lims</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>bats5 <span class="ot">&lt;-</span> bats <span class="sc">|&gt;</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># bin wind speed and direction</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pressure_bins =</span> <span class="fu">cut_number</span>(airpressure, <span class="at">n =</span> <span class="dv">10</span>),</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>         <span class="at">winddirection_bins =</span> <span class="fu">cut_interval</span>(winddirection, <span class="at">n =</span> <span class="dv">4</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># group by bins</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(pressure_bins, winddirection_bins) <span class="sc">|&gt;</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute the bin median and proportion migrating in each bin</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_pressure =</span> <span class="fu">median</span>(airpressure, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            <span class="at">migration_prop =</span> <span class="fu">sum</span>(migration) <span class="sc">/</span> <span class="fu">n</span>() ) <span class="sc">|&gt;</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(migration_prop <span class="sc">~</span> median_pressure <span class="sc">|</span> winddirection_bins, <span class="at">data =</span> bats5) <span class="sc">|&gt;</span> </span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">'Air Pressure'</span>, </span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">'Proportion Migrating'</span>) <span class="sc">|&gt;</span> <span class="fu">gf_lims</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>What patterns did you notice? How were you able to improve on my graphs?</p>
+<p>Make a couple of mental or actual notes about the patterns that you see: how would you describe the trend? Is the trend monotonic? Would you say it’s very wiggly (lots of ups and downs) or just a little (which is more common)? Is the predictor you looked at periodic, or not?</p>
+<p>Take a quick screen shot of your best graph that does show a nonlinear trend, and save it for later - it will come in handy for one of the practice problems next module! (You’ll be asked to upload your screen shot, briefly describe what you see, and write the code you’d use to specify a smooth terms for your predictor if you were to fit a GAM to this data.)</p>
+</section>
+<section id="goal-smooths" class="level2" data-number="36.6">
+<h2 data-number="36.6" class="anchored" data-anchor-id="goal-smooths"><span class="header-section-number">36.6</span> Goal: Smooths</h2>
+<p>Our goal is to fit a model for a response variable of interest, including some smooth (nonlinear) terms. We would like it if:</p>
+<ul>
+<li>The predictor-response relationship can be linear, <em>or</em> nonlinear with <em>any</em> shape</li>
+<li>We’d like some control of how much “wiggliness” is allowed</li>
+</ul>
+</section>
+<section id="basis-functions" class="level2" data-number="36.7">
+<h2 data-number="36.7" class="anchored" data-anchor-id="basis-functions"><span class="header-section-number">36.7</span> Basis functions</h2>
+<p>We are going to build each <em>smooth term</em> we are interested in as a scaled sum of a set of <strong>basis functions.</strong> Here’s the basic idea:</p>
+<ul>
+<li>Several parts, or <em>basis functions</em>, sum to form a smooth</li>
+<li>Each has simple shape</li>
+<li>Scaled and added together, yield nearly any shape</li>
+<li>Higher basis dimension (more functions added together) can allow for more wiggles</li>
+<li>Goal: enough flexibility to fit data well, without <em>overfitting</em></li>
+</ul>
+<p>That’s kind of a lot…here’s a picture to try to show what I mean. In both panels, the x variable <code>vh</code> is a predictor for which we want to estimate a smooth term in a regression to predict atmospheric Ozone levels.</p>
+<p>The <em>top</em> panel shows the data: response variable Ozone and candidate predictor vh (let’s not worry about what that actually is).</p>
+<p>The <em>bottom</em> panel shows a set of basis functions with dimension k = 6. Notice it’s made up of 6 different curves of different colors, all with the same shape, but centered at different points to cover the range of possible predictor variable values.</p>
+<p>The middle panel shows the fitted smooth (the fat black line). It’s pretty much a straight line in this case, since the trend between vh and Ozone is nearly linear. But how did we <em>get</em> that straight line? In fitting the model, <code>gam()</code> estimated scaling coefficients for each basis function (the colored curves). Notice some of them are squished down nearly flat in this panel, while others (like the light blue one on the right) are still taller? After this scaling, if we add all the basis functions together (literally), we get the black smooth. So cool! You will get to see more examples soon…</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/bases-and-smooth.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="overfitting" class="level2" data-number="36.8">
+<h2 data-number="36.8" class="anchored" data-anchor-id="overfitting"><span class="header-section-number">36.8</span> Overfitting</h2>
+<p>We’ve already mentioned several times that we want to avoid “overfitting”… so, what <em>is</em> this <strong>overfitting</strong> that we want to avoid?</p>
+<p>Basically, overfitting is when your model matches the patterns in the dataset to which it’s fit <em>too</em> well – modeling not only the underlying trends but also the noise!</p>
+<p>Underfitting is the opposite: when the model is too simple to capture the true patterns in the data.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://miro.medium.com/max/1400/1*iiPH0JyowvS3k12T0-W2HA.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If you want a short video explanation from a machine learning perspective:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EuBBz3bI-aA?si=EcBixjZfG-R3XOWE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+<p>From a machine learning point of view, checking a model’s predictive performance on testing data is a key to fighting overfitting; but in our statistical-inference focused approach, we don’t generally split our data for training and testing or rely on prediction accuracy as much as an outcome. But nevertheless, we can still use approaches related to the ones briefly mentioned in the video to protect against overfitting; this module we will see a bit about shrinkage and penalization.</p>
+</section>
+<section id="mgcvgam" class="level2" data-number="36.9">
+<h2 data-number="36.9" class="anchored" data-anchor-id="mgcvgam"><span class="header-section-number">36.9</span> <code>mgcv::gam()</code></h2>
+<p>SO…we want to be able to fit regression models with smooth terms in them, fitted in such a way as to protect against overfitting (without underfitting). To specify these models, we already have a hunch that we will need to know something about <strong>basis functions</strong> (there are many different types so we’ll need to pick one) and that there will be some other settings that we have to specify.</p>
+<p>We’re going to fit our GAMs using the most commonly used R package for the job, <code>mgcv</code> and its <code>gam()</code> function.</p>
+<p>Take note – although the first examples we’ll see will be Gaussian GAMs (like linear models, but with smooths - <del>L</del>INE conditions) – we will be able to fit <code>gam()</code>s of any family (linear, binary, count) depending on our response variable type.</p>
+<p>But to fit these models, we will need to make some choices.</p>
+<p>Let’s explore some of the choices related to the <em>type</em> and <em>dimension</em> of the basis to be used, interactively…to help us, I’ve made a little <a href="https://stacy-deruiter.shinyapps.io/smooth/">Shiny App</a></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_xKNFe-NmY0?si=fjpUj7m-bNWNPyQb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+<p>Use the app yourself! Choose one (or more) candidate predictor variable and to try to investigate:</p>
+<ul>
+<li>What choices of smooth type (<code>bs</code> input to <code>gam()</code>) and/or choice of <code>k</code> work <em>well</em> for your variable?</li>
+<li>What choices of smooth type and <code>k</code> can result in a smooth that seems <em>overfitted</em>?</li>
+<li>Can you get a model to <em>underfit</em>, or mismatch to data in some other way?</li>
+<li>What does shrinkage (<code>bs = _s</code> – the basis types that end with “s”) do?</li>
+</ul>
+<p>Access the app at: <a href="https://stacy-deruiter.shinyapps.io/smooth/" class="uri">https://stacy-deruiter.shinyapps.io/smooth/</a></p>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+This wasn’t covered in your exploration via the app, but based on the course so far and your instinct, which terms should I plan as smooth terms in a regression model? Choose all viable approaches.
+<div id="radio_YDTGKRJGMX" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_YDTGKRJGMX" value="answer"> <span>Just make them all smooths, as dataset size allows!</span></label><label><input type="radio" autocomplete="off" name="radio_YDTGKRJGMX" value="answer"> <span>Decide based on background knowledge about the scenario</span></label><label><input type="radio" autocomplete="off" name="radio_YDTGKRJGMX" value=""> <span>Decide based on exploratory graphics</span></label><label><input type="radio" autocomplete="off" name="radio_YDTGKRJGMX" value=""> <span>Only specify the <em>categorical</em> predictors as smooths. But, it's a good idea to use smooths for all categorical predictors because it saves parameters.</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for more explanation of the answers above.
+</button>
+<ul>
+<li>Yes, people definitely do just ‘make them all smooths’ (all quantitative predictors, that is) when the dataset is large enough. This is ok because the smooth can be, or very closely approximate, a straight line if that’s what the data support. It can be a waste of estimated parameters, though, which you may not be able to afford if your dataset is small.”</li>
+<li>As far as using data graphs to decide: You can only make data-driven choices about which terms to include as smooths IF you are not intending to do inference later (if prediction is your sole objective, or, if your analysis is just exploratory). An exception is if you fit a model, and then find that it fails assessment due to nonlinearity. In that case, the original model is useless, and there’s nothing to lose in fixing it by adding a smooth term.</li>
+<li>Planning your model carefully based on throughful consideration of the situation and context is always a good bet.</li>
+<li>Only quantitative predictors can be fitted as smooth terms. (The exception (kind-of) is random effects; there’s a syntax for specifying a random effect in a GAM that looks like a smooth. Stay tuned for details later.</li>
+</ul>
+</div>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+When does it make sense to use a cyclic basis (<code>bs = 'cc'</code>)?
+<div id="radio_QSDQDRIZSY" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_QSDQDRIZSY" value="answer"> <span>If the predictor is periodic (like day of the year, or an angle: something where the smallest and largest possible values are equivalent or adjacent).</span></label><label><input type="radio" autocomplete="off" name="radio_QSDQDRIZSY" value=""> <span>If the predictor has a lower bound at 0</span></label><label><input type="radio" autocomplete="off" name="radio_QSDQDRIZSY" value=""> <span>If the relationship between the predictor and response is very wiggly</span></label><label><input type="radio" autocomplete="off" name="radio_QSDQDRIZSY" value=""> <span>If the predictor is bounded between 0-1</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for more explanation of the answers above.
+</button>
+<p>A cyclic basis enforces that the values at the smallest and largest possible values of the predictor match (the function is continuous there). For non-periodic predictors, this restriction rarely makes any sense.</p>
+</div>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+How can you make a gam() <em>underfit</em>?
+<div id="radio_BFJLYYJDSQ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BFJLYYJDSQ" value="answer"> <span>Choosing k too small</span></label><label><input type="radio" autocomplete="off" name="radio_BFJLYYJDSQ" value=""> <span>Choosing k just right</span></label><label><input type="radio" autocomplete="off" name="radio_BFJLYYJDSQ" value=""> <span>Choosing k too large</span></label>
+</div>
+Which basis types did you find tended to work best at matching trends you saw in the data without apparent over- or underfitting?
+<div id="radio_RAKZRZUPBR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_RAKZRZUPBR" value=""> <span>Most of them work well, but the 'cs' basis is to be avoided at all costs.</span></label><label><input type="radio" autocomplete="off" name="radio_RAKZRZUPBR" value=""> <span>Only the cyclic ('cc') basis is appropriate for inferential statistics.</span></label><label><input type="radio" autocomplete="off" name="radio_RAKZRZUPBR" value=""> <span>The 'cs' and 'cr' bases always outperform the others.</span></label><label><input type="radio" autocomplete="off" name="radio_RAKZRZUPBR" value=""> <span>The 'tp' and 'ts' bases always outperform the others.</span></label><label><input type="radio" autocomplete="off" name="radio_RAKZRZUPBR" value="answer"> <span>This is hard to answer, since almost all of them actually seemed to work pretty well</span></label>
+</div>
+</div>
+</div>
+<div class="webex-solution">
+<button>
+Click for more explanation of the answers above.
+</button>
+<p>Let it be a source of comfort that regardless of the basis type you choose, in many cases, it will work just fine. There are special situations where the choice really matters, but often it’s true that many of the options will work perfectly well.</p>
+<p>In addition to the options you looked at, there are other fancier options available for special situations (for example, geospatial modeling and modeling interactions between categorical predictors and smooth terms). We won’t get into those in this short module, but may see them in some later examples at the end of the course. For now, remember that either a thin-plate shrinkage basis (<code>bs = 'ts'</code>) or a shrinkage cubic regression spline basis (<code>bs = 'cs'</code>) are pretty good general defaults.</p>
+</div>
+</section>
+<section id="gam-formula-syntax" class="level2" data-number="36.10">
+<h2 data-number="36.10" class="anchored" data-anchor-id="gam-formula-syntax"><span class="header-section-number">36.10</span> <code>gam()</code> formula syntax</h2>
+<p>Now that we have some idea what basis functions are and what <code>k</code> means, let’s talk about how to write a model formula for <code>gam()</code> to fit a GAM.</p>
+<p>In the formula for a GAM fitted in <code>gam()</code>, the function <code>s()</code> specifies a smooth. <code>s</code> has inputs:</p>
+<ul>
+<li>variable name(s)</li>
+<li><code>k</code> (see <code>?choose.k</code> in R for more info, if what you learn here isn’t enough!)</li>
+<li><code>bs</code> the basis type</li>
+<li><code>by</code> used when you want a smooth that interacts with a categorical predictor</li>
+</ul>
+<p>So a call to <code>gam()</code> might look something like:</p>
+<p><code>gam(response ~ non_smooth_predictor + categorical_moderator +</code> <code>s(smooth_predictor1, bs = ___, k = __) +</code> <code>s(smooth_interacting_predictor, bs = ___, k = ___, by = categorical_moderator) +</code> <code>other_categorical_predictor + ..., ...)</code></p>
+<p>Notice a couple things:</p>
+<ul>
+<li>We can include predictors that are <em>not</em> being modeled with smooth terms just like in previous models</li>
+<li>the <code>by</code> input to a smooth specifies a categorical variable that <em>interacts</em> with the smooth term, effectively estimating a different smooth for each level of the categorical variable. If you do this, you <em>also</em> need to include the categorical predictor as a “normal” predictor too.</li>
+<li>You will choose values of <code>bs</code> the basis type, and <code>k</code> the basis dimension</li>
+</ul>
+<p>How will we make these choices? Based on your exploration already, you may have some idea. Here are some tips…</p>
+<section id="choosing-a-basis-dimension" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-a-basis-dimension">Choosing a basis dimension</h3>
+<p>For general use, “cs” and “ts” are good defaults. They are both “shrinkage” bases which means that if appropriate the smooth can shrink down to nothing – a flat line with 0 slope. This is one way to help guard against overfitting.</p>
+</section>
+<section id="choosing-k" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-k">Choosing k</h3>
+<p>Choosing a smaller k guards against overfitting.</p>
+<p>Choosing k too large may mean the model takes longer to fit or maybe even overfits.</p>
+<p>the <code>mgcv</code> documentation says, (helpfully!) “k must be chosen: the defaults are essentially arbitrary.” Ahhh, so how do we choose? The documentation also states,</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>[k] should be chosen to be large enough that you are reasonably sure of having enough degrees of freedom to represent the underlying ‘truth’ reasonably well, but small enough to maintain reasonable computational efficiency. Clearly ‘large’ and ‘small’ are dependent on the particular problem being addressed.</p>
+</blockquote>
+</blockquote>
+<p>Hmmm, super helpful…</p>
+<p>Basically, if k is in a reasonable range it should work. If it’s too large, you are wasting parameters and maybe computation time, and may even get errors if you don’t have enough data to estimate all those parameters. But if using our suggested default settings and the <code>gam()</code> function, the model still probably won’t overfit. Sometimes choosing k small (like 3-6 or so) is a way of limiting the possible wiggliness of a smooth, when you have theoretical reason to believe the true relationship just couldn’t be that wiggly. But if lots and lots of ups and downs are plausible and the dataset is big, bump k up.</p>
+<p>Roughly, you estimate k model parameters to fit your smooth term, and it can have around k ups and downs in it (neither of these is exact, but good enough to have a general idea of model size and make decent choices of k).</p>
+</section>
+</section>
+<section id="n15" class="level2" data-number="36.11">
+<h2 data-number="36.11" class="anchored" data-anchor-id="n15"><span class="header-section-number">36.11</span> n/15?</h2>
+<p>Previously, we’ve used the n/15 or m/15 rule to estimate about how many parameters we can reasonably estimate, given the size of our dataset.</p>
+<p>Those constraints still apply, and the larger k you choose, the more parameters you’re estimating!</p>
+<p>So take care: like categorical predictors with many levels, smooth terms can require <em>a lot</em> of parameters to be estimated and thus require quite a bit of data!</p>
+</section>
+<section id="random-effects" class="level2" data-number="36.12">
+<h2 data-number="36.12" class="anchored" data-anchor-id="random-effects"><span class="header-section-number">36.12</span> Random Effects</h2>
+<p><code>gam()</code> can also easily fit models with simple (not nested) random effects.</p>
+<p>The syntax is to add to the model formula: <code>s(random_effect_variable_name, bs = 're')</code>.</p>
+<p>The ‘re’ basis type is <em>specifically for random effects</em>. Your random effect variable must be categorical, and must be of <code>factor()</code> type.</p>
+<p>So if we were modeling <code>mass</code> as a smooth function of <code>height</code> with a random effect of <code>species</code>, we might write: <code>gam(mass ~ s(height, bs = 'cs', k = 7) + s(species, bs = 're'), data = my_datset)</code>.</p>
+<p>Not that for the ‘re’ basis only, there’s no need to specify <code>k</code>.</p>
+</section>
+<section id="gam-options" class="level2" data-number="36.13">
+<h2 data-number="36.13" class="anchored" data-anchor-id="gam-options"><span class="header-section-number">36.13</span> <code>gam()</code> Options</h2>
+<p>In fitting a <code>gam()</code> there are a few more methods and options to consider:</p>
+<ul>
+<li>the <code>method</code> input to <code>gam()</code>:
+<ul>
+<li><del><code>method = 'GCV.Cp'</code></del></li>
+<li><del><code>method = 'REML'</code></del></li>
+<li><code>method = 'ML'</code> (we choose this one because it’s the best option if you plan to do inference later on using hypothesis tests)</li>
+</ul></li>
+<li><code>select = TRUE</code> (or <del><code>FALSE</code></del>) This is similar to using a shrinkage basis, but applies for <em>all</em> smooth terms in a model. (So using <code>bs = 'cs'</code> or <code>bs = 'tp'</code> with this is a bit redundant, but doesn’t seem to cause problems; and you want this option if you are using other bases, like ‘re’ or ‘cc’.)</li>
+</ul>
+</section>
+<section id="snow-data" class="level2" data-number="36.14">
+<h2 data-number="36.14" class="anchored" data-anchor-id="snow-data"><span class="header-section-number">36.14</span> Snow Data</h2>
+<p>OK, that first bat example got us thinking a bit about the kinds of trends we might model with a GAM, and then we took in a lot of abstract information about GAMs.</p>
+<p>Now, let’s learn a bit how GAMs actually work in practice, with an example. We’ll use a different dataset; this time our case study is data collected by the: <a href="https://www.ncdc.noaa.gov/cdo-web/search">GRR weather station</a> at the Grand Rapids airport. <a href="https://www.ncei.noaa.gov/pub/data/cdo/documentation/GHCND_documentation.pdf">Metadata</a> about this dataset is also available online.</p>
+<p>We can read in and do some minimal data prep via:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>grweather <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://sldr.netlify.app/data/grr-weather-metric.csv'</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(SNOW, TMIN, DATE, TSUN) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">MONTH =</span> lubridate<span class="sc">::</span><span class="fu">month</span>(DATE),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">DAY =</span> lubridate<span class="sc">::</span><span class="fu">yday</span>(DATE),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">YEAR =</span> lubridate<span class="sc">::</span><span class="fu">year</span>(DATE),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">WEEK =</span> lubridate<span class="sc">::</span><span class="fu">isoweek</span>(DATE),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>         <span class="co"># this new variable will be the snow one day ago</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">PREV.SNOW =</span> <span class="fu">lag</span>(SNOW)) <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Variables in the dataset are now:</p>
+<ul>
+<li><code>DATE</code>, <code>MONTH</code> of the year, <code>DAY</code> of the year (1-365), <code>WEEK</code> of the year (1-52)</li>
+<li>Amount of <code>SNOW</code> in millimeters</li>
+<li>Amount of snow the previous day: <code>PREV.SNOW</code></li>
+<li><code>TMIN</code>, minimum temperature in degrees Celsius</li>
+<li><code>TSUN</code>, daily total sunshine in minutes</li>
+</ul>
+<div class="webex-check webex-box">
+<div class="cell" data-layout-align="center">
+Which of the variables in this dataset might be considered to be periodic? Choose all correct answers.
+<div id="radio_PPXFGWPSNR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_PPXFGWPSNR" value=""> <span><code>SNOW</code></span></label><label><input type="radio" autocomplete="off" name="radio_PPXFGWPSNR" value=""> <span><code>TMIN</code></span></label><label><input type="radio" autocomplete="off" name="radio_PPXFGWPSNR" value="answer"> <span><code>DAY</code></span></label><label><input type="radio" autocomplete="off" name="radio_PPXFGWPSNR" value=""> <span><code>DATE</code></span></label><label><input type="radio" autocomplete="off" name="radio_PPXFGWPSNR" value=""> <span><code>PREV.SNOW</code></span></label><label><input type="radio" autocomplete="off" name="radio_PPXFGWPSNR" value="answer"> <span><code>MONTH</code></span></label><label><input type="radio" autocomplete="off" name="radio_PPXFGWPSNR" value="answer"> <span><code>WEEK</code></span></label><label><input type="radio" autocomplete="off" name="radio_PPXFGWPSNR" value=""> <span><code>TSUN</code></span></label>
+</div>
+</div>
+</div>
+<p>Again, let’s explore the data a little bit. There are definitely some nonlinear, non-monotonic trends here, as you might guess – no huge surprises, but at least the patterns we see make sense…</p>
+<p><strong>You might ask why we’re exploring the data before planning our modeling approach. Good question!</strong></p>
+<p><em>This is definitely “night science” type work, where our goal is not to do inference…</em></p>
+<p><em>but to learn what GAMs are all about.</em></p>
+<p>So getting very familiar with the data first of all makes sense.</p>
+<p>As with the bat data, take a peek! Some graphs are suggested for you in the “hints,” but you are invited to make your own.</p>
+<div class="cell" data-layout-align="center" data-exercise="snow-figs">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InNub3ctZmlncyJ9LCJjb2RlIjoiIn0=
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="snow-figs">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hints and ideas:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(SNOW <span class="sc">~</span> DATE, <span class="at">data =</span> grweather, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(SNOW <span class="sc">~</span> <span class="fu">factor</span>(MONTH), <span class="at">data =</span> grweather, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(SNOW <span class="sc">~</span> TMIN, <span class="at">data =</span> grweather, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(SNOW <span class="sc">~</span> TSUN <span class="sc">|</span> <span class="fu">cut_width</span>(TMIN, <span class="at">width =</span> <span class="dv">5</span>), <span class="at">data =</span> grweather, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(SNOW <span class="sc">~</span> PREV.SNOW <span class="sc">|</span> <span class="fu">cut_width</span>(TMIN, <span class="at">width =</span> <span class="dv">5</span>), <span class="at">data =</span> grweather, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(SNOW <span class="sc">~</span> DAY, <span class="at">data =</span> grweather, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="gam-example---snow" class="level2" data-number="36.15">
+<h2 data-number="36.15" class="anchored" data-anchor-id="gam-example---snow"><span class="header-section-number">36.15</span> GAM Example - Snow</h2>
+<div class="cell" data-layout-align="center" data-exercise="snow-gam">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6InNub3ctZ2FtIn0sImNvZGUiOiJcbmxpYnJhcnkobWdjdilcbnNub3cuZ2FtIDwtIGdhbShTTk9XIH4gcyhEQVksIGsgPSAyMDAsIGJzID0gJ2NjJykgK1xuICAgICAgICAgICAgICAgIHMoVE1JTiwgayA9IDUsIGJzID0gJ3JlJykgK1xuICAgICAgICAgICAgICAgIHMoWUVBUiwgayA9IDUsIGJzID0gJ2NjJykgKyBcbiAgICAgICAgICAgICAgICAgIFBSRVYuU05PVyxcbiAgICAgICAgICAgICAgZGF0YSA9IGdyd2VhdGhlcixcbiAgICAgICAgICAgICAgbWV0aG9kID0gJ01MJywgXG4gICAgICAgICAgICAgIHNlbGVjdCA9IFRSVUUpXG5cbnN1bW1hcnkoc25vdy5nYW0pIn0=
+</script>
+</div>
+</div>
+<p>Notice the options that were chosen above.</p>
+<p>Try running the code. <strong>There are three less-than-ideal choices;</strong> can you spot them and fix them?</p>
+<p>(With sensible choices, it will run without errors very quickly.)</p>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="snow-gam">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A Solution:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>snow.gam <span class="ot">&lt;-</span> <span class="fu">gam</span>(SNOW <span class="sc">~</span> <span class="fu">s</span>(DAY, <span class="at">k =</span> <span class="dv">20</span>, <span class="at">bs =</span> <span class="st">'cc'</span>) <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                <span class="fu">s</span>(TMIN, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">bs =</span> <span class="st">'cs'</span>) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">s</span>(YEAR, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">bs =</span> <span class="st">'cs'</span>) <span class="sc">+</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                  PREV.SNOW,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> grweather,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">'ML'</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">select =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(snow.gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>There could be other ok solutions too - it doesn’t have to be “cs.”</p>
+<p>But the basis type should <em>not</em> be random effect (“re”) for a quantitative predictor…</p>
+<p>or cyclic (“cc”) for a non-periodic one!</p>
+<p>We need not choose 20 exactly for k for <code>DAY</code>, but 200 is ALOT and takes a pretty LONG time to run (although it doesn’t seem to actually overfit much).</p>
+</div>
+</div>
+</div>
+</div>
+<p>Whoohoo! We did it! Well…now what?</p>
+</section>
+<section id="model-assessment" class="level2" data-number="36.16">
+<h2 data-number="36.16" class="anchored" data-anchor-id="model-assessment"><span class="header-section-number">36.16</span> Model Assessment</h2>
+<ul>
+<li>Conditions (for family used) must be met: <del>L</del>INE <em>or</em> <del>L</del>I, mean-variance (Basically, same as it ever was…but, of course, with no linearity constraint for smooth predictors.)</li>
+<li>All conditions must be checked just as for <code>(g)lm(mTMB)()</code> models we’ve worked with before - except linearity!</li>
+</ul>
+</section>
+<section id="whats-next" class="level2" data-number="36.17">
+<h2 data-number="36.17" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">36.17</span> What’s next?</h2>
+<p>Clearly, we need to understand not only how to specify and fit GAMs, but also how to interpret the fitted model, make inferences, and of course make prediction plots. Prediction plots are incredibly useful in this case, because just staring at a set of lots and lots of scaling coefficients for each smooth is nearly impossible to make sense of! On the other hand, a prediction plot shows us what the model says the predictor-response relationship looks like much more clearly.</p>
+<p>That said, I can’t resist - let’s peek at an example prediction plot to see what we have wrought.</p>
+<div class="cell" data-layout-align="center" data-exercise="gam-pred" data-envir="snow-gam">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InNub3ctZ2FtIiwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOiJnYW0tcHJlZCJ9LCJjb2RlIjoiXG5zbm93X3ByZWRzIDwtIGdncHJlZGljdChzbm93LmdhbSwgdGVybXMgPSAnREFZJylcbiMgY2hlY2sgd2hhdCB2YWx1ZXMgb2YgXCJwcmVkaWN0b3JzIG5vdCBzaG93blwiIGFyZVxuIyBub3RlLCBvdXRzaWRlIGEgdHV0b3JpYWwganVzdCBydW5uaW5nIFxuIyBzbm93X3ByZWRzIFxuIyB3aWxsIHdvcmshXG5hdHRyKHNub3dfcHJlZHMsICdjb25zdGFudC52YWx1ZXMnKVxucGxvdChzbm93X3ByZWRzKSB8PlxuICBnZl9sYWJzKHggPSAnRGF5IG9mIFllYXInLCB5ID0gJ1Nub3dmYWxsIChtbSknKSJ9
+</script>
+</div>
+</div>
+<p>Notice: A) Cool! but also B) these predictions are for all 365 days of the year, but holding the temperature constant at about 5 degrees Celsius (41 Fahrenheit).</p>
+<p>Ugh - not realistic for summer OR snowy weather.</p>
+<p>We could at least pick something below freezing…even though there are still issues there…or what if we asked for a range of temperatures?</p>
+<div class="cell" data-layout-align="center" data-exercise="gam-pred2" data-envir="snow-gam">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6InNub3ctZ2FtIiwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOiJnYW0tcHJlZDIifSwiY29kZSI6InNub3dfcHJlZHMyIDwtIGdncHJlZGljdChzbm93LmdhbSwgdGVybXMgPSBjKCdEQVknLCAnVE1JTicpKVxucGxvdChzbm93X3ByZWRzMikgfD5cbiAgZ2ZfbGFicyh4ID0gJ0RheSBvZiBZZWFyJywgeSA9ICdTbm93ZmFsbCAobW0pJykifQ==
+</script>
+</div>
+</div>
+<p>Still not at all perfect, but it’s not because it’s a GAM - it’s because there are combinations of predictor values (freezing summer days and hot winter days) that are just about outright impossible. At least this second attempt lets us see predictions for both cold winter days and hotter summer ones…</p>
+<p>OK, more work on interpretation and practice is coming in the next section - see you there!</p>
+
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImRwbHlyIiwidGlkeXIiLCJyZWFkciIsInJlYWR4bCIsInN0cmluZ3IiLCJnZ3Bsb3QyIiwiZ2dmb3JtdWxhIiwibWdjdiIsIm1vc2FpYyIsImNhciIsIkRIQVJNYSIsImx1YnJpZGF0ZSJdLCJyZXBvcyI6W119LCJyZW5kZXJfZGYiOiJkZWZhdWx0In0=
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItNi1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzYgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzYsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzYuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici01IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNSA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici01LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNSwge30pO1xuX3dlYnJfZmVlZGJhY2tfNSA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfNS5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTQiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl80ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTQtY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV80ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl80LCB7fSk7XG5fd2Vicl9mZWVkYmFja180ID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV80LmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItMy1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzMgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzMsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzMuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMiA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici0yLWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMiwge30pO1xuX3dlYnJfZmVlZGJhY2tfMiA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfMi5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici1wcmVsdWRlIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoid2ViUk9qcyA9IHtcbiAgY29uc3QgeyBXZWJSLCBDaGFubmVsVHlwZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZS5XZWJSO1xuICBjb25zdCB7XG4gICAgV2ViUkV2YWx1YXRvcixcbiAgICBXZWJSRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoXG4gIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHN0YXR1c0NvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1zdGF0dXNcIik7XG4gIGNvbnN0IGluZGljYXRvckNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGluZGljYXRvckNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKFwiZC1ub25lXCIpO1xuXG4gIGxldCBzdGF0dXNUZXh0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICBzdGF0dXNUZXh0LmNsYXNzTGlzdCA9IFwiZXhlcmNpc2UtbG9hZGluZy1kZXRhaWxzXCI7XG4gIHN0YXR1c1RleHQgPSBzdGF0dXNDb250YWluZXIuYXBwZW5kQ2hpbGQoc3RhdHVzVGV4dCk7XG4gIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5pdGlhbGlzZWA7XG5cbiAgLy8gSG9pc3QgaW5kaWNhdG9yIG91dCBmcm9tIGZpbmFsIHNsaWRlIHdoZW4gcnVubmluZyB1bmRlciByZXZlYWxcbiAgY29uc3QgcmV2ZWFsU3RhdHVzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgLmV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpZiAocmV2ZWFsU3RhdHVzKSB7XG4gICAgcmV2ZWFsU3RhdHVzLnJlbW92ZSgpO1xuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsID4gLnNsaWRlc1wiKS5hcHBlbmRDaGlsZChyZXZlYWxTdGF0dXMpO1xuICB9XG5cbiAgLy8gTWFrZSBhbnkgcmV2ZWFsIHNsaWRlcyB3aXRoIGxpdmUgY2VsbHMgc2Nyb2xsYWJsZVxuICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFwiLnJldmVhbCAuZXhlcmNpc2UtY2VsbFwiKS5mb3JFYWNoKChlbCkgPT4ge1xuICAgIGVsLmNsb3Nlc3QoJ3NlY3Rpb24uc2xpZGUnKS5jbGFzc0xpc3QuYWRkKFwic2Nyb2xsYWJsZVwiKTtcbiAgfSlcblxuICAvLyB3ZWJSIHN1cHBsZW1lbnRhbCBkYXRhIGFuZCBvcHRpb25zXG4gIGNvbnN0IGRhdGFDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItZGF0YVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwidmZzLWZpbGVcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBmaWxlcyA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGZpbGVzQ29udGVudCkpO1xuXG4gIC8vIFVzZSBQb3N0TWVzc2FnZSBjaGFubmVsIGZvciBhc3luYyBjb21tdW5pY2F0aW9uXG4gIC8vIFdlIGRvIG5vdCBleHBlY3QgdG8gdGFrZSBuZXN0ZWQgcHJvbXB0IGlucHV0IGluIFF1YXJ0byBMaXZlIGNlbGxzXG4gIGRhdGEub3B0aW9ucy5jaGFubmVsVHlwZSA9IENoYW5uZWxUeXBlLlBvc3RNZXNzYWdlO1xuXG4gIC8vIEluaXRpYWxpc2Ugd2ViUiBhbmQgc2V0dXAgZm9yIFIgY29kZSBldmFsdWF0aW9uXG4gIGxldCB3ZWJSUHJvbWlzZSA9IChhc3luYyAod2ViUikgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICAvLyBJbnN0YWxsIHByb3ZpZGVkIGxpc3Qgb2YgcGFja2FnZXNcbiAgICAvLyBFbnN1cmUgd2ViUiBkZWZhdWx0IHJlcG8gaXMgaW5jbHVkZWRcbiAgICBkYXRhLnBhY2thZ2VzLnJlcG9zLnB1c2goXCJodHRwczovL3JlcG8uci13YXNtLm9yZ1wiKVxuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBcbiAgICAgICAgd2Vicjo6aW5zdGFsbChwa2csIHJlcG9zID0gcmVwb3MpXG4gICAgICAgIGxpYnJhcnkocGtnLCBjaGFyYWN0ZXIub25seSA9IFRSVUUpXG4gICAgICBgLCB7IGVudjoge1xuICAgICAgICBwa2c6IHBrZyxcbiAgICAgICAgcmVwb3M6IGRhdGEucGFja2FnZXMucmVwb3MsXG4gICAgICB9fSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgY29uc3QgYW5hbHlzaXMgPSBhd2FpdCB3ZWJSLkZTLmFuYWx5emVQYXRoKHBhdGgpO1xuICAgICAgICBpZiAoIWFuYWx5c2lzLmV4aXN0cykge1xuICAgICAgICAgIHRyeSB7XG4gICAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvcjogXCIke2UubWVzc2FnZX1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9KShuZXcgV2ViUihkYXRhLm9wdGlvbnMpKTtcblxuICAvLyBLZWVwIHRyYWNrIG9mIGluaXRpYWwgT0pTIGJsb2NrIHJlbmRlclxuICBjb25zdCByZW5kZXJlZE9qcyA9IHt9O1xuXG4gIGNvbnN0IHByb2Nlc3MgPSBhc3luYyAoY29udGV4dCwgaW5wdXRzKSA9PiB7XG4gICAgY29uc3Qgd2ViUiA9IGF3YWl0IHdlYlJQcm9taXNlO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICB3ZWJSUHJvbWlzZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiJ9XX0=
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvZ3JyLXdlYXRoZXItbWV0cmljLmNzdiIsImRhdGEvcHdkLmNzdiIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvcnNibDIwMTcwMzk1X3NpXzAwMy5jc3YiLCJkYXRhL0ZsaW50V2F0ZXJUZXN0SmFuTWFyMjAxNi5jc3YiLCJkYXRhL1Byb2ZFdmFsdG5zQmVhdXR5UHVibGljLmNzdiIsImRhdGEvRUlBcHJvcGRhdGEuY3N2IiwiZGF0YS9icmlkZ2VzLmNzdiIsImRhdGEvenNoYWwuY3N2IiwiZGF0YS9nYXBtaW5kZXJfY2xlYW4uY3N2IiwiZGF0YS9mcm9nLWFibm9ybWFsaXRpZXMuY3N2IiwiZGF0YS9ib25vYm9fZmFjZXMuY3N2IiwiZGF0YS9iZWUtdmlydXMuY3N2Il0=
+</script>
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./hier2.html" class="pagination-link" aria-label="Hierarchical Models - Interpretation &amp; Prediction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Hierarchical Models - Interpretation &amp; Prediction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="./cclicense.html">
+<p>License</p>
+</a>
+  </li>  
+</ul>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stacyderuiter/data545-tutorials/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/stacyderuiter/data545-tutorials/edit/main/gams1.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
