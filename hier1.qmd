@@ -6,8 +6,6 @@ webr:
   packages:
     - dplyr
     - tidyr
-    - readr
-    - readxl
     - stringr
     - ggplot2
     - ggformula

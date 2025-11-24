@@ -6,15 +6,11 @@ webr:
   packages:
     - dplyr
     - tidyr
-    - readr
-    - readxl
     - stringr
     - ggplot2
     - ggformula
     - mgcv
     - mosaic
-    - car
-    - DHARMa
     - lubridate
   cell-options:
     autorun: false
@@ -30,8 +26,6 @@ library(tidyverse)
 library(mgcv)
 library(ggformula)
 library(ggeffects)
-library(readxl)
-library(DHARMa)
 library(lubridate)
 
 theme_set(theme_bw(base_size=16))
@@ -59,8 +53,7 @@ snow.gam <- gam(SNOW ~ s(DAY, k = 20, bs = 'cc') +
               method = 'ML', 
               select = TRUE)
 
-bats <- #read_csv('https://ndownloader.figshare.com/files/9348010')
-  read.csv("data/rsbl20170395_si_003.csv")
+bats <- read.csv("data/rsbl20170395_si_003.csv")
 ```
 
 ```{webr}
@@ -75,10 +68,8 @@ bats <- #read_csv('https://ndownloader.figshare.com/files/9348010')
 
 
 library(tidyverse)
-library(glmmTMB)
 library(ggformula)
 library(ggeffects)
-library(DHARMa)
 library(mgcv)
 library(lubridate)
 
@@ -89,8 +80,7 @@ knitr::opts_chunk$set(
   fig.align = "center",
   fig.width = 6, fig.height = 2.5)
 
-grweather <- read.csv('data/grr-weather-metric.csv',
-         show_col_types = FALSE) |>
+grweather <- read.csv('data/grr-weather-metric.csv') |>
     select(SNOW, TMIN, DATE, TSUN) |>
   mutate(MONTH = lubridate::month(DATE),
          DAY = lubridate::yday(DATE),
@@ -108,8 +98,7 @@ snow.gam <- gam(SNOW ~ s(DAY, k = 20, bs = 'cc') +
               method = 'ML', 
               select = TRUE)
 
-bats <- #read_csv('https://ndownloader.figshare.com/files/9348010')
-  read.csv("data/rsbl20170395_si_003.csv")
+bats <- read.csv('data/rsbl20170395_si_003.csv')
 ```
 
 ## Section Learning Outcomes
@@ -229,8 +218,6 @@ Variables in the dataset include:
 Let's try exploring this dataset a bit to see what kinds of nonlinear relationships are present between the response variable `migration` and some predictors describing the environmental conditions. Remember, the study authors concluded that bats chose to depart on their migrations when the wind speed, direction, and air pressure were just right. But there may also be other stuff going on in the data -- the approach the authors used to get their conclusions was very unlike what we'd use.
 
 In the block below, there are some "hints" of things you might try, but feel free to get creative, too! You'll likely need to prep the data a bit by grouping observations and computing a proportion migrating for each group, in order to really see what is going on.
-
-
 
 ```{webr}
 #| exercise: bat-plots
