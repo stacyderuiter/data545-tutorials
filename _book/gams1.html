@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./gams2.html" rel="next">
 <link href="./hier2.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -553,6 +553,29 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Introduction</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gams2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Assessment &amp; Interpretation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false">
+ <span class="menu-text">Generalized Estimating Equations (GEEs)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gees.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Generalized Estimating Equations (GEEs)</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -914,8 +937,8 @@ Hints and ideas:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 This wasn’t covered in your exploration via the app, but based on the course so far and your instinct, which terms should I plan as smooth terms in a regression model? Choose all viable approaches.
-<div id="radio_GVFRRNAHMV" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_GVFRRNAHMV" value=""> <span>Only specify the <em>categorical</em> predictors as smooths. But, it's a good idea to use smooths for all categorical predictors because it saves parameters.</span></label><label><input type="radio" autocomplete="off" name="radio_GVFRRNAHMV" value=""> <span>Decide based on exploratory graphics</span></label><label><input type="radio" autocomplete="off" name="radio_GVFRRNAHMV" value="answer"> <span>Just make them all smooths, as dataset size allows!</span></label><label><input type="radio" autocomplete="off" name="radio_GVFRRNAHMV" value="answer"> <span>Decide based on background knowledge about the scenario</span></label>
+<div id="radio_FYKPUTAUST" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_FYKPUTAUST" value=""> <span>Decide based on exploratory graphics</span></label><label><input type="radio" autocomplete="off" name="radio_FYKPUTAUST" value=""> <span>Only specify the <em>categorical</em> predictors as smooths. But, it's a good idea to use smooths for all categorical predictors because it saves parameters.</span></label><label><input type="radio" autocomplete="off" name="radio_FYKPUTAUST" value="answer"> <span>Decide based on background knowledge about the scenario</span></label><label><input type="radio" autocomplete="off" name="radio_FYKPUTAUST" value="answer"> <span>Just make them all smooths, as dataset size allows!</span></label>
 </div>
 </div>
 </div>
@@ -933,8 +956,8 @@ Click for more explanation of the answers above.
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 When does it make sense to use a cyclic basis (<code>bs = 'cc'</code>)?
-<div id="radio_OCLGBXOKRB" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_OCLGBXOKRB" value=""> <span>If the predictor is bounded between 0-1</span></label><label><input type="radio" autocomplete="off" name="radio_OCLGBXOKRB" value=""> <span>If the predictor has a lower bound at 0</span></label><label><input type="radio" autocomplete="off" name="radio_OCLGBXOKRB" value="answer"> <span>If the predictor is periodic (like day of the year, or an angle: something where the smallest and largest possible values are equivalent or adjacent).</span></label><label><input type="radio" autocomplete="off" name="radio_OCLGBXOKRB" value=""> <span>If the relationship between the predictor and response is very wiggly</span></label>
+<div id="radio_GTXUHXFVXP" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_GTXUHXFVXP" value="answer"> <span>If the predictor is periodic (like day of the year, or an angle: something where the smallest and largest possible values are equivalent or adjacent).</span></label><label><input type="radio" autocomplete="off" name="radio_GTXUHXFVXP" value=""> <span>If the predictor has a lower bound at 0</span></label><label><input type="radio" autocomplete="off" name="radio_GTXUHXFVXP" value=""> <span>If the relationship between the predictor and response is very wiggly</span></label><label><input type="radio" autocomplete="off" name="radio_GTXUHXFVXP" value=""> <span>If the predictor is bounded between 0-1</span></label>
 </div>
 </div>
 </div>
@@ -947,12 +970,12 @@ Click for more explanation of the answers above.
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 How can you make a gam() <em>underfit</em>?
-<div id="radio_QGVHZTJGDJ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_QGVHZTJGDJ" value=""> <span>Choosing k just right</span></label><label><input type="radio" autocomplete="off" name="radio_QGVHZTJGDJ" value=""> <span>Choosing k too large</span></label><label><input type="radio" autocomplete="off" name="radio_QGVHZTJGDJ" value="answer"> <span>Choosing k too small</span></label>
+<div id="radio_JRTJZRLQKI" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_JRTJZRLQKI" value=""> <span>Choosing k just right</span></label><label><input type="radio" autocomplete="off" name="radio_JRTJZRLQKI" value=""> <span>Choosing k too large</span></label><label><input type="radio" autocomplete="off" name="radio_JRTJZRLQKI" value="answer"> <span>Choosing k too small</span></label>
 </div>
 Which basis types did you find tended to work best at matching trends you saw in the data without apparent over- or underfitting?
-<div id="radio_IPXIWCPWUY" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_IPXIWCPWUY" value="answer"> <span>This is hard to answer, since almost all of them actually seemed to work pretty well</span></label><label><input type="radio" autocomplete="off" name="radio_IPXIWCPWUY" value=""> <span>The 'cs' and 'cr' bases always outperform the others.</span></label><label><input type="radio" autocomplete="off" name="radio_IPXIWCPWUY" value=""> <span>Most of them work well, but the 'cs' basis is to be avoided at all costs.</span></label><label><input type="radio" autocomplete="off" name="radio_IPXIWCPWUY" value=""> <span>The 'tp' and 'ts' bases always outperform the others.</span></label><label><input type="radio" autocomplete="off" name="radio_IPXIWCPWUY" value=""> <span>Only the cyclic ('cc') basis is appropriate for inferential statistics.</span></label>
+<div id="radio_DLJSWFJYUW" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_DLJSWFJYUW" value=""> <span>The 'tp' and 'ts' bases always outperform the others.</span></label><label><input type="radio" autocomplete="off" name="radio_DLJSWFJYUW" value="answer"> <span>This is hard to answer, since almost all of them actually seemed to work pretty well</span></label><label><input type="radio" autocomplete="off" name="radio_DLJSWFJYUW" value=""> <span>Most of them work well, but the 'cs' basis is to be avoided at all costs.</span></label><label><input type="radio" autocomplete="off" name="radio_DLJSWFJYUW" value=""> <span>The 'cs' and 'cr' bases always outperform the others.</span></label><label><input type="radio" autocomplete="off" name="radio_DLJSWFJYUW" value=""> <span>Only the cyclic ('cc') basis is appropriate for inferential statistics.</span></label>
 </div>
 </div>
 </div>
@@ -1057,8 +1080,8 @@ Click for more explanation of the answers above.
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 Which of the variables in this dataset might be considered to be periodic? Choose all correct answers.
-<div id="radio_NCKBBINNNM" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_NCKBBINNNM" value="answer"> <span><code>MONTH</code></span></label><label><input type="radio" autocomplete="off" name="radio_NCKBBINNNM" value="answer"> <span><code>DAY</code></span></label><label><input type="radio" autocomplete="off" name="radio_NCKBBINNNM" value=""> <span><code>SNOW</code></span></label><label><input type="radio" autocomplete="off" name="radio_NCKBBINNNM" value=""> <span><code>PREV.SNOW</code></span></label><label><input type="radio" autocomplete="off" name="radio_NCKBBINNNM" value=""> <span><code>TMIN</code></span></label><label><input type="radio" autocomplete="off" name="radio_NCKBBINNNM" value="answer"> <span><code>WEEK</code></span></label><label><input type="radio" autocomplete="off" name="radio_NCKBBINNNM" value=""> <span><code>TSUN</code></span></label><label><input type="radio" autocomplete="off" name="radio_NCKBBINNNM" value=""> <span><code>DATE</code></span></label>
+<div id="radio_KPXDJUVSCR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_KPXDJUVSCR" value="answer"> <span><code>DAY</code></span></label><label><input type="radio" autocomplete="off" name="radio_KPXDJUVSCR" value=""> <span><code>PREV.SNOW</code></span></label><label><input type="radio" autocomplete="off" name="radio_KPXDJUVSCR" value=""> <span><code>DATE</code></span></label><label><input type="radio" autocomplete="off" name="radio_KPXDJUVSCR" value="answer"> <span><code>WEEK</code></span></label><label><input type="radio" autocomplete="off" name="radio_KPXDJUVSCR" value="answer"> <span><code>MONTH</code></span></label><label><input type="radio" autocomplete="off" name="radio_KPXDJUVSCR" value=""> <span><code>TSUN</code></span></label><label><input type="radio" autocomplete="off" name="radio_KPXDJUVSCR" value=""> <span><code>TMIN</code></span></label><label><input type="radio" autocomplete="off" name="radio_KPXDJUVSCR" value=""> <span><code>SNOW</code></span></label>
 </div>
 </div>
 </div>
@@ -1207,7 +1230,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvZ3JyLXdlYXRoZXItbWV0cmljLmNzdiIsImRhdGEvcHdkLmNzdiIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvcnNibDIwMTcwMzk1X3NpXzAwMy5jc3YiLCJkYXRhL0ZsaW50V2F0ZXJUZXN0SmFuTWFyMjAxNi5jc3YiLCJkYXRhL1Byb2ZFdmFsdG5zQmVhdXR5UHVibGljLmNzdiIsImRhdGEvRUlBcHJvcGRhdGEuY3N2IiwiZGF0YS9icmlkZ2VzLmNzdiIsImRhdGEvenNoYWwuY3N2IiwiZGF0YS9nYXBtaW5kZXJfY2xlYW4uY3N2IiwiZGF0YS9mcm9nLWFibm9ybWFsaXRpZXMuY3N2IiwiZGF0YS9ib25vYm9fZmFjZXMuY3N2IiwiZGF0YS9iZWUtdmlydXMuY3N2Il0=
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL2h5ZHJhdGlvbkRhdGEuY3N2IiwiZGF0YS91bml2ZXJzaXR5X3RlYWNoZXJzLmNzdiIsImRhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3giLCJkYXRhL2dyci13ZWF0aGVyLW1ldHJpYy5jc3YiLCJkYXRhL3B3ZC5jc3YiLCJkYXRhL0NTQUFsbGRhdGEueGxzeCIsImRhdGEvSGFEaXZlUGFyYW1ldGVycy5jc3YiLCJkYXRhL3JzYmwyMDE3MDM5NV9zaV8wMDMuY3N2IiwiZGF0YS9GbGludFdhdGVyVGVzdEphbk1hcjIwMTYuY3N2IiwiZGF0YS9Qcm9mRXZhbHRuc0JlYXV0eVB1YmxpYy5jc3YiLCJkYXRhL0VJQXByb3BkYXRhLmNzdiIsImRhdGEvYnJpZGdlcy5jc3YiLCJkYXRhL3pzaGFsLmNzdiIsImRhdGEvZ2FwbWluZGVyX2NsZWFuLmNzdiIsImRhdGEvZnJvZy1hYm5vcm1hbGl0aWVzLmNzdiIsImRhdGEvYm9ub2JvX2ZhY2VzLmNzdiIsImRhdGEvYmVlLXZpcnVzLmNzdiJd
 </script>
 </section>
 
@@ -1835,8 +1858,8 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./gams2.html" class="pagination-link" aria-label="Generalized Additive Models - Assessment &amp; Interpretation">
+        <span class="nav-page-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Assessment &amp; Interpretation</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

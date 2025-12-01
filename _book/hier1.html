@@ -563,6 +563,29 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Introduction</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gams2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Assessment &amp; Interpretation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false">
+ <span class="menu-text">Generalized Estimating Equations (GEEs)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gees.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Generalized Estimating Equations (GEEs)</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -861,8 +884,8 @@ Hint:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What do you think, based on the plot?
-<div id="radio_NJKVAMSIAS" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_NJKVAMSIAS" value="answer"> <span>We have clear evidence of dependence in the residuals (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_NJKVAMSIAS" value=""> <span>It looks like the residuals definitely don't have constant variance (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_NJKVAMSIAS" value=""> <span>There's a clear problem with linearity (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_NJKVAMSIAS" value=""> <span>The residual normality condition is violated (since all the ACF values at lags above one are way outside the confidence bounds).</span></label>
+<div id="radio_DJROWTZQAY" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_DJROWTZQAY" value=""> <span>There's a clear problem with linearity (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_DJROWTZQAY" value=""> <span>It looks like the residuals definitely don't have constant variance (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_DJROWTZQAY" value=""> <span>The residual normality condition is violated (since all the ACF values at lags above one are way outside the confidence bounds).</span></label><label><input type="radio" autocomplete="off" name="radio_DJROWTZQAY" value="answer"> <span>We have clear evidence of dependence in the residuals (since all the ACF values at lags above one are way outside the confidence bounds).</span></label>
 </div>
 </div>
 </div>
@@ -1049,8 +1072,8 @@ Solution:
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 How does the ACF look for the model with the random effect included?
-<div id="radio_JUJMNEZMAK" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_JUJMNEZMAK" value="answer"> <span>Noticably better, but…alas, still bad - condition is still not met.</span></label><label><input type="radio" autocomplete="off" name="radio_JUJMNEZMAK" value=""> <span>Better! We are good to go now and ready to interpret the results</span></label><label><input type="radio" autocomplete="off" name="radio_JUJMNEZMAK" value=""> <span>The ACF for the original linear model actually looks a bit better</span></label><label><input type="radio" autocomplete="off" name="radio_JUJMNEZMAK" value=""> <span>It was OK before, but now it's looking great</span></label>
+<div id="radio_CTNTSEEQAZ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_CTNTSEEQAZ" value=""> <span>The ACF for the original linear model actually looks a bit better</span></label><label><input type="radio" autocomplete="off" name="radio_CTNTSEEQAZ" value="answer"> <span>Noticably better, but…alas, still bad - condition is still not met.</span></label><label><input type="radio" autocomplete="off" name="radio_CTNTSEEQAZ" value=""> <span>It was OK before, but now it's looking great</span></label><label><input type="radio" autocomplete="off" name="radio_CTNTSEEQAZ" value=""> <span>Better! We are good to go now and ready to interpret the results</span></label>
 </div>
 </div>
 </div>
@@ -1153,8 +1176,8 @@ Solution:
 <h3 class="anchored" data-anchor-id="coefficients">Coefficients</h3>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-0f81e2300e1611f6bf8c" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-0f81e2300e1611f6bf8c">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11"],["(Intercept)","DepthAvg","TimeOfDayDay","TimeOfDayDusk","TimeOfDayNight","SonarA1","SonarB","SonarAMinKm.fill","SonarBMinKm.fill","SonarAPercOL.fill","SonarBPercOL.fill"],[0.2522,0.0005999999999999999,-0.0135,-0.0351,-0.0407,0.8446,-0.7865,0.0017,-0.0018,0.0001,0.007],[0.4293,0.0007,-0.0048,-0.0222,-0.0385,0.3841,-0.5357,0.0007,-0.0013,0.0163,0.0034],[0.7065,0,0.0045,0.0059,0.0045,0.5332,0.4682,0.0011,0.001,0.0361,0.0385],[0.7318,0,0.0042,0.0056,0.0042,0.5654,0.4481,0.0012,0.0009,0.0299,0.0319]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variable<\/th>\n      <th>lm() est.<\/th>\n      <th>RE model est.<\/th>\n      <th>lm SE<\/th>\n      <th>RE SE<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Variable","targets":1},{"name":"lm() est.","targets":2},{"name":"RE model est.","targets":3},{"name":"lm SE","targets":4},{"name":"RE SE","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-d780cf6fb323f44f19b2" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-d780cf6fb323f44f19b2">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11"],["(Intercept)","DepthAvg","TimeOfDayDay","TimeOfDayDusk","TimeOfDayNight","SonarA1","SonarB","SonarAMinKm.fill","SonarBMinKm.fill","SonarAPercOL.fill","SonarBPercOL.fill"],[0.2522,0.0005999999999999999,-0.0135,-0.0351,-0.0407,0.8446,-0.7865,0.0017,-0.0018,0.0001,0.007],[0.4293,0.0007,-0.0048,-0.0222,-0.0385,0.3841,-0.5357,0.0007,-0.0013,0.0163,0.0034],[0.7065,0,0.0045,0.0059,0.0045,0.5332,0.4682,0.0011,0.001,0.0361,0.0385],[0.7318,0,0.0042,0.0056,0.0042,0.5654,0.4481,0.0012,0.0009,0.0299,0.0319]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variable<\/th>\n      <th>lm() est.<\/th>\n      <th>RE model est.<\/th>\n      <th>lm SE<\/th>\n      <th>RE SE<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Variable","targets":1},{"name":"lm() est.","targets":2},{"name":"RE model est.","targets":3},{"name":"lm SE","targets":4},{"name":"RE SE","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>There’s no guarantee that the estimates of the <span class="math inline">\(\beta\)</span>s will be the same for a linear model and a corresponding random effect model. Their standard errors may vary, too, and although it’s not a rule, the SEs may often be biased <em>small</em> in the model without random effects, which means that if you used that no-RE model to draw conclusions, you might <em>wrongly</em> conclude there were real associations between some predictors and the response.</p>
@@ -1200,8 +1223,8 @@ rem_no_sonar  8 -14321.29</code></pre>
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 What do the BIC results tell us?
-<div id="radio_OWRWMORLLJ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_OWRWMORLLJ" value=""> <span>The models with the sonar predictors included fits a tiny bit better</span></label><label><input type="radio" autocomplete="off" name="radio_OWRWMORLLJ" value="answer"> <span>The model with the sonar predictors included fits a LOT better</span></label><label><input type="radio" autocomplete="off" name="radio_OWRWMORLLJ" value=""> <span>The model with the sonar predictors doesn't fit as well as the one without</span></label>
+<div id="radio_TDUPZSLAMT" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_TDUPZSLAMT" value="answer"> <span>The model with the sonar predictors included fits a LOT better</span></label><label><input type="radio" autocomplete="off" name="radio_TDUPZSLAMT" value=""> <span>The models with the sonar predictors included fits a tiny bit better</span></label><label><input type="radio" autocomplete="off" name="radio_TDUPZSLAMT" value=""> <span>The model with the sonar predictors doesn't fit as well as the one without</span></label>
 </div>
 </div>
 </div>
@@ -1264,7 +1287,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC03IiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvZ3JyLXdlYXRoZXItbWV0cmljLmNzdiIsImRhdGEvcHdkLmNzdiIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvcnNibDIwMTcwMzk1X3NpXzAwMy5jc3YiLCJkYXRhL0ZsaW50V2F0ZXJUZXN0SmFuTWFyMjAxNi5jc3YiLCJkYXRhL1Byb2ZFdmFsdG5zQmVhdXR5UHVibGljLmNzdiIsImRhdGEvRUlBcHJvcGRhdGEuY3N2IiwiZGF0YS9icmlkZ2VzLmNzdiIsImRhdGEvenNoYWwuY3N2IiwiZGF0YS9nYXBtaW5kZXJfY2xlYW4uY3N2IiwiZGF0YS9mcm9nLWFibm9ybWFsaXRpZXMuY3N2IiwiZGF0YS9ib25vYm9fZmFjZXMuY3N2IiwiZGF0YS9iZWUtdmlydXMuY3N2Il0=
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL2h5ZHJhdGlvbkRhdGEuY3N2IiwiZGF0YS91bml2ZXJzaXR5X3RlYWNoZXJzLmNzdiIsImRhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3giLCJkYXRhL2dyci13ZWF0aGVyLW1ldHJpYy5jc3YiLCJkYXRhL3B3ZC5jc3YiLCJkYXRhL0NTQUFsbGRhdGEueGxzeCIsImRhdGEvSGFEaXZlUGFyYW1ldGVycy5jc3YiLCJkYXRhL3JzYmwyMDE3MDM5NV9zaV8wMDMuY3N2IiwiZGF0YS9GbGludFdhdGVyVGVzdEphbk1hcjIwMTYuY3N2IiwiZGF0YS9Qcm9mRXZhbHRuc0JlYXV0eVB1YmxpYy5jc3YiLCJkYXRhL0VJQXByb3BkYXRhLmNzdiIsImRhdGEvYnJpZGdlcy5jc3YiLCJkYXRhL3pzaGFsLmNzdiIsImRhdGEvZ2FwbWluZGVyX2NsZWFuLmNzdiIsImRhdGEvZnJvZy1hYm5vcm1hbGl0aWVzLmNzdiIsImRhdGEvYm9ub2JvX2ZhY2VzLmNzdiIsImRhdGEvYmVlLXZpcnVzLmNzdiJd
 </script>
 </section>
 </section>

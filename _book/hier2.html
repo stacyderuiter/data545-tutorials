@@ -553,6 +553,29 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Introduction</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gams2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Generalized Additive Models - Assessment &amp; Interpretation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false">
+ <span class="menu-text">Generalized Estimating Equations (GEEs)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gees.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Generalized Estimating Equations (GEEs)</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -791,20 +814,20 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6
 <p>Considering the model given for the pilot whale dive data to answer the questions below.</p>
 <div class="cell" data-layout-align="center">
 What fixed effects are included in the model? (Choose all correct answers.)
-<div id="radio_RESGCDWQVA" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value="answer"> <span>interaction between <code>prev_buzzes</code> and <code>dive_state</code></span></label><label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value="answer"> <span><code>ODBA</code></span></label><label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value="answer"> <span><code>duration</code></span></label><label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value="answer"> <span><code>dive_state</code></span></label><label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value=""> <span><code>activity</code></span></label><label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value=""> <span><code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value="answer"> <span><code>prev_buzzes</code></span></label><label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value=""> <span><code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_RESGCDWQVA" value=""> <span>interaction between <code>individual</code> and <code>time_cat</code></span></label>
+<div id="radio_JLLMDEHWPM" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value=""> <span><code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value=""> <span><code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value="answer"> <span><code>dive_state</code></span></label><label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value="answer"> <span>interaction between <code>prev_buzzes</code> and <code>dive_state</code></span></label><label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value="answer"> <span><code>ODBA</code></span></label><label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value=""> <span><code>activity</code></span></label><label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value=""> <span>interaction between <code>individual</code> and <code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value="answer"> <span><code>duration</code></span></label><label><input type="radio" autocomplete="off" name="radio_JLLMDEHWPM" value="answer"> <span><code>prev_buzzes</code></span></label>
 </div>
 What random effect(s) are included in the model? Choose the one best answer.
-<div id="radio_JCZFZJRONR" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_JCZFZJRONR" value=""> <span><code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_JCZFZJRONR" value=""> <span><code>individual</code> nested within <code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_JCZFZJRONR" value=""> <span><code>time_cat</code> and <code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_JCZFZJRONR" value=""> <span><code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_JCZFZJRONR" value=""> <span><code>prev_buzzes</code> and <code>dive_state</code></span></label><label><input type="radio" autocomplete="off" name="radio_JCZFZJRONR" value="answer"> <span><code>time_cat</code> nested within <code>individual</code></span></label>
+<div id="radio_HMAERYDVGL" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_HMAERYDVGL" value="answer"> <span><code>time_cat</code> nested within <code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_HMAERYDVGL" value=""> <span><code>individual</code> nested within <code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_HMAERYDVGL" value=""> <span><code>time_cat</code> and <code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_HMAERYDVGL" value=""> <span><code>time_cat</code></span></label><label><input type="radio" autocomplete="off" name="radio_HMAERYDVGL" value=""> <span><code>individual</code></span></label><label><input type="radio" autocomplete="off" name="radio_HMAERYDVGL" value=""> <span><code>prev_buzzes</code> and <code>dive_state</code></span></label>
 </div>
 How many parameters have to be estimated to fit the model above?
-<div id="radio_LZCCPIJCXM" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_LZCCPIJCXM" value=""> <span>50</span></label><label><input type="radio" autocomplete="off" name="radio_LZCCPIJCXM" value="answer"> <span>16</span></label><label><input type="radio" autocomplete="off" name="radio_LZCCPIJCXM" value=""> <span>6</span></label><label><input type="radio" autocomplete="off" name="radio_LZCCPIJCXM" value=""> <span>14</span></label><label><input type="radio" autocomplete="off" name="radio_LZCCPIJCXM" value=""> <span>7</span></label><label><input type="radio" autocomplete="off" name="radio_LZCCPIJCXM" value=""> <span>4</span></label><label><input type="radio" autocomplete="off" name="radio_LZCCPIJCXM" value=""> <span>17</span></label><label><input type="radio" autocomplete="off" name="radio_LZCCPIJCXM" value=""> <span>some other number</span></label>
+<div id="radio_PIKEJLZLTB" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_PIKEJLZLTB" value=""> <span>7</span></label><label><input type="radio" autocomplete="off" name="radio_PIKEJLZLTB" value=""> <span>50</span></label><label><input type="radio" autocomplete="off" name="radio_PIKEJLZLTB" value=""> <span>17</span></label><label><input type="radio" autocomplete="off" name="radio_PIKEJLZLTB" value=""> <span>4</span></label><label><input type="radio" autocomplete="off" name="radio_PIKEJLZLTB" value=""> <span>6</span></label><label><input type="radio" autocomplete="off" name="radio_PIKEJLZLTB" value=""> <span>some other number</span></label><label><input type="radio" autocomplete="off" name="radio_PIKEJLZLTB" value="answer"> <span>16</span></label><label><input type="radio" autocomplete="off" name="radio_PIKEJLZLTB" value=""> <span>14</span></label>
 </div>
 What if we had included <code>individual</code> as a fixed effect instead? We estimated one parameter (the random effect variance) to include it as a random effect. How many parameters would we have had to estimate to do it as a fixed effect?
-<div id="radio_GHVGTMWKXY" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_GHVGTMWKXY" value="answer"> <span>13</span></label><label><input type="radio" autocomplete="off" name="radio_GHVGTMWKXY" value=""> <span>0</span></label><label><input type="radio" autocomplete="off" name="radio_GHVGTMWKXY" value=""> <span>14</span></label><label><input type="radio" autocomplete="off" name="radio_GHVGTMWKXY" value=""> <span>16</span></label><label><input type="radio" autocomplete="off" name="radio_GHVGTMWKXY" value=""> <span>some other number</span></label><label><input type="radio" autocomplete="off" name="radio_GHVGTMWKXY" value=""> <span>1</span></label><label><input type="radio" autocomplete="off" name="radio_GHVGTMWKXY" value=""> <span>2</span></label>
+<div id="radio_OPWPINVESV" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_OPWPINVESV" value=""> <span>some other number</span></label><label><input type="radio" autocomplete="off" name="radio_OPWPINVESV" value=""> <span>2</span></label><label><input type="radio" autocomplete="off" name="radio_OPWPINVESV" value=""> <span>0</span></label><label><input type="radio" autocomplete="off" name="radio_OPWPINVESV" value=""> <span>14</span></label><label><input type="radio" autocomplete="off" name="radio_OPWPINVESV" value=""> <span>1</span></label><label><input type="radio" autocomplete="off" name="radio_OPWPINVESV" value=""> <span>16</span></label><label><input type="radio" autocomplete="off" name="radio_OPWPINVESV" value="answer"> <span>13</span></label>
 </div>
 </div>
 </div>
@@ -872,12 +895,12 @@ Solution:
 <p>Considering the m/15 rule of thumb…</p>
 <div class="cell" data-layout-align="center">
 About how many parameters can we safely estimate with this dataset?
-<div id="radio_LGOFFYFIFX" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_LGOFFYFIFX" value=""> <span>6452</span></label><label><input type="radio" autocomplete="off" name="radio_LGOFFYFIFX" value=""> <span>395</span></label><label><input type="radio" autocomplete="off" name="radio_LGOFFYFIFX" value=""> <span>430</span></label><label><input type="radio" autocomplete="off" name="radio_LGOFFYFIFX" value=""> <span>5930</span></label><label><input type="radio" autocomplete="off" name="radio_LGOFFYFIFX" value=""> <span>522</span></label><label><input type="radio" autocomplete="off" name="radio_LGOFFYFIFX" value="answer"> <span>35</span></label>
+<div id="radio_AECRBOWAKQ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_AECRBOWAKQ" value="answer"> <span>35</span></label><label><input type="radio" autocomplete="off" name="radio_AECRBOWAKQ" value=""> <span>395</span></label><label><input type="radio" autocomplete="off" name="radio_AECRBOWAKQ" value=""> <span>6452</span></label><label><input type="radio" autocomplete="off" name="radio_AECRBOWAKQ" value=""> <span>5930</span></label><label><input type="radio" autocomplete="off" name="radio_AECRBOWAKQ" value=""> <span>430</span></label><label><input type="radio" autocomplete="off" name="radio_AECRBOWAKQ" value=""> <span>522</span></label>
 </div>
 So…are we estimating too many coefficients, or are we OK?
-<div id="radio_KDDPMBFSBA" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_KDDPMBFSBA" value=""> <span>We are really pushing our luck</span></label><label><input type="radio" autocomplete="off" name="radio_KDDPMBFSBA" value=""> <span>We are estimating too many by so much that we are doomed</span></label><label><input type="radio" autocomplete="off" name="radio_KDDPMBFSBA" value="answer"> <span>We should be fine</span></label>
+<div id="radio_DCTHVZRWGQ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_DCTHVZRWGQ" value=""> <span>We are really pushing our luck</span></label><label><input type="radio" autocomplete="off" name="radio_DCTHVZRWGQ" value="answer"> <span>We should be fine</span></label><label><input type="radio" autocomplete="off" name="radio_DCTHVZRWGQ" value=""> <span>We are estimating too many by so much that we are doomed</span></label>
 </div>
 </div>
 </div>
@@ -970,8 +993,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6Im1vZGVsLWZpdCIsImV2
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 Considering all the graphs, does our model pass assessment? Select ALL true statements.
-<div id="radio_RAARUUOHOY" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_RAARUUOHOY" value=""> <span>The ACF shows evidence of a major problem with residual dependence, so the model fails assessment.</span></label><label><input type="radio" autocomplete="off" name="radio_RAARUUOHOY" value="answer"> <span>The scaled residual plot doesn't show evidence of big issues with the mean-variance condition since the points are pretty evenly spread between 0-1.</span></label><label><input type="radio" autocomplete="off" name="radio_RAARUUOHOY" value=""> <span>The scaled residual plot shows evidence of a problem with the mean-variance condition, because the points are clustered at the left and right edges near Prob(Feeding) = 0 and are very sparse between Prob(Feeding) of 0.25 and 0.9.</span></label><label><input type="radio" autocomplete="off" name="radio_RAARUUOHOY" value="answer"> <span>In the ACF, there is some evidence of residual dependence, but it is kind of borderline. This model would probably give pretty reliable results, but if there is anything else we could try to further ensure independent residuals we should.</span></label><label><input type="radio" autocomplete="off" name="radio_RAARUUOHOY" value=""> <span>The ACF looks great! No evidence of any problems with the residual independence condition.</span></label><label><input type="radio" autocomplete="off" name="radio_RAARUUOHOY" value=""> <span>There is a clear linear trend in the final scatter plot, so the model fails the logit-linearity condition</span></label>
+<div id="radio_VLPRJFCQHQ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_VLPRJFCQHQ" value=""> <span>There is a clear linear trend in the final scatter plot, so the model fails the logit-linearity condition</span></label><label><input type="radio" autocomplete="off" name="radio_VLPRJFCQHQ" value="answer"> <span>The scaled residual plot doesn't show evidence of big issues with the mean-variance condition since the points are pretty evenly spread between 0-1.</span></label><label><input type="radio" autocomplete="off" name="radio_VLPRJFCQHQ" value=""> <span>The ACF shows evidence of a major problem with residual dependence, so the model fails assessment.</span></label><label><input type="radio" autocomplete="off" name="radio_VLPRJFCQHQ" value="answer"> <span>In the ACF, there is some evidence of residual dependence, but it is kind of borderline. This model would probably give pretty reliable results, but if there is anything else we could try to further ensure independent residuals we should.</span></label><label><input type="radio" autocomplete="off" name="radio_VLPRJFCQHQ" value=""> <span>The ACF looks great! No evidence of any problems with the residual independence condition.</span></label><label><input type="radio" autocomplete="off" name="radio_VLPRJFCQHQ" value=""> <span>The scaled residual plot shows evidence of a problem with the mean-variance condition, because the points are clustered at the left and right edges near Prob(Feeding) = 0 and are very sparse between Prob(Feeding) of 0.25 and 0.9.</span></label>
 </div>
 </div>
 </div>
@@ -1048,8 +1071,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJlbnZpciI6Im1vZGVsLWZpdCIsImV2
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 Summarize the relationship that exists between dive duration and probability of feeding, according to this model. (If you think the model didn’t pass assessment, pretend for now that it did an interpret the results accordingly.)
-<div id="radio_TATRCXLCBI" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_TATRCXLCBI" value=""> <span>When dive duration goes up, probability of feeding increases.</span></label><label><input type="radio" autocomplete="off" name="radio_TATRCXLCBI" value=""> <span>Our best estimate is that: Shorter dives below about 200 seconds have very low chances of being feeding dives, but the probability increases rapidly between 200-400 seconds duration so that almost all dives longer than 400 seconds are almost surely feeding dives. However, given the notable amount of uncertainty around this prediction, it is plausible that the probability of feeding doesn't really vary with dive duration; we can't draw firm conclusions.</span></label><label><input type="radio" autocomplete="off" name="radio_TATRCXLCBI" value=""> <span>As these predictions are made for fake data, no conclusions about the real world can be drawn.</span></label><label><input type="radio" autocomplete="off" name="radio_TATRCXLCBI" value="answer"> <span>Shorter dives below about 200 seconds have very low chances of being feeding dives, but the probability increases rapidly between 200-400 seconds duration so that almost all dives longer than 400 seconds are almost surely feeding dives.</span></label>
+<div id="radio_KMNQZTEWDL" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_KMNQZTEWDL" value=""> <span>When dive duration goes up, probability of feeding increases.</span></label><label><input type="radio" autocomplete="off" name="radio_KMNQZTEWDL" value=""> <span>As these predictions are made for fake data, no conclusions about the real world can be drawn.</span></label><label><input type="radio" autocomplete="off" name="radio_KMNQZTEWDL" value=""> <span>Our best estimate is that: Shorter dives below about 200 seconds have very low chances of being feeding dives, but the probability increases rapidly between 200-400 seconds duration so that almost all dives longer than 400 seconds are almost surely feeding dives. However, given the notable amount of uncertainty around this prediction, it is plausible that the probability of feeding doesn't really vary with dive duration; we can't draw firm conclusions.</span></label><label><input type="radio" autocomplete="off" name="radio_KMNQZTEWDL" value="answer"> <span>Shorter dives below about 200 seconds have very low chances of being feeding dives, but the probability increases rapidly between 200-400 seconds duration so that almost all dives longer than 400 seconds are almost surely feeding dives.</span></label>
 </div>
 </div>
 </div>
@@ -1171,8 +1194,8 @@ Disable this warning with 'allow.new.levels=TRUE'</code></pre>
 <div class="webex-check webex-box">
 <div class="cell" data-layout-align="center">
 Any ideas why the black ‘average individual’ does <em>not</em> look like it is in the middle in any sense?
-<div id="radio_DYOCNIPELB" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_DYOCNIPELB" value=""> <span>What do you mean it's not in the middle? It's clearly in the middle.</span></label><label><input type="radio" autocomplete="off" name="radio_DYOCNIPELB" value="answer"> <span>There are only 6-7 clearly distinguishalbe lines for 14 whales, so there must be 7-8 more others under the black one! Also, individuals may have very different numbers of dives, and one with more dives might affect the average more.</span></label><label><input type="radio" autocomplete="off" name="radio_DYOCNIPELB" value=""> <span>This is due to the nonlinearities introduced by using the logit link function</span></label><label><input type="radio" autocomplete="off" name="radio_DYOCNIPELB" value=""> <span>We must have made a mistake in our calculations.</span></label>
+<div id="radio_LCMJRMOXNB" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_LCMJRMOXNB" value=""> <span>What do you mean it's not in the middle? It's clearly in the middle.</span></label><label><input type="radio" autocomplete="off" name="radio_LCMJRMOXNB" value=""> <span>We must have made a mistake in our calculations.</span></label><label><input type="radio" autocomplete="off" name="radio_LCMJRMOXNB" value="answer"> <span>There are only 6-7 clearly distinguishalbe lines for 14 whales, so there must be 7-8 more others under the black one! Also, individuals may have very different numbers of dives, and one with more dives might affect the average more.</span></label><label><input type="radio" autocomplete="off" name="radio_LCMJRMOXNB" value=""> <span>This is due to the nonlinearities introduced by using the logit link function</span></label>
 </div>
 </div>
 </div>
@@ -1313,7 +1336,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC01IiwiaW5saW5lIjpmYWxzZSwibWV0
 </div>
 </div>
 <script type="vfs-file">
-WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL3VuaXZlcnNpdHlfdGVhY2hlcnMuY3N2IiwiZGF0YS8xRC1NZW1vcnkgTmFpdmUueGxzeCIsImRhdGEvZ3JyLXdlYXRoZXItbWV0cmljLmNzdiIsImRhdGEvcHdkLmNzdiIsImRhdGEvQ1NBQWxsZGF0YS54bHN4IiwiZGF0YS9IYURpdmVQYXJhbWV0ZXJzLmNzdiIsImRhdGEvcnNibDIwMTcwMzk1X3NpXzAwMy5jc3YiLCJkYXRhL0ZsaW50V2F0ZXJUZXN0SmFuTWFyMjAxNi5jc3YiLCJkYXRhL1Byb2ZFdmFsdG5zQmVhdXR5UHVibGljLmNzdiIsImRhdGEvRUlBcHJvcGRhdGEuY3N2IiwiZGF0YS9icmlkZ2VzLmNzdiIsImRhdGEvenNoYWwuY3N2IiwiZGF0YS9nYXBtaW5kZXJfY2xlYW4uY3N2IiwiZGF0YS9mcm9nLWFibm9ybWFsaXRpZXMuY3N2IiwiZGF0YS9ib25vYm9fZmFjZXMuY3N2IiwiZGF0YS9iZWUtdmlydXMuY3N2Il0=
+WyJkYXRhL2hlaWdodHMuZHRhIiwiZGF0YS9ncmF0aXR1ZGUtZXhwZXJpbWVudC5jc3YiLCJkYXRhL01hbW1hbE1ldGFib2xpY1JhdGVzLmNzdiIsImRhdGEvZWxlcGhhbnRTdXJ2ZXkuY3N2IiwiZGF0YS9lYm9sYS1XQVNILmNzdiIsImRhdGEvZmlzaC5jc3YiLCJkYXRhL2h5ZHJhdGlvbkRhdGEuY3N2IiwiZGF0YS91bml2ZXJzaXR5X3RlYWNoZXJzLmNzdiIsImRhdGEvMUQtTWVtb3J5IE5haXZlLnhsc3giLCJkYXRhL2dyci13ZWF0aGVyLW1ldHJpYy5jc3YiLCJkYXRhL3B3ZC5jc3YiLCJkYXRhL0NTQUFsbGRhdGEueGxzeCIsImRhdGEvSGFEaXZlUGFyYW1ldGVycy5jc3YiLCJkYXRhL3JzYmwyMDE3MDM5NV9zaV8wMDMuY3N2IiwiZGF0YS9GbGludFdhdGVyVGVzdEphbk1hcjIwMTYuY3N2IiwiZGF0YS9Qcm9mRXZhbHRuc0JlYXV0eVB1YmxpYy5jc3YiLCJkYXRhL0VJQXByb3BkYXRhLmNzdiIsImRhdGEvYnJpZGdlcy5jc3YiLCJkYXRhL3pzaGFsLmNzdiIsImRhdGEvZ2FwbWluZGVyX2NsZWFuLmNzdiIsImRhdGEvZnJvZy1hYm5vcm1hbGl0aWVzLmNzdiIsImRhdGEvYm9ub2JvX2ZhY2VzLmNzdiIsImRhdGEvYmVlLXZpcnVzLmNzdiJd
 </script>
 </section>
 </section>

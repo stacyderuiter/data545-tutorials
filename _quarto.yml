@@ -70,6 +70,10 @@ book:
   - part: "Generalized Additive Models (GAMs)"
     chapters:
     - gams1.qmd
+    - gams2.qmd
+  - part: "Generalized Estimating Equations (GEEs)"
+    chapters:
+    - gees.qmd
   - references.qmd
   page-footer:
     center:

@@ -1,0 +1,605 @@
+---
+live-html:
+resources:
+  - data
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - stringr
+    - ggplot2
+    - ggformula
+    - geepack
+  cell-options:
+    autorun: false
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Generalized Estimating Equations (GEEs)
+
+```{r setup, include=FALSE}
+library(webexercises)
+library(dplyr)
+library(tidyr)
+library(ggformula)
+library(ggeffects)
+library(geepack)
+library(dagitty)
+library(CalvinBayes)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+hyd <- read.csv('data/hydrationData.csv')
+
+hyd <- hyd |> mutate(Subjects = factor(Subjects),
+  Subjects_cat = factor(paste0('Subject ', Subjects)),
+  Product = factor(paste0('Product ', Product)),
+  Time_cat = factor(Time)) 
+
+hyd_sorted <- hyd |>
+  arrange(Subjects, Product, Time) |> drop_na()
+
+lm1 <- lm(CorneoDiff ~ Time_cat * Product, data = hyd)
+lm2 <- lm(CorneoDiff ~ Time_cat * Product, data = hyd_sorted)
+
+hyd_gee_ind <- geeglm(CorneoDiff ~ Time_cat * Product, data=hyd_sorted, 
+                  id = Subjects, corstr = 'independence')
+
+hyd_gee_ar1 <- geeglm(CorneoDiff ~ Time_cat * Product, data=hyd_sorted,
+                  id = Subjects, corstr = 'ar1')
+
+hyd_gee_exch <- geeglm(CorneoDiff ~ Time_cat * Product, data=hyd_sorted, 
+                   id = Subjects, corstr = 'exchangeable')
+```
+
+```{webr}
+#| setup: true
+#| include: false
+#| exercise:
+#|   - gam-check
+
+library(dplyr)
+library(tidyr)
+library(ggformula)
+library(ggeffects)
+library(geepack)
+
+theme_set(theme_bw(base_size=16))
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align = "center",
+  fig.width = 6, fig.height = 2.5)
+
+hyd <- read.csv('data/hydrationData.csv')
+
+hyd <- hyd |> mutate(Subjects = factor(Subjects),
+  Subjects_cat = factor(paste0('Subject ', Subjects)),
+  Product = factor(paste0('Product ', Product)),
+  Time_cat = factor(Time)) 
+
+hyd_sorted <- hyd |>
+  arrange(Subjects, Product, Time) |> drop_na()
+
+lm1 <- lm(CorneoDiff ~ Time_cat * Product, data = hyd)
+lm2 <- lm(CorneoDiff ~ Time_cat * Product, data = hyd_sorted)
+
+hyd_gee_ind <- geeglm(CorneoDiff ~ Time_cat * Product, data=hyd_sorted, 
+                  id = Subjects, corstr = 'independence')
+
+hyd_gee_ar1 <- geeglm(CorneoDiff ~ Time_cat * Product, data=hyd_sorted,
+                  id = Subjects, corstr = 'ar1')
+
+hyd_gee_exch <- geeglm(CorneoDiff ~ Time_cat * Product, data=hyd_sorted, 
+                   id = Subjects, corstr = 'exchangeable')
+```
+
+## Section Learning Outcomes
+
+Generalized estimating equations (GEEs), like hierarchical models, can also deal with multi-level or dependent data, but they take a quite different mathematical approach. One result is that they produce population-average predictions by default. We will learn to use GEEs and compare and contrast them with random effects models.
+
+By the end of the module you will:
+
+1) Define the different residual correlation structure options available for use in a GEE
+2) Present an appropriate rationale for choosing a particular correlation structure for a GEE fit to a given dataset
+3) Plan, fit, assess, and interpret generalized estimating equations, making use of appropriate visualizations and model selection
+4) Compare and contrast GEEs and random effects models, listing circumstances in which one or the other may be preferred
+
+## Text Reference
+Recommended reading for the materials covered in this tutorial can be found in:
+
+- Course Notes [Chapter 16](https://stacyderuiter.github.io/regression/gee-motivation.html){target="_blank"}
+- ["Getting Started with Generalized Estimating Equations" (University of Virginia Library)](https://data.library.virginia.edu/getting-started-with-generalized-estimating-equations/){target="_blank"}
+
+It's suggested that you read these chapters *after* doing this tutorial, with particular focus on the topics you found most challenging.
+
+## What's a GEE?
+So far, we looked at random effects as one way to account for non-independence of residuals due to a variable that we don't want to include as a fixed-effect predictor. Another option for this kind of situation is to use Generalized Estimating Equations (GEEs).
+
+## Data Context
+Many beauty product companies use tiny clinical trials to test the efficacy of their products, and use the results in their marketing. Here are just a few examples...
+
+From <https://truebotanicals.com/pages/clinical-trial-results-moisture-lock-overnight-mask>
+
+```{r, echo = FALSE, out.width = '90%'}
+knitr::include_graphics('images/truebotanicals.png')
+```
+
+From a [peer-reviewed publication on a trial testing the "PCA Skin Hyaluronic Acid Boosting Serum"](https://link.springer.com/article/10.1007/s13555-021-00566-0) made by the Colgate-Palmolive Co.:
+
+```{r, echo = FALSE, out.width = '90%'}
+knitr::include_graphics('https://adisjournals.figshare.com/ndownloader/files/28565490/preview/28565490/preview.jpg')
+```
+
+## Data Source
+The dataset used here is industry data from a skin care company (which may or may not be real...but many skin and hair product companies do trials of their products like this very often, and if this isn't real it's based on real data). 
+
+The dataset contains data from experiments with 20 subjects. Each person tested 6 different skin moisturizers, and the hydration level of their skin was measured every 2 hours for 24 hours following application of each product.
+
+This type of data is sometimes called panel data, consisting of time-series of observations for each of a number of subjects, and is very common in medicine, psychology and other fields.
+
+The variables in our dataset are:
+
+- `Subjects` Numeric code identifying the person
+- `CorneoDiff`, which is a score that measures skin hydration. Negative values mean dryer skin and positive ones, more moisturized (so higher is better).
+- `Time` Time in hours since product application
+- `Product` Which product was used (identified by numbers rather than names to protect proprietary information)
+
+The data file can be accessed online at:
+
+<https://sldr.netlify.app/data/hydrationData.csv>
+
+We will read in the data, use `factor()` to ensure that categorical variables stores as numeric codes are treated as categorical. We'll also change from straight numeric labels to labels like "Product 1" and "Subject 1". We'll make a categorical version of the `Time` variable. We order the data by person, then product, then time. We drop rows with missing data. 
+
+Finally, we'll also create a smaller version of the dataset (`hyd_sm`) for teaching purposes later.
+
+```{r, eval = FALSE}
+hyd <- read_csv('http://sldr.netlify.com/data/hydrationData.csv',
+                show_col_types = FALSE)
+
+hyd <- hyd |> 
+  mutate(Subjects = factor(paste0('Subject ', Subjects)),
+         Product = factor(paste0('Product ', Product)),
+         Time_cat = factor(Time)) |>
+  arrange(Subjects, Product, Time) |> 
+  drop_na()
+
+hyd_sm <- hyd |> 
+  dplyr::filter(Subjects %in% paste0('Subject ', c('1', '2', '3','4','5', '6')))
+```
+
+## Data Exploration
+We would like to model the hydration score, `CorneoDiff`, over time and as a function of product. 
+
+The company sponsoring the study would like to know how their product compares to others on the market in terms of moisturizing skin, knowing that the effects may be different from person to person (some have persistently dryer skin, etc.). They also think that the effect of a skin lotion will decline over time after it's applied, and that the amount of hydration and also the rate of decay of hydration effects will vary from product to product.
+
+A causal diagram for this scenario might look like:
+
+```{r, causal-skin}
+dagitty(dagitty("dag{ 
+  Product -> Interaction ;
+  Time -> Interaction;
+  Interaction -> CorneoDiff;
+  Subjects -> CorneoDiff;
+ }")) |>
+  CalvinBayes::gg_dag(size = 20)
+```
+
+Let's take a peek at the data - what do these data look like? Some graphs are suggested (in the hints) but please take a minute to see if you can improve them further, or come up with any better ways to see what's going on in this dataset. The `hyd` dataset is the full one, with 20 subjects; `hyd_sm` just has 6 (and so in that subset it may be easier to picture what's going on, at least for those few subjects).
+
+```{webr, fig.width=7, fig.height=10.5, warning=FALSE}
+#| exercise: skincare-figs
+ 
+```
+
+:::: {.hint exercise="skincare-figs"}
+::: {.callout-tip collapse="true"}
+## Hints and ideas:
+
+``` r
+gf_point(CorneoDiff ~ Time | Product, data=hyd_sm) |>
+  gf_lims(x=c(0,24)) 
+  
+gf_point(CorneoDiff ~ Time | Subjects, color=~Product, data = hyd) |>
+  gf_line() |>
+  gf_lims(x=c(0,24)) 
+  
+gf_point(CorneoDiff ~ Time, data = hyd) |>
+  gf_lims(x=c(0,24)) |>
+  gf_facet_grid(Subjects ~ Product) |> 
+  gf_line()
+```
+:::
+::::
+
+## Linear Regression
+We could try just fitting a linear regression. We don't want to include subject as a fixed effect variable, since we've only observed a small group of specific people and would like to generalize the results beyond just them. For now, we'll omit that precision covariate, even though we will eventually include it.
+
+(Here we've used the categorical version of the `Time` variable since the relationship may not be linear - you could also try to linear version for comparison if you wish.)
+
+From this model...What do you expect? Will the model perform well?
+
+```{r}
+lm1 <- lm(CorneoDiff ~ Time_cat * Product, data = hyd)
+summary(lm1)
+```
+
+## Model Assessment
+For the linear regression:
+
+```{r, fig.width=6, fig.height=3.5}
+acf(resid(lm1))
+```
+
+Hey, that doesn't look so bad...*but remember,* the ACF depends on the order in which the dataset is sorted. What is that now?
+
+```{r, echo=FALSE}
+DT::datatable(hyd)
+```
+
+In fact, we think the observations are likely dependent on `Subjects`, so within a person and product, the residuals may be autocorrelated over time. 
+
+**To see if that's the case, we'd need the observations sorted by person, then product, then time.**
+
+One way to do that is to add the residuals to the dataset, then sort...that allows you to try all the orders that you want without refitting the model.
+
+(Or, we could sort the data and then re-fit the model (which is quick for this model).
+
+```{r, acf2}
+hyd_sorted <- hyd |>
+  arrange(Subjects, Product, Time)
+lm2 <- lm(CorneoDiff ~ Time_cat * Product, data = hyd_sorted)
+acf(resid(lm2))
+```
+
+YIKES.
+
+*As we expected, things do not look good...*
+
+## Linear Regression
+We tried a linear regression and encountered two problems:
+
+- The residuals are not independent.  There seems to be correlation over time within subjects.
+- We can't account for inter-person differences unless we include person as a predictor, but we don't want to do that, because if we do we can not make predictions from the fitted model without specifying which of these exact people we want to predict for.  That's not ideal - we want predictions for all people, or at least averaged over all people.
+
+## Generalized Estimating Equations (GEEs)
+A potential solution we will investigate today is to use a generalized estimating equation (GEE). (We could also have tried a GLMM; and, we could have considered a GAM instead of treating time as categorical, too. We'll leave that as an exercise for now, since the current focus is to learn about GEEs)  GEEs:
+
+- Are a "population average" model: They naturally and easily return population-average predictions (unlike GLMMs).
+- Work by relaxing the requirement for residual dependence -- instead, this dependence is expected and modeled. We specify *how* the residuals depend on one another instead of assuming that they don't.
+
+### Correlation Structures
+
+What residual correlation structures can be accommodated in this framework? There are several options which we'll consider in turn, but first we'll list  them here. When we fit a GEE, we'll specify a chosen correlation structure via the input `corstr`, and the possible values of that input are given along with the full name.
+
+- Independence (`corstr = "independence"`)
+- Exchangeable = Block Diagonal (`corstr = "exchangeable"`)
+- AR1 (first-order auto-regressive) (`corstr = "ar1"`)
+- Unstructured (CAUTION!) (`corstr = "unstructured"`)
+
+## Fit a GEE
+
+Before we go into the details of what those all mean, let's see the code used to fit these models.  We fit them using the function `geeglm()` from package `geepack`.
+
+**A crucial note: The function assumes that the data are sorted by the `id` (grouping) variable. If it isn't, the model may seem to run but the observations won't actually be clustered by groups. So the data** *must* **be sorted correctly before model fitting.**
+
+From the help file for `?geeglm`:
+
+>> `id` is a vector which identifies the clusters. The length of `id` should be the same as the number of observations. Data are assumed to be sorted so that observations on each cluster appear as contiguous rows in data. If data is not sorted this way, the function will not identify the clusters correctly. 
+
+```{webr}
+#| exercise: fit-GEEs
+hyd_gee_ind <- geeglm(CorneoDiff ~ Time_cat * Product, data = hyd_sorted, 
+                  id = Subjects, corstr = 'independence')
+summary(hyd_gee_ind)
+
+hyd_gee_ar1 <- geeglm(CorneoDiff ~ Time_cat * Product, data = hyd_sorted,
+                  id = Subjects, corstr = 'ar1')
+summary(hyd_gee_ar1)
+
+hyd_gee_exch <- geeglm(CorneoDiff ~ Time_cat * Product, data = hyd_sorted, 
+                   id = Subjects, corstr = 'exchangeable')
+summary(hyd_gee_exch)
+```
+
+What is **the same** (or similar) and what is very **different** between the models?
+
+Let's have a look at the parameter estimates...
+
+```{webr}
+#| exercise: params
+#| envir: fit_GEEs
+DT::datatable(data.frame(Independence = coef(hyd_gee_ind),
+                     AR1 = coef(hyd_gee_ar1),
+                     Exchangeable = coef(hyd_gee_exch)))
+```
+
+Their standard errors:
+
+```{webr}
+#| exercise: param-SEs
+#| envir: fit-GEEs
+DT::datatable(
+  data.frame(Independence = summary(hyd_gee_ind)$coefficients$Std.err,
+             AR1 = summary(hyd_gee_ar1)$coefficients$Std.err,
+             Exchangeable = summary(hyd_gee_exch)$coefficients$Std.err)
+)
+```
+
+The parameter estimates here don't vary much, although that *won't* always be the case.
+
+Interestingly, their standard errors also don't seem to vary too much, which might be a surprise. We might expect a model that ignores residual dependence to underestimate uncertainty.
+
+Keep this in mind...we will return to it...
+
+## Comparing correlation structures
+We see that the parameter estimates vary quite a bit depending on which correlation structure is chosen, but we don't often have an *a priori* way of deciding which one will be most relevant in a given situation.
+
+A model-comparison approach to determine which option best fits the data would be quite useful!
+
+Unfortunately, we can't just use AIC or BIC, because these models are fitted using quasi-Likelihood (an approximation to the full likelihood function is used). However, just as we're able to use a quasi-likelihood to do the model fitting, we can use it to obtain a quantity called QIC (which stands for quasi-likelihood under the independence model criterion) which is an analog of AIC.
+
+We can use a specific variant of QIC, $QIC_{R}$, to compare models with different correlation structures (but *not* to compare models with different predictors and the same correlation structure):
+
+```{r}
+geepack::QIC(hyd_gee_ind, hyd_gee_exch, hyd_gee_ar1)
+```
+
+In the `QIC` output the $QIC_{R}$ is simply labeled QIC. 
+
+(Another quantity reported by `QIC()` $QIC_u$, would be the one to use for models with the *same* correlation structure and *different predictors*. To remember which is which, maybe think of the **R** as relating to "residual correlation.")
+
+How can we interpret this result?
+
+The independence and exchangeable correlation structures yield the lower QIC values, so they would be preferred (one of them)...
+
+## Assessment
+Model assessment for a GEE is mostly the same as for the corresponding linear regression or GLM (count, binary or beta regression, etc.)
+
+We were using GEEs to try to correct for issues with non-independent residuals.  How does the residual plot change for a GEE relative to the corresponding (g)lm? 
+
+*Does* it change? 
+
+*Should* it?
+
+```{r,fig.width=3.5, fig.height=2.8, fig.show = 'hold', echo = FALSE}
+CalvinBayes::acf_plot(resid(lm2)) |>
+  gf_labs(title = 'LM ACF')
+
+CalvinBayes::acf_plot(resid(hyd_gee_ind)) |>
+  gf_labs(title = 'GEE ACF')
+```
+
+**What is going on here?**
+
+Remember: we *didn't actually do anything in our model to remove dependence in the residuals.* 
+
+Instead, we *expected* it and *accounted for* it in our model. 
+
+We still haven't seen the details of the math - a bit of that will come at the end - but the residuals of a GEE *are* probably going to be non-independent. 
+
+But...we *expect* them to be that way!
+
+It's kind of like the switch from a linear to a count model: for count regression, the residuals don't have constant variance...but we don't expect them to. This is analogous: the residuals aren't independent...but we no longer expect them to be.
+
+But it would sure be nice to be able to "see" whether the model worked in terms of correctly modeling that dependence. Unfortunately, as far as I know, the tools to do this aren't implemented in R.
+
+However, we have a little comfort: the standard errors reported by `geeglm()` are computed using the "robust" or "sandwich" estimator (if you want details, see [Liang & Zeger 1986](https://doi.org/10.1093/biomet/73.1.13)). This is "robust" in the sense that (for large enough sample sizes) it provides good estimates even if the correlation structure is mis-specified. (Remember the consistency of the standard errors of the parameter estimates in the models that we fitted?) 
+
+This is important because these standard errors are the measure of our uncertainty in the parameter estimates, and they have a big influence on model selection results to determine whether a certain predictor of interest is or is not associated with the results. So even in the case when we haven't gotten the correlation structure quite right, we can be reassured that it's better than *not* accounting for residual dependence at all, and that our model selection results should be more reliable as a result.
+
+## Selection
+We can use another variant of the QIC to do model selection to determine which variables are important to retain in a GEE model.
+
+We could fit and then compare specific models:
+
+```{r}
+hyd_gee_ind_no_int <- 
+  geeglm(CorneoDiff ~ Time_cat + Product, 
+         data = hyd_sorted, 
+         id = Subjects, 
+         corstr = 'independence')
+geepack::QIC(hyd_gee_ind, 
+             hyd_gee_ind_no_int)
+```
+
+There is also an `anova()` method for GEEs, but *not* a `car::Anova()` method. 
+
+The `anova()` **will not** do Type II tests - they are sequential (at least I believe that is still true - the documentation is lacking). 
+
+So, if we wanted to use ANOVA to compare models, we'd also need to fit the models we want to compare and compare them two by two, like:
+
+```{r}
+anova(hyd_gee_ind, 
+      hyd_gee_ind_no_int)
+```
+
+How would you interpret these results and present them to the cosmetics company that collected the data?
+
+Well, we have moderate to strong evidence -- quite oddly *much* more apparently strong than according to QIC -- of an interaction between time and product. That is, *both* are associated with differences in skin hydration level. 
+
+But that's not enough...surely they'll want to know *how* their product works - is it better than others, for longer, or faster, or...?
+
+To get a clear picture of all that, prediction plots would be just the ticket.
+
+## Prediction Plots
+As for models we studied previously, we can make prediction plots to visualize the relationships a model specifies between the predictor and response variables.
+
+However, we can not use `predict()` to get model predictions **with standard errors** from a GEE.
+
+`predict_response()` works, though; for example:
+
+(We make the plot by hand this time since just piping the output of `predict_response()` to `plot()` may return an error because it tries to use a color palette with too few colors.)
+
+```{r}
+gee_preds <- predict_response(hyd_gee_ind, 
+          terms = c('Product', 'Time_cat')) 
+
+gf_point(predicted ~ group, color = ~x, 
+         data = gee_preds) |>
+  gf_errorbar(conf.low + conf.high ~ group,
+              width = 0.1) |>
+  gf_labs(x = 'Time (hours)', 
+          y = 'Expected Hydration Score')
+```
+
+Well, OK then. Our selection results indicate that there are hydration differences over time and by product (plus an interaction), but the magnitude of those differences (according to the prediction plot) is not incredibly overwhelming. (And the company is probably hoping they are Product 6!) While the differences may be consistent enough to be detectable, they are not huge.
+
+This might be reassuring for consumers, I guess, if the best products are only marginally better than the worst ones and a lotion is a lotion and they all work decently well.
+
+## Correlation Structures
+OK, we've seen the full modeling process, in terms of the practical steps and code.
+
+But you're probably a bit frustrated that we just mentioned that we were "accounting for residual dependence in our model" with no further details. Here come some of the details!
+
+### Variance/Covariance or Correlation?
+Statisticians often talk about a model's **variance-covariance** matrix (which gives residual variance on the diagonal and covariance between residuals in its off-diagonal elements). It has one row and one column for each residual. 
+
+Here we will consider **correlation** matrices instead. This will give us a simplified way of looking at similar ideas. In a correlation matrix, the diagonal entries will be all ones (the correlation of something with itself is 1), and off-diagonal elements will show correlation between residuals. This lets us focus our attention on the relationships between residuals, which is what we're trying to model in a GEE.
+
+### Example Case
+Let's consider an example for a dataset with 9 observations; three observations for each of value of the grouping variable. Here, the grouping variable is `Subjects`. 
+
+*(Side note: The groupings causing non-independence in the residuals don't have to be "individuals" -- it could be some other relationship encoded in a categorical variable, like being from the same school or town or country or ethnic group -- any single categorical variable that defines the groups of interest and induces non-independence withing the groups, could work. Here we are just calling them "individuals" for convenience, and because when time-series data are collected on multiple individuals, this kind of model often works well.)*
+
+Each of the correlation matrices below has one row and one column for each observation.
+
+The *diagonal* entries will all, always, be 1.
+
+The *off-diagonal* entries indicate how the different residuals depend on each other -- in other words, they describe mathematically exactly *how* each residual is correlated with the others.
+
+We will use the letter $\rho$ (say "rho") for correlations.
+
+### Independence
+If the residuals are all independent of each other, then all the correlations between them will be zero:
+
+$$
+\begin{vmatrix}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+\end{vmatrix}
+$$
+
+#### ACF Example
+The residual ACF from a model fitted to data that perfectly embody the independence structure with 5 observations per individual might look like:
+
+```{r, echo=FALSE}
+set.seed(15)
+d <- data.frame(r = as.numeric(arima.sim(model = list(), n=5)))
+while(nrow(d) < 100){
+  a <- data.frame(r = as.numeric(arima.sim(model = list(), n=5)))
+  d <- bind_rows(d,a)
+}
+CalvinBayes::acf_plot(d$r, main='Residual ACF')
+```
+
+An "independence" correlation structure corresponds to all of the models we have considered previously in class prior to this module (which all have a condition that residuals should be independent).
+
+This is also the model with `corstr = 'independence'`, which we saw fitted our data best of the three that we tried. Whaaat? So then, how did *that* model somehow account for residual dependence better than just the linear model? What was the point? Well, remember the robust standard errors? They are still worth something.
+
+We might also ask ourselves, if the residuals were dependent -- and the ACF really seemed to show that they were -- then why didn't one of the other correlation structures fit better than this basic independence one? The answer is that we have to specify the mathematical form of the correlation structure, in a very specific way. Perhaps residuals sometimes *do* have structure and dependence, but not in a way that closely matches any of these particular options.
+
+But what *are* the other options?
+
+### Exchangeable = Block Diagonal
+In an exchangeable or block diagonal structure, all residuals for one individual are equally correlated (correlation = $\rho$). All residuals from different groups (in our hydration example, different `Subjects`) are independent, that is, with correlation = 0.
+
+$$
+\begin{vmatrix}
+1 & \rho & \rho & 0 & 0 & 0 & 0 & 0 & 0\\
+\rho & 1 & \rho & 0 & 0 & 0 & 0 & 0 & 0\\
+\rho & \rho & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & \rho &\rho & 0 & 0 & 0\\
+0 & 0 & 0 & \rho & 1 & \rho & 0 & 0 & 0\\
+0 & 0 & 0 & \rho & \rho & 1 & 0& 0& 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & \rho & \rho\\
+0 & 0 & 0 & 0 & 0 & 0 & \rho & 1 & \rho\\
+0 & 0 & 0 & 0 & 0 & 0 & \rho & \rho & 1\\
+\end{vmatrix}
+$$
+
+#### ACF Example
+The residual ACF from a model fitted to data that perfectly embody the exchangeable structure would show non-independence in the residual ACF, out to about the number of lags that there are observations per individual, but the autocorrelation coefficients would remain relatively constant across that number of lags. (Sorry I don't have a straightforward way to simulate this in order to show you what it might look like...)
+
+### AR1 
+An AR1 (first-order autoregressive process) correlation structure is another option for GEEs. In this structure, we again assume that residuals are uncorrelated (independent) between individuals.
+
+Within an individual, though, we assume measurements that are closer to one another are more correlated.  More precisely, we say that observations 1 lag apart have correlation $\rho$; observations 2 lags apart have correlation $\rho^2$; three lags apart $\rho^3$, and so on. Remember, $\rho$ is less than 1, so this means the amount of correlation declines as the lag increases (in a very structured way).
+
+To illustrate this, I show below a correlation structure for a model with 10 observations: 5 observations from each of 2 individuals.
+
+$$
+\begin{vmatrix}
+1 & \rho & \rho^2 & \rho^3 & \rho^4 & 0 & 0 & 0 & 0 & 0\\
+\rho & 1 & \rho &\rho^2 & \rho^3 & 0 & 0 & 0 & 0& 0\\
+\rho^2 & \rho & 1 & \rho & \rho^2 & 0 & 0 & 0 & 0& 0\\
+\rho^3 & \rho^2 & \rho & 1 & \rho & 0 & 0 & 0 & 0& 0\\
+\rho^4 & \rho^3 & \rho^2 & \rho & 1 & 0 & 0 & 0 & 0& 0\\
+0 & 0 & 0 & 0 & 0 & 1 & \rho & \rho^2 & \rho^3 & \rho^4\\
+0 & 0 & 0 & 0 & 0 & \rho & 1 & \rho &\rho^2 & \rho^3\\
+0 & 0 & 0 & 0 & 0 & \rho^2 & \rho & 1 & \rho & \rho^2 \\
+0 & 0 & 0 & 0 & 0 & \rho^3 & \rho^2 & \rho & 1 & \rho\\
+0 & 0 & 0 & 0 & 0 & \rho^4 & \rho^3 & \rho^2 & \rho & 1\\
+\end{vmatrix}
+$$
+
+#### ACF Example
+The residual ACF from a model fitted to data that perfectly embody this structure with $\rho=0.9$ and 10 observations per individual, might look like:
+
+```{r, echo=FALSE}
+d <- data.frame(r = as.numeric(arima.sim(model = list(ar = 0.9), n=10)))
+while(nrow(d) < 1000){
+  a <- data.frame(r = as.numeric(arima.sim(model = list(ar = 0.9), n=10)))
+  d <- bind_rows(d,a)
+}
+CalvinBayes::acf_plot(d$r, main='Residual ACF')
+```
+
+### Unstructured
+This one is not of practical use because it is so hard to estimate. Basically, we don't impose any of the constraints present in the other structures (constant correlation within each group, or the specific rate of decline in dependence of the AR1 model). We just try to estimate the correlation at each lag.
+
+This would take a *lot* of data to be able to estimate, and as the `geeglm()` documentation mentions,
+
+>> Warning. Use "unstructured" correlation structure only with great care. (It may cause R to crash).
+
+$$
+\begin{vmatrix}
+1 & \rho_{1,2} & \rho_{1,3} & 0 & 0 & 0 & 0 & 0 & 0\\
+\rho_{1,2} & 1 & \rho_{2,3} & 0 & 0 & 0 & 0 & 0 & 0\\
+\rho_{1,3} & \rho_{2,3} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & \rho_{1,2} & \rho_{1,3} & 0 & 0 & 0\\
+0 & 0 & 0 & \rho_{1,2} & 1 & \rho_{2,3}& 0 & 0 & 0\\
+0 & 0 & 0 & \rho_{1,3} & \rho_{2,3} & 1&0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & \rho_{1,2} & \rho_{1,3}\\
+0 & 0 & 0 & 0 & 0 & 0 & \rho_{1,2} & 1 & \rho_{2,3}\\
+0 & 0 & 0 & 0 & 0 & 0 & \rho_{1,3} & \rho_{2,3} & 1\\
+\end{vmatrix}
+$$
+
+## Summary
+GEEs provide another option for modeling data that we might otherwise model with a GLMM.
+
+An important difference is that they return (naturally and directly) population-level estimates and predictions. The results are pretty robust to some mis-specification of the correlation structure, too.
+
+Both of these features are in contrast with GLMMs, for which it's more work to obtain population-average predictions. GLMMs also depend on the assumption that the differences between random-effect groups follow a normal distribution, which is crucial and difficult to check (unless sample sizes are massive - we haven't even tried, really).
+
+So, it's another useful tool to have in our arsenal!
+
+What are downsides, though? Model selection is a bit more challenging, in terms of software implementation and because it relies on quasi-likelihood (an approximation to the full likelihood). Perhaps even more important practically, with current software tools, we can only have *one* grouping variable. With random effects, by contrast, we can have as many as we like, and can even nest them. (We could do something similar if we were clever enough in defining a bespoke correlation structure for a GEE, but that's far beyond the scope of this course - here, we recommend choosing a GLMM or GAMM if we need more than one grouping/random effect variable.)
+
+We might lean toward choosing random intercepts if we are interested in actually quantifying the amount of variation between groups, while a GEE accounts for it but doesn't as easily allow you to measure how big it is. GEEs are also harder to simulate from, if you need to do that for some reason, while for mixed-effect models you have seen how to simulate when you bootstrapped!
+
+For a more detailed comparison and contrast of the two approaches, consider this section's optional extra reading. Until then, bask in the knowledge you've added one more tool to your tool kit!
